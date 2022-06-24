@@ -108,7 +108,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Souces\core\application.h" />
+    <ClInclude Include="Souces\core\engine.h" />
     <ClInclude Include="Souces\core\renderer.h" />
     <ClInclude Include="Souces\utils\d3dx12.h" />
   </ItemGroup>
@@ -132,7 +132,7 @@
     </ClCompile>
     <ClCompile Include="Souces\core\renderer.cpp" />
     <ClCompile Include="Souces\main.cpp" />
-    <ClCompile Include="Souces\core\application.cpp" />
+    <ClCompile Include="Souces\core\engine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

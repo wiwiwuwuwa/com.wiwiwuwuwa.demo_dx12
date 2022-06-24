@@ -4,7 +4,7 @@
 
 namespace aiva
 {
-	struct Application : winrt::implements<Application, IFrameworkViewSource, IFrameworkView>
+	struct Engine : winrt::implements<Engine, IFrameworkViewSource, IFrameworkView>
 	{
         IFrameworkView CreateView();
 

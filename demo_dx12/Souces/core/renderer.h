@@ -21,6 +21,9 @@ namespace aiva
 	// DirectX
 
 	private:
+		static constexpr int32_t SWAP_CHAIN_BUFFERS_COUNT = 2;
+
+	private:
 #if defined(_DEBUG)
 		void EnableDebugLayer();
 #endif
@@ -41,9 +44,11 @@ namespace aiva
 
 		static winrt::com_ptr<IDXGISwapChain4> CreateSwapChain(winrt::com_ptr<IDXGIFactory7> const& factory, winrt::com_ptr<ID3D12CommandQueue> const& commandQueue, CoreWindow const window, bool const isTearingAllowed);
 
-	private:
-		static constexpr int32_t SWAP_CHAIN_BUFFERS_COUNT = 2;
+		static winrt::com_ptr<ID3D12DescriptorHeap> CreateDescriptorHeap(winrt::com_ptr<ID3D12Device9> const& device);
 
+		static std::array<winrt::com_ptr<ID3D12Resource>, SWAP_CHAIN_BUFFERS_COUNT> CreateRenderTargetViews(winrt::com_ptr<ID3D12Device9> const& device, winrt::com_ptr<IDXGISwapChain4> const& swapChain, winrt::com_ptr<ID3D12DescriptorHeap> const& descriptorHeap);
+
+	private:
 		winrt::com_ptr<IDXGIFactory7> mFactory{};
 
 		winrt::com_ptr<IDXGIAdapter4> mAdapter{};
@@ -59,5 +64,9 @@ namespace aiva
 		bool mIsTearingAllowed;
 
 		winrt::com_ptr<IDXGISwapChain4> mSwapChain{};
+
+		winrt::com_ptr<ID3D12DescriptorHeap> mDescriptorHeap{};
+
+		std::array<winrt::com_ptr<ID3D12Resource>, SWAP_CHAIN_BUFFERS_COUNT> mRenderTargetViews{};
 	};
 }

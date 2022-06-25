@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <array>
 #include <boost/core/noncopyable.hpp>
 #include <Unknwn.h>
 #include <winrt/base.h>

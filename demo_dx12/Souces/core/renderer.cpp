@@ -33,6 +33,12 @@ aiva::Renderer::Renderer(winrt::com_ptr<aiva::Engine> const& engine)
 
 	mSwapChain = CreateSwapChain(mFactory, mCommandQueue, mEngine->GetWindow(), mIsTearingAllowed);
 	winrt::check_bool(mSwapChain);
+
+	mDescriptorHeap = CreateDescriptorHeap(mDevice);
+	winrt::check_bool(mDescriptorHeap);
+
+	mRenderTargetViews = CreateRenderTargetViews(mDevice, mSwapChain, mDescriptorHeap);
+	for (const winrt::com_ptr<ID3D12Resource>& rtv : mRenderTargetViews) winrt::check_bool(rtv);
 }
 
 #if defined(_DEBUG)
@@ -155,4 +161,48 @@ winrt::com_ptr<IDXGISwapChain4> aiva::Renderer::CreateSwapChain(winrt::com_ptr<I
 	basicSwapChain.as(specificSwapChain);
 
 	return specificSwapChain;
+}
+
+winrt::com_ptr<ID3D12DescriptorHeap> aiva::Renderer::CreateDescriptorHeap(winrt::com_ptr<ID3D12Device9> const& device)
+{
+	winrt::check_bool(device);
+
+	D3D12_DESCRIPTOR_HEAP_DESC desc{};
+	desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+	desc.NumDescriptors = static_cast<UINT>(SWAP_CHAIN_BUFFERS_COUNT);
+	desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	desc.NodeMask = 0;
+
+	winrt::com_ptr<ID3D12DescriptorHeap> descriptorHeap{};
+	winrt::check_hresult(device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&descriptorHeap)));
+
+	return descriptorHeap;
+}
+
+std::array<winrt::com_ptr<ID3D12Resource>, aiva::Renderer::SWAP_CHAIN_BUFFERS_COUNT> aiva::Renderer::CreateRenderTargetViews(winrt::com_ptr<ID3D12Device9> const& device, winrt::com_ptr<IDXGISwapChain4> const& swapChain, winrt::com_ptr<ID3D12DescriptorHeap> const& descriptorHeap)
+{
+	winrt::check_bool(device);
+	winrt::check_bool(swapChain);
+	winrt::check_bool(descriptorHeap);
+
+	const SIZE_T heapStart = descriptorHeap->GetCPUDescriptorHandleForHeapStart().ptr;
+	const UINT heapOffset = device->GetDescriptorHandleIncrementSize(descriptorHeap->GetDesc().Type);
+
+	std::array<winrt::com_ptr<ID3D12Resource>, aiva::Renderer::SWAP_CHAIN_BUFFERS_COUNT> renderTargetViews{};
+
+	for (UINT i = 0; i < renderTargetViews.size(); i++)
+	{
+		winrt::com_ptr<ID3D12Resource> backBuffer{};
+		winrt::check_hresult(swapChain->GetBuffer(i, IID_PPV_ARGS(&backBuffer)));
+
+		D3D12_CPU_DESCRIPTOR_HANDLE handle{};
+		handle.ptr = heapStart + static_cast<SIZE_T>(heapOffset * i);
+
+		device->CreateRenderTargetView(backBuffer.get(), nullptr, handle);
+		winrt::check_bool(backBuffer);
+
+		renderTargetViews[i] = backBuffer;
+	}
+
+	return renderTargetViews;
 }

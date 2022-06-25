@@ -6,6 +6,19 @@ namespace aiva
 {
 	struct Engine : winrt::implements<Engine, IFrameworkViewSource, IFrameworkView>
 	{
+    // ----------------------------------------------------
+    // Engine
+
+    public:
+        CoreWindow const& GetWindow() const;
+
+    private:
+        CoreWindow mWindow{ nullptr };
+
+    // ----------------------------------------------------
+    // WinRT
+
+    public:
         IFrameworkView CreateView();
 
         void Initialize(CoreApplicationView const&);

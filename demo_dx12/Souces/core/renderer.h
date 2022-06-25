@@ -15,7 +15,7 @@ namespace aiva
 		Renderer(winrt::com_ptr<aiva::Engine> const& engine);
 
 	private:
-		winrt::com_ptr<aiva::Engine> mEngine;
+		winrt::com_ptr<aiva::Engine> mEngine{};
 
 	// ----------------------------------------------------
 	// DirectX
@@ -42,6 +42,8 @@ namespace aiva
 		static winrt::com_ptr<IDXGISwapChain4> CreateSwapChain(winrt::com_ptr<IDXGIFactory7> const& factory, winrt::com_ptr<ID3D12CommandQueue> const& commandQueue, CoreWindow const window, bool const isTearingAllowed);
 
 	private:
+		static constexpr int32_t SWAP_CHAIN_BUFFERS_COUNT = 2;
+
 		winrt::com_ptr<IDXGIFactory7> mFactory{};
 
 		winrt::com_ptr<IDXGIAdapter4> mAdapter{};

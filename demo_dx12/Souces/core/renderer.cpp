@@ -39,6 +39,9 @@ aiva::Renderer::Renderer(winrt::com_ptr<aiva::Engine> const& engine)
 
 	mRenderTargetViews = CreateRenderTargetViews(mDevice, mSwapChain, mDescriptorHeap);
 	for (const winrt::com_ptr<ID3D12Resource>& rtv : mRenderTargetViews) winrt::check_bool(rtv);
+
+	mCommandAllocator = CreateCommandAllocator(mDevice);
+	winrt::check_bool(mCommandAllocator);
 }
 
 #if defined(_DEBUG)
@@ -205,4 +208,14 @@ std::array<winrt::com_ptr<ID3D12Resource>, aiva::Renderer::SWAP_CHAIN_BUFFERS_CO
 	}
 
 	return renderTargetViews;
+}
+
+winrt::com_ptr<ID3D12CommandAllocator> aiva::Renderer::CreateCommandAllocator(winrt::com_ptr<ID3D12Device9> const& device)
+{
+	winrt::check_bool(device);
+
+	winrt::com_ptr<ID3D12CommandAllocator> commandAllocator{};
+	winrt::check_hresult(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator)));
+
+	return commandAllocator;
 }

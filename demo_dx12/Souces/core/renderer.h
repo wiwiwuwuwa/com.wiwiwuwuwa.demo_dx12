@@ -48,6 +48,8 @@ namespace aiva
 
 		static std::array<winrt::com_ptr<ID3D12Resource>, SWAP_CHAIN_BUFFERS_COUNT> CreateRenderTargetViews(winrt::com_ptr<ID3D12Device9> const& device, winrt::com_ptr<IDXGISwapChain4> const& swapChain, winrt::com_ptr<ID3D12DescriptorHeap> const& descriptorHeap);
 
+		static winrt::com_ptr<ID3D12CommandAllocator> CreateCommandAllocator(winrt::com_ptr<ID3D12Device9> const& device);
+
 	private:
 		winrt::com_ptr<IDXGIFactory7> mFactory{};
 
@@ -68,5 +70,7 @@ namespace aiva
 		winrt::com_ptr<ID3D12DescriptorHeap> mDescriptorHeap{};
 
 		std::array<winrt::com_ptr<ID3D12Resource>, SWAP_CHAIN_BUFFERS_COUNT> mRenderTargetViews{};
+
+		winrt::com_ptr<ID3D12CommandAllocator> mCommandAllocator{};
 	};
 }

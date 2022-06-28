@@ -50,6 +50,8 @@ namespace aiva
 
 		static winrt::com_ptr<ID3D12CommandAllocator> CreateCommandAllocator(winrt::com_ptr<ID3D12Device9> const& device);
 
+		static winrt::com_ptr<ID3D12GraphicsCommandList6> CreateCommandList(winrt::com_ptr<ID3D12Device9> const& device, winrt::com_ptr<ID3D12CommandAllocator> const& commandAllocator);
+
 	private:
 		winrt::com_ptr<IDXGIFactory7> mFactory{};
 
@@ -72,5 +74,7 @@ namespace aiva
 		std::array<winrt::com_ptr<ID3D12Resource>, SWAP_CHAIN_BUFFERS_COUNT> mRenderTargetViews{};
 
 		winrt::com_ptr<ID3D12CommandAllocator> mCommandAllocator{};
+
+		winrt::com_ptr<ID3D12GraphicsCommandList6> mCommandList{};
 	};
 }

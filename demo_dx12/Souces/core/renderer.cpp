@@ -42,6 +42,9 @@ aiva::Renderer::Renderer(winrt::com_ptr<aiva::Engine> const& engine)
 
 	mCommandAllocator = CreateCommandAllocator(mDevice);
 	winrt::check_bool(mCommandAllocator);
+
+	mCommandList = CreateCommandList(mDevice, mCommandAllocator);
+	winrt::check_bool(mCommandList);
 }
 
 #if defined(_DEBUG)
@@ -218,4 +221,18 @@ winrt::com_ptr<ID3D12CommandAllocator> aiva::Renderer::CreateCommandAllocator(wi
 	winrt::check_hresult(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator)));
 
 	return commandAllocator;
+}
+
+winrt::com_ptr<ID3D12GraphicsCommandList6> aiva::Renderer::CreateCommandList(winrt::com_ptr<ID3D12Device9> const& device, winrt::com_ptr<ID3D12CommandAllocator> const& commandAllocator)
+{
+	winrt::check_bool(device);
+	winrt::check_bool(commandAllocator);
+
+	winrt::com_ptr<ID3D12GraphicsCommandList> basicCommandList{};
+	winrt::check_hresult(device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator.get(), nullptr, IID_PPV_ARGS(&basicCommandList)));
+
+	winrt::com_ptr<ID3D12GraphicsCommandList6> specificCommandList{};
+	basicCommandList.as(specificCommandList);
+
+	return specificCommandList;
 }

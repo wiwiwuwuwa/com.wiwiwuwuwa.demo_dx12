@@ -1,11 +1,14 @@
 #pragma once
 
-#include "pch.h"
+#include <pch.h>
 
 namespace aiva
 {
 	struct Engine;
+}
 
+namespace aiva
+{
 	class Renderer final : private boost::noncopyable
 	{
 	// ----------------------------------------------------

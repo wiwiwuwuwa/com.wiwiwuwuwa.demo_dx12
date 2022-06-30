@@ -1,7 +1,6 @@
-#include "pch.h"
-#include "renderer.h"
-
-#include "engine.h"
+#include <pch.h>
+#include <core/renderer.h>
+#include <core/engine.h>
 
 aiva::Renderer::Renderer(winrt::com_ptr<aiva::Engine> const& engine)
 {

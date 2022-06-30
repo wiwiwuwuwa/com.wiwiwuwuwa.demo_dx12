@@ -1,7 +1,6 @@
-#include "pch.h"
-#include "engine.h"
-
-#include "renderer.h"
+#include <pch.h>
+#include <core/engine.h>
+#include <core/renderer.h>
 
 CoreWindow const& aiva::Engine::GetWindow() const
 {

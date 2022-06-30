@@ -2,15 +2,15 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="Souces\main.cpp" />
-    <ClCompile Include="Souces\core\engine.cpp" />
-    <ClCompile Include="Souces\core\renderer.cpp" />
+    <ClCompile Include="Sources\main.cpp" />
+    <ClCompile Include="Sources\core\engine.cpp" />
+    <ClCompile Include="Sources\core\renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Souces\core\engine.h" />
-    <ClInclude Include="Souces\utils\d3dx12.h" />
-    <ClInclude Include="Souces\core\renderer.h" />
+    <ClInclude Include="Sources\core\engine.h" />
+    <ClInclude Include="Sources\utils\d3dx12.h" />
+    <ClInclude Include="Sources\core\renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

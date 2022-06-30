@@ -52,6 +52,8 @@ namespace aiva
 
 		static winrt::com_ptr<ID3D12GraphicsCommandList6> CreateCommandList(winrt::com_ptr<ID3D12Device9> const& device, winrt::com_ptr<ID3D12CommandAllocator> const& commandAllocator);
 
+		static winrt::com_ptr<ID3D12Fence1> CreateFence(winrt::com_ptr<ID3D12Device9> const& device);
+
 	private:
 		winrt::com_ptr<IDXGIFactory7> mFactory{};
 
@@ -76,5 +78,7 @@ namespace aiva
 		winrt::com_ptr<ID3D12CommandAllocator> mCommandAllocator{};
 
 		winrt::com_ptr<ID3D12GraphicsCommandList6> mCommandList{};
+
+		winrt::com_ptr<ID3D12Fence1> mFence{};
 	};
 }

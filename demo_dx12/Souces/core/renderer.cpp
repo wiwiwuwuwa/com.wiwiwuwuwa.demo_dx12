@@ -45,6 +45,9 @@ aiva::Renderer::Renderer(winrt::com_ptr<aiva::Engine> const& engine)
 
 	mCommandList = CreateCommandList(mDevice, mCommandAllocator);
 	winrt::check_bool(mCommandList);
+
+	mFence = CreateFence(mDevice);
+	winrt::check_bool(mFence);
 }
 
 #if defined(_DEBUG)
@@ -236,3 +239,17 @@ winrt::com_ptr<ID3D12GraphicsCommandList6> aiva::Renderer::CreateCommandList(win
 
 	return specificCommandList;
 }
+
+winrt::com_ptr<ID3D12Fence1> aiva::Renderer::CreateFence(winrt::com_ptr<ID3D12Device9> const& device)
+{
+	winrt::check_bool(device);
+
+	winrt::com_ptr<ID3D12Fence> basicFence{};
+	winrt::check_hresult(device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&basicFence)));
+
+	winrt::com_ptr<ID3D12Fence1> specificFence{};
+	basicFence.as(specificFence);
+
+	return specificFence;
+}
+

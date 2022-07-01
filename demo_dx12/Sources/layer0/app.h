@@ -1,26 +1,29 @@
 #pragma once
-
 #include <pch.h>
 
-namespace aiva
+namespace aiva::layer0
 {
-	struct Engine : winrt::implements<Engine, IFrameworkViewSource, IFrameworkView>
-	{
+    struct App : winrt::implements<App, IFrameworkViewSource, IFrameworkView>
+    {
     // ----------------------------------------------------
-    // Engine
+    // App
 
     public:
-        CoreWindow const& GetWindow() const;
+        CoreWindow const& Window() const;
 
     private:
         CoreWindow mWindow{ nullptr };
 
     // ----------------------------------------------------
-    // WinRT
+    // IFrameworkViewSource
 
     public:
         IFrameworkView CreateView();
 
+    // ----------------------------------------------------
+    // IFrameworkView
+
+    public:
         void Initialize(CoreApplicationView const&);
 
         void Load(winrt::hstring const&);
@@ -30,5 +33,5 @@ namespace aiva
         void Run();
 
         void SetWindow(CoreWindow const&);
-	};
+    };
 }

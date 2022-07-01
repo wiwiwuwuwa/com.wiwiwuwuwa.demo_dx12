@@ -1,7 +1,7 @@
 #pragma once
-
 #include <pch.h>
 
+/*
 namespace aiva
 {
 	struct Engine;
@@ -85,3 +85,4 @@ namespace aiva
 		winrt::com_ptr<ID3D12Fence1> mFence{};
 	};
 }
+*/

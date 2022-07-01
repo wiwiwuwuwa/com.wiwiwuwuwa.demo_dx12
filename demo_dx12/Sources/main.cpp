@@ -1,7 +1,8 @@
 #include <pch.h>
-#include <core/engine.h>
+#include <layer0/app.h>
 
 int __stdcall wWinMain(HINSTANCE, HINSTANCE, PWSTR, int)
 {
-	CoreApplication::Run(winrt::make<aiva::Engine>());
+	CoreApplication::Run(winrt::make<aiva::layer0::App>());
+	return EXIT_SUCCESS;
 }

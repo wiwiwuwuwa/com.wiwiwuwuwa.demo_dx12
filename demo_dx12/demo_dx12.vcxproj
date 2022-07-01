@@ -116,8 +116,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Sources\core\engine.h" />
-    <ClInclude Include="Sources\core\renderer.h" />
+    <ClInclude Include="Sources\layer0\renderer.h" />
+    <ClInclude Include="Sources\layer0\app.h" />
     <ClInclude Include="Sources\utils\d3dx12.h" />
   </ItemGroup>
   <ItemGroup>
@@ -138,9 +138,9 @@
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Sources\core\renderer.cpp" />
+    <ClCompile Include="Sources\layer0\renderer.cpp" />
+    <ClCompile Include="Sources\layer0\app.cpp" />
     <ClCompile Include="Sources\main.cpp" />
-    <ClCompile Include="Sources\core\engine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

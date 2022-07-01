@@ -3,14 +3,14 @@
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Sources\main.cpp" />
-    <ClCompile Include="Sources\core\engine.cpp" />
-    <ClCompile Include="Sources\core\renderer.cpp" />
+    <ClCompile Include="Sources\layer0\renderer.cpp" />
+    <ClCompile Include="Sources\layer0\app.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Sources\core\engine.h" />
     <ClInclude Include="Sources\utils\d3dx12.h" />
-    <ClInclude Include="Sources\core\renderer.h" />
+    <ClInclude Include="Sources\layer0\renderer.h" />
+    <ClInclude Include="Sources\layer0\app.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

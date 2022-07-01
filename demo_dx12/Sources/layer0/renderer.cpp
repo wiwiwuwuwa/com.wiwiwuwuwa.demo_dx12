@@ -1,4 +1,6 @@
 #include <pch.h>
+
+/*
 #include <core/renderer.h>
 #include <core/engine.h>
 
@@ -251,4 +253,4 @@ winrt::com_ptr<ID3D12Fence1> aiva::Renderer::CreateFence(winrt::com_ptr<ID3D12De
 
 	return specificFence;
 }
-
+*/

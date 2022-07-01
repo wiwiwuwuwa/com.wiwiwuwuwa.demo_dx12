@@ -2,6 +2,7 @@
 
 #include <array>
 #include <boost/core/noncopyable.hpp>
+#include <boost/signals2.hpp>
 #include <Unknwn.h>
 #include <winrt/base.h>
 #include <winrt/Windows.ApplicationModel.Core.h>

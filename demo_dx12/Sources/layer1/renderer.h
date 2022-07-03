@@ -1,24 +1,28 @@
 #pragma once
 #include <pch.h>
 
-/*
-namespace aiva
+#include <array>
+#include <boost/core/noncopyable.hpp>
+#include <winrt/base.h>
+
+namespace aiva::layer1
 {
 	struct Engine;
 }
 
-namespace aiva
+namespace aiva::layer1
 {
-	class Renderer final : private boost::noncopyable
+	struct Renderer final : private boost::noncopyable
 	{
 	// ----------------------------------------------------
 	// Renderer
 
 	public:
-		Renderer(winrt::com_ptr<aiva::Engine> const& engine);
+		Renderer(aiva::layer1::Engine& engine);
+		~Renderer();
 
 	private:
-		winrt::com_ptr<aiva::Engine> mEngine{};
+		aiva::layer1::Engine& mEngine;
 
 	// ----------------------------------------------------
 	// DirectX
@@ -70,7 +74,7 @@ namespace aiva
 
 		winrt::com_ptr<ID3D12CommandQueue> mCommandQueue{};
 
-		bool mIsTearingAllowed;
+		bool mIsTearingAllowed{};
 
 		winrt::com_ptr<IDXGISwapChain4> mSwapChain{};
 
@@ -85,4 +89,3 @@ namespace aiva
 		winrt::com_ptr<ID3D12Fence1> mFence{};
 	};
 }
-*/

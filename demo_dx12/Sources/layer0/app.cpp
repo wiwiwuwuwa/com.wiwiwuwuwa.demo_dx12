@@ -1,6 +1,21 @@
 #include <pch.h>
 #include <layer0/app.h>
 
+aiva::utils::EvAction& aiva::layer0::App::OnStart()
+{
+    return mOnStart;
+}
+
+aiva::utils::EvAction& aiva::layer0::App::OnUpdate()
+{
+    return mOnUpdate;
+}
+
+aiva::utils::EvAction& aiva::layer0::App::OnFinish()
+{
+    return mOnFinish;
+}
+
 CoreWindow const& aiva::layer0::App::Window() const
 {
     return mWindow;
@@ -30,11 +45,17 @@ void aiva::layer0::App::Run()
     CoreWindow window = CoreWindow::GetForCurrentThread();
     window.Activate();
 
+    OnStart()();
+
     while (true)
     {
         CoreDispatcher dispatcher = window.Dispatcher();
         dispatcher.ProcessEvents(CoreProcessEventsOption::ProcessAllIfPresent);
+
+        OnUpdate()();
     }
+
+    OnFinish()();
 }
 
 void aiva::layer0::App::SetWindow(CoreWindow const& window)

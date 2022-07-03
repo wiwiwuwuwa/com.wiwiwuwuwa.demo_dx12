@@ -1,14 +1,11 @@
 #include <pch.h>
+#include <layer1/renderer.h>
 
-/*
-#include <core/renderer.h>
-#include <core/engine.h>
+#include <layer0/app.h>
+#include <layer1/engine.h>
 
-aiva::Renderer::Renderer(winrt::com_ptr<aiva::Engine> const& engine)
+aiva::layer1::Renderer::Renderer(aiva::layer1::Engine& engine) : mEngine{ engine }
 {
-	mEngine = engine;
-	winrt::check_bool(mEngine);
-
 #if defined(_DEBUG)
 	EnableDebugLayer();
 #endif
@@ -32,7 +29,7 @@ aiva::Renderer::Renderer(winrt::com_ptr<aiva::Engine> const& engine)
 
 	mIsTearingAllowed = CheckIsTearingAllowed(mFactory);
 
-	mSwapChain = CreateSwapChain(mFactory, mCommandQueue, mEngine->GetWindow(), mIsTearingAllowed);
+	mSwapChain = CreateSwapChain(mFactory, mCommandQueue, mEngine.App()->Window(), mIsTearingAllowed);
 	winrt::check_bool(mSwapChain);
 
 	mDescriptorHeap = CreateDescriptorHeap(mDevice);
@@ -51,8 +48,24 @@ aiva::Renderer::Renderer(winrt::com_ptr<aiva::Engine> const& engine)
 	winrt::check_bool(mFence);
 }
 
+aiva::layer1::Renderer::~Renderer()
+{
+	mFence = {};
+	mCommandList = {};
+	mCommandAllocator = {};
+	mRenderTargetViews = {};
+	mDescriptorHeap = {};
+	mSwapChain = {};
+	mIsTearingAllowed = {};
+	mCommandQueue = {};
+	mInfoQueue = {};
+	mDevice = {};
+	mAdapter = {};
+	mFactory = {};
+}
+
 #if defined(_DEBUG)
-void aiva::Renderer::EnableDebugLayer()
+void aiva::layer1::Renderer::EnableDebugLayer()
 {
 	winrt::com_ptr<ID3D12Debug> debug{};
 	winrt::check_hresult(D3D12GetDebugInterface(IID_PPV_ARGS(&debug)));
@@ -60,7 +73,7 @@ void aiva::Renderer::EnableDebugLayer()
 }
 #endif
 
-winrt::com_ptr<IDXGIFactory7> aiva::Renderer::CreateFactory()
+winrt::com_ptr<IDXGIFactory7> aiva::layer1::Renderer::CreateFactory()
 {
 #if defined(_DEBUG)
 	const UINT flags = DXGI_CREATE_FACTORY_DEBUG;
@@ -77,7 +90,7 @@ winrt::com_ptr<IDXGIFactory7> aiva::Renderer::CreateFactory()
 	return specificFactory;
 }
 
-winrt::com_ptr<IDXGIAdapter4> aiva::Renderer::CreateAdapter(winrt::com_ptr<IDXGIFactory7> const& factory)
+winrt::com_ptr<IDXGIAdapter4> aiva::layer1::Renderer::CreateAdapter(winrt::com_ptr<IDXGIFactory7> const& factory)
 {
 	winrt::check_bool(factory);
 
@@ -90,7 +103,7 @@ winrt::com_ptr<IDXGIAdapter4> aiva::Renderer::CreateAdapter(winrt::com_ptr<IDXGI
 	return specificAdapter;
 }
 
-winrt::com_ptr<ID3D12Device9> aiva::Renderer::CreateDevice(winrt::com_ptr<IDXGIAdapter4> const& adapter)
+winrt::com_ptr<ID3D12Device9> aiva::layer1::Renderer::CreateDevice(winrt::com_ptr<IDXGIAdapter4> const& adapter)
 {
 	winrt::check_bool(adapter);
 
@@ -104,7 +117,7 @@ winrt::com_ptr<ID3D12Device9> aiva::Renderer::CreateDevice(winrt::com_ptr<IDXGIA
 }
 
 #if defined(_DEBUG)
-winrt::com_ptr<ID3D12InfoQueue1> aiva::Renderer::CreateInfoQueue(winrt::com_ptr<ID3D12Device9> const& device)
+winrt::com_ptr<ID3D12InfoQueue1> aiva::layer1::Renderer::CreateInfoQueue(winrt::com_ptr<ID3D12Device9> const& device)
 {
 	winrt::check_bool(device);
 
@@ -119,7 +132,7 @@ winrt::com_ptr<ID3D12InfoQueue1> aiva::Renderer::CreateInfoQueue(winrt::com_ptr<
 }
 #endif
 
-winrt::com_ptr<ID3D12CommandQueue> aiva::Renderer::CreateCommandQueue(winrt::com_ptr<ID3D12Device9> const& device)
+winrt::com_ptr<ID3D12CommandQueue> aiva::layer1::Renderer::CreateCommandQueue(winrt::com_ptr<ID3D12Device9> const& device)
 {
 	winrt::check_bool(device);
 
@@ -135,7 +148,7 @@ winrt::com_ptr<ID3D12CommandQueue> aiva::Renderer::CreateCommandQueue(winrt::com
 	return commandQueue;
 }
 
-bool aiva::Renderer::CheckIsTearingAllowed(winrt::com_ptr<IDXGIFactory7> const& factory)
+bool aiva::layer1::Renderer::CheckIsTearingAllowed(winrt::com_ptr<IDXGIFactory7> const& factory)
 {
 	winrt::check_bool(factory);
 	
@@ -145,7 +158,7 @@ bool aiva::Renderer::CheckIsTearingAllowed(winrt::com_ptr<IDXGIFactory7> const& 
 	return isTearingAllowed;
 }
 
-winrt::com_ptr<IDXGISwapChain4> aiva::Renderer::CreateSwapChain(winrt::com_ptr<IDXGIFactory7> const& factory, winrt::com_ptr<ID3D12CommandQueue> const& commandQueue, CoreWindow const window, bool const isTearingAllowed)
+winrt::com_ptr<IDXGISwapChain4> aiva::layer1::Renderer::CreateSwapChain(winrt::com_ptr<IDXGIFactory7> const& factory, winrt::com_ptr<ID3D12CommandQueue> const& commandQueue, CoreWindow const window, bool const isTearingAllowed)
 {
 	winrt::check_bool(factory);
 	winrt::check_bool(commandQueue);
@@ -173,7 +186,7 @@ winrt::com_ptr<IDXGISwapChain4> aiva::Renderer::CreateSwapChain(winrt::com_ptr<I
 	return specificSwapChain;
 }
 
-winrt::com_ptr<ID3D12DescriptorHeap> aiva::Renderer::CreateDescriptorHeap(winrt::com_ptr<ID3D12Device9> const& device)
+winrt::com_ptr<ID3D12DescriptorHeap> aiva::layer1::Renderer::CreateDescriptorHeap(winrt::com_ptr<ID3D12Device9> const& device)
 {
 	winrt::check_bool(device);
 
@@ -189,7 +202,7 @@ winrt::com_ptr<ID3D12DescriptorHeap> aiva::Renderer::CreateDescriptorHeap(winrt:
 	return descriptorHeap;
 }
 
-std::array<winrt::com_ptr<ID3D12Resource>, aiva::Renderer::SWAP_CHAIN_BUFFERS_COUNT> aiva::Renderer::CreateRenderTargetViews(winrt::com_ptr<ID3D12Device9> const& device, winrt::com_ptr<IDXGISwapChain4> const& swapChain, winrt::com_ptr<ID3D12DescriptorHeap> const& descriptorHeap)
+std::array<winrt::com_ptr<ID3D12Resource>, aiva::layer1::Renderer::SWAP_CHAIN_BUFFERS_COUNT> aiva::layer1::Renderer::CreateRenderTargetViews(winrt::com_ptr<ID3D12Device9> const& device, winrt::com_ptr<IDXGISwapChain4> const& swapChain, winrt::com_ptr<ID3D12DescriptorHeap> const& descriptorHeap)
 {
 	winrt::check_bool(device);
 	winrt::check_bool(swapChain);
@@ -198,7 +211,7 @@ std::array<winrt::com_ptr<ID3D12Resource>, aiva::Renderer::SWAP_CHAIN_BUFFERS_CO
 	const SIZE_T heapStart = descriptorHeap->GetCPUDescriptorHandleForHeapStart().ptr;
 	const UINT heapOffset = device->GetDescriptorHandleIncrementSize(descriptorHeap->GetDesc().Type);
 
-	std::array<winrt::com_ptr<ID3D12Resource>, aiva::Renderer::SWAP_CHAIN_BUFFERS_COUNT> renderTargetViews{};
+	std::array<winrt::com_ptr<ID3D12Resource>, aiva::layer1::Renderer::SWAP_CHAIN_BUFFERS_COUNT> renderTargetViews{};
 
 	for (UINT i = 0; i < renderTargetViews.size(); i++)
 	{
@@ -217,7 +230,7 @@ std::array<winrt::com_ptr<ID3D12Resource>, aiva::Renderer::SWAP_CHAIN_BUFFERS_CO
 	return renderTargetViews;
 }
 
-winrt::com_ptr<ID3D12CommandAllocator> aiva::Renderer::CreateCommandAllocator(winrt::com_ptr<ID3D12Device9> const& device)
+winrt::com_ptr<ID3D12CommandAllocator> aiva::layer1::Renderer::CreateCommandAllocator(winrt::com_ptr<ID3D12Device9> const& device)
 {
 	winrt::check_bool(device);
 
@@ -227,7 +240,7 @@ winrt::com_ptr<ID3D12CommandAllocator> aiva::Renderer::CreateCommandAllocator(wi
 	return commandAllocator;
 }
 
-winrt::com_ptr<ID3D12GraphicsCommandList6> aiva::Renderer::CreateCommandList(winrt::com_ptr<ID3D12Device9> const& device, winrt::com_ptr<ID3D12CommandAllocator> const& commandAllocator)
+winrt::com_ptr<ID3D12GraphicsCommandList6> aiva::layer1::Renderer::CreateCommandList(winrt::com_ptr<ID3D12Device9> const& device, winrt::com_ptr<ID3D12CommandAllocator> const& commandAllocator)
 {
 	winrt::check_bool(device);
 	winrt::check_bool(commandAllocator);
@@ -241,7 +254,7 @@ winrt::com_ptr<ID3D12GraphicsCommandList6> aiva::Renderer::CreateCommandList(win
 	return specificCommandList;
 }
 
-winrt::com_ptr<ID3D12Fence1> aiva::Renderer::CreateFence(winrt::com_ptr<ID3D12Device9> const& device)
+winrt::com_ptr<ID3D12Fence1> aiva::layer1::Renderer::CreateFence(winrt::com_ptr<ID3D12Device9> const& device)
 {
 	winrt::check_bool(device);
 
@@ -253,4 +266,3 @@ winrt::com_ptr<ID3D12Fence1> aiva::Renderer::CreateFence(winrt::com_ptr<ID3D12De
 
 	return specificFence;
 }
-*/

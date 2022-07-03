@@ -1,10 +1,6 @@
 ﻿#pragma once
 
-#include <array>
-#include <boost/core/noncopyable.hpp>
-#include <boost/signals2.hpp>
 #include <Unknwn.h>
-#include <winrt/base.h>
 #include <winrt/Windows.ApplicationModel.Core.h>
 #include <winrt/Windows.UI.Core.h>
 #include <d3d12.h>

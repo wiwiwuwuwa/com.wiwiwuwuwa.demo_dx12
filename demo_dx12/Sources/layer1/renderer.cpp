@@ -1,6 +1,7 @@
 #include <pch.h>
 #include <layer1/renderer.h>
 
+#include <boost/bind.hpp>
 #include <layer0/app.h>
 #include <layer1/engine.h>
 
@@ -44,12 +45,15 @@ aiva::layer1::Renderer::Renderer(aiva::layer1::Engine& engine) : mEngine{ engine
 	mCommandList = CreateCommandList(mDevice, mCommandAllocator);
 	winrt::check_bool(mCommandList);
 
-	mFence = CreateFence(mDevice);
+	mFence = CreateFence(mDevice, mEngine.Tick());
 	winrt::check_bool(mFence);
+
+	mEngine.OnRender().connect(boost::bind(&aiva::layer1::Renderer::OnEngineRender, this));
 }
 
 aiva::layer1::Renderer::~Renderer()
 {
+	mEngine.OnRender().disconnect(boost::bind(&aiva::layer1::Renderer::OnEngineRender, this));
 	mFence = {};
 	mCommandList = {};
 	mCommandAllocator = {};
@@ -62,6 +66,21 @@ aiva::layer1::Renderer::~Renderer()
 	mDevice = {};
 	mAdapter = {};
 	mFactory = {};
+}
+
+void aiva::layer1::Renderer::OnEngineRender()
+{
+	winrt::check_bool(mFence);
+	winrt::check_bool(mCommandQueue);
+	winrt::check_bool(mCommandAllocator);
+	winrt::check_bool(mCommandList);
+
+	WaitForTick(mFence, mEngine.Tick());
+	ResetCommandList(mCommandAllocator, mCommandList);
+	PopulateCommandList(mCommandList);
+	CloseCommandList(mCommandList);
+	ExecuteCommandList(mCommandQueue, mCommandList);
+	ExecuteSignalForTick(mCommandQueue, mFence, mEngine.Tick() + 1);
 }
 
 #if defined(_DEBUG)
@@ -251,18 +270,72 @@ winrt::com_ptr<ID3D12GraphicsCommandList6> aiva::layer1::Renderer::CreateCommand
 	winrt::com_ptr<ID3D12GraphicsCommandList6> specificCommandList{};
 	basicCommandList.as(specificCommandList);
 
+	winrt::check_hresult(specificCommandList->Close());
 	return specificCommandList;
 }
 
-winrt::com_ptr<ID3D12Fence1> aiva::layer1::Renderer::CreateFence(winrt::com_ptr<ID3D12Device9> const& device)
+winrt::com_ptr<ID3D12Fence1> aiva::layer1::Renderer::CreateFence(winrt::com_ptr<ID3D12Device9> const& device, uint64_t const tick)
 {
 	winrt::check_bool(device);
 
 	winrt::com_ptr<ID3D12Fence> basicFence{};
-	winrt::check_hresult(device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&basicFence)));
+	winrt::check_hresult(device->CreateFence(tick, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&basicFence)));
 
 	winrt::com_ptr<ID3D12Fence1> specificFence{};
 	basicFence.as(specificFence);
 
 	return specificFence;
+}
+
+void aiva::layer1::Renderer::WaitForTick(winrt::com_ptr<ID3D12Fence1> const& fence, uint64_t const desiredTick)
+{
+	winrt::check_bool(fence);
+
+	UINT64 const currentTick = fence->GetCompletedValue();
+	winrt::check_bool(currentTick != UINT64_MAX);
+
+	if (currentTick >= desiredTick)
+	{
+		return;
+	}
+
+	winrt::check_hresult(fence->SetEventOnCompletion(desiredTick, nullptr));
+}
+
+void aiva::layer1::Renderer::ResetCommandList(winrt::com_ptr<ID3D12CommandAllocator> const& commandAllocator, winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList)
+{
+	winrt::check_bool(commandAllocator);
+	winrt::check_bool(commandList);
+
+	winrt::check_hresult(commandAllocator->Reset());
+	winrt::check_hresult(commandList->Reset(commandAllocator.get(), nullptr));
+}
+
+void aiva::layer1::Renderer::PopulateCommandList(winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList)
+{
+	winrt::check_bool(commandList);
+}
+
+void aiva::layer1::Renderer::CloseCommandList(winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList)
+{
+	winrt::check_bool(commandList);
+
+	commandList->Close();
+}
+
+void aiva::layer1::Renderer::ExecuteCommandList(winrt::com_ptr<ID3D12CommandQueue> const& commandQueue, winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList)
+{
+	winrt::check_bool(commandQueue);
+	winrt::check_bool(commandList);
+
+	std::array<ID3D12CommandList*, 1> const commandsList = { commandList.get() };
+	commandQueue->ExecuteCommandLists(1, commandsList.data());
+}
+
+void aiva::layer1::Renderer::ExecuteSignalForTick(winrt::com_ptr<ID3D12CommandQueue> const& commandQueue, winrt::com_ptr<ID3D12Fence1> const& fence, uint64_t tick)
+{
+	winrt::check_bool(commandQueue);
+	winrt::check_bool(fence);
+	
+	winrt::check_hresult(commandQueue->Signal(fence.get(), tick));
 }

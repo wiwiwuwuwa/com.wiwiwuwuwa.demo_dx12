@@ -15,13 +15,15 @@ namespace aiva::layer1
 	struct Renderer final : private boost::noncopyable
 	{
 	// ----------------------------------------------------
-	// Renderer
+	// Main
 
 	public:
 		Renderer(aiva::layer1::Engine& engine);
 		~Renderer();
 
 	private:
+		void OnEngineRender();
+
 		aiva::layer1::Engine& mEngine;
 
 	// ----------------------------------------------------
@@ -59,7 +61,19 @@ namespace aiva::layer1
 
 		static winrt::com_ptr<ID3D12GraphicsCommandList6> CreateCommandList(winrt::com_ptr<ID3D12Device9> const& device, winrt::com_ptr<ID3D12CommandAllocator> const& commandAllocator);
 
-		static winrt::com_ptr<ID3D12Fence1> CreateFence(winrt::com_ptr<ID3D12Device9> const& device);
+		static winrt::com_ptr<ID3D12Fence1> CreateFence(winrt::com_ptr<ID3D12Device9> const& device, uint64_t const tick);
+
+		static void WaitForTick(winrt::com_ptr<ID3D12Fence1> const& fence, uint64_t const desiredTick);
+
+		static void ResetCommandList(winrt::com_ptr<ID3D12CommandAllocator> const& commandAllocator, winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList);
+
+		static void PopulateCommandList(winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList);
+
+		static void CloseCommandList(winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList);
+
+		static void ExecuteCommandList(winrt::com_ptr<ID3D12CommandQueue> const& commandQueue, winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList);
+
+		static void ExecuteSignalForTick(winrt::com_ptr<ID3D12CommandQueue> const& commandQueue, winrt::com_ptr<ID3D12Fence1> const& fence, uint64_t tick);
 
 	private:
 		winrt::com_ptr<IDXGIFactory7> mFactory{};

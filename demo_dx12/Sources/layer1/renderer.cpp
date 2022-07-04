@@ -75,12 +75,12 @@ void aiva::layer1::Renderer::OnEngineRender()
 	winrt::check_bool(mCommandAllocator);
 	winrt::check_bool(mCommandList);
 
-	WaitForTick(mFence, mEngine.Tick());
+	WaitForFrame(mFence, mEngine.Tick());
 	ResetCommandList(mCommandAllocator, mCommandList);
 	PopulateCommandList(mCommandList);
 	CloseCommandList(mCommandList);
 	ExecuteCommandList(mCommandQueue, mCommandList);
-	ExecuteSignalForTick(mCommandQueue, mFence, mEngine.Tick() + 1);
+	ExecuteSignalForFrame(mCommandQueue, mFence, mEngine.Tick() + 1);
 }
 
 #if defined(_DEBUG)
@@ -287,19 +287,19 @@ winrt::com_ptr<ID3D12Fence1> aiva::layer1::Renderer::CreateFence(winrt::com_ptr<
 	return specificFence;
 }
 
-void aiva::layer1::Renderer::WaitForTick(winrt::com_ptr<ID3D12Fence1> const& fence, uint64_t const desiredTick)
+void aiva::layer1::Renderer::WaitForFrame(winrt::com_ptr<ID3D12Fence1> const& fence, uint64_t const desiredFrame)
 {
 	winrt::check_bool(fence);
 
-	UINT64 const currentTick = fence->GetCompletedValue();
-	winrt::check_bool(currentTick != UINT64_MAX);
+	UINT64 const currentFrame = fence->GetCompletedValue();
+	winrt::check_bool(currentFrame != UINT64_MAX);
 
-	if (currentTick >= desiredTick)
+	if (currentFrame >= desiredFrame)
 	{
 		return;
 	}
 
-	winrt::check_hresult(fence->SetEventOnCompletion(desiredTick, nullptr));
+	winrt::check_hresult(fence->SetEventOnCompletion(desiredFrame, nullptr));
 }
 
 void aiva::layer1::Renderer::ResetCommandList(winrt::com_ptr<ID3D12CommandAllocator> const& commandAllocator, winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList)
@@ -332,10 +332,10 @@ void aiva::layer1::Renderer::ExecuteCommandList(winrt::com_ptr<ID3D12CommandQueu
 	commandQueue->ExecuteCommandLists(1, commandsList.data());
 }
 
-void aiva::layer1::Renderer::ExecuteSignalForTick(winrt::com_ptr<ID3D12CommandQueue> const& commandQueue, winrt::com_ptr<ID3D12Fence1> const& fence, uint64_t tick)
+void aiva::layer1::Renderer::ExecuteSignalForFrame(winrt::com_ptr<ID3D12CommandQueue> const& commandQueue, winrt::com_ptr<ID3D12Fence1> const& fence, uint64_t frame)
 {
 	winrt::check_bool(commandQueue);
 	winrt::check_bool(fence);
 	
-	winrt::check_hresult(commandQueue->Signal(fence.get(), tick));
+	winrt::check_hresult(commandQueue->Signal(fence.get(), frame));
 }

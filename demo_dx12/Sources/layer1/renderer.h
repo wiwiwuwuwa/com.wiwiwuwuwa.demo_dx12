@@ -63,7 +63,7 @@ namespace aiva::layer1
 
 		static winrt::com_ptr<ID3D12Fence1> CreateFence(winrt::com_ptr<ID3D12Device9> const& device, uint64_t const tick);
 
-		static void WaitForTick(winrt::com_ptr<ID3D12Fence1> const& fence, uint64_t const desiredTick);
+		static void WaitForFrame(winrt::com_ptr<ID3D12Fence1> const& fence, uint64_t const desiredFrame);
 
 		static void ResetCommandList(winrt::com_ptr<ID3D12CommandAllocator> const& commandAllocator, winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList);
 
@@ -73,7 +73,7 @@ namespace aiva::layer1
 
 		static void ExecuteCommandList(winrt::com_ptr<ID3D12CommandQueue> const& commandQueue, winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList);
 
-		static void ExecuteSignalForTick(winrt::com_ptr<ID3D12CommandQueue> const& commandQueue, winrt::com_ptr<ID3D12Fence1> const& fence, uint64_t tick);
+		static void ExecuteSignalForFrame(winrt::com_ptr<ID3D12CommandQueue> const& commandQueue, winrt::com_ptr<ID3D12Fence1> const& fence, uint64_t frame);
 
 	private:
 		winrt::com_ptr<IDXGIFactory7> mFactory{};

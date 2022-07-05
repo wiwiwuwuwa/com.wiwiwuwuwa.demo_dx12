@@ -74,8 +74,10 @@ void aiva::layer1::Renderer::OnEngineRender()
 	winrt::check_bool(mCommandQueue);
 	winrt::check_bool(mCommandAllocator);
 	winrt::check_bool(mCommandList);
+	winrt::check_bool(mSwapChain);
 
-	WaitForFrame(mFence, mEngine.Tick());
+	WaitFrame(mFence, mEngine.Tick());
+	PresentFrame(mSwapChain, mIsTearingAllowed);
 	ResetCommandList(mCommandAllocator, mCommandList);
 	PopulateCommandList(mCommandList);
 	CloseCommandList(mCommandList);
@@ -287,7 +289,7 @@ winrt::com_ptr<ID3D12Fence1> aiva::layer1::Renderer::CreateFence(winrt::com_ptr<
 	return specificFence;
 }
 
-void aiva::layer1::Renderer::WaitForFrame(winrt::com_ptr<ID3D12Fence1> const& fence, uint64_t const desiredFrame)
+void aiva::layer1::Renderer::WaitFrame(winrt::com_ptr<ID3D12Fence1> const& fence, uint64_t const desiredFrame)
 {
 	winrt::check_bool(fence);
 
@@ -300,6 +302,16 @@ void aiva::layer1::Renderer::WaitForFrame(winrt::com_ptr<ID3D12Fence1> const& fe
 	}
 
 	winrt::check_hresult(fence->SetEventOnCompletion(desiredFrame, nullptr));
+}
+
+void aiva::layer1::Renderer::PresentFrame(winrt::com_ptr<IDXGISwapChain4> const& swapChain, bool const isTearingAllowed)
+{
+	winrt::check_bool(swapChain);
+
+	UINT const syncInterval = SWAP_CHAIN_VSYNC_ENABLED ? 1 : 0;
+	UINT const presentFlags = isTearingAllowed && !SWAP_CHAIN_VSYNC_ENABLED ? DXGI_PRESENT_ALLOW_TEARING : 0;
+
+	winrt::check_hresult(swapChain->Present(syncInterval, presentFlags));
 }
 
 void aiva::layer1::Renderer::ResetCommandList(winrt::com_ptr<ID3D12CommandAllocator> const& commandAllocator, winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList)

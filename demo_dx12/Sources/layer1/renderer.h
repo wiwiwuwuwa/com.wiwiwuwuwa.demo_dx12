@@ -31,6 +31,7 @@ namespace aiva::layer1
 
 	private:
 		static constexpr int32_t SWAP_CHAIN_BUFFERS_COUNT = 2;
+		static constexpr bool SWAP_CHAIN_VSYNC_ENABLED = false;
 
 	private:
 #if defined(_DEBUG)
@@ -63,7 +64,9 @@ namespace aiva::layer1
 
 		static winrt::com_ptr<ID3D12Fence1> CreateFence(winrt::com_ptr<ID3D12Device9> const& device, uint64_t const tick);
 
-		static void WaitForFrame(winrt::com_ptr<ID3D12Fence1> const& fence, uint64_t const desiredFrame);
+		static void WaitFrame(winrt::com_ptr<ID3D12Fence1> const& fence, uint64_t const desiredFrame);
+
+		static void PresentFrame(winrt::com_ptr<IDXGISwapChain4> const& swapChain, bool const isTearingAllowed);
 
 		static void ResetCommandList(winrt::com_ptr<ID3D12CommandAllocator> const& commandAllocator, winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList);
 

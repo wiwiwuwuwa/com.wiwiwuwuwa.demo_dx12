@@ -4,6 +4,7 @@
 #include <array>
 #include <boost/core/noncopyable.hpp>
 #include <winrt/base.h>
+#include <glm/glm.hpp>
 
 namespace aiva::layer1
 {
@@ -31,7 +32,8 @@ namespace aiva::layer1
 
 	private:
 		static constexpr int32_t SWAP_CHAIN_BUFFERS_COUNT = 2;
-		static constexpr bool SWAP_CHAIN_VSYNC_ENABLED = false;
+		static constexpr bool SWAP_CHAIN_VSYNC_ENABLED = true;
+		static constexpr glm::vec4 BACK_BUFFER_CLEAR_COLOR = glm::vec4(27.0f, 32.0f, 80.0f, 255.0f) / 255.0f;
 
 	private:
 #if defined(_DEBUG)
@@ -70,7 +72,7 @@ namespace aiva::layer1
 
 		static void ResetCommandList(winrt::com_ptr<ID3D12CommandAllocator> const& commandAllocator, winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList);
 
-		static void PopulateCommandList(winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList);
+		static void PopulateCommandList(winrt::com_ptr<ID3D12Device9> const& device, winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList, winrt::com_ptr<IDXGISwapChain4> const& swapChain, winrt::com_ptr<ID3D12DescriptorHeap> const& renderTargetHeap, std::array<winrt::com_ptr<ID3D12Resource>, SWAP_CHAIN_BUFFERS_COUNT> const& renderTargetResources);
 
 		static void CloseCommandList(winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList);
 

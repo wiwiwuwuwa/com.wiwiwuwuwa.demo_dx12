@@ -2,6 +2,7 @@
 #include <layer1/renderer.h>
 
 #include <boost/bind.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <layer0/app.h>
 #include <layer1/engine.h>
 
@@ -79,7 +80,7 @@ void aiva::layer1::Renderer::OnEngineRender()
 	WaitFrame(mFence, mEngine.Tick());
 	PresentFrame(mSwapChain, mIsTearingAllowed);
 	ResetCommandList(mCommandAllocator, mCommandList);
-	PopulateCommandList(mCommandList);
+	PopulateCommandList(mDevice, mCommandList, mSwapChain, mDescriptorHeap, mRenderTargetViews);
 	CloseCommandList(mCommandList);
 	ExecuteCommandList(mCommandQueue, mCommandList);
 	ExecuteSignalForFrame(mCommandQueue, mFence, mEngine.Tick() + 1);
@@ -323,9 +324,50 @@ void aiva::layer1::Renderer::ResetCommandList(winrt::com_ptr<ID3D12CommandAlloca
 	winrt::check_hresult(commandList->Reset(commandAllocator.get(), nullptr));
 }
 
-void aiva::layer1::Renderer::PopulateCommandList(winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList)
+void aiva::layer1::Renderer::PopulateCommandList(winrt::com_ptr<ID3D12Device9> const& device, winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList, winrt::com_ptr<IDXGISwapChain4> const& swapChain, winrt::com_ptr<ID3D12DescriptorHeap> const& renderTargetHeap, std::array<winrt::com_ptr<ID3D12Resource>, SWAP_CHAIN_BUFFERS_COUNT> const& renderTargetResources)
 {
+	winrt::check_bool(device);
 	winrt::check_bool(commandList);
+	winrt::check_bool(swapChain);
+	winrt::check_bool(renderTargetHeap);
+	for (winrt::com_ptr<ID3D12Resource> const& renderTargetResource : renderTargetResources) winrt::check_bool(renderTargetResource);
+
+	UINT const currentBackBufferIndex = swapChain->GetCurrentBackBufferIndex();
+	winrt::com_ptr<ID3D12Resource> const currentBackBufferResource = renderTargetResources.at(currentBackBufferIndex);
+
+	{
+		D3D12_RESOURCE_BARRIER openBarrier{};
+		openBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		openBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		openBarrier.Transition.pResource = currentBackBufferResource.get();
+		openBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+		openBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+		openBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+
+		commandList->ResourceBarrier(1, &openBarrier);
+	}
+
+	{
+		SIZE_T const currentBackBufferHeapStart = renderTargetHeap->GetCPUDescriptorHandleForHeapStart().ptr;
+		UINT const currentBackBufferHeapDelta = device->GetDescriptorHandleIncrementSize(renderTargetHeap->GetDesc().Type);
+
+		D3D12_CPU_DESCRIPTOR_HANDLE currentBackBufferHandle{};
+		currentBackBufferHandle.ptr = currentBackBufferHeapStart + static_cast<SIZE_T>(currentBackBufferIndex * currentBackBufferHeapDelta);
+
+		commandList->ClearRenderTargetView(currentBackBufferHandle, glm::value_ptr(BACK_BUFFER_CLEAR_COLOR), 0, nullptr);
+	}
+
+	{
+		D3D12_RESOURCE_BARRIER closeBarrier{};
+		closeBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		closeBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		closeBarrier.Transition.pResource = currentBackBufferResource.get();
+		closeBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+		closeBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+		closeBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
+
+		commandList->ResourceBarrier(1, &closeBarrier);
+	}
 }
 
 void aiva::layer1::Renderer::CloseCommandList(winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList)

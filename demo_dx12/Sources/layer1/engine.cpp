@@ -13,8 +13,11 @@ aiva::layer1::Engine::Engine()
 	mApp->OnStart().connect(boost::bind(&aiva::layer1::Engine::OnAppStart, this));
 	mApp->OnUpdate().connect(boost::bind(&aiva::layer1::Engine::OnAppUpdate, this));
 	mApp->OnFinish().connect(boost::bind(&aiva::layer1::Engine::OnAppFinish, this));
+}
 
-	CoreApplication::Run(*mApp);
+aiva::layer1::Engine::~Engine()
+{
+	winrt::check_bool(mApp);
 
 	mApp->OnFinish().disconnect(boost::bind(&aiva::layer1::Engine::OnAppFinish, this));
 	mApp->OnUpdate().disconnect(boost::bind(&aiva::layer1::Engine::OnAppUpdate, this));
@@ -23,9 +26,10 @@ aiva::layer1::Engine::Engine()
 	mApp = {};
 }
 
-aiva::layer1::Engine::~Engine()
+void aiva::layer1::Engine::Run()
 {
-
+	winrt::check_bool(mApp);
+	CoreApplication::Run(*mApp);
 }
 
 winrt::com_ptr<aiva::layer0::App> const& aiva::layer1::Engine::App() const

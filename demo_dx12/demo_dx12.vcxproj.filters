@@ -6,6 +6,7 @@
     <ClCompile Include="Sources\layer1\renderer.cpp" />
     <ClCompile Include="Sources\layer0\app.cpp" />
     <ClCompile Include="Sources\layer1\engine.cpp" />
+    <ClCompile Include="Sources\layer2\world.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -14,6 +15,8 @@
     <ClInclude Include="Sources\layer0\app.h" />
     <ClInclude Include="Sources\layer1\engine.h" />
     <ClInclude Include="Sources\utils\ev_action.h" />
+    <ClInclude Include="Sources\layer2\world.h" />
+    <ClInclude Include="Sources\utils\asserts.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

@@ -25,7 +25,10 @@ namespace aiva::layer1
 
 	public:
 		Engine();
+
 		~Engine();
+
+		void Run();
 
 		winrt::com_ptr<aiva::layer0::App> const& App() const;
 

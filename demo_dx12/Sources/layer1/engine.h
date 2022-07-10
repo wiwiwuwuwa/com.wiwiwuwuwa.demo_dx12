@@ -13,7 +13,9 @@ namespace aiva::layer0
 
 namespace aiva::layer1
 {
-	struct Renderer;
+	struct GraphicExecutor;
+	struct GraphicHardware;
+	struct GraphicPipeline;
 }
 
 namespace aiva::layer1
@@ -32,6 +34,12 @@ namespace aiva::layer1
 
 		winrt::com_ptr<aiva::layer0::App> const& App() const;
 
+		aiva::layer1::GraphicHardware& GraphicHardware() const;
+
+		aiva::layer1::GraphicPipeline& GraphicPipeline() const;
+
+		aiva::layer1::GraphicExecutor& GraphicExecutor() const;
+
 	private:
 		void OnAppStart();
 
@@ -41,15 +49,27 @@ namespace aiva::layer1
 
 		winrt::com_ptr<aiva::layer0::App> mApp{};
 
-		std::unique_ptr<aiva::layer1::Renderer> mRenderer{};
+		std::unique_ptr<aiva::layer1::GraphicHardware> mGraphicHardware{};
+
+		std::unique_ptr<aiva::layer1::GraphicPipeline> mGraphicPipeline{};
+
+		std::unique_ptr<aiva::layer1::GraphicExecutor> mGraphicExecutor{};
 
 	// ----------------------------------------------------
 	// Events
 
 	public:
+		aiva::utils::EvAction& OnUpdate();
+
+		aiva::utils::EvAction& OnPrepareForRender();
+
 		aiva::utils::EvAction& OnRender();
 
 	private:
+		aiva::utils::EvAction mOnUpdate{};
+
+		aiva::utils::EvAction mOnPrepareForRender{};
+
 		aiva::utils::EvAction mOnRender{};
 
 	// ----------------------------------------------------

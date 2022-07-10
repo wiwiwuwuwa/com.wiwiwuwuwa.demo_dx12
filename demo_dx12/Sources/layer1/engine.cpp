@@ -3,7 +3,10 @@
 
 #include <boost/bind.hpp>
 #include <layer0/app.h>
-#include <layer1/renderer.h>
+#include <layer1/graphic_executor.h>
+#include <layer1/graphic_hardware.h>
+#include <layer1/graphic_pipeline.h>
+#include <utils/asserts.h>
 
 aiva::layer1::Engine::Engine()
 {
@@ -37,20 +40,54 @@ winrt::com_ptr<aiva::layer0::App> const& aiva::layer1::Engine::App() const
 	return mApp;
 }
 
+aiva::layer1::GraphicHardware& aiva::layer1::Engine::GraphicHardware() const
+{
+	aiva::utils::Asserts::CheckBool(mGraphicHardware);
+	return *mGraphicHardware;
+}
+
+aiva::layer1::GraphicPipeline& aiva::layer1::Engine::GraphicPipeline() const
+{
+	aiva::utils::Asserts::CheckBool(mGraphicPipeline);
+	return *mGraphicPipeline;
+}
+
+aiva::layer1::GraphicExecutor& aiva::layer1::Engine::GraphicExecutor() const
+{
+	aiva::utils::Asserts::CheckBool(mGraphicExecutor);
+	return *mGraphicExecutor;
+}
+
 void aiva::layer1::Engine::OnAppStart()
 {
-	mRenderer = std::make_unique<aiva::layer1::Renderer>(*this);
+	mGraphicHardware = std::make_unique<aiva::layer1::GraphicHardware>(*this);
+	mGraphicPipeline = std::make_unique<aiva::layer1::GraphicPipeline>(*this);
+	mGraphicExecutor = std::make_unique<aiva::layer1::GraphicExecutor>(*this);
 }
 
 void aiva::layer1::Engine::OnAppUpdate()
 {
+	OnUpdate()();
+	OnPrepareForRender()();
 	OnRender()();
 	mTick++;
 }
 
 void aiva::layer1::Engine::OnAppFinish()
 {
-	mRenderer = {};
+	mGraphicExecutor = {};
+	mGraphicPipeline = {};
+	mGraphicHardware = {};
+}
+
+aiva::utils::EvAction& aiva::layer1::Engine::OnUpdate()
+{
+	return mOnUpdate;
+}
+
+aiva::utils::EvAction& aiva::layer1::Engine::OnPrepareForRender()
+{
+	return mOnPrepareForRender;
 }
 
 aiva::utils::EvAction& aiva::layer1::Engine::OnRender()

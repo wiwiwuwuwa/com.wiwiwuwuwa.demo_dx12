@@ -4,7 +4,6 @@
 #include <array>
 #include <boost/core/noncopyable.hpp>
 #include <winrt/base.h>
-#include <glm/glm.hpp>
 
 namespace aiva::layer1
 {
@@ -13,27 +12,29 @@ namespace aiva::layer1
 
 namespace aiva::layer1
 {
-	struct Renderer final : private boost::noncopyable
+	struct GraphicHardware final : private boost::noncopyable
 	{
 	// ----------------------------------------------------
 	// Main
 
 	public:
-		Renderer(aiva::layer1::Engine& engine);
-		~Renderer();
+		GraphicHardware(aiva::layer1::Engine const& engine);
+
+		~GraphicHardware();
 
 	private:
-		void OnEngineRender();
-
-		aiva::layer1::Engine& mEngine;
+		aiva::layer1::Engine const& mEngine;
 
 	// ----------------------------------------------------
-	// DirectX
+	// DirectX Logic
 
 	private:
 		static constexpr int32_t SWAP_CHAIN_BUFFERS_COUNT = 2;
-		static constexpr bool SWAP_CHAIN_VSYNC_ENABLED = true;
-		static constexpr glm::vec4 BACK_BUFFER_CLEAR_COLOR = glm::vec4(27.0f, 32.0f, 80.0f, 255.0f) / 255.0f;
+
+	private:
+		void InitializeDirectX();
+
+		void TerminateDirectX();
 
 	private:
 #if defined(_DEBUG)
@@ -66,19 +67,35 @@ namespace aiva::layer1
 
 		static winrt::com_ptr<ID3D12Fence1> CreateFence(winrt::com_ptr<ID3D12Device9> const& device, uint64_t const tick);
 
-		static void WaitFrame(winrt::com_ptr<ID3D12Fence1> const& fence, uint64_t const desiredFrame);
+	// ----------------------------------------------------
+	// DirectX Data
 
-		static void PresentFrame(winrt::com_ptr<IDXGISwapChain4> const& swapChain, bool const isTearingAllowed);
+	public:
+		winrt::com_ptr<IDXGIFactory7> const& Factory() const;
 
-		static void ResetCommandList(winrt::com_ptr<ID3D12CommandAllocator> const& commandAllocator, winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList);
+		winrt::com_ptr<IDXGIAdapter4> const& Adapter() const;
 
-		static void PopulateCommandList(winrt::com_ptr<ID3D12Device9> const& device, winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList, winrt::com_ptr<IDXGISwapChain4> const& swapChain, winrt::com_ptr<ID3D12DescriptorHeap> const& renderTargetHeap, std::array<winrt::com_ptr<ID3D12Resource>, SWAP_CHAIN_BUFFERS_COUNT> const& renderTargetResources);
+		winrt::com_ptr<ID3D12Device9> const& Device() const;
 
-		static void CloseCommandList(winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList);
+#if defined(_DEBUG)
+		winrt::com_ptr<ID3D12InfoQueue1> const& InfoQueue() const;
+#endif
 
-		static void ExecuteCommandList(winrt::com_ptr<ID3D12CommandQueue> const& commandQueue, winrt::com_ptr<ID3D12GraphicsCommandList6> const& commandList);
+		winrt::com_ptr<ID3D12CommandQueue> const& CommandQueue() const;
 
-		static void ExecuteSignalForFrame(winrt::com_ptr<ID3D12CommandQueue> const& commandQueue, winrt::com_ptr<ID3D12Fence1> const& fence, uint64_t frame);
+		bool IsTearingAllowed() const;
+
+		winrt::com_ptr<IDXGISwapChain4> const& SwapChain() const;
+
+		winrt::com_ptr<ID3D12DescriptorHeap> const& DescriptorHeap() const;
+
+		std::array<winrt::com_ptr<ID3D12Resource>, SWAP_CHAIN_BUFFERS_COUNT> const& RenderTargetViews() const;
+
+		winrt::com_ptr<ID3D12CommandAllocator> const& CommandAllocator() const;
+
+		winrt::com_ptr<ID3D12GraphicsCommandList6> const& CommandList() const;
+
+		winrt::com_ptr<ID3D12Fence1> const& Fence() const;
 
 	private:
 		winrt::com_ptr<IDXGIFactory7> mFactory{};

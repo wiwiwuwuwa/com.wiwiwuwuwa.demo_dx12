@@ -25,5 +25,15 @@ namespace aiva::layer2
 
 	private:
 		std::unique_ptr<aiva::layer1::Engine> mEngine{};
+
+	// ----------------------------------------------------
+	// Render
+
+	public:
+		void InitializeRender();
+
+		void TickRender();
+
+		void TerminateRender();
 	};
 }

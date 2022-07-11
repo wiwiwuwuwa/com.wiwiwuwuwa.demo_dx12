@@ -4,6 +4,8 @@
 	#define NOMINMAX
 #endif
 
+#include <memory>
+#include <boost/core/noncopyable.hpp>
 #include <Unknwn.h>
 #include <winrt/Windows.ApplicationModel.Core.h>
 #include <winrt/Windows.UI.Core.h>

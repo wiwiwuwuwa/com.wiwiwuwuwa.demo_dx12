@@ -26,6 +26,7 @@
     <ClInclude Include="Sources\aiva\utils\asserts.h" />
     <ClInclude Include="Sources\aiva\utils\d3dx12.h" />
     <ClInclude Include="Sources\aiva\utils\ev_action.h" />
+    <ClInclude Include="External Sources\tinyutf8\tinyutf8.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

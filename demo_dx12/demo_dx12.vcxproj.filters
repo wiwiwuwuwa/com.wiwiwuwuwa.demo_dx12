@@ -10,6 +10,8 @@
     <ClCompile Include="Sources\aiva\layer1\graphic_pipeline.cpp" />
     <ClCompile Include="Sources\aiva\layer2\world.cpp" />
     <ClCompile Include="Sources\main.cpp" />
+    <ClCompile Include="Sources\aiva\layer2\scene_system.cpp" />
+    <ClCompile Include="Sources\aiva\layer2\scene_actor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -27,6 +29,8 @@
     <ClInclude Include="Sources\aiva\utils\d3dx12.h" />
     <ClInclude Include="Sources\aiva\utils\ev_action.h" />
     <ClInclude Include="External Sources\tinyutf8\tinyutf8.h" />
+    <ClInclude Include="Sources\aiva\layer2\scene_system.h" />
+    <ClInclude Include="Sources\aiva\layer2\scene_actor.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

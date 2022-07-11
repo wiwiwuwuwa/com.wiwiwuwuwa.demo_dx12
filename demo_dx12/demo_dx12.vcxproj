@@ -126,6 +126,8 @@
     <ClInclude Include="Sources\aiva\layer1\i_graphic_command.h" />
     <ClInclude Include="Sources\aiva\layer1\i_graphic_command_async.h" />
     <ClInclude Include="Sources\aiva\layer1\i_graphic_command_sync.h" />
+    <ClInclude Include="Sources\aiva\layer2\scene_actor.h" />
+    <ClInclude Include="Sources\aiva\layer2\scene_system.h" />
     <ClInclude Include="Sources\aiva\layer2\world.h" />
     <ClInclude Include="Sources\aiva\utils\asserts.h" />
     <ClInclude Include="Sources\aiva\utils\d3dx12.h" />
@@ -155,6 +157,8 @@
     <ClCompile Include="Sources\aiva\layer1\graphic_executor.cpp" />
     <ClCompile Include="Sources\aiva\layer1\graphic_hardware.cpp" />
     <ClCompile Include="Sources\aiva\layer1\graphic_pipeline.cpp" />
+    <ClCompile Include="Sources\aiva\layer2\scene_actor.cpp" />
+    <ClCompile Include="Sources\aiva\layer2\scene_system.cpp" />
     <ClCompile Include="Sources\aiva\layer2\world.cpp" />
     <ClCompile Include="Sources\main.cpp" />
   </ItemGroup>

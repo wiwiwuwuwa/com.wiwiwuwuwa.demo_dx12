@@ -1,11 +1,11 @@
 #include <pch.h>
-#include <layer1/graphic_executor.h>
+#include <aiva/layer1/graphic_executor.h>
 
 #include <utility>
 #include <boost/bind.hpp>
-#include <layer1/engine.h>
-#include <layer1/graphic_pipeline.h>
-#include <utils/asserts.h>
+#include <aiva/layer1/engine.h>
+#include <aiva/layer1/graphic_pipeline.h>
+#include <aiva/utils/asserts.h>
 
 aiva::layer1::GraphicExecutor::GraphicExecutor(aiva::layer1::Engine const& engine) : mEngine{ engine }
 {

@@ -116,19 +116,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Sources\layer1\engine.h" />
-    <ClInclude Include="Sources\layer1\gca_do_everything.h" />
-    <ClInclude Include="Sources\layer1\graphic_executor.h" />
-    <ClInclude Include="Sources\layer1\graphic_hardware.h" />
-    <ClInclude Include="Sources\layer1\i_graphic_command.h" />
-    <ClInclude Include="Sources\layer1\i_graphic_command_async.h" />
-    <ClInclude Include="Sources\layer1\i_graphic_command_sync.h" />
-    <ClInclude Include="Sources\layer1\graphic_pipeline.h" />
-    <ClInclude Include="Sources\layer0\app.h" />
-    <ClInclude Include="Sources\layer2\world.h" />
-    <ClInclude Include="Sources\utils\asserts.h" />
-    <ClInclude Include="Sources\utils\d3dx12.h" />
-    <ClInclude Include="Sources\utils\ev_action.h" />
+    <ClInclude Include="Sources\aiva\layer0\app.h" />
+    <ClInclude Include="Sources\aiva\layer1\engine.h" />
+    <ClInclude Include="Sources\aiva\layer1\gca_do_everything.h" />
+    <ClInclude Include="Sources\aiva\layer1\graphic_executor.h" />
+    <ClInclude Include="Sources\aiva\layer1\graphic_hardware.h" />
+    <ClInclude Include="Sources\aiva\layer1\graphic_pipeline.h" />
+    <ClInclude Include="Sources\aiva\layer1\i_graphic_command.h" />
+    <ClInclude Include="Sources\aiva\layer1\i_graphic_command_async.h" />
+    <ClInclude Include="Sources\aiva\layer1\i_graphic_command_sync.h" />
+    <ClInclude Include="Sources\aiva\layer2\world.h" />
+    <ClInclude Include="Sources\aiva\utils\asserts.h" />
+    <ClInclude Include="Sources\aiva\utils\d3dx12.h" />
+    <ClInclude Include="Sources\aiva\utils\ev_action.h" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -148,13 +148,13 @@
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Sources\layer1\engine.cpp" />
-    <ClCompile Include="Sources\layer1\gca_do_everything.cpp" />
-    <ClCompile Include="Sources\layer1\graphic_executor.cpp" />
-    <ClCompile Include="Sources\layer1\graphic_hardware.cpp" />
-    <ClCompile Include="Sources\layer1\graphic_pipeline.cpp" />
-    <ClCompile Include="Sources\layer0\app.cpp" />
-    <ClCompile Include="Sources\layer2\world.cpp" />
+    <ClCompile Include="Sources\aiva\layer0\app.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\engine.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gca_do_everything.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\graphic_executor.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\graphic_hardware.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\graphic_pipeline.cpp" />
+    <ClCompile Include="Sources\aiva\layer2\world.cpp" />
     <ClCompile Include="Sources\main.cpp" />
   </ItemGroup>
   <ItemGroup>

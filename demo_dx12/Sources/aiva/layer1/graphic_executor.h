@@ -5,8 +5,8 @@
 #include <queue>
 #include <type_traits>
 #include <boost/core/noncopyable.hpp>
-#include <layer1/i_graphic_command_async.h>
-#include <layer1/i_graphic_command_sync.h>
+#include <aiva/layer1/i_graphic_command_async.h>
+#include <aiva/layer1/i_graphic_command_sync.h>
 
 namespace aiva::layer1
 {

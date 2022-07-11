@@ -1,8 +1,8 @@
 #include <pch.h>
-#include <layer1/graphic_hardware.h>
+#include <aiva/layer1/graphic_hardware.h>
 
-#include <layer0/app.h>
-#include <layer1/engine.h>
+#include <aiva/layer0/app.h>
+#include <aiva/layer1/engine.h>
 
 aiva::layer1::GraphicHardware::GraphicHardware(aiva::layer1::Engine const& engine) : mEngine{ engine }
 {

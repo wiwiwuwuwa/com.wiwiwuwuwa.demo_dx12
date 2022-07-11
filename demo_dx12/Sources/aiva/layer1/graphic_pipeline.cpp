@@ -1,10 +1,10 @@
 #include <pch.h>
-#include <layer1/graphic_pipeline.h>
+#include <aiva/layer1/graphic_pipeline.h>
 
 #include <boost/bind.hpp>
-#include <layer0/app.h>
-#include <layer1/engine.h>
-#include <layer1/graphic_hardware.h>
+#include <aiva/layer0/app.h>
+#include <aiva/layer1/engine.h>
+#include <aiva/layer1/graphic_hardware.h>
 
 aiva::layer1::GraphicPipeline::GraphicPipeline(aiva::layer1::Engine& engine) : mEngine{ engine }
 {

@@ -1,10 +1,10 @@
 #include <pch.h>
-#include <layer2/world.h>
+#include <aiva/layer2/world.h>
 
-#include <layer1/engine.h>
-#include <layer1/gca_do_everything.h>
-#include <layer1/graphic_executor.h>
-#include <utils/asserts.h>
+#include <aiva/layer1/engine.h>
+#include <aiva/layer1/gca_do_everything.h>
+#include <aiva/layer1/graphic_executor.h>
+#include <aiva/utils/asserts.h>
 
 aiva::layer2::World::World()
 {

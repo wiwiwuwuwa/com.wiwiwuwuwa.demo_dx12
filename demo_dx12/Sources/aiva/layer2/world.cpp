@@ -9,26 +9,38 @@
 
 aiva::layer2::World::World()
 {
-	mEngine = std::make_unique<aiva::layer1::Engine>();
-	aiva::utils::Asserts::CheckBool(mEngine);
-
-	InitializeSystems();
-	InitializeRender();
+	
 }
 
 aiva::layer2::World::~World()
 {
-	TerminateRender();
-	TerminateSystems();
-
-	aiva::utils::Asserts::CheckBool(mEngine);
-	mEngine = {};
+	
 }
 
 void aiva::layer2::World::Run()
 {
+	InitializeEngine();
+	InitializeSystems();
+	InitializeRender();
+
 	aiva::utils::Asserts::CheckBool(mEngine);
 	mEngine->Run();
+
+	TerminateRender();
+	TerminateSystems();
+	TerminateEngine();
+}
+
+void aiva::layer2::World::InitializeEngine()
+{
+	mEngine = std::make_unique<aiva::layer1::Engine>();
+	aiva::utils::Asserts::CheckBool(mEngine);
+}
+
+void aiva::layer2::World::TerminateEngine()
+{
+	aiva::utils::Asserts::CheckBool(mEngine);
+	mEngine = {};
 }
 
 aiva::layer2::SceneSystem& aiva::layer2::World::SceneSystem() const
@@ -39,7 +51,7 @@ aiva::layer2::SceneSystem& aiva::layer2::World::SceneSystem() const
 
 void aiva::layer2::World::InitializeSystems()
 {
-	mSceneSystem = std::make_unique<aiva::layer2::SceneSystem>(weak_from_this());
+	mSceneSystem = aiva::layer2::SceneSystem::Create(weak_from_this());
 	aiva::utils::Asserts::CheckBool(mSceneSystem);
 }
 

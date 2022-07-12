@@ -33,6 +33,13 @@ namespace aiva::layer2
 	private:
 		World();
 
+	// ----------------------------------------------------
+
+	private:
+		void InitializeEngine();
+
+		void TerminateEngine();
+
 	private:
 		std::unique_ptr<aiva::layer1::Engine> mEngine{};
 
@@ -48,7 +55,7 @@ namespace aiva::layer2
 		void TerminateSystems();
 
 	private:
-		std::unique_ptr<aiva::layer2::SceneSystem> mSceneSystem{};
+		std::shared_ptr<aiva::layer2::SceneSystem> mSceneSystem{};
 
 	// ----------------------------------------------------
 	// Render

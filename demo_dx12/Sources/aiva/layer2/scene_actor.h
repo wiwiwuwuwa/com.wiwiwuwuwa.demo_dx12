@@ -3,6 +3,7 @@
 
 namespace aiva::layer2
 {
+	struct SceneComponent;
 	struct World;
 }
 
@@ -44,10 +45,26 @@ namespace aiva::layer2
 		std::weak_ptr<SceneActor> mParent{};
 
 		std::vector<std::shared_ptr<SceneActor>> mChildren{};
+
+	// ----------------------------------------------------
+	// Components
+
+	public:
+		template <typename T>
+		std::weak_ptr<T> CreateComponent();
+
+	private:
+		std::vector<std::shared_ptr<aiva::layer2::SceneComponent>> mComponents{};
 	};
 }
 
 // --------------------------------------------------------
+
+template <typename T>
+std::weak_ptr<T> aiva::layer2::SceneActor::CreateComponent()
+{
+	return mComponents.emplace_back(new T{ weak_from_this() });
+}
 
 template <typename... Args>
 std::shared_ptr<aiva::layer2::SceneActor> aiva::layer2::SceneActor::Create(Args&&... args)

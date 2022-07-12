@@ -15,15 +15,14 @@ aiva::layer2::SceneSystem::~SceneSystem()
 	TerminateHierarchy();
 }
 
-aiva::layer2::SceneActor& aiva::layer2::SceneSystem::SceneActor() const
+std::shared_ptr<aiva::layer2::SceneActor> aiva::layer2::SceneSystem::SceneActor() const
 {
-	aiva::utils::Asserts::CheckBool(mSceneActor);
-	return *mSceneActor;
+	return mSceneActor;
 }
 
 void aiva::layer2::SceneSystem::InitializeHierarchy()
 {
-	mSceneActor = std::make_unique<aiva::layer2::SceneActor>(u8"🌍");
+	mSceneActor = aiva::layer2::SceneActor::Create(mWorld, u8"🌍");
 	aiva::utils::Asserts::CheckBool(mSceneActor);
 }
 

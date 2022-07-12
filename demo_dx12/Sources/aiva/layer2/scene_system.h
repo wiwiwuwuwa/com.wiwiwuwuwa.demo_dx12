@@ -26,7 +26,7 @@ namespace aiva::layer2
 	// Hierarchy
 
 	public:
-		aiva::layer2::SceneActor& SceneActor() const;
+		std::shared_ptr<aiva::layer2::SceneActor> SceneActor() const;
 
 	private:
 		void InitializeHierarchy();
@@ -34,6 +34,6 @@ namespace aiva::layer2
 		void TerminateHierarchy();
 
 	private:
-		std::unique_ptr<aiva::layer2::SceneActor> mSceneActor{};
+		std::shared_ptr<aiva::layer2::SceneActor> mSceneActor{};
 	};
 }

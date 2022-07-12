@@ -21,10 +21,10 @@ namespace aiva::layer2
 		~SceneActor();
 
 	private:
-		SceneActor(aiva::layer2::World const& world, tiny_utf8::string const& name);
+		SceneActor(std::weak_ptr<aiva::layer2::World> const& world, tiny_utf8::string const& name);
 
 	private:
-		aiva::layer2::World const& mWorld;
+		std::weak_ptr<aiva::layer2::World> mWorld{};
 
 		tiny_utf8::string mName{};
 

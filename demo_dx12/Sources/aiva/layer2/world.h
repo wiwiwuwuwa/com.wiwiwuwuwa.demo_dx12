@@ -16,17 +16,22 @@ namespace aiva::layer2
 
 namespace aiva::layer2
 {
-	struct World final : private boost::noncopyable
+	struct World final : private boost::noncopyable, public std::enable_shared_from_this<World>
 	{
 	// ----------------------------------------------------
 	// Main
 
 	public:
-		World();
+		template <typename... Args>
+		static std::shared_ptr<World> Create(Args&&... args);
 
+	public:
 		~World();
 
 		void Run();
+
+	private:
+		World();
 
 	private:
 		std::unique_ptr<aiva::layer1::Engine> mEngine{};
@@ -55,4 +60,12 @@ namespace aiva::layer2
 
 		void TerminateRender();
 	};
+}
+
+// --------------------------------------------------------
+
+template<typename... Args>
+std::shared_ptr<aiva::layer2::World> aiva::layer2::World::Create(Args&&... args)
+{
+	return std::shared_ptr<aiva::layer2::World>(new aiva::layer2::World{ std::forward<Args>(args)... });
 }

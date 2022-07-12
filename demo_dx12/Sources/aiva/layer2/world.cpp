@@ -39,7 +39,7 @@ aiva::layer2::SceneSystem& aiva::layer2::World::SceneSystem() const
 
 void aiva::layer2::World::InitializeSystems()
 {
-	mSceneSystem = std::make_unique<aiva::layer2::SceneSystem>(*this);
+	mSceneSystem = std::make_unique<aiva::layer2::SceneSystem>(weak_from_this());
 	aiva::utils::Asserts::CheckBool(mSceneSystem);
 }
 

@@ -15,12 +15,12 @@ namespace aiva::layer2
 	// Main
 
 	public:
-		SceneSystem(aiva::layer2::World const& world);
+		SceneSystem(std::weak_ptr<aiva::layer2::World> const& world);
 
 		~SceneSystem();
 
 	private:
-		aiva::layer2::World const& mWorld;
+		std::weak_ptr<aiva::layer2::World> mWorld{};
 
 	// ----------------------------------------------------
 	// Hierarchy

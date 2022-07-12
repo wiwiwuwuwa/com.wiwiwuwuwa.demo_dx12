@@ -5,7 +5,7 @@
 #include <aiva/layer2/world.h>
 #include <aiva/utils/asserts.h>
 
-aiva::layer2::SceneSystem::SceneSystem(aiva::layer2::World const& world) : mWorld{ world }
+aiva::layer2::SceneSystem::SceneSystem(std::weak_ptr<aiva::layer2::World> const& world) : mWorld{ world }
 {
 	InitializeHierarchy();
 }

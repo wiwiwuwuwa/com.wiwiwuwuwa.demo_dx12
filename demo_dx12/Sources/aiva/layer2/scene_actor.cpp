@@ -1,12 +1,12 @@
 #include <pch.h>
 #include <aiva/layer2/scene_actor.h>
 
-aiva::layer2::SceneActor::~SceneActor()
+aiva::layer2::SceneActor::SceneActor(std::weak_ptr<aiva::layer2::World> const& world, tiny_utf8::string const& name) : mWorld{ world }, mName{ name }
 {
 
 }
 
-aiva::layer2::SceneActor::SceneActor(aiva::layer2::World const& world, tiny_utf8::string const& name) : mWorld{ world }, mName { name }
+aiva::layer2::SceneActor::~SceneActor()
 {
 
 }

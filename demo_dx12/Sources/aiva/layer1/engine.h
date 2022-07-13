@@ -16,6 +16,7 @@ namespace aiva::layer1
 	struct GraphicExecutor;
 	struct GraphicHardware;
 	struct GraphicPipeline;
+	struct ResourceSystem;
 }
 
 namespace aiva::layer1
@@ -34,6 +35,8 @@ namespace aiva::layer1
 
 		winrt::com_ptr<aiva::layer0::App> const& App() const;
 
+		aiva::layer1::ResourceSystem& ResourceSystem() const;
+
 		aiva::layer1::GraphicHardware& GraphicHardware() const;
 
 		aiva::layer1::GraphicPipeline& GraphicPipeline() const;
@@ -48,6 +51,8 @@ namespace aiva::layer1
 		void OnAppFinish();	
 
 		winrt::com_ptr<aiva::layer0::App> mApp{};
+
+		std::unique_ptr<aiva::layer1::ResourceSystem> mResourceSystem{};
 
 		std::unique_ptr<aiva::layer1::GraphicHardware> mGraphicHardware{};
 

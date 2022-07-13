@@ -5,7 +5,12 @@
 #endif
 
 #include <algorithm>
+#include <cstddef>
+#include <filesystem>
+#include <fstream>
+#include <functional>
 #include <memory>
+#include <unordered_map>
 #include <vector>
 #include <boost/core/noncopyable.hpp>
 #include <Unknwn.h>

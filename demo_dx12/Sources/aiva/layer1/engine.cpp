@@ -6,6 +6,7 @@
 #include <aiva/layer1/graphic_executor.h>
 #include <aiva/layer1/graphic_hardware.h>
 #include <aiva/layer1/graphic_pipeline.h>
+#include <aiva/layer1/resource_system.h>
 #include <aiva/utils/asserts.h>
 
 aiva::layer1::Engine::Engine()
@@ -40,6 +41,12 @@ winrt::com_ptr<aiva::layer0::App> const& aiva::layer1::Engine::App() const
 	return mApp;
 }
 
+aiva::layer1::ResourceSystem& aiva::layer1::Engine::ResourceSystem() const
+{
+	aiva::utils::Asserts::CheckBool(mResourceSystem);
+	return *mResourceSystem;
+}
+
 aiva::layer1::GraphicHardware& aiva::layer1::Engine::GraphicHardware() const
 {
 	aiva::utils::Asserts::CheckBool(mGraphicHardware);
@@ -60,6 +67,7 @@ aiva::layer1::GraphicExecutor& aiva::layer1::Engine::GraphicExecutor() const
 
 void aiva::layer1::Engine::OnAppStart()
 {
+	mResourceSystem = std::make_unique<aiva::layer1::ResourceSystem>(*this);
 	mGraphicHardware = std::make_unique<aiva::layer1::GraphicHardware>(*this);
 	mGraphicPipeline = std::make_unique<aiva::layer1::GraphicPipeline>(*this);
 	mGraphicExecutor = std::make_unique<aiva::layer1::GraphicExecutor>(*this);
@@ -78,6 +86,7 @@ void aiva::layer1::Engine::OnAppFinish()
 	mGraphicExecutor = {};
 	mGraphicPipeline = {};
 	mGraphicHardware = {};
+	mResourceSystem = {};
 }
 
 aiva::utils::EvAction& aiva::layer1::Engine::OnUpdate()

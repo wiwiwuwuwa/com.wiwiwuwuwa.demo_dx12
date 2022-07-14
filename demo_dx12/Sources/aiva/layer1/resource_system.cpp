@@ -89,7 +89,7 @@ void aiva::layer1::ResourceSystem::SetResourceToCache(std::filesystem::path cons
 void aiva::layer1::ResourceSystem::InitializeFactories()
 {
 	mFactories = {};
-	RegisterFactory<aiva::layer1::RoShaderCompute>(".cs");
+	RegisterFactory<aiva::layer1::RoShaderCompute>(".hlsl_cs");
 }
 
 void aiva::layer1::ResourceSystem::TerminateFactories()

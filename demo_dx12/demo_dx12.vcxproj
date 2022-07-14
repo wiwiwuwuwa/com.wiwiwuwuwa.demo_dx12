@@ -100,6 +100,22 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Sources;$(ProjectDir)External Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)Sources;$(ProjectDir)External Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <PostBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">rm -r "$(LayoutDir)\resources"
+xcopy "$(ProjectDir)Resources\" "$(LayoutDir)\resources" /D /I /S /Y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">rm -r "$(LayoutDir)\resources"
+xcopy "$(ProjectDir)Resources\" "$(LayoutDir)\resources" /D /I /S /Y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">rm -r "$(LayoutDir)\resources"
+xcopy "$(ProjectDir)Resources\" "$(LayoutDir)\resources" /D /I /S /Y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">rm -r "$(LayoutDir)\resources"
+xcopy "$(ProjectDir)Resources\" "$(LayoutDir)\resources" /D /I /S /Y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
     <ClCompile>
@@ -113,6 +129,22 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">rm -r "$(LayoutDir)\resources"
+xcopy "$(ProjectDir)Resources\" "$(LayoutDir)\resources" /D /I /S /Y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">rm -r "$(LayoutDir)\resources"
+xcopy "$(ProjectDir)Resources\" "$(LayoutDir)\resources" /D /I /S /Y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">rm -r "$(LayoutDir)\resources"
+xcopy "$(ProjectDir)Resources\" "$(LayoutDir)\resources" /D /I /S /Y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">rm -r "$(LayoutDir)\resources"
+xcopy "$(ProjectDir)Resources\" "$(LayoutDir)\resources" /D /I /S /Y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="External Sources\tinyutf8\tinyutf8.h" />
@@ -172,6 +204,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="PropertySheet.props" />
+    <None Include="Resources\shaders\checker.hlsl_cs" />
     <Text Include="readme.txt">
       <DeploymentContent>false</DeploymentContent>
     </Text>

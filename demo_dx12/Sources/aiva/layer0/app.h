@@ -48,5 +48,11 @@ namespace aiva::layer0
         void Run();
 
         void SetWindow(CoreWindow const&);
+
+    // ----------------------------------------------------
+    // Debug
+
+    public:
+        void LogToDebugConsole(std::string const& message) const;
     };
 }

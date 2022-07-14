@@ -73,6 +73,7 @@
   <ItemGroup>
     <None Include="PropertySheet.props" />
     <None Include="packages.config" />
+    <None Include="Resources\shaders\checker.hlsl_cs" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme.txt" />

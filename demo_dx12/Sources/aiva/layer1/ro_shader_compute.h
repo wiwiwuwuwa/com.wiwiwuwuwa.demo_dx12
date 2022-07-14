@@ -20,12 +20,19 @@ namespace aiva::layer1
 		static std::shared_ptr<aiva::layer1::RoShaderCompute> Create(Args&&... args);
 
 	private:
-		RoShaderCompute();
-
 		RoShaderCompute(aiva::layer1::Engine const& engine, std::vector<std::byte> const& binaryData);
 
 	public:
 		~RoShaderCompute();
+
+	// ----------------------------------------------------
+	// Directx
+
+	public:
+		winrt::com_ptr<ID3DBlob> const& CachedBytecode() const;
+
+	private:
+		winrt::com_ptr<ID3DBlob> mCachedBytecode{};
 	};
 }
 

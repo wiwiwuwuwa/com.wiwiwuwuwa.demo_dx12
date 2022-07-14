@@ -108,3 +108,9 @@ uint64_t aiva::layer1::Engine::Tick() const
 {
 	return mTick;
 }
+
+void aiva::layer1::Engine::LogToDebugConsole(std::string const& message) const
+{
+	winrt::check_bool(mApp);
+	mApp->LogToDebugConsole("aiva: " + message + "\n");
+}

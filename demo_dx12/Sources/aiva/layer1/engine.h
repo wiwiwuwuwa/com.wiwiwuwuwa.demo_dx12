@@ -85,5 +85,11 @@ namespace aiva::layer1
 
 	private:
 		uint64_t mTick{};
+
+	// ----------------------------------------------------
+	// Debug
+
+	public:
+		void LogToDebugConsole(std::string const& message) const;
 	};
 }

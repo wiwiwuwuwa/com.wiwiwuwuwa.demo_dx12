@@ -71,21 +71,31 @@ void aiva::layer1::Engine::OnAppStart()
 	mGraphicHardware = std::make_unique<aiva::layer1::GraphicHardware>(*this);
 	mGraphicPipeline = std::make_unique<aiva::layer1::GraphicPipeline>(*this);
 	mGraphicExecutor = std::make_unique<aiva::layer1::GraphicExecutor>(*this);
+
+	OnStart()();
 }
 
 void aiva::layer1::Engine::OnAppUpdate()
 {
 	OnUpdate()();
 	OnRender()();
+
 	mTick++;
 }
 
 void aiva::layer1::Engine::OnAppFinish()
 {
+	OnFinish()();
+
 	mGraphicExecutor = {};
 	mGraphicPipeline = {};
 	mGraphicHardware = {};
 	mResourceSystem = {};
+}
+
+aiva::utils::EvAction& aiva::layer1::Engine::OnStart()
+{
+	return mOnStart;
 }
 
 aiva::utils::EvAction& aiva::layer1::Engine::OnUpdate()
@@ -96,6 +106,11 @@ aiva::utils::EvAction& aiva::layer1::Engine::OnUpdate()
 aiva::utils::EvAction& aiva::layer1::Engine::OnRender()
 {
 	return mOnRender;
+}
+
+aiva::utils::EvAction& aiva::layer1::Engine::OnFinish()
+{
+	return mOnFinish;
 }
 
 uint64_t aiva::layer1::Engine::Tick() const

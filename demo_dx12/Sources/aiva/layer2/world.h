@@ -41,6 +41,11 @@ namespace aiva::layer2
 		void TerminateEngine();
 
 	private:
+		void OnEngineStart();
+
+		void OnEngineFinish();
+
+	private:
 		std::unique_ptr<aiva::layer1::Engine> mEngine{};
 
 	// ----------------------------------------------------

@@ -13,38 +13,49 @@
 
 aiva::layer2::World::World()
 {
-	
+	InitializeEngine();
 }
 
 aiva::layer2::World::~World()
 {
-	
+	TerminateEngine();
 }
 
 void aiva::layer2::World::Run()
 {
-	InitializeEngine();
-	InitializeSystems();
-	InitializeRender();
-
 	aiva::utils::Asserts::CheckBool(mEngine);
 	mEngine->Run();
-
-	TerminateRender();
-	TerminateSystems();
-	TerminateEngine();
 }
 
 void aiva::layer2::World::InitializeEngine()
 {
 	mEngine = std::make_unique<aiva::layer1::Engine>();
 	aiva::utils::Asserts::CheckBool(mEngine);
+
+	mEngine->OnStart().connect(boost::bind(&aiva::layer2::World::OnEngineStart, this));
+	mEngine->OnFinish().connect(boost::bind(&aiva::layer2::World::OnEngineFinish, this));
 }
 
 void aiva::layer2::World::TerminateEngine()
 {
 	aiva::utils::Asserts::CheckBool(mEngine);
+
+	mEngine->OnFinish().disconnect(boost::bind(&aiva::layer2::World::OnEngineFinish, this));
+	mEngine->OnStart().disconnect(boost::bind(&aiva::layer2::World::OnEngineStart, this));
+
 	mEngine = {};
+}
+
+void aiva::layer2::World::OnEngineStart()
+{
+	InitializeSystems();
+	InitializeRender();
+}
+
+void aiva::layer2::World::OnEngineFinish()
+{
+	TerminateRender();
+	TerminateSystems();
 }
 
 aiva::layer2::SceneSystem& aiva::layer2::World::SceneSystem() const
@@ -68,7 +79,7 @@ void aiva::layer2::World::TerminateSystems()
 void aiva::layer2::World::InitializeRender()
 {
 	aiva::utils::Asserts::CheckBool(mEngine);
-	//mEngine->GraphicPipeline().OnPopulateCommands().connect(boost::bind(&aiva::layer2::World::TickRender, this));
+	mEngine->GraphicPipeline().OnPopulateCommands().connect(boost::bind(&aiva::layer2::World::TickRender, this));
 }
 
 void aiva::layer2::World::TickRender()
@@ -87,5 +98,5 @@ void aiva::layer2::World::TickRender()
 void aiva::layer2::World::TerminateRender()
 {
 	aiva::utils::Asserts::CheckBool(mEngine);
-	//mEngine->GraphicPipeline().OnPopulateCommands().disconnect(boost::bind(&aiva::layer2::World::TickRender, this));
+	mEngine->GraphicPipeline().OnPopulateCommands().disconnect(boost::bind(&aiva::layer2::World::TickRender, this));
 }

@@ -64,14 +64,22 @@ namespace aiva::layer1
 	// Events
 
 	public:
+		aiva::utils::EvAction& OnStart();
+
 		aiva::utils::EvAction& OnUpdate();
 
 		aiva::utils::EvAction& OnRender();
 
+		aiva::utils::EvAction& OnFinish();
+
 	private:
+		aiva::utils::EvAction mOnStart{};
+
 		aiva::utils::EvAction mOnUpdate{};
 
 		aiva::utils::EvAction mOnRender{};
+
+		aiva::utils::EvAction mOnFinish{};
 
 	// ----------------------------------------------------
 	// Time

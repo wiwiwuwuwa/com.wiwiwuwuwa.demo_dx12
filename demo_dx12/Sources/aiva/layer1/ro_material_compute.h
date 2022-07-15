@@ -21,16 +21,19 @@ namespace aiva::layer1
 		static std::shared_ptr<aiva::layer1::RoMaterialCompute> Create(Args&&... args);
 
 	private:
-		RoMaterialCompute();
+		RoMaterialCompute(aiva::layer1::Engine const& engine);
 
 	public:
 		~RoMaterialCompute();
+
+	private:
+		aiva::layer1::Engine const& mEngine;
 
 	// ----------------------------------------------------
 	// IResourceObject
 
 	public:
-		void Deserealize(aiva::layer1::Engine const& engine, std::vector<std::byte> const& binaryData) override;
+		void Deserealize(std::vector<std::byte> const& binaryData) override;
 
 	// ----------------------------------------------------
 	// Changes Detection

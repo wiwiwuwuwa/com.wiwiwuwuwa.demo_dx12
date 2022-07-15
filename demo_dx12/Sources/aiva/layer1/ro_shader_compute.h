@@ -21,16 +21,19 @@ namespace aiva::layer1
 		static std::shared_ptr<aiva::layer1::RoShaderCompute> Create(Args&&... args);
 
 	private:
-		RoShaderCompute();
+		RoShaderCompute(aiva::layer1::Engine const& engine);
 
 	public:
 		~RoShaderCompute();
+
+	private:
+		aiva::layer1::Engine const& mEngine;
 
 	// ----------------------------------------------------
 	// IResourceObject
 
 	public:
-		void Deserealize(aiva::layer1::Engine const& engine, std::vector<std::byte> const& binaryData) override;
+		void Deserealize(std::vector<std::byte> const& binaryData) override;
 
 	// ----------------------------------------------------
 	// Directx Cache

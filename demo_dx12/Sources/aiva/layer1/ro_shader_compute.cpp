@@ -4,7 +4,7 @@
 #include <aiva/layer1/engine.h>
 #include <aiva/utils/asserts.h>
 
-aiva::layer1::RoShaderCompute::RoShaderCompute()
+aiva::layer1::RoShaderCompute::RoShaderCompute(aiva::layer1::Engine const& engine) : mEngine{ engine }
 {
 
 }
@@ -14,7 +14,7 @@ aiva::layer1::RoShaderCompute::~RoShaderCompute()
 
 }
 
-void aiva::layer1::RoShaderCompute::Deserealize(aiva::layer1::Engine const& engine, std::vector<std::byte> const& binaryData)
+void aiva::layer1::RoShaderCompute::Deserealize(std::vector<std::byte> const& binaryData)
 {
 	aiva::utils::Asserts::CheckBool(!binaryData.empty());
 
@@ -39,7 +39,7 @@ void aiva::layer1::RoShaderCompute::Deserealize(aiva::layer1::Engine const& engi
 	if (FAILED(result))
 	{
 		winrt::check_bool(errorMessage);
-		engine.LogToDebugConsole(static_cast<const char*>(errorMessage->GetBufferPointer()));
+		mEngine.LogToDebugConsole(static_cast<const char*>(errorMessage->GetBufferPointer()));
 		winrt::throw_hresult(result);
 	}
 

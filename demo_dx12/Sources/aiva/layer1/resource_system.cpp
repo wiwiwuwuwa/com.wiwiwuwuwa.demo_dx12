@@ -58,7 +58,7 @@ std::shared_ptr<aiva::layer1::IResourceObject> aiva::layer1::ResourceSystem::Get
 	auto const factory = mFactories.find(fileExtension);
 	aiva::utils::Asserts::CheckBool(factory != mFactories.end());
 
-	std::shared_ptr<aiva::layer1::IResourceObject> const resource = factory->second();
+	std::shared_ptr<aiva::layer1::IResourceObject> const resource = factory->second(mEngine);
 	aiva::utils::Asserts::CheckBool(resource);
 
 	return resource;
@@ -93,7 +93,7 @@ void aiva::layer1::ResourceSystem::DeserealizeResourceFromBinary(std::shared_ptr
 	aiva::utils::Asserts::CheckBool(resource);
 	aiva::utils::Asserts::CheckBool(!binary.empty());
 
-	resource->Deserealize(mEngine, binary);
+	resource->Deserealize(binary);
 }
 
 void aiva::layer1::ResourceSystem::InitializeFactories()

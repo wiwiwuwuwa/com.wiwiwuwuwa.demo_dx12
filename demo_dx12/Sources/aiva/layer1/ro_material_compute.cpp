@@ -4,7 +4,7 @@
 #include <aiva/layer1/engine.h>
 #include <aiva/utils/asserts.h>
 
-aiva::layer1::RoMaterialCompute::RoMaterialCompute()
+aiva::layer1::RoMaterialCompute::RoMaterialCompute(aiva::layer1::Engine const& engine) : mEngine{ engine }
 {
 
 }
@@ -15,7 +15,7 @@ aiva::layer1::RoMaterialCompute::~RoMaterialCompute()
 
 }
 
-void aiva::layer1::RoMaterialCompute::Deserealize(aiva::layer1::Engine const& engine, std::vector<std::byte> const& binaryData)
+void aiva::layer1::RoMaterialCompute::Deserealize(std::vector<std::byte> const& binaryData)
 {
 	aiva::utils::Asserts::CheckBool(!binaryData.empty());
 	BeginChanges();

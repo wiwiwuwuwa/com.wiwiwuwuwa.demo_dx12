@@ -51,7 +51,7 @@ namespace aiva::layer1
 	// Factories
 
 	private:
-		using ResourceFactoryMethod = std::function<std::shared_ptr<aiva::layer1::IResourceObject>()>;
+		using ResourceFactoryMethod = std::function<std::shared_ptr<aiva::layer1::IResourceObject>(aiva::layer1::Engine const&)>;
 
 	private:
 		void InitializeFactories();
@@ -87,5 +87,5 @@ template <typename T>
 void aiva::layer1::ResourceSystem::RegisterFactory(std::filesystem::path const& extension)
 {
 	aiva::utils::Asserts::CheckBool(!extension.empty());
-	mFactories.insert_or_assign(extension, &T::Create<>);
+	mFactories.insert_or_assign(extension, &T::Create<aiva::layer1::Engine const&>);
 }

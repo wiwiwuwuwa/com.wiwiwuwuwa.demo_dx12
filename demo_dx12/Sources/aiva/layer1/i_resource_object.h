@@ -12,6 +12,6 @@ namespace aiva::layer1
 	{
 	public:
 		virtual ~IResourceObject() = default;
-		virtual void Deserealize(aiva::layer1::Engine const& engine, std::vector<std::byte> const& binaryData) = 0;
+		virtual void Deserealize(std::vector<std::byte> const& binaryData) = 0;
 	};
 }

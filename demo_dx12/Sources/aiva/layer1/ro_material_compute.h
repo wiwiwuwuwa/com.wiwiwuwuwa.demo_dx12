@@ -11,20 +11,20 @@ namespace aiva::layer1
 
 namespace aiva::layer1
 {
-	struct RoShaderCompute final : public aiva::layer1::IResourceObject
+	struct RoMaterialCompute final : public aiva::layer1::IResourceObject
 	{
 	// ----------------------------------------------------
 	// Main
 
 	public:
 		template <typename... Args>
-		static std::shared_ptr<aiva::layer1::RoShaderCompute> Create(Args&&... args);
+		static std::shared_ptr<aiva::layer1::RoMaterialCompute> Create(Args&&... args);
 
 	private:
-		RoShaderCompute();
+		RoMaterialCompute();
 
 	public:
-		~RoShaderCompute();
+		~RoMaterialCompute();
 
 	// ----------------------------------------------------
 	// IResourceObject
@@ -33,20 +33,22 @@ namespace aiva::layer1
 		void Deserealize(aiva::layer1::Engine const& engine, std::vector<std::byte> const& binaryData) override;
 
 	// ----------------------------------------------------
-	// Directx Cache
+	// Changes Detection
 
 	public:
-		winrt::com_ptr<ID3DBlob> const& CachedBytecode() const;
+		RoMaterialCompute& BeginChanges();
+
+		RoMaterialCompute& EndChanges();
 
 	private:
-		winrt::com_ptr<ID3DBlob> mCachedBytecode{};
+		aiva::utils::ChangesCounter mChangesCounter{};
 	};
 }
 
 // --------------------------------------------------------
 
 template <typename... Args>
-std::shared_ptr<aiva::layer1::RoShaderCompute> aiva::layer1::RoShaderCompute::Create(Args&&... args)
+std::shared_ptr<aiva::layer1::RoMaterialCompute> aiva::layer1::RoMaterialCompute::Create(Args&&... args)
 {
-	return std::shared_ptr<aiva::layer1::RoShaderCompute>{new aiva::layer1::RoShaderCompute{ std::forward<Args>(args)... }};
+	return std::shared_ptr<aiva::layer1::RoMaterialCompute>{new aiva::layer1::RoMaterialCompute{ std::forward<Args>(args)... }};
 }

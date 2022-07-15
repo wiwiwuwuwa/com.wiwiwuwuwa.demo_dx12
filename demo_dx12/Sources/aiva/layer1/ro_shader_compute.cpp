@@ -4,7 +4,17 @@
 #include <aiva/layer1/engine.h>
 #include <aiva/utils/asserts.h>
 
-aiva::layer1::RoShaderCompute::RoShaderCompute(aiva::layer1::Engine const& engine, std::vector<std::byte> const& binaryData)
+aiva::layer1::RoShaderCompute::RoShaderCompute()
+{
+
+}
+
+aiva::layer1::RoShaderCompute::~RoShaderCompute()
+{
+
+}
+
+void aiva::layer1::RoShaderCompute::Deserealize(aiva::layer1::Engine const& engine, std::vector<std::byte> const& binaryData)
 {
 	aiva::utils::Asserts::CheckBool(!binaryData.empty());
 
@@ -36,7 +46,7 @@ aiva::layer1::RoShaderCompute::RoShaderCompute(aiva::layer1::Engine const& engin
 	mCachedBytecode = shaderBytecode;
 }
 
-aiva::layer1::RoShaderCompute::~RoShaderCompute()
+winrt::com_ptr<ID3DBlob> const& aiva::layer1::RoShaderCompute::CachedBytecode() const
 {
-
+	return mCachedBytecode;
 }

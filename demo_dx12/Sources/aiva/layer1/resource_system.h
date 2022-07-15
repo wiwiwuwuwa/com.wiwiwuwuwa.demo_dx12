@@ -36,11 +36,13 @@ namespace aiva::layer1
 	private:
 		std::shared_ptr<aiva::layer1::IResourceObject> GetResourceFromCache(std::filesystem::path const& fileName) const;
 
-		std::vector<std::byte> GetBinaryFromFile(std::filesystem::path const& fileName) const;
-
-		std::shared_ptr<aiva::layer1::IResourceObject> GetResourceFromBinary(std::filesystem::path const& extension, std::vector<std::byte> const& binary) const;
+		std::shared_ptr<aiva::layer1::IResourceObject> GetResourceFromFactory(std::filesystem::path const& fileExtension) const;
 
 		void SetResourceToCache(std::filesystem::path const& fileName, std::shared_ptr<aiva::layer1::IResourceObject> const& resource);
+
+		std::vector<std::byte> GetBinaryFromFile(std::filesystem::path const& fileName) const;
+
+		void DeserealizeResourceFromBinary(std::shared_ptr<aiva::layer1::IResourceObject> const& resource, std::vector<std::byte> const& binary) const;
 
 	private:
 		std::unordered_map<std::filesystem::path, std::weak_ptr<aiva::layer1::IResourceObject>> mResources{};
@@ -49,7 +51,7 @@ namespace aiva::layer1
 	// Factories
 
 	private:
-		using ResourceFactoryMethod = std::function<std::shared_ptr<aiva::layer1::IResourceObject>(aiva::layer1::Engine const& /*engine*/, std::vector<std::byte> const& /*binaryData*/)>;
+		using ResourceFactoryMethod = std::function<std::shared_ptr<aiva::layer1::IResourceObject>()>;
 
 	private:
 		void InitializeFactories();
@@ -85,5 +87,5 @@ template <typename T>
 void aiva::layer1::ResourceSystem::RegisterFactory(std::filesystem::path const& extension)
 {
 	aiva::utils::Asserts::CheckBool(!extension.empty());
-	mFactories.insert_or_assign(extension, &T::Create<aiva::layer1::Engine const&, std::vector<std::byte> const&>);
+	mFactories.insert_or_assign(extension, &T::Create<>);
 }

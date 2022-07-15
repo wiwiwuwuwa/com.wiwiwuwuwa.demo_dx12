@@ -22,6 +22,7 @@
 #include <dxgi1_6.h>
 #include <d3dcompiler.h>
 #include <tinyutf8/tinyutf8.h>
+#include <nlohmann/json.hpp>
 
 using namespace winrt::Windows::ApplicationModel::Core;
 using namespace winrt::Windows::UI::Core;

@@ -2,6 +2,7 @@
 #include <aiva/layer1/resource_system.h>
 
 #include <aiva/layer1/engine.h>
+#include <aiva/layer1/ro_material_compute.h>
 #include <aiva/layer1/ro_shader_compute.h>
 #include <aiva/utils/asserts.h>
 
@@ -19,20 +20,22 @@ std::shared_ptr<aiva::layer1::IResourceObject> aiva::layer1::ResourceSystem::Get
 {
 	aiva::utils::Asserts::CheckBool(!fileName.empty());
 
+	std::shared_ptr<aiva::layer1::IResourceObject> const resourceFromCache = GetResourceFromCache(fileName);
+	if (resourceFromCache) return resourceFromCache;
+
 	std::filesystem::path const fileExtension = fileName.extension();
 	aiva::utils::Asserts::CheckBool(!fileExtension.empty());
 
-	std::shared_ptr<aiva::layer1::IResourceObject> const resourceFromCache = GetResourceFromCache(fileName);
-	if (resourceFromCache) return resourceFromCache;
+	std::shared_ptr<aiva::layer1::IResourceObject> const resourceFromFactory = GetResourceFromFactory(fileExtension);
+	aiva::utils::Asserts::CheckBool(resourceFromFactory);
+
+	SetResourceToCache(fileName, resourceFromFactory);
 
 	std::vector<std::byte> const binaryFromFile = GetBinaryFromFile(fileName);
 	aiva::utils::Asserts::CheckBool(!binaryFromFile.empty());
 
-	std::shared_ptr<aiva::layer1::IResourceObject> const resourceFromBinary = GetResourceFromBinary(fileExtension, binaryFromFile);
-	aiva::utils::Asserts::CheckBool(resourceFromBinary);
-
-	SetResourceToCache(fileName, resourceFromBinary);
-	return resourceFromBinary;
+	DeserealizeResourceFromBinary(resourceFromFactory, binaryFromFile);
+	return resourceFromFactory;
 }
 
 std::shared_ptr<aiva::layer1::IResourceObject> aiva::layer1::ResourceSystem::GetResourceFromCache(std::filesystem::path const& fileName) const
@@ -46,6 +49,27 @@ std::shared_ptr<aiva::layer1::IResourceObject> aiva::layer1::ResourceSystem::Get
 	if (!resourcePointer) return {};
 
 	return resourcePointer;
+}
+
+std::shared_ptr<aiva::layer1::IResourceObject> aiva::layer1::ResourceSystem::GetResourceFromFactory(std::filesystem::path const& fileExtension) const
+{
+	aiva::utils::Asserts::CheckBool(!fileExtension.empty());
+
+	auto const factory = mFactories.find(fileExtension);
+	aiva::utils::Asserts::CheckBool(factory != mFactories.end());
+
+	std::shared_ptr<aiva::layer1::IResourceObject> const resource = factory->second();
+	aiva::utils::Asserts::CheckBool(resource);
+
+	return resource;
+}
+
+void aiva::layer1::ResourceSystem::SetResourceToCache(std::filesystem::path const& fileName, std::shared_ptr<aiva::layer1::IResourceObject> const& resource)
+{
+	aiva::utils::Asserts::CheckBool(!fileName.empty());
+	aiva::utils::Asserts::CheckBool(resource);
+
+	mResources.insert_or_assign(fileName, resource);
 }
 
 std::vector<std::byte> aiva::layer1::ResourceSystem::GetBinaryFromFile(std::filesystem::path const& fileName) const
@@ -64,31 +88,18 @@ std::vector<std::byte> aiva::layer1::ResourceSystem::GetBinaryFromFile(std::file
 	return fileData;
 }
 
-std::shared_ptr<aiva::layer1::IResourceObject> aiva::layer1::ResourceSystem::GetResourceFromBinary(std::filesystem::path const& extension, std::vector<std::byte> const& binary) const
+void aiva::layer1::ResourceSystem::DeserealizeResourceFromBinary(std::shared_ptr<aiva::layer1::IResourceObject> const& resource, std::vector<std::byte> const& binary) const
 {
-	aiva::utils::Asserts::CheckBool(!extension.empty());
+	aiva::utils::Asserts::CheckBool(resource);
 	aiva::utils::Asserts::CheckBool(!binary.empty());
 
-	auto const factory = mFactories.find(extension);
-	aiva::utils::Asserts::CheckBool(factory != mFactories.end());
-
-	std::shared_ptr<aiva::layer1::IResourceObject> const resource = factory->second(mEngine, binary);
-	aiva::utils::Asserts::CheckBool(resource);
-
-	return resource;
-}
-
-void aiva::layer1::ResourceSystem::SetResourceToCache(std::filesystem::path const& fileName, std::shared_ptr<aiva::layer1::IResourceObject> const& resource)
-{
-	aiva::utils::Asserts::CheckBool(!fileName.empty());
-	aiva::utils::Asserts::CheckBool(resource);
-
-	mResources.insert_or_assign(fileName, resource);
+	resource->Deserealize(mEngine, binary);
 }
 
 void aiva::layer1::ResourceSystem::InitializeFactories()
 {
 	mFactories = {};
+	RegisterFactory<aiva::layer1::RoMaterialCompute>(".mat_cs");
 	RegisterFactory<aiva::layer1::RoShaderCompute>(".hlsl_cs");
 }
 

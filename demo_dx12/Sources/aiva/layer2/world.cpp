@@ -5,6 +5,7 @@
 #include <aiva/layer1/gca_dispatch.h>
 #include <aiva/layer1/gca_do_everything.h>
 #include <aiva/layer1/graphic_executor.h>
+#include <aiva/layer1/graphic_pipeline.h>
 #include <aiva/layer1/resource_system.h>
 #include <aiva/layer1/ro_material_compute.h>
 #include <aiva/layer2/scene_system.h>
@@ -67,7 +68,7 @@ void aiva::layer2::World::TerminateSystems()
 void aiva::layer2::World::InitializeRender()
 {
 	aiva::utils::Asserts::CheckBool(mEngine);
-	mEngine->OnPrepareForRender().connect(boost::bind(&aiva::layer2::World::TickRender, this));
+	//mEngine->GraphicPipeline().OnPopulateCommands().connect(boost::bind(&aiva::layer2::World::TickRender, this));
 }
 
 void aiva::layer2::World::TickRender()
@@ -86,5 +87,5 @@ void aiva::layer2::World::TickRender()
 void aiva::layer2::World::TerminateRender()
 {
 	aiva::utils::Asserts::CheckBool(mEngine);
-	mEngine->OnPrepareForRender().disconnect(boost::bind(&aiva::layer2::World::TickRender, this));
+	//mEngine->GraphicPipeline().OnPopulateCommands().disconnect(boost::bind(&aiva::layer2::World::TickRender, this));
 }

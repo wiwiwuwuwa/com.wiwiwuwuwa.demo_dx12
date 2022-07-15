@@ -19,24 +19,28 @@ aiva::layer1::GraphicExecutor::~GraphicExecutor()
 
 void aiva::layer1::GraphicExecutor::InitializeCommands()
 {
-	mPendingCommands = {};
-	mEngine.GraphicPipeline().OnPopulateCommands().connect(boost::bind(&aiva::layer1::GraphicExecutor::TickCommands, this));
+	mPendingCommands.clear();
+	mEngine.GraphicPipeline().OnCleanupCommands().connect(boost::bind(&aiva::layer1::GraphicExecutor::CleanupCommands, this));
+	mEngine.GraphicPipeline().OnExecuteCommands().connect(boost::bind(&aiva::layer1::GraphicExecutor::ExecuteCommands, this));
 }
 
-void aiva::layer1::GraphicExecutor::TickCommands()
+void aiva::layer1::GraphicExecutor::CleanupCommands()
 {
-	while (!mPendingCommands.empty())
-	{
-		std::unique_ptr<aiva::layer1::IGraphicCommandAsync> const& command = mPendingCommands.front();
-		aiva::utils::Asserts::CheckBool(command);
+	mPendingCommands.clear();
+}
 
+void aiva::layer1::GraphicExecutor::ExecuteCommands()
+{
+	for (auto const& command : mPendingCommands)
+	{
+		aiva::utils::Asserts::CheckBool(command);
 		command->Execute(mEngine);
-		mPendingCommands.pop();
 	}
 }
 
 void aiva::layer1::GraphicExecutor::TerminateCommands()
 {
-	mEngine.GraphicPipeline().OnPopulateCommands().disconnect(boost::bind(&aiva::layer1::GraphicExecutor::TickCommands, this));
-	mPendingCommands = {};
+	mEngine.GraphicPipeline().OnExecuteCommands().disconnect(boost::bind(&aiva::layer1::GraphicExecutor::ExecuteCommands, this));
+	mEngine.GraphicPipeline().OnCleanupCommands().disconnect(boost::bind(&aiva::layer1::GraphicExecutor::CleanupCommands, this));
+	mPendingCommands.clear();
 }

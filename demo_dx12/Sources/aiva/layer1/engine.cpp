@@ -76,7 +76,6 @@ void aiva::layer1::Engine::OnAppStart()
 void aiva::layer1::Engine::OnAppUpdate()
 {
 	OnUpdate()();
-	OnPrepareForRender()();
 	OnRender()();
 	mTick++;
 }
@@ -92,11 +91,6 @@ void aiva::layer1::Engine::OnAppFinish()
 aiva::utils::EvAction& aiva::layer1::Engine::OnUpdate()
 {
 	return mOnUpdate;
-}
-
-aiva::utils::EvAction& aiva::layer1::Engine::OnPrepareForRender()
-{
-	return mOnPrepareForRender;
 }
 
 aiva::utils::EvAction& aiva::layer1::Engine::OnRender()

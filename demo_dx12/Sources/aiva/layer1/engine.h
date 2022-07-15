@@ -66,14 +66,10 @@ namespace aiva::layer1
 	public:
 		aiva::utils::EvAction& OnUpdate();
 
-		aiva::utils::EvAction& OnPrepareForRender();
-
 		aiva::utils::EvAction& OnRender();
 
 	private:
 		aiva::utils::EvAction mOnUpdate{};
-
-		aiva::utils::EvAction mOnPrepareForRender{};
 
 		aiva::utils::EvAction mOnRender{};
 

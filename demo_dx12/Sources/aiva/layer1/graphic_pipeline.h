@@ -28,10 +28,18 @@ namespace aiva::layer1
 	// Events
 
 	public:
+		aiva::utils::EvAction& OnCleanupCommands();
+		
 		aiva::utils::EvAction& OnPopulateCommands();
 
+		aiva::utils::EvAction& OnExecuteCommands();
+
 	private:
+		aiva::utils::EvAction mOnCleanupCommands{};
+
 		aiva::utils::EvAction mOnPopulateCommands{};
+
+		aiva::utils::EvAction mOnExecuteCommands{};
 
 	// ----------------------------------------------------
 	// DirectX

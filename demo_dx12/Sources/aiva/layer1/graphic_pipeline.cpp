@@ -16,9 +16,19 @@ aiva::layer1::GraphicPipeline::~GraphicPipeline()
 	TerminateDirectX();
 }
 
+aiva::utils::EvAction& aiva::layer1::GraphicPipeline::OnCleanupCommands()
+{
+	return mOnCleanupCommands;
+}
+
 aiva::utils::EvAction& aiva::layer1::GraphicPipeline::OnPopulateCommands()
 {
 	return mOnPopulateCommands;
+}
+
+aiva::utils::EvAction& aiva::layer1::GraphicPipeline::OnExecuteCommands()
+{
+	return mOnExecuteCommands;
 }
 
 void aiva::layer1::GraphicPipeline::InitializeDirectX()
@@ -46,7 +56,9 @@ void aiva::layer1::GraphicPipeline::TickDirectX()
 	WaitFrame(fence, mEngine.Tick());
 	PresentFrame(swapChain, mEngine.GraphicHardware().IsTearingAllowed());
 	ResetCommandList(commandAllocator, commandList);
+	OnCleanupCommands()();
 	OnPopulateCommands()();
+	OnExecuteCommands()();
 	CloseCommandList(commandList);
 	ExecuteCommandList(commandQueue, commandList);
 	ExecuteSignalForFrame(commandQueue, fence, mEngine.Tick() + 1);

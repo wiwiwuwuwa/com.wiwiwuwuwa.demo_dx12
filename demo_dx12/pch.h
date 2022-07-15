@@ -22,8 +22,9 @@
 #include <d3d12.h>
 #include <dxgi1_6.h>
 #include <d3dcompiler.h>
-#include <tinyutf8/tinyutf8.h>
+#include <glm/glm.hpp>
 #include <nlohmann/json.hpp>
+#include <tinyutf8/tinyutf8.h>
 
 using namespace winrt::Windows::ApplicationModel::Core;
 using namespace winrt::Windows::UI::Core;

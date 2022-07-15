@@ -17,6 +17,7 @@
     <ClCompile Include="Sources\aiva\layer1\ro_shader_compute.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_material_compute.cpp" />
     <ClCompile Include="Sources\aiva\utils\changes_counter.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gca_dispatch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -42,6 +43,7 @@
     <ClInclude Include="Sources\aiva\layer1\i_resource_object.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_material_compute.h" />
     <ClInclude Include="Sources\aiva\utils\changes_counter.h" />
+    <ClInclude Include="Sources\aiva\layer1\gca_dispatch.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

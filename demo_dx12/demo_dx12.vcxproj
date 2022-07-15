@@ -151,6 +151,7 @@ xcopy "$(ProjectDir)Resources\" "$(LayoutDir)\resources" /D /I /S /Y</Command>
     <ClInclude Include="pch.h" />
     <ClInclude Include="Sources\aiva\layer0\app.h" />
     <ClInclude Include="Sources\aiva\layer1\engine.h" />
+    <ClInclude Include="Sources\aiva\layer1\gca_dispatch.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_do_everything.h" />
     <ClInclude Include="Sources\aiva\layer1\graphic_executor.h" />
     <ClInclude Include="Sources\aiva\layer1\graphic_hardware.h" />
@@ -191,6 +192,7 @@ xcopy "$(ProjectDir)Resources\" "$(LayoutDir)\resources" /D /I /S /Y</Command>
     </ClCompile>
     <ClCompile Include="Sources\aiva\layer0\app.cpp" />
     <ClCompile Include="Sources\aiva\layer1\engine.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gca_dispatch.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_do_everything.cpp" />
     <ClCompile Include="Sources\aiva\layer1\graphic_executor.cpp" />
     <ClCompile Include="Sources\aiva\layer1\graphic_hardware.cpp" />

@@ -66,6 +66,12 @@ winrt::com_ptr<ID3D12RootSignature> const& aiva::layer1::RoMaterialCompute::Root
 	return mRootSignature;
 }
 
+winrt::com_ptr<ID3D12PipelineState> const& aiva::layer1::RoMaterialCompute::PipelineState() const
+{
+	winrt::check_bool(mPipelineState);
+	return mPipelineState;
+}
+
 void aiva::layer1::RoMaterialCompute::InitializeLowLevelData()
 {
 	mChangesCounter.OnChangesFinished().connect(boost::bind(&aiva::layer1::RoMaterialCompute::RefreshLowLevelData, this));

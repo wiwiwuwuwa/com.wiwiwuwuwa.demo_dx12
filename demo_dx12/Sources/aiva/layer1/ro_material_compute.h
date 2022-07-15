@@ -64,6 +64,8 @@ namespace aiva::layer1
 	public:
 		winrt::com_ptr<ID3D12RootSignature> const& RootSignature() const;
 
+		winrt::com_ptr<ID3D12PipelineState> const& PipelineState() const;
+
 	private:
 		void InitializeLowLevelData();
 

@@ -36,13 +36,13 @@ namespace aiva::layer1
 		void Deserealize(std::vector<std::byte> const& binaryData) override;
 
 	// ----------------------------------------------------
-	// Directx Cache
+	// Low-Level Data
 
 	public:
-		winrt::com_ptr<ID3DBlob> const& CachedBytecode() const;
+		winrt::com_ptr<ID3DBlob> const& Bytecode() const;
 
 	private:
-		winrt::com_ptr<ID3DBlob> mCachedBytecode{};
+		winrt::com_ptr<ID3DBlob> mBytecode{};
 	};
 }
 

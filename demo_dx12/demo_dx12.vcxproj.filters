@@ -78,6 +78,7 @@
     <None Include="PropertySheet.props" />
     <None Include="packages.config" />
     <None Include="Resources\shaders\checker.hlsl_cs" />
+    <None Include="Resources\materials\checker.mat_cs" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme.txt" />

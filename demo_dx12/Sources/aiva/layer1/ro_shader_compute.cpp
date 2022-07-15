@@ -43,10 +43,11 @@ void aiva::layer1::RoShaderCompute::Deserealize(std::vector<std::byte> const& bi
 		winrt::throw_hresult(result);
 	}
 
-	mCachedBytecode = shaderBytecode;
+	mBytecode = shaderBytecode;
 }
 
-winrt::com_ptr<ID3DBlob> const& aiva::layer1::RoShaderCompute::CachedBytecode() const
+winrt::com_ptr<ID3DBlob> const& aiva::layer1::RoShaderCompute::Bytecode() const
 {
-	return mCachedBytecode;
+	winrt::check_bool(mBytecode);
+	return mBytecode;
 }

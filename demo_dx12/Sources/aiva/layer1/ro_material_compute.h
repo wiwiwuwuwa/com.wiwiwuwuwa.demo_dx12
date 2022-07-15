@@ -7,6 +7,7 @@
 namespace aiva::layer1
 {
 	struct Engine;
+	struct RoShaderCompute;
 }
 
 namespace aiva::layer1
@@ -45,6 +46,40 @@ namespace aiva::layer1
 
 	private:
 		aiva::utils::ChangesCounter mChangesCounter{};
+
+	// ----------------------------------------------------
+	// High-Level Data
+
+	public:
+		std::shared_ptr<aiva::layer1::RoShaderCompute> const& Shader() const;
+
+		aiva::layer1::RoMaterialCompute& Shader(std::shared_ptr<aiva::layer1::RoShaderCompute> const& shader);
+
+	private:
+		std::shared_ptr<aiva::layer1::RoShaderCompute> mShader{};
+
+	// ----------------------------------------------------
+	// Low-Level Data
+
+	public:
+		winrt::com_ptr<ID3D12RootSignature> const& RootSignature() const;
+
+	private:
+		void InitializeLowLevelData();
+
+		void TerminateLowLevelData();
+
+	private:
+		void RefreshLowLevelData();
+
+		void RefreshRootSignature();
+
+		void RefreshComputePipelineState();
+
+	private:
+		winrt::com_ptr<ID3D12RootSignature> mRootSignature{};
+
+		winrt::com_ptr<ID3D12PipelineState> mPipelineState{};
 	};
 }
 

@@ -13,6 +13,7 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
+#include <boost/bind.hpp>
 #include <boost/core/noncopyable.hpp>
 #include <Unknwn.h>
 #include <winrt/Windows.ApplicationModel.Core.h>

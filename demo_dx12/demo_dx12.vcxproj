@@ -208,6 +208,7 @@ xcopy "$(ProjectDir)Resources\" "$(LayoutDir)\resources" /D /I /S /Y</Command>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="PropertySheet.props" />
+    <None Include="Resources\materials\checker.mat_cs" />
     <None Include="Resources\shaders\checker.hlsl_cs" />
     <Text Include="readme.txt">
       <DeploymentContent>false</DeploymentContent>

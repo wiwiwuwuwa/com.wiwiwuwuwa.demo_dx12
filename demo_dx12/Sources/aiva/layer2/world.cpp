@@ -88,7 +88,7 @@ void aiva::layer2::World::TickRender()
 
 	aiva::layer1::GcaDispatch gcaDispatch{};
 	gcaDispatch.ThreadGroupCount = { 1, 1, 1 };
-	gcaDispatch.ComputeMaterial = mEngine->ResourceSystem().GetResource<aiva::layer1::RoMaterialCompute>("resources/materials/checker.mat_cs");
+	gcaDispatch.ComputeMaterial = mEngine->ResourceSystem().GetResource<aiva::layer1::RoMaterialCompute>("resources\\materials\\checker.mat_cs");
 	mEngine->GraphicExecutor().ExecuteCommand(gcaDispatch);
 
 	aiva::layer1::GcaDoEveryting gcaDoEverything{};

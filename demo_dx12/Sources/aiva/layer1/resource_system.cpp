@@ -76,10 +76,13 @@ std::vector<std::byte> aiva::layer1::ResourceSystem::GetBinaryFromFile(std::file
 {
 	aiva::utils::Asserts::CheckBool(!fileName.empty());
 
-	std::uintmax_t const fileSize = std::filesystem::file_size(fileName);
+	std::filesystem::path const fullPath = std::filesystem::path{ "Assets" } / fileName;
+	aiva::utils::Asserts::CheckBool(!fullPath.empty());
+
+	std::uintmax_t const fileSize = std::filesystem::file_size(fullPath);
 	aiva::utils::Asserts::CheckBool(fileSize > 0);
 
-	std::basic_ifstream<std::byte> binaryStream{ fileName, std::ios_base::in | std::ios_base::binary };
+	std::basic_ifstream<std::byte> binaryStream{ fullPath, std::ios_base::in | std::ios_base::binary };
 	aiva::utils::Asserts::CheckBool(binaryStream);
 
 	std::vector<std::byte> fileData{ fileSize };

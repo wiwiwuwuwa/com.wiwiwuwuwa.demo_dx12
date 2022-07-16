@@ -44,6 +44,8 @@
     <ClInclude Include="Sources\aiva\layer1\ro_material_compute.h" />
     <ClInclude Include="Sources\aiva\utils\changes_counter.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_dispatch.h" />
+    <ClInclude Include="Sources\aiva\layer1\i_constant_buffer_value.h" />
+    <ClInclude Include="Sources\aiva\layer1\t_constant_buffer_value.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

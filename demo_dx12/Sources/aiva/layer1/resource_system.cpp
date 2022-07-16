@@ -6,9 +6,16 @@
 #include <aiva/layer1/ro_shader_compute.h>
 #include <aiva/utils/asserts.h>
 
+#include <aiva/layer1/t_constant_buffer_value.h>
+
 aiva::layer1::ResourceSystem::ResourceSystem(aiva::layer1::Engine const& engine) : mEngine{ engine }
 {
 	InitializeFactories();
+
+	auto const x = aiva::layer1::TConstantBufferValue<uint32_t>::Create();
+	x->Value(8);
+
+	auto const y = x;
 }
 
 aiva::layer1::ResourceSystem::~ResourceSystem()

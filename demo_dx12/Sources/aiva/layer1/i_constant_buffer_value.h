@@ -7,6 +7,6 @@ namespace aiva::layer1
 	{
 	public:
 		virtual ~IConstantBufferValue() = default;
-		virtual std::vector<std::byte> const& GetRawData() const = 0;
+		virtual boost::span<const std::byte> GetRawData() const = 0;
 	};
 }

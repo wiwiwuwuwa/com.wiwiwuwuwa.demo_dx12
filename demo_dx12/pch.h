@@ -5,6 +5,7 @@
 #endif
 
 #include <algorithm>
+#include <any>
 #include <cstddef>
 #include <filesystem>
 #include <fstream>
@@ -12,6 +13,7 @@
 #include <iostream>
 #include <list>
 #include <memory>
+#include <string>
 #include <unordered_map>
 #include <vector>
 #include <boost/bind.hpp>

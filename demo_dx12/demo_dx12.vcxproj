@@ -150,6 +150,7 @@
     <ClInclude Include="External Sources\tinyutf8\tinyutf8.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Sources\aiva\layer0\app.h" />
+    <ClInclude Include="Sources\aiva\layer1\constant_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\engine.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_dispatch.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_do_everything.h" />
@@ -193,6 +194,7 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Sources\aiva\layer0\app.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\constant_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\engine.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_dispatch.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_do_everything.cpp" />

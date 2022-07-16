@@ -18,6 +18,7 @@
     <ClCompile Include="Sources\aiva\layer1\ro_material_compute.cpp" />
     <ClCompile Include="Sources\aiva\utils\changes_counter.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_dispatch.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\constant_buffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -46,6 +47,7 @@
     <ClInclude Include="Sources\aiva\layer1\gca_dispatch.h" />
     <ClInclude Include="Sources\aiva\layer1\i_constant_buffer_value.h" />
     <ClInclude Include="Sources\aiva\layer1\t_constant_buffer_value.h" />
+    <ClInclude Include="Sources\aiva\layer1\constant_buffer.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

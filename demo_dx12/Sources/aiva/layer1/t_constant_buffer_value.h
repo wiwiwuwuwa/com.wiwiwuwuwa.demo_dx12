@@ -16,6 +16,8 @@ namespace aiva::layer1
 	public:
 		TConstantBufferValue();
 
+		TConstantBufferValue(TValue const& value);
+
 		~TConstantBufferValue();
 
 		// ------------------------------------------------
@@ -43,6 +45,12 @@ template <typename TValue>
 aiva::layer1::TConstantBufferValue<TValue>::TConstantBufferValue()
 {
 
+}
+
+template <typename TValue>
+aiva::layer1::TConstantBufferValue<TValue>::TConstantBufferValue(TValue const& value)
+{
+	Value(value);
 }
 
 template <typename TValue>

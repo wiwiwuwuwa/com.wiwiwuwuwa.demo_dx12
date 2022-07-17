@@ -1,6 +1,7 @@
 #pragma once
 #include <pch.h>
 
+#include <aiva/layer1/t_constant_buffer_value.h>
 #include <aiva/utils/asserts.h>
 
 namespace aiva::layer1
@@ -62,15 +63,17 @@ TValue const& aiva::layer1::ConstantBuffer::GetValue(std::string const& key) con
 	auto const& valueAny = valueIter->second;
 	aiva::utils::Asserts::CheckBool(valueAny.has_value());
 
-	auto const& valueObject = std::any_cast<TValue const&>(valueAny);
-	return valueObject;
+	auto const& valueObject = std::any_cast<TConstantBufferValue<TValue> const&>(valueAny);
+	return valueObject.Value();
 }
 
 template <typename TValue>
 aiva::layer1::ConstantBuffer& aiva::layer1::ConstantBuffer::SetValue(std::string const& key, TValue const& value)
 {
 	aiva::utils::Asserts::CheckBool(!key.empty());
-	mValues.insert_or_assign(key, value);
+	
+	auto const valueObject = aiva::layer1::TConstantBufferValue<TValue>{ value };
+	mValues.insert_or_assign(key, valueObject);
 
 	return *this;
 }

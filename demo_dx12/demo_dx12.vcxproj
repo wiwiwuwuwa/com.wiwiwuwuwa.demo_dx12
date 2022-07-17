@@ -173,6 +173,7 @@
     <ClInclude Include="Sources\aiva\utils\asserts.h" />
     <ClInclude Include="Sources\aiva\utils\changes_counter.h" />
     <ClInclude Include="Sources\aiva\utils\d3dx12.h" />
+    <ClInclude Include="Sources\aiva\utils\enum_utils.h" />
     <ClInclude Include="Sources\aiva\utils\ev_action.h" />
     <ClInclude Include="Sources\aiva\utils\t_changes_counter.h" />
     <ClInclude Include="Sources\aiva\utils\t_ev_action.h" />

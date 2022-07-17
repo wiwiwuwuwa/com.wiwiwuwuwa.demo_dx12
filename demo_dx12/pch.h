@@ -14,6 +14,7 @@
 #include <list>
 #include <memory>
 #include <string>
+#include <type_traits>
 #include <unordered_map>
 #include <vector>
 #include <boost/bind.hpp>

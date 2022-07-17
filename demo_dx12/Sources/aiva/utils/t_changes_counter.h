@@ -2,12 +2,16 @@
 #include <pch.h>
 
 #include <aiva/utils/asserts.h>
+#include <aiva/utils/enum_utils.h>
 #include <aiva/utils/t_ev_action.h>
 
 namespace aiva::utils
 {
+	template <typename TDirtyFlags, typename TEnable = void>
+	struct TChangesCounter;
+
 	template <typename TDirtyFlags>
-	struct TChangesCounter final : private boost::noncopyable
+	struct TChangesCounter<TDirtyFlags, std::enable_if_t<std::is_enum_v<TDirtyFlags>>> final : private boost::noncopyable
 	{
 	public:
 		aiva::utils::TEvAction<TDirtyFlags>& OnChangesFinished();
@@ -28,22 +32,22 @@ namespace aiva::utils
 // --------------------------------------------------------
 
 template <typename TDirtyFlags>
-aiva::utils::TEvAction<TDirtyFlags>& aiva::utils::TChangesCounter<TDirtyFlags>::OnChangesFinished()
+aiva::utils::TEvAction<TDirtyFlags>& aiva::utils::TChangesCounter<TDirtyFlags, std::enable_if_t<std::is_enum_v<TDirtyFlags>>>::OnChangesFinished()
 {
 	return mOnChangesFinished;
 }
 
 template <typename TDirtyFlags>
-void aiva::utils::TChangesCounter<TDirtyFlags>::IncrementChanges(TDirtyFlags const& dirtyFlags)
+void aiva::utils::TChangesCounter<TDirtyFlags, std::enable_if_t<std::is_enum_v<TDirtyFlags>>>::IncrementChanges(TDirtyFlags const& dirtyFlags)
 {
-	mDirtyFlags |= dirtyFlags;
+	mDirtyFlags = aiva::utils::EnumUtils::Or(mDirtyFlags, dirtyFlags);
 	mChangesCounter++;
 }
 
 template <typename TDirtyFlags>
-void aiva::utils::TChangesCounter<TDirtyFlags>::DecrementChanges(TDirtyFlags const& dirtyFlags)
+void aiva::utils::TChangesCounter<TDirtyFlags, std::enable_if_t<std::is_enum_v<TDirtyFlags>>>::DecrementChanges(TDirtyFlags const& dirtyFlags)
 {
-	mDirtyFlags |= dirtyFlags;
+	mDirtyFlags = aiva::utils::EnumUtils::Or(mDirtyFlags, dirtyFlags);
 	mChangesCounter--;
 
 	aiva::utils::Asserts::CheckBool(mChangesCounter >= 0);

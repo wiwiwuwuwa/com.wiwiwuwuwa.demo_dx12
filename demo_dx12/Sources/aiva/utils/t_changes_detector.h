@@ -39,6 +39,7 @@ template <typename TDirtyFlags>
 void aiva::utils::TChangesDetector<TDirtyFlags, std::enable_if_t<std::is_enum_v<TDirtyFlags>>>::FlushChanges()
 {
 	OnFlushChanges()(mDirtyFlags);
+	mDirtyFlags = {};
 }
 
 template <typename TDirtyFlags>

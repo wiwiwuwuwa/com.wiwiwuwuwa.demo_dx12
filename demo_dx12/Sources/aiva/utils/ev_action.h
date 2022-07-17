@@ -1,8 +1,9 @@
 #pragma once
 #include <pch.h>
-#include <boost/signals2.hpp>
+
+#include <aiva/utils/t_ev_action.h>
 
 namespace aiva::utils
 {
-	using EvAction = boost::signals2::signal<void()>;
+	using EvAction = aiva::utils::TEvAction<>;
 }

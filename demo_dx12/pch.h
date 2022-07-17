@@ -19,6 +19,7 @@
 #include <boost/bind.hpp>
 #include <boost/core/noncopyable.hpp>
 #include <boost/core/span.hpp>
+#include <boost/signals2.hpp>
 #include <Unknwn.h>
 #include <winrt/Windows.ApplicationModel.Core.h>
 #include <winrt/Windows.System.Diagnostics.h>

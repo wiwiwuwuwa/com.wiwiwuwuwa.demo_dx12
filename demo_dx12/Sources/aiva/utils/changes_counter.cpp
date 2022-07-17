@@ -18,9 +18,12 @@ void aiva::utils::ChangesCounter::DecrementChanges()
 	mChangesCounter--;
 
 	aiva::utils::Asserts::CheckBool(mChangesCounter >= 0);
-
-	if (mChangesCounter == 0)
+	if (mChangesCounter > 0)
 	{
-		OnChangesFinished()();
+		return;
 	}
+
+	OnChangesFinished()();
+
+	mChangesCounter = {};
 }

@@ -38,13 +38,13 @@ namespace aiva::layer1
 		enum class EDirtyFlags : std::uint8_t
 		{
 			None = 0,
-			DataValue = 1 << 0,
-			DataSize = 1 << 1,
-			All = DataValue | DataSize,
+			All = 1,
 		};
 
 	public:
 		aiva::layer1::ConstantBuffer& MarkAsChanged(EDirtyFlags const dirtyFlags = EDirtyFlags::All);
+
+		aiva::layer1::ConstantBuffer& FlushChanges();
 
 	private:
 		aiva::utils::TChangesDetector<EDirtyFlags> mChangesDetector{};
@@ -60,9 +60,6 @@ namespace aiva::layer1
 		aiva::layer1::ConstantBuffer& SetValue(std::string const& key, TValue const& value);
 
 	private:
-		template <typename TValue>
-		EDirtyFlags GetDirtyFlagsForSetValue(std::string const& key) const;
-
 		std::unordered_map<std::string, std::shared_ptr<aiva::layer1::IConstantBufferValue>> mValues{};
 
 	// ----------------------------------------------------
@@ -75,6 +72,13 @@ namespace aiva::layer1
 
 	private:
 		void RefreshLowLevelData(EDirtyFlags const dirtyFlags);
+
+		void RefreshResourceObject(boost::span<const std::byte> const& binaryData);
+
+		void RefreshResourceData(boost::span<const std::byte> const& binaryData);
+
+	private:
+		winrt::com_ptr<ID3D12Resource> mRawResource{};
 	};
 }
 
@@ -108,29 +112,9 @@ aiva::layer1::ConstantBuffer& aiva::layer1::ConstantBuffer::SetValue(std::string
 {
 	aiva::utils::Asserts::CheckBool(!key.empty());
 
-	EDirtyFlags const dirtyFlags = GetDirtyFlagsForSetValue<TValue>(key);
-	MarkAsChanged(dirtyFlags);
-
 	auto const& valuePointer = aiva::layer1::TConstantBufferValue<TValue>::Create(value);
 	mValues.insert_or_assign(key, valuePointer);
 
+	MarkAsChanged(EDirtyFlags::All);
 	return *this;
-}
-
-template <typename TValue>
-aiva::layer1::ConstantBuffer::EDirtyFlags aiva::layer1::ConstantBuffer::GetDirtyFlagsForSetValue(std::string const& key) const
-{
-	auto const& valueIter = mValues.find(key);
-	if (valueIter == mValues.end())
-	{
-		return aiva::utils::EnumUtils::Or(EDirtyFlags::DataValue, EDirtyFlags::DataSize);
-	}
-
-	auto const& valuePointer = valueIter->second;
-	if (typeid(valuePointer) != typeid(std::shared_ptr<aiva::layer1::TConstantBufferValue<TValue>>))
-	{
-		return aiva::utils::EnumUtils::Or(EDirtyFlags::DataValue, EDirtyFlags::DataSize);
-	}
-
-	return EDirtyFlags::DataValue;
 }

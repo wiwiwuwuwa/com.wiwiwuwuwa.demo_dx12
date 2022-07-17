@@ -51,6 +51,7 @@
     <ClInclude Include="Sources\aiva\utils\t_changes_counter.h" />
     <ClInclude Include="Sources\aiva\utils\t_ev_action.h" />
     <ClInclude Include="Sources\aiva\utils\enum_utils.h" />
+    <ClInclude Include="Sources\aiva\layer1\constant_packer.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

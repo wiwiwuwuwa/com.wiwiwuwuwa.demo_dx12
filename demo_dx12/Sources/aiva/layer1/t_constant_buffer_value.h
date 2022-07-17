@@ -8,16 +8,21 @@
 namespace aiva::layer1
 {
 	template <typename TValue>
-	struct TConstantBufferValue : public aiva::layer1::IConstantBufferValue
+	struct TConstantBufferValue : private boost::noncopyable, public std::enable_shared_from_this<TConstantBufferValue<TValue>>, public aiva::layer1::IConstantBufferValue
 	{
 		// ------------------------------------------------
 		// Main
 
 	public:
+		template <typename... Args>
+		static std::shared_ptr<aiva::layer1::TConstantBufferValue<TValue>> Create(Args&&... args);
+
+	private:
 		TConstantBufferValue();
 
 		TConstantBufferValue(TValue const& value);
 
+	public:
 		~TConstantBufferValue();
 
 		// ------------------------------------------------
@@ -40,6 +45,13 @@ namespace aiva::layer1
 }
 
 // --------------------------------------------------------
+
+template <typename TValue>
+template <typename... Args>
+std::shared_ptr<aiva::layer1::TConstantBufferValue<TValue>> aiva::layer1::TConstantBufferValue<TValue>::Create(Args&&... args)
+{
+	return std::shared_ptr<aiva::layer1::TConstantBufferValue<TValue>>{new aiva::layer1::TConstantBufferValue<TValue>{ std::forward<Args>(args)... }};
+}
 
 template <typename TValue>
 aiva::layer1::TConstantBufferValue<TValue>::TConstantBufferValue()

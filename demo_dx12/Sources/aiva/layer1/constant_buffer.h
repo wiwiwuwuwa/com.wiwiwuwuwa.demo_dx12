@@ -40,12 +40,13 @@ namespace aiva::layer1
 			None = 0,
 			DataValue = 1 << 0,
 			DataSize = 1 << 1,
+			All = DataValue | DataSize,
 		};
 
 	public:
-		aiva::layer1::ConstantBuffer& IncrementChanges(EDirtyFlags const& dirtyFlags);
+		aiva::layer1::ConstantBuffer& IncrementChanges(EDirtyFlags const dirtyFlags = EDirtyFlags::All);
 
-		aiva::layer1::ConstantBuffer& DecrementChanges(EDirtyFlags const& dirtyFlags);
+		aiva::layer1::ConstantBuffer& DecrementChanges(EDirtyFlags const dirtyFlags = EDirtyFlags::All);
 
 	private:
 		aiva::utils::TChangesCounter<EDirtyFlags> mChangesCounter{};
@@ -64,7 +65,7 @@ namespace aiva::layer1
 		template <typename TValue>
 		EDirtyFlags GetDirtyFlagsForSetValue(std::string const& key) const;
 
-		std::unordered_map<std::string, std::any> mValues{};
+		std::unordered_map<std::string, std::shared_ptr<aiva::layer1::IConstantBufferValue>> mValues{};
 
 	// ----------------------------------------------------
 	// Low-Level Data
@@ -95,11 +96,13 @@ TValue const& aiva::layer1::ConstantBuffer::GetValue(std::string const& key) con
 	auto const& valueIter = mValues.find(key);
 	aiva::utils::Asserts::CheckBool(valueIter != mValues.end());
 
-	auto const& valueAny = valueIter->second;
-	aiva::utils::Asserts::CheckBool(valueAny.has_value());
+	auto const& valueBasicPointer = valueIter->second;
+	aiva::utils::Asserts::CheckBool(valuePointer);
 
-	auto const& valueObject = std::any_cast<aiva::layer1::TConstantBufferValue<TValue> const&>(valueAny);
-	return valueObject.Value();
+	auto const& valueSpecificPointer = std::dynamic_pointer_cast<aiva::layer1::TConstantBufferValue<TValue>>(valueBasicPointer);
+	aiva::utils::Asserts::CheckBool(valueSpecificPointer);
+
+	return valueSpecificPointer->Value();
 }
 
 template <typename TValue>
@@ -110,8 +113,8 @@ aiva::layer1::ConstantBuffer& aiva::layer1::ConstantBuffer::SetValue(std::string
 	EDirtyFlags const dirtyFlags = GetDirtyFlagsForSetValue<TValue>(key);
 	IncrementChanges(dirtyFlags);
 
-	auto const& valueObject = aiva::layer1::TConstantBufferValue<TValue>{ value };
-	mValues.insert_or_assign(key, valueObject);
+	auto const& valuePointer = aiva::layer1::TConstantBufferValue<TValue>::Create(value);
+	mValues.insert_or_assign(key, valuePointer);
 
 	DecrementChanges(dirtyFlags);
 	return *this;
@@ -126,8 +129,8 @@ aiva::layer1::ConstantBuffer::EDirtyFlags aiva::layer1::ConstantBuffer::GetDirty
 		return aiva::utils::EnumUtils::Or(EDirtyFlags::DataValue, EDirtyFlags::DataSize);
 	}
 
-	auto const& valueAny = valueIter->second;
-	if (valueAny.type() != typeid(aiva::layer1::TConstantBufferValue<TValue>))
+	auto const& valuePointer = valueIter->second;
+	if (typeid(valuePointer) != typeid(std::shared_ptr<aiva::layer1::TConstantBufferValue<TValue>>))
 	{
 		return aiva::utils::EnumUtils::Or(EDirtyFlags::DataValue, EDirtyFlags::DataSize);
 	}

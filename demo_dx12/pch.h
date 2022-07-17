@@ -11,11 +11,13 @@
 #include <fstream>
 #include <functional>
 #include <iostream>
+#include <iterator>
 #include <list>
 #include <memory>
 #include <string>
 #include <type_traits>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 #include <boost/bind.hpp>
 #include <boost/core/noncopyable.hpp>

@@ -27,6 +27,16 @@ aiva::layer1::ConstantBuffer& aiva::layer1::ConstantBuffer::FlushChanges()
 	return *this;
 }
 
+winrt::com_ptr<ID3D12Resource> const& aiva::layer1::ConstantBuffer::RawResource()
+{
+	FlushChanges();
+
+	winrt::com_ptr<ID3D12Resource> rawResource = mRawResource;
+	winrt::check_bool(rawResource);
+
+	return rawResource;
+}
+
 void aiva::layer1::ConstantBuffer::InitializeLowLevelData()
 {
 	mChangesDetector.OnFlushChanges().connect(boost::bind(&aiva::layer1::ConstantBuffer::RefreshLowLevelData, this, boost::placeholders::_1));

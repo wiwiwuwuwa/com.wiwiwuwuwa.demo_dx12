@@ -65,6 +65,9 @@ namespace aiva::layer1
 	// ----------------------------------------------------
 	// Low-Level Data
 
+	public:
+		winrt::com_ptr<ID3D12Resource> const& RawResource();
+
 	private:
 		void InitializeLowLevelData();
 

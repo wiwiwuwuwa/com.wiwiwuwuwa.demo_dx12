@@ -4,7 +4,7 @@
 #include <aiva/layer1/t_constant_buffer_value.h>
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/enum_utils.h>
-#include <aiva/utils/t_changes_counter.h>
+#include <aiva/utils/t_changes_detector.h>
 
 namespace aiva::layer1
 {
@@ -44,12 +44,10 @@ namespace aiva::layer1
 		};
 
 	public:
-		aiva::layer1::ConstantBuffer& IncrementChanges(EDirtyFlags const dirtyFlags = EDirtyFlags::All);
-
-		aiva::layer1::ConstantBuffer& DecrementChanges(EDirtyFlags const dirtyFlags = EDirtyFlags::All);
+		aiva::layer1::ConstantBuffer& MarkAsChanged(EDirtyFlags const dirtyFlags = EDirtyFlags::All);
 
 	private:
-		aiva::utils::TChangesCounter<EDirtyFlags> mChangesCounter{};
+		aiva::utils::TChangesDetector<EDirtyFlags> mChangesDetector{};
 
 	// ----------------------------------------------------
 	// High-Level Data

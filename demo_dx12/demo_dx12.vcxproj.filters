@@ -48,7 +48,7 @@
     <ClInclude Include="Sources\aiva\layer1\i_constant_buffer_value.h" />
     <ClInclude Include="Sources\aiva\layer1\t_constant_buffer_value.h" />
     <ClInclude Include="Sources\aiva\layer1\constant_buffer.h" />
-    <ClInclude Include="Sources\aiva\utils\t_changes_counter.h" />
+    <ClInclude Include="Sources\aiva\utils\t_changes_detector.h" />
     <ClInclude Include="Sources\aiva\utils\t_ev_action.h" />
     <ClInclude Include="Sources\aiva\utils\enum_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\constant_packer.h" />

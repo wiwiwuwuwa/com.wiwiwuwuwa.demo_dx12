@@ -95,7 +95,7 @@ TValue const& aiva::layer1::ConstantBuffer::GetValue(std::string const& key) con
 	aiva::utils::Asserts::CheckBool(valueIter != mValues.end());
 
 	auto const& valueBasicPointer = valueIter->second;
-	aiva::utils::Asserts::CheckBool(valuePointer);
+	aiva::utils::Asserts::CheckBool(valueBasicPointer);
 
 	auto const& valueSpecificPointer = std::dynamic_pointer_cast<aiva::layer1::TConstantBufferValue<TValue>>(valueBasicPointer);
 	aiva::utils::Asserts::CheckBool(valueSpecificPointer);
@@ -109,12 +109,11 @@ aiva::layer1::ConstantBuffer& aiva::layer1::ConstantBuffer::SetValue(std::string
 	aiva::utils::Asserts::CheckBool(!key.empty());
 
 	EDirtyFlags const dirtyFlags = GetDirtyFlagsForSetValue<TValue>(key);
-	IncrementChanges(dirtyFlags);
+	MarkAsChanged(dirtyFlags);
 
 	auto const& valuePointer = aiva::layer1::TConstantBufferValue<TValue>::Create(value);
 	mValues.insert_or_assign(key, valuePointer);
 
-	DecrementChanges(dirtyFlags);
 	return *this;
 }
 

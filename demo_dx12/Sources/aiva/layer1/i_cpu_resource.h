@@ -8,10 +8,10 @@ namespace aiva::layer1
 
 namespace aiva::layer1
 {
-	struct IResourceObject
+	struct ICpuResource
 	{
 	public:
-		virtual ~IResourceObject() = default;
+		virtual ~ICpuResource() = default;
 		virtual void Deserealize(std::vector<std::byte> const& binaryData) = 0;
 	};
 }

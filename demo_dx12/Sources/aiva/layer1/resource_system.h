@@ -1,7 +1,7 @@
 #pragma once
 #include <pch.h>
 
-#include <aiva/layer1/i_resource_object.h>
+#include <aiva/layer1/i_cpu_resource.h>
 #include <aiva/utils/asserts.h>
 
 namespace aiva::layer1
@@ -31,27 +31,27 @@ namespace aiva::layer1
 		template <typename T>
 		std::shared_ptr<T> GetResource(std::filesystem::path const& fileName);
 
-		std::shared_ptr<aiva::layer1::IResourceObject> GetResource(std::filesystem::path const& fileName);
+		std::shared_ptr<aiva::layer1::ICpuResource> GetResource(std::filesystem::path const& fileName);
 
 	private:
-		std::shared_ptr<aiva::layer1::IResourceObject> GetResourceFromCache(std::filesystem::path const& fileName) const;
+		std::shared_ptr<aiva::layer1::ICpuResource> GetResourceFromCache(std::filesystem::path const& fileName) const;
 
-		std::shared_ptr<aiva::layer1::IResourceObject> GetResourceFromFactory(std::filesystem::path const& fileExtension) const;
+		std::shared_ptr<aiva::layer1::ICpuResource> GetResourceFromFactory(std::filesystem::path const& fileExtension) const;
 
-		void SetResourceToCache(std::filesystem::path const& fileName, std::shared_ptr<aiva::layer1::IResourceObject> const& resource);
+		void SetResourceToCache(std::filesystem::path const& fileName, std::shared_ptr<aiva::layer1::ICpuResource> const& resource);
 
 		std::vector<std::byte> GetBinaryFromFile(std::filesystem::path const& fileName) const;
 
-		void DeserealizeResourceFromBinary(std::shared_ptr<aiva::layer1::IResourceObject> const& resource, std::vector<std::byte> const& binary) const;
+		void DeserealizeResourceFromBinary(std::shared_ptr<aiva::layer1::ICpuResource> const& resource, std::vector<std::byte> const& binary) const;
 
 	private:
-		std::unordered_map<std::filesystem::path, std::weak_ptr<aiva::layer1::IResourceObject>> mResources{};
+		std::unordered_map<std::filesystem::path, std::weak_ptr<aiva::layer1::ICpuResource>> mResources{};
 
 	// ----------------------------------------------------
 	// Factories
 
 	private:
-		using ResourceFactoryMethod = std::function<std::shared_ptr<aiva::layer1::IResourceObject>(aiva::layer1::Engine const&)>;
+		using ResourceFactoryMethod = std::function<std::shared_ptr<aiva::layer1::ICpuResource>(aiva::layer1::Engine const&)>;
 
 	private:
 		void InitializeFactories();
@@ -74,7 +74,7 @@ std::shared_ptr<T> aiva::layer1::ResourceSystem::GetResource(std::filesystem::pa
 {
 	aiva::utils::Asserts::CheckBool(!fileName.empty());
 
-	std::shared_ptr<aiva::layer1::IResourceObject> const basicResource = GetResource(fileName);
+	std::shared_ptr<aiva::layer1::ICpuResource> const basicResource = GetResource(fileName);
 	aiva::utils::Asserts::CheckBool(basicResource);
 
 	std::shared_ptr<T> const specificResource = std::dynamic_pointer_cast<T>(basicResource);

@@ -1,7 +1,7 @@
 #pragma once
 #include <pch.h>
 
-#include <aiva/layer1/i_resource_object.h>
+#include <aiva/layer1/i_cpu_resource.h>
 #include <aiva/utils/changes_counter.h>
 
 namespace aiva::layer1
@@ -12,7 +12,7 @@ namespace aiva::layer1
 
 namespace aiva::layer1
 {
-	struct RoMaterialCompute final : public aiva::layer1::IResourceObject
+	struct RoMaterialCompute final : public aiva::layer1::ICpuResource
 	{
 	// ----------------------------------------------------
 	// Main
@@ -31,7 +31,7 @@ namespace aiva::layer1
 		aiva::layer1::Engine const& mEngine;
 
 	// ----------------------------------------------------
-	// IResourceObject
+	// ICpuResource
 
 	public:
 		void Deserealize(std::vector<std::byte> const& binaryData) override;

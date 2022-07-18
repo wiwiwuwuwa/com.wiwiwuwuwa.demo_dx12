@@ -16,17 +16,17 @@ aiva::layer1::ResourceSystem::~ResourceSystem()
 	TerminateFactories();
 }
 
-std::shared_ptr<aiva::layer1::IResourceObject> aiva::layer1::ResourceSystem::GetResource(std::filesystem::path const& fileName)
+std::shared_ptr<aiva::layer1::ICpuResource> aiva::layer1::ResourceSystem::GetResource(std::filesystem::path const& fileName)
 {
 	aiva::utils::Asserts::CheckBool(!fileName.empty());
 
-	std::shared_ptr<aiva::layer1::IResourceObject> const resourceFromCache = GetResourceFromCache(fileName);
+	std::shared_ptr<aiva::layer1::ICpuResource> const resourceFromCache = GetResourceFromCache(fileName);
 	if (resourceFromCache) return resourceFromCache;
 
 	std::filesystem::path const fileExtension = fileName.extension();
 	aiva::utils::Asserts::CheckBool(!fileExtension.empty());
 
-	std::shared_ptr<aiva::layer1::IResourceObject> const resourceFromFactory = GetResourceFromFactory(fileExtension);
+	std::shared_ptr<aiva::layer1::ICpuResource> const resourceFromFactory = GetResourceFromFactory(fileExtension);
 	aiva::utils::Asserts::CheckBool(resourceFromFactory);
 
 	SetResourceToCache(fileName, resourceFromFactory);
@@ -38,7 +38,7 @@ std::shared_ptr<aiva::layer1::IResourceObject> aiva::layer1::ResourceSystem::Get
 	return resourceFromFactory;
 }
 
-std::shared_ptr<aiva::layer1::IResourceObject> aiva::layer1::ResourceSystem::GetResourceFromCache(std::filesystem::path const& fileName) const
+std::shared_ptr<aiva::layer1::ICpuResource> aiva::layer1::ResourceSystem::GetResourceFromCache(std::filesystem::path const& fileName) const
 {
 	aiva::utils::Asserts::CheckBool(!fileName.empty());
 
@@ -51,20 +51,20 @@ std::shared_ptr<aiva::layer1::IResourceObject> aiva::layer1::ResourceSystem::Get
 	return resourcePointer;
 }
 
-std::shared_ptr<aiva::layer1::IResourceObject> aiva::layer1::ResourceSystem::GetResourceFromFactory(std::filesystem::path const& fileExtension) const
+std::shared_ptr<aiva::layer1::ICpuResource> aiva::layer1::ResourceSystem::GetResourceFromFactory(std::filesystem::path const& fileExtension) const
 {
 	aiva::utils::Asserts::CheckBool(!fileExtension.empty());
 
 	auto const factory = mFactories.find(fileExtension);
 	aiva::utils::Asserts::CheckBool(factory != mFactories.end());
 
-	std::shared_ptr<aiva::layer1::IResourceObject> const resource = factory->second(mEngine);
+	std::shared_ptr<aiva::layer1::ICpuResource> const resource = factory->second(mEngine);
 	aiva::utils::Asserts::CheckBool(resource);
 
 	return resource;
 }
 
-void aiva::layer1::ResourceSystem::SetResourceToCache(std::filesystem::path const& fileName, std::shared_ptr<aiva::layer1::IResourceObject> const& resource)
+void aiva::layer1::ResourceSystem::SetResourceToCache(std::filesystem::path const& fileName, std::shared_ptr<aiva::layer1::ICpuResource> const& resource)
 {
 	aiva::utils::Asserts::CheckBool(!fileName.empty());
 	aiva::utils::Asserts::CheckBool(resource);
@@ -91,7 +91,7 @@ std::vector<std::byte> aiva::layer1::ResourceSystem::GetBinaryFromFile(std::file
 	return fileData;
 }
 
-void aiva::layer1::ResourceSystem::DeserealizeResourceFromBinary(std::shared_ptr<aiva::layer1::IResourceObject> const& resource, std::vector<std::byte> const& binary) const
+void aiva::layer1::ResourceSystem::DeserealizeResourceFromBinary(std::shared_ptr<aiva::layer1::ICpuResource> const& resource, std::vector<std::byte> const& binary) const
 {
 	aiva::utils::Asserts::CheckBool(resource);
 	aiva::utils::Asserts::CheckBool(!binary.empty());

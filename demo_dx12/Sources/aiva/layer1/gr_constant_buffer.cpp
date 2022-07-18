@@ -1,33 +1,33 @@
 #include <pch.h>
-#include <aiva/layer1/constant_buffer.h>
+#include <aiva/layer1/gr_constant_buffer.h>
 
 #include <aiva/layer1/constant_packer.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/graphic_hardware.h>
 
-aiva::layer1::ConstantBuffer::ConstantBuffer(aiva::layer1::Engine const& engine) : mEngine{ engine }
+aiva::layer1::GrConstantBuffer::GrConstantBuffer(aiva::layer1::Engine const& engine) : mEngine{ engine }
 {
 	InitializeLowLevelData();
 }
 
-aiva::layer1::ConstantBuffer::~ConstantBuffer()
+aiva::layer1::GrConstantBuffer::~GrConstantBuffer()
 {
 	TerminateLowLevelData();
 }
 
-aiva::layer1::ConstantBuffer& aiva::layer1::ConstantBuffer::MarkAsChanged(aiva::layer1::ConstantBuffer::EDirtyFlags const dirtyFlags /*=EDirtyFlags::All*/)
+aiva::layer1::GrConstantBuffer& aiva::layer1::GrConstantBuffer::MarkAsChanged(aiva::layer1::GrConstantBuffer::EDirtyFlags const dirtyFlags /*=EDirtyFlags::All*/)
 {
 	mChangesDetector.MarkAsChanged(dirtyFlags);
 	return *this;
 }
 
-aiva::layer1::ConstantBuffer& aiva::layer1::ConstantBuffer::FlushChanges()
+aiva::layer1::GrConstantBuffer& aiva::layer1::GrConstantBuffer::FlushChanges()
 {
 	mChangesDetector.FlushChanges();
 	return *this;
 }
 
-winrt::com_ptr<ID3D12Resource> const& aiva::layer1::ConstantBuffer::RawResource()
+winrt::com_ptr<ID3D12Resource> const& aiva::layer1::GrConstantBuffer::RawResource()
 {
 	FlushChanges();
 
@@ -37,18 +37,18 @@ winrt::com_ptr<ID3D12Resource> const& aiva::layer1::ConstantBuffer::RawResource(
 	return rawResource;
 }
 
-void aiva::layer1::ConstantBuffer::InitializeLowLevelData()
+void aiva::layer1::GrConstantBuffer::InitializeLowLevelData()
 {
-	mChangesDetector.OnFlushChanges().connect(boost::bind(&aiva::layer1::ConstantBuffer::RefreshLowLevelData, this, boost::placeholders::_1));
+	mChangesDetector.OnFlushChanges().connect(boost::bind(&aiva::layer1::GrConstantBuffer::RefreshLowLevelData, this, boost::placeholders::_1));
 	MarkAsChanged(EDirtyFlags::All);
 }
 
-void aiva::layer1::ConstantBuffer::TerminateLowLevelData()
+void aiva::layer1::GrConstantBuffer::TerminateLowLevelData()
 {
-	mChangesDetector.OnFlushChanges().disconnect(boost::bind(&aiva::layer1::ConstantBuffer::RefreshLowLevelData, this, boost::placeholders::_1));
+	mChangesDetector.OnFlushChanges().disconnect(boost::bind(&aiva::layer1::GrConstantBuffer::RefreshLowLevelData, this, boost::placeholders::_1));
 }
 
-void aiva::layer1::ConstantBuffer::RefreshLowLevelData(EDirtyFlags const dirtyFlags)
+void aiva::layer1::GrConstantBuffer::RefreshLowLevelData(EDirtyFlags const dirtyFlags)
 {
 	if (dirtyFlags == EDirtyFlags{})
 	{
@@ -62,7 +62,7 @@ void aiva::layer1::ConstantBuffer::RefreshLowLevelData(EDirtyFlags const dirtyFl
 	RefreshResourceData(binaryData);
 }
 
-void aiva::layer1::ConstantBuffer::RefreshResourceObject(boost::span<const std::byte> const& binaryData)
+void aiva::layer1::GrConstantBuffer::RefreshResourceObject(boost::span<const std::byte> const& binaryData)
 {
 	aiva::utils::Asserts::CheckBool(!binaryData.empty());
 
@@ -105,7 +105,7 @@ void aiva::layer1::ConstantBuffer::RefreshResourceObject(boost::span<const std::
 	mRawResource = resourceObject;
 }
 
-void aiva::layer1::ConstantBuffer::RefreshResourceData(boost::span<const std::byte> const& binaryData)
+void aiva::layer1::GrConstantBuffer::RefreshResourceData(boost::span<const std::byte> const& binaryData)
 {
 	aiva::utils::Asserts::CheckBool(!binaryData.empty());
 

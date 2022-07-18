@@ -1,6 +1,7 @@
 #pragma once
 #include <pch.h>
 
+#include <aiva/layer1/i_gpu_resource.h>
 #include <aiva/layer1/t_constant_buffer_value.h>
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/enum_utils.h>
@@ -13,20 +14,20 @@ namespace aiva::layer1
 
 namespace aiva::layer1
 {
-	struct ConstantBuffer final : private boost::noncopyable, public std::enable_shared_from_this<ConstantBuffer>
+	struct GrConstantBuffer final : private boost::noncopyable, public std::enable_shared_from_this<GrConstantBuffer>, public aiva::layer1::IGpuResource
 	{
 	// ----------------------------------------------------
 	// Main
 
 	public:
 		template <typename... TArgs>
-		static std::shared_ptr<aiva::layer1::ConstantBuffer> Create(TArgs&&... args);
+		static std::shared_ptr<aiva::layer1::GrConstantBuffer> Create(TArgs&&... args);
 
 	private:
-		ConstantBuffer(aiva::layer1::Engine const& engine);
+		GrConstantBuffer(aiva::layer1::Engine const& engine);
 
 	public:
-		~ConstantBuffer();
+		~GrConstantBuffer();
 
 	private:
 		aiva::layer1::Engine const& mEngine;
@@ -42,9 +43,9 @@ namespace aiva::layer1
 		};
 
 	public:
-		aiva::layer1::ConstantBuffer& MarkAsChanged(EDirtyFlags const dirtyFlags = EDirtyFlags::All);
+		aiva::layer1::GrConstantBuffer& MarkAsChanged(EDirtyFlags const dirtyFlags = EDirtyFlags::All);
 
-		aiva::layer1::ConstantBuffer& FlushChanges();
+		aiva::layer1::GrConstantBuffer& FlushChanges();
 
 	private:
 		aiva::utils::TChangesDetector<EDirtyFlags> mChangesDetector{};
@@ -57,7 +58,7 @@ namespace aiva::layer1
 		TValue const& GetValue(std::string const& key) const;
 
 		template <typename TValue>
-		aiva::layer1::ConstantBuffer& SetValue(std::string const& key, TValue const& value);
+		aiva::layer1::GrConstantBuffer& SetValue(std::string const& key, TValue const& value);
 
 	private:
 		std::unordered_map<std::string, std::shared_ptr<aiva::layer1::IConstantBufferValue>> mValues{};
@@ -88,13 +89,13 @@ namespace aiva::layer1
 // --------------------------------------------------------
 
 template <typename... TArgs>
-std::shared_ptr<aiva::layer1::ConstantBuffer> aiva::layer1::ConstantBuffer::Create(TArgs&&... args)
+std::shared_ptr<aiva::layer1::GrConstantBuffer> aiva::layer1::GrConstantBuffer::Create(TArgs&&... args)
 {
-	return std::shared_ptr<aiva::layer1::ConstantBuffer>{new aiva::layer1::ConstantBuffer{ std::forward<TArgs>(args)... }};
+	return std::shared_ptr<aiva::layer1::GrConstantBuffer>{new aiva::layer1::GrConstantBuffer{ std::forward<TArgs>(args)... }};
 }
 
 template <typename TValue>
-TValue const& aiva::layer1::ConstantBuffer::GetValue(std::string const& key) const
+TValue const& aiva::layer1::GrConstantBuffer::GetValue(std::string const& key) const
 {
 	aiva::utils::Asserts::CheckBool(!key.empty());
 
@@ -111,7 +112,7 @@ TValue const& aiva::layer1::ConstantBuffer::GetValue(std::string const& key) con
 }
 
 template <typename TValue>
-aiva::layer1::ConstantBuffer& aiva::layer1::ConstantBuffer::SetValue(std::string const& key, TValue const& value)
+aiva::layer1::GrConstantBuffer& aiva::layer1::GrConstantBuffer::SetValue(std::string const& key, TValue const& value)
 {
 	aiva::utils::Asserts::CheckBool(!key.empty());
 

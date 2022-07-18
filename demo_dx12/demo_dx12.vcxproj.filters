@@ -18,8 +18,8 @@
     <ClCompile Include="Sources\aiva\layer1\ro_material_compute.cpp" />
     <ClCompile Include="Sources\aiva\utils\changes_counter.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_dispatch.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\constant_buffer.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\texture_buffer.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gr_constant_buffer.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gr_texture_buffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -48,12 +48,13 @@
     <ClInclude Include="Sources\aiva\layer1\gca_dispatch.h" />
     <ClInclude Include="Sources\aiva\layer1\i_constant_buffer_value.h" />
     <ClInclude Include="Sources\aiva\layer1\t_constant_buffer_value.h" />
-    <ClInclude Include="Sources\aiva\layer1\constant_buffer.h" />
+    <ClInclude Include="Sources\aiva\layer1\gr_constant_buffer.h" />
     <ClInclude Include="Sources\aiva\utils\t_changes_detector.h" />
     <ClInclude Include="Sources\aiva\utils\t_ev_action.h" />
     <ClInclude Include="Sources\aiva\utils\enum_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\constant_packer.h" />
-    <ClInclude Include="Sources\aiva\layer1\texture_buffer.h" />
+    <ClInclude Include="Sources\aiva\layer1\gr_texture_buffer.h" />
+    <ClInclude Include="Sources\aiva\layer1\i_gpu_resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

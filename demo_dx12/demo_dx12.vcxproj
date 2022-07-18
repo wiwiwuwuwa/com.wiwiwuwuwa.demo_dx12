@@ -166,6 +166,7 @@
     <ClInclude Include="Sources\aiva\layer1\resource_system.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_material_compute.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_shader_compute.h" />
+    <ClInclude Include="Sources\aiva\layer1\texture_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\t_constant_buffer_value.h" />
     <ClInclude Include="Sources\aiva\layer2\scene_component.h" />
     <ClInclude Include="Sources\aiva\layer2\scene_actor.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="Sources\aiva\layer1\resource_system.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_material_compute.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_shader_compute.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\texture_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer2\scene_actor.cpp" />
     <ClCompile Include="Sources\aiva\layer2\scene_component.cpp" />
     <ClCompile Include="Sources\aiva\layer2\scene_system.cpp" />

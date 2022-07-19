@@ -5,7 +5,7 @@
 #include <aiva/layer1/t_constant_buffer_value.h>
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/enum_utils.h>
-#include <aiva/utils/t_changes_detector.h>
+#include <aiva/utils/t_cache_refresh.h>
 
 namespace aiva::layer1
 {
@@ -33,24 +33,6 @@ namespace aiva::layer1
 		aiva::layer1::Engine const& mEngine;
 
 	// ----------------------------------------------------
-	// Changes Detection
-
-	public:
-		enum class EDirtyFlags : std::uint8_t
-		{
-			None = 0,
-			All = 1,
-		};
-
-	public:
-		aiva::layer1::GrConstantBuffer& MarkAsChanged(EDirtyFlags const dirtyFlags = EDirtyFlags::All);
-
-		aiva::layer1::GrConstantBuffer& FlushChanges();
-
-	private:
-		aiva::utils::TChangesDetector<EDirtyFlags> mChangesDetector{};
-
-	// ----------------------------------------------------
 	// High-Level Data
 
 	public:
@@ -64,10 +46,31 @@ namespace aiva::layer1
 		std::unordered_map<std::string, std::shared_ptr<aiva::layer1::IConstantBufferValue>> mValues{};
 
 	// ----------------------------------------------------
+	// Cache Refresh
+
+	public:
+		enum class EDirtyFlags : std::uint8_t
+		{
+			None = 0,
+			All = 1,
+		};
+
+	public:
+		aiva::utils::TEvAction<EDirtyFlags>& OnFlushCompleted();
+
+	private:
+		void InitializeCacheRefresh();
+
+		void TerminateCacheRefresh();
+
+	private:
+		aiva::utils::TCacheRefresh<EDirtyFlags> mCacheRefresh{};
+
+	// ----------------------------------------------------
 	// Low-Level Data
 
 	public:
-		winrt::com_ptr<ID3D12Resource> const& RawResource();
+		winrt::com_ptr<ID3D12Resource> const& InternalResource();
 
 	private:
 		void InitializeLowLevelData();
@@ -82,7 +85,7 @@ namespace aiva::layer1
 		void RefreshResourceData(boost::span<const std::byte> const& binaryData);
 
 	private:
-		winrt::com_ptr<ID3D12Resource> mRawResource{};
+		winrt::com_ptr<ID3D12Resource> mInternalResource{};
 	};
 }
 
@@ -119,6 +122,6 @@ aiva::layer1::GrConstantBuffer& aiva::layer1::GrConstantBuffer::SetValue(std::st
 	auto const& valuePointer = aiva::layer1::TConstantBufferValue<TValue>::Create(value);
 	mValues.insert_or_assign(key, valuePointer);
 
-	MarkAsChanged(EDirtyFlags::All);
+	mCacheRefresh.MarkAsChanged(EDirtyFlags::All);
 	return *this;
 }

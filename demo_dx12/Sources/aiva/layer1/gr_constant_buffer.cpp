@@ -7,54 +7,54 @@
 
 aiva::layer1::GrConstantBuffer::GrConstantBuffer(aiva::layer1::Engine const& engine) : mEngine{ engine }
 {
+	InitializeCacheRefresh();
 	InitializeLowLevelData();
 }
 
 aiva::layer1::GrConstantBuffer::~GrConstantBuffer()
 {
 	TerminateLowLevelData();
+	TerminateCacheRefresh();
 }
 
-aiva::layer1::GrConstantBuffer& aiva::layer1::GrConstantBuffer::MarkAsChanged(aiva::layer1::GrConstantBuffer::EDirtyFlags const dirtyFlags /*=EDirtyFlags::All*/)
+void aiva::layer1::GrConstantBuffer::InitializeCacheRefresh()
 {
-	mChangesDetector.MarkAsChanged(dirtyFlags);
-	return *this;
+	mCacheRefresh.MarkAsChanged(EDirtyFlags::All);
 }
 
-aiva::layer1::GrConstantBuffer& aiva::layer1::GrConstantBuffer::FlushChanges()
+void aiva::layer1::GrConstantBuffer::TerminateCacheRefresh()
 {
-	mChangesDetector.FlushChanges();
-	return *this;
+
 }
 
-winrt::com_ptr<ID3D12Resource> const& aiva::layer1::GrConstantBuffer::RawResource()
+aiva::utils::TEvAction<aiva::layer1::GrConstantBuffer::EDirtyFlags>& aiva::layer1::GrConstantBuffer::OnFlushCompleted()
 {
-	FlushChanges();
+	return mCacheRefresh.OnFlushCompleted();
+}
 
-	winrt::com_ptr<ID3D12Resource> rawResource = mRawResource;
-	winrt::check_bool(rawResource);
 
-	return rawResource;
+winrt::com_ptr<ID3D12Resource> const& aiva::layer1::GrConstantBuffer::InternalResource()
+{
+	mCacheRefresh.FlushChanges();
+
+	winrt::com_ptr<ID3D12Resource> internalResource = mInternalResource;
+	winrt::check_bool(internalResource);
+
+	return internalResource;
 }
 
 void aiva::layer1::GrConstantBuffer::InitializeLowLevelData()
 {
-	mChangesDetector.OnFlushChanges().connect(boost::bind(&aiva::layer1::GrConstantBuffer::RefreshLowLevelData, this, boost::placeholders::_1));
-	MarkAsChanged(EDirtyFlags::All);
+	mCacheRefresh.OnFlushRequested().connect(boost::bind(&aiva::layer1::GrConstantBuffer::RefreshLowLevelData, this, boost::placeholders::_1));
 }
 
 void aiva::layer1::GrConstantBuffer::TerminateLowLevelData()
 {
-	mChangesDetector.OnFlushChanges().disconnect(boost::bind(&aiva::layer1::GrConstantBuffer::RefreshLowLevelData, this, boost::placeholders::_1));
+	mCacheRefresh.OnFlushRequested().disconnect(boost::bind(&aiva::layer1::GrConstantBuffer::RefreshLowLevelData, this, boost::placeholders::_1));
 }
 
 void aiva::layer1::GrConstantBuffer::RefreshLowLevelData(EDirtyFlags const dirtyFlags)
 {
-	if (dirtyFlags == EDirtyFlags{})
-	{
-		return;
-	}
-
 	std::vector<std::byte> const binaryData = aiva::layer1::ConstantPacker::PackConstants(mValues.cbegin(), mValues.cend());
 	aiva::utils::Asserts::CheckBool(!binaryData.empty());
 
@@ -66,7 +66,7 @@ void aiva::layer1::GrConstantBuffer::RefreshResourceObject(boost::span<const std
 {
 	aiva::utils::Asserts::CheckBool(!binaryData.empty());
 
-	bool const needRefresh = !mRawResource || mRawResource->GetDesc().Width != binaryData.size();
+	bool const needRefresh = !mInternalResource || mInternalResource->GetDesc().Width != binaryData.size();
 	if (!needRefresh)
 	{
 		return;
@@ -102,14 +102,14 @@ void aiva::layer1::GrConstantBuffer::RefreshResourceObject(boost::span<const std
 	winrt::check_hresult(device->CreateCommittedResource(&heapProperties, heapFlags, &resourceDesc, resourceStates, nullptr, IID_PPV_ARGS(&resourceObject)));
 
 	winrt::check_bool(resourceObject);
-	mRawResource = resourceObject;
+	mInternalResource = resourceObject;
 }
 
 void aiva::layer1::GrConstantBuffer::RefreshResourceData(boost::span<const std::byte> const& binaryData)
 {
 	aiva::utils::Asserts::CheckBool(!binaryData.empty());
 
-	winrt::com_ptr<ID3D12Resource> const resourceObject = mRawResource;
+	winrt::com_ptr<ID3D12Resource> const resourceObject = mInternalResource;
 	aiva::utils::Asserts::CheckBool(resourceObject);
 	aiva::utils::Asserts::CheckBool(resourceObject->GetDesc().Width == binaryData.size());
 

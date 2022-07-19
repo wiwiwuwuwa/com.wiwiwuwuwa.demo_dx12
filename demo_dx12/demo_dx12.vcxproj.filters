@@ -19,7 +19,7 @@
     <ClCompile Include="Sources\aiva\utils\changes_counter.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_dispatch.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gr_constant_buffer.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\gr_texture_buffer.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gr_texture_buffer_2d.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -53,7 +53,7 @@
     <ClInclude Include="Sources\aiva\utils\t_ev_action.h" />
     <ClInclude Include="Sources\aiva\utils\enum_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\constant_packer.h" />
-    <ClInclude Include="Sources\aiva\layer1\gr_texture_buffer.h" />
+    <ClInclude Include="Sources\aiva\layer1\gr_texture_buffer_2d.h" />
     <ClInclude Include="Sources\aiva\layer1\i_gpu_resource.h" />
   </ItemGroup>
   <ItemGroup>

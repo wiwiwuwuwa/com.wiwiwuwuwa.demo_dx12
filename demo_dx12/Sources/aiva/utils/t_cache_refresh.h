@@ -14,6 +14,12 @@ namespace aiva::utils
 	struct TCacheRefresh<TDirtyFlags, std::enable_if_t<std::is_enum_v<TDirtyFlags>>> final : private boost::noncopyable
 	{
 	// ------------------------------------------------
+	// Constructors
+
+	public:
+		TCacheRefresh(TDirtyFlags const dirtyFlags = {});
+
+	// ------------------------------------------------
 	// Actions
 
 	public:
@@ -40,6 +46,12 @@ namespace aiva::utils
 }
 
 // --------------------------------------------------------
+
+template <typename TDirtyFlags>
+aiva::utils::TCacheRefresh<TDirtyFlags, std::enable_if_t<std::is_enum_v<TDirtyFlags>>>::TCacheRefresh(TDirtyFlags const dirtyFlags /*={}*/) : mDirtyFlags{dirtyFlags}
+{
+
+}
 
 template <typename TDirtyFlags>
 void aiva::utils::TCacheRefresh<TDirtyFlags, std::enable_if_t<std::is_enum_v<TDirtyFlags>>>::MarkAsChanged(TDirtyFlags const dirtyFlags)

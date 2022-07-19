@@ -59,12 +59,7 @@ namespace aiva::layer1
 		aiva::utils::TEvAction<EDirtyFlags>& OnFlushCompleted();
 
 	private:
-		void InitializeCacheRefresh();
-
-		void TerminateCacheRefresh();
-
-	private:
-		aiva::utils::TCacheRefresh<EDirtyFlags> mCacheRefresh{};
+		aiva::utils::TCacheRefresh<EDirtyFlags> mCacheRefresh{ EDirtyFlags::All };
 
 	// ----------------------------------------------------
 	// Low-Level Data

@@ -2,6 +2,7 @@
 #include <pch.h>
 
 #include <aiva/layer1/i_gpu_resource.h>
+#include <aiva/utils/t_cache_refresh.h>
 
 namespace aiva::layer1
 {
@@ -27,6 +28,39 @@ namespace aiva::layer1
 
 	private:
 		aiva::layer1::Engine const& mEngine;
+
+	// ----------------------------------------------------
+	// Cache Refresh
+
+	public:
+		enum class EDirtyFlags : std::uint8_t
+		{
+			None = 0,
+			All = 1,
+		};
+
+	public:
+		aiva::utils::TEvAction<EDirtyFlags>& OnFlushCompleted();
+
+	private:
+		aiva::utils::TCacheRefresh<EDirtyFlags> mCacheRefresh{ EDirtyFlags::All };
+
+	// ----------------------------------------------------
+	// Low-Level Data
+
+	public:
+		winrt::com_ptr<ID3D12Resource> const& InternalResource();
+
+	private:
+		void InitializeLowLevelData();
+
+		void TerminateLowLevelData();
+
+	private:
+		void RefreshLowLevelData(EDirtyFlags const dirtyFlags);
+
+	private:
+		winrt::com_ptr<ID3D12Resource> mInternalResource{};
 	};
 }
 

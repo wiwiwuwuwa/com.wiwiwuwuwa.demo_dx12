@@ -7,31 +7,18 @@
 
 aiva::layer1::GrConstantBuffer::GrConstantBuffer(aiva::layer1::Engine const& engine) : mEngine{ engine }
 {
-	InitializeCacheRefresh();
 	InitializeLowLevelData();
 }
 
 aiva::layer1::GrConstantBuffer::~GrConstantBuffer()
 {
 	TerminateLowLevelData();
-	TerminateCacheRefresh();
-}
-
-void aiva::layer1::GrConstantBuffer::InitializeCacheRefresh()
-{
-	mCacheRefresh.MarkAsChanged(EDirtyFlags::All);
-}
-
-void aiva::layer1::GrConstantBuffer::TerminateCacheRefresh()
-{
-
 }
 
 aiva::utils::TEvAction<aiva::layer1::GrConstantBuffer::EDirtyFlags>& aiva::layer1::GrConstantBuffer::OnFlushCompleted()
 {
 	return mCacheRefresh.OnFlushCompleted();
 }
-
 
 winrt::com_ptr<ID3D12Resource> const& aiva::layer1::GrConstantBuffer::InternalResource()
 {

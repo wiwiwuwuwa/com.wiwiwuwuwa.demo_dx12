@@ -5,7 +5,7 @@
 
 namespace aiva::layer1
 {
-	struct GrBufferDescriptor final
+	struct GrBufferDesc final
 	{
 	// ----------------------------------------------------
 	// Data Layout

@@ -2,7 +2,7 @@
 #include <pch.h>
 
 #include <aiva/layer1/i_gpu_resource.h>
-#include <aiva/layer1/gr_buffer_descriptor.h>
+#include <aiva/layer1/gr_buffer_desc.h>
 #include <aiva/utils/ev_action.h>
 
 namespace aiva::layer1
@@ -22,7 +22,7 @@ namespace aiva::layer1
 		static std::shared_ptr<GrBuffer> Create(TArgs&&... args);
 
 	private:
-		GrBuffer(Engine const& engine, GrBufferDescriptor const& descriptor);
+		GrBuffer(Engine const& engine, GrBufferDesc const& desc);
 
 	public:
 		~GrBuffer();
@@ -34,9 +34,9 @@ namespace aiva::layer1
 	// High-Level Data
 
 	public:
-		GrBufferDescriptor GetDescriptor() const;
+		GrBufferDesc Desc() const;
 
-		GrBuffer& SetDescriptor(GrBufferDescriptor const& descriptor);
+		GrBuffer& Desc(GrBufferDesc const& desc);
 
 	// ----------------------------------------------------
 	// Low-Level Data
@@ -47,7 +47,7 @@ namespace aiva::layer1
 		aiva::utils::EvAction& OnInternalResourceUpdated();
 
 	private:
-		void UpdateInternalResource(GrBufferDescriptor const& descriptor);
+		void UpdateInternalResource(GrBufferDesc const& desc);
 
 	private:
 		winrt::com_ptr<ID3D12Resource> mInternalResource{};

@@ -2,7 +2,7 @@
 #include <pch.h>
 
 #include <aiva/layer1/i_gpu_resource.h>
-#include <aiva/layer1/gr_texture_2d_descriptor.h>
+#include <aiva/layer1/gr_texture_2d_desc.h>
 #include <aiva/utils/ev_action.h>
 
 namespace aiva::layer1
@@ -22,7 +22,7 @@ namespace aiva::layer1
 		static std::shared_ptr<GrTexture2D> Create(TArgs&&... args);
 
 	private:
-		GrTexture2D(Engine const& engine, GrTexture2DDescriptor const& descriptor);
+		GrTexture2D(Engine const& engine, GrTexture2DDesc const& desc);
 
 	public:
 		~GrTexture2D();
@@ -34,9 +34,9 @@ namespace aiva::layer1
 	// High-Level Data
 
 	public:
-		GrTexture2DDescriptor GetDescriptor() const;
+		GrTexture2DDesc Desc() const;
 
-		GrTexture2D& SetDescriptor(GrTexture2DDescriptor const& descriptor);
+		GrTexture2D& Desc(GrTexture2DDesc const& desc);
 
 	// ----------------------------------------------------
 	// Low-Level Data
@@ -47,7 +47,7 @@ namespace aiva::layer1
 		aiva::utils::EvAction& OnInternalResourceUpdated();
 
 	private:
-		void UpdateInternalResource(GrTexture2DDescriptor const& descriptor);
+		void UpdateInternalResource(GrTexture2DDesc const& desc);
 
 	private:
 		winrt::com_ptr<ID3D12Resource> mInternalResource{};

@@ -154,7 +154,7 @@
     <ClInclude Include="Sources\aiva\layer1\e_gpu_resource_memory_type.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer_desc.h" />
-    <ClInclude Include="Sources\aiva\layer1\gr_buffer_descriptor.h" />
+    <ClInclude Include="Sources\aiva\layer1\gr_buffer_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\gr_constant_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\constant_packer.h" />
     <ClInclude Include="Sources\aiva\layer1\engine.h" />
@@ -164,7 +164,7 @@
     <ClInclude Include="Sources\aiva\layer1\graphic_hardware.h" />
     <ClInclude Include="Sources\aiva\layer1\graphic_pipeline.h" />
     <ClInclude Include="Sources\aiva\layer1\gr_buffer.h" />
-    <ClInclude Include="Sources\aiva\layer1\gr_texture_2d_descriptor.h" />
+    <ClInclude Include="Sources\aiva\layer1\gr_texture_2d_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\i_constant_buffer_value.h" />
     <ClInclude Include="Sources\aiva\layer1\i_gpu_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\i_gpu_resource_view.h" />

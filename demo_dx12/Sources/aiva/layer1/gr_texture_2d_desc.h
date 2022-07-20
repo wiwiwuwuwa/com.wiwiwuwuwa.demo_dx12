@@ -6,7 +6,7 @@
 
 namespace aiva::layer1
 {
-	struct GrTexture2DDescriptor final
+	struct GrTexture2DDesc final
 	{
 		// ----------------------------------------------------
 		// Data Layout

@@ -1,6 +1,8 @@
 #pragma once
 #include <pch.h>
 
+#include <aiva/layer1/e_gpu_resource_buffer_format.h>
+#include <aiva/layer1/e_gpu_resource_memory_type.h>
 #include <aiva/layer1/i_gpu_resource.h>
 #include <aiva/utils/t_cache_refresh.h>
 
@@ -13,8 +15,8 @@ namespace aiva::layer1
 {
 	struct GrTextureBuffer2D final : private boost::noncopyable, public std::enable_shared_from_this<GrTextureBuffer2D>, public aiva::layer1::IGpuResource
 	{
-	// ----------------------------------------------------
-	// Main
+		// ----------------------------------------------------
+		// Main
 
 	public:
 		template <typename... TArgs>
@@ -28,6 +30,59 @@ namespace aiva::layer1
 
 	private:
 		aiva::layer1::Engine const& mEngine;
+
+		// ----------------------------------------------------
+		// High-Level Data
+
+	public:
+		bool SupportsShaderAtomics() const;
+
+		aiva::layer1::GrTextureBuffer2D& SupportsShaderAtomics(bool const value);
+
+		std::uint64_t Width() const;
+
+		aiva::layer1::GrTextureBuffer2D& Width(std::uint64_t const width);
+
+		std::uint64_t Height() const;
+
+		aiva::layer1::GrTextureBuffer2D& Height(std::uint64_t const height);
+
+		bool SupportsMipMapping() const;
+
+		aiva::layer1::GrTextureBuffer2D& SupportsMipMapping(bool const value);
+
+		aiva::layer1::EGpuResourceBufferFormat BufferFormat() const;
+
+		aiva::layer1::GrTextureBuffer2D& BufferFormat(aiva::layer1::EGpuResourceBufferFormat const bufferFormat);
+
+		bool SupportsRenderTarget() const;
+
+		aiva::layer1::GrTextureBuffer2D& SupportsRenderTarget(bool const value);
+
+		bool SupportsDepthStencil() const;
+
+		aiva::layer1::GrTextureBuffer2D& SupportsDepthStencil(bool const value);
+
+		bool SupportsUnorderedAccess() const;
+
+		aiva::layer1::GrTextureBuffer2D& SupportsUnorderedAccess(const bool value);
+
+	private:
+		bool mSupportsShaderAtomics{};
+
+		std::uint64_t mWidth{};
+
+		std::uint64_t mHeight{};
+
+		bool mSupportsMipMapping{};
+
+		aiva::layer1::EGpuResourceBufferFormat mBufferFormat{};
+
+		bool mSupportsRenderTarget{};
+
+		bool mSupportsDepthStencil{};
+
+		bool mSupportsUnorderedAccess{};
 
 	// ----------------------------------------------------
 	// Cache Refresh

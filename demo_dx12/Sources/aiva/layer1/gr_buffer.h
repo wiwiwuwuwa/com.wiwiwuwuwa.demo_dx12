@@ -42,7 +42,7 @@ namespace aiva::layer1
 	// Low-Level Data
 
 	public:
-		winrt::com_ptr<ID3D12Resource> const& InternalResource();
+		winrt::com_ptr<ID3D12Resource> const InternalResource();
 
 		aiva::utils::EvAction& OnInternalResourceUpdated();
 

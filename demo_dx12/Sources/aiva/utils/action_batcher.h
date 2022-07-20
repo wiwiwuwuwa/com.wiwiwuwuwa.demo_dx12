@@ -22,9 +22,13 @@ namespace aiva::utils
 	// Events
 
 	public:
-		EvAction& OnBatched();
+		EvAction& OnBeginBatch();
+
+		EvAction& OnEndBatch();
 
 	private:
-		EvAction mOnBatched{};
+		EvAction mOnBeginBatch{};
+
+		EvAction mOnEndBatch{};
 	};
 }

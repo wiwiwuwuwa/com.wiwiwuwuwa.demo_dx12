@@ -37,12 +37,12 @@ aiva::utils::ActionBatcher& aiva::layer1::GroDictionaryToBuffer::GetBatcher()
 
 void aiva::layer1::GroDictionaryToBuffer::InitializeUpdater()
 {
-	GetBatcher().OnBatched().connect(boost::bind(&GroDictionaryToBuffer::UpdateInternalResources, this));
+	GetBatcher().OnEndBatch().connect(boost::bind(&GroDictionaryToBuffer::UpdateInternalResources, this));
 }
 
 void aiva::layer1::GroDictionaryToBuffer::TerminateUpdater()
 {
-	GetBatcher().OnBatched().disconnect(boost::bind(&GroDictionaryToBuffer::UpdateInternalResources, this));
+	GetBatcher().OnEndBatch().disconnect(boost::bind(&GroDictionaryToBuffer::UpdateInternalResources, this));
 }
 
 void aiva::layer1::GroDictionaryToBuffer::UpdateInternalResources()

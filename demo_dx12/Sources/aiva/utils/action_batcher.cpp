@@ -5,24 +5,34 @@
 
 void aiva::utils::ActionBatcher::BeginBatch()
 {
+	aiva::utils::Asserts::CheckBool(mCounter >= 0);
+
+	if (mCounter == 0)
+	{
+		OnBeginBatch()();
+	}
+
 	mCounter++;
 }
 
 void aiva::utils::ActionBatcher::EndBatch()
 {
-	aiva::utils::Asserts::CheckBool(mCounter > 0);
+	aiva::utils::Asserts::CheckBool(mCounter >= 1);
 
 	mCounter--;
 
-	if (mCounter != 0)
+	if (mCounter == 0)
 	{
-		return;
+		OnEndBatch()();
 	}
-
-	OnBatched()();
 }
 
-aiva::utils::EvAction& aiva::utils::ActionBatcher::OnBatched()
+aiva::utils::EvAction& aiva::utils::ActionBatcher::OnBeginBatch()
 {
-	return mOnBatched;
+	return mOnBeginBatch;
+}
+
+aiva::utils::EvAction& aiva::utils::ActionBatcher::OnEndBatch()
+{
+	return mOnEndBatch;
 }

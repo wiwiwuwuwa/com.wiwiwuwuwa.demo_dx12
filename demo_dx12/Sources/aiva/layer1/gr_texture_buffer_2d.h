@@ -2,7 +2,6 @@
 #include <pch.h>
 
 #include <aiva/layer1/e_gpu_resource_buffer_format.h>
-#include <aiva/layer1/e_gpu_resource_memory_type.h>
 #include <aiva/layer1/i_gpu_resource.h>
 #include <aiva/utils/t_cache_refresh.h>
 
@@ -15,8 +14,8 @@ namespace aiva::layer1
 {
 	struct GrTextureBuffer2D final : private boost::noncopyable, public std::enable_shared_from_this<GrTextureBuffer2D>, public aiva::layer1::IGpuResource
 	{
-		// ----------------------------------------------------
-		// Main
+	// ----------------------------------------------------
+	// Main
 
 	public:
 		template <typename... TArgs>
@@ -31,8 +30,8 @@ namespace aiva::layer1
 	private:
 		aiva::layer1::Engine const& mEngine;
 
-		// ----------------------------------------------------
-		// High-Level Data
+	// ----------------------------------------------------
+	// High-Level Data
 
 	public:
 		bool SupportsShaderAtomics() const;

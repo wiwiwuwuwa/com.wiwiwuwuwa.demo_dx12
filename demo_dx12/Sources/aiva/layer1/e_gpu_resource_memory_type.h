@@ -7,8 +7,9 @@ namespace aiva::layer1
 {
 	enum class EGpuResourceMemoryType : std::uint8_t
 	{
-		GpuOnly,
 		CpuToGpu,
+		GpuOnly,
+		GpuToCpu,
 	};
 
 	EGpuResourceMemoryType FromInternalEnum(D3D12_HEAP_TYPE const heapType);

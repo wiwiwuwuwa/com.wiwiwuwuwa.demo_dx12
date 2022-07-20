@@ -11,6 +11,9 @@ aiva::layer1::EGpuResourceMemoryType aiva::layer1::FromInternalEnum(D3D12_HEAP_T
 	case D3D12_HEAP_TYPE_UPLOAD:
 		return EGpuResourceMemoryType::CpuToGpu;
 
+	case D3D12_HEAP_TYPE_READBACK:
+		return EGpuResourceMemoryType::GpuToCpu;
+
 	default:
 		aiva::utils::Asserts::CheckBool(false);
 		return {};
@@ -21,11 +24,14 @@ D3D12_HEAP_TYPE aiva::layer1::ToInternalEnum(EGpuResourceMemoryType const memory
 {
 	switch (memoryType)
 	{
+	case EGpuResourceMemoryType::CpuToGpu:
+		return D3D12_HEAP_TYPE_UPLOAD;
+
 	case EGpuResourceMemoryType::GpuOnly:
 		return D3D12_HEAP_TYPE_DEFAULT;
 
-	case EGpuResourceMemoryType::CpuToGpu:
-		return D3D12_HEAP_TYPE_UPLOAD;
+	case EGpuResourceMemoryType::GpuToCpu:
+		return D3D12_HEAP_TYPE_READBACK;
 
 	default:
 		aiva::utils::Asserts::CheckBool(false);

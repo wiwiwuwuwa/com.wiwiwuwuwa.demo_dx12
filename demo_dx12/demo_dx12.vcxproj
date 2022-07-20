@@ -160,6 +160,7 @@
     <ClInclude Include="Sources\aiva\layer1\graphic_executor.h" />
     <ClInclude Include="Sources\aiva\layer1\graphic_hardware.h" />
     <ClInclude Include="Sources\aiva\layer1\graphic_pipeline.h" />
+    <ClInclude Include="Sources\aiva\layer1\gr_linear_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\i_constant_buffer_value.h" />
     <ClInclude Include="Sources\aiva\layer1\i_gpu_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\i_graphic_command.h" />
@@ -211,6 +212,7 @@
     <ClCompile Include="Sources\aiva\layer1\graphic_executor.cpp" />
     <ClCompile Include="Sources\aiva\layer1\graphic_hardware.cpp" />
     <ClCompile Include="Sources\aiva\layer1\graphic_pipeline.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gr_linear_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_system.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_material_compute.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_shader_compute.cpp" />

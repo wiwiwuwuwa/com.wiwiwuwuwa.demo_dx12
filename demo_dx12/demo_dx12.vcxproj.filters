@@ -22,6 +22,7 @@
     <ClCompile Include="Sources\aiva\layer1\gr_texture_buffer_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_gpu_resource_memory_type.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_gpu_resource_buffer_format.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gr_linear_buffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -59,6 +60,7 @@
     <ClInclude Include="Sources\aiva\layer1\i_gpu_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_resource_memory_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_resource_buffer_format.h" />
+    <ClInclude Include="Sources\aiva\layer1\gr_linear_buffer.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

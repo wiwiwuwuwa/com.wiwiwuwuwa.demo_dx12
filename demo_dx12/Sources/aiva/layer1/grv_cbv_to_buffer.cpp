@@ -46,8 +46,8 @@ void aiva::layer1::GrvCbvToBuffer::OnDescInternalResourceUpdated()
 
 std::optional<D3D12_CONSTANT_BUFFER_VIEW_DESC> aiva::layer1::GrvCbvToBuffer::InternalResource()
 {
-	GrvCbvToBufferDesc const bufferDesc = Desc();
-	if (!bufferDesc.Resource)
+	auto const aivaViewDesc = Desc();
+	if (!aivaViewDesc.Resource)
 	{
 		return {};
 	}
@@ -55,18 +55,20 @@ std::optional<D3D12_CONSTANT_BUFFER_VIEW_DESC> aiva::layer1::GrvCbvToBuffer::Int
 	auto const device = mEngine.GraphicHardware().Device();
 	winrt::check_bool(device);
 
-	auto const resource = bufferDesc.Resource->InternalResource();
-	winrt::check_bool(resource);
+	auto const aivaResource = aivaViewDesc.Resource;
+	aiva::utils::Asserts::CheckBool(aivaResource);
 
-	D3D12_RESOURCE_DESC const resourceDesc = resource->GetDesc();
-	D3D12_RESOURCE_ALLOCATION_INFO const allocationInfo = device->GetResourceAllocationInfo(0, 1, &resourceDesc);
-	aiva::utils::Asserts::CheckBool(allocationInfo.SizeInBytes != UINT64_MAX);
+	auto const directxResource = aivaResource->InternalResource();
+	winrt::check_bool(directxResource);
 
-	D3D12_CONSTANT_BUFFER_VIEW_DESC viewDesc{};
-	viewDesc.BufferLocation = resource->GetGPUVirtualAddress();
-	viewDesc.SizeInBytes = allocationInfo.SizeInBytes;
+	auto const directxResourceDesc = directxResource->GetDesc();
+	aiva::utils::Asserts::CheckBool(directxResourceDesc.Width > 0);
 
-	return viewDesc;
+	D3D12_CONSTANT_BUFFER_VIEW_DESC directxViewDesc{};
+	directxViewDesc.BufferLocation = directxResource->GetGPUVirtualAddress();
+	directxViewDesc.SizeInBytes = directxResourceDesc.Width;
+
+	return directxViewDesc;
 }
 
 aiva::utils::EvAction& aiva::layer1::GrvCbvToBuffer::OnInternalResourceUpdated()

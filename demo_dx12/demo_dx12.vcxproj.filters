@@ -18,12 +18,13 @@
     <ClCompile Include="Sources\aiva\layer1\ro_material_compute.cpp" />
     <ClCompile Include="Sources\aiva\utils\changes_counter.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_dispatch.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\gr_constant_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gr_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_gpu_resource_memory_type.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_gpu_resource_buffer_format.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gr_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_cbv_to_buffer.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gro_dictionary_to_buffer.cpp" />
+    <ClCompile Include="Sources\aiva\utils\action_batcher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -52,7 +53,6 @@
     <ClInclude Include="Sources\aiva\layer1\gca_dispatch.h" />
     <ClInclude Include="Sources\aiva\layer1\i_constant_buffer_value.h" />
     <ClInclude Include="Sources\aiva\layer1\t_constant_buffer_value.h" />
-    <ClInclude Include="Sources\aiva\layer1\gr_constant_buffer.h" />
     <ClInclude Include="Sources\aiva\utils\t_cache_refresh.h" />
     <ClInclude Include="Sources\aiva\utils\t_ev_action.h" />
     <ClInclude Include="Sources\aiva\utils\enum_utils.h" />
@@ -67,6 +67,10 @@
     <ClInclude Include="Sources\aiva\layer1\i_gpu_resource_view.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer_desc.h" />
+    <ClInclude Include="Sources\aiva\layer1\i_gpu_resource_operator.h" />
+    <ClInclude Include="Sources\aiva\layer1\gro_dictionary_to_buffer.h" />
+    <ClInclude Include="Sources\aiva\layer1\gro_dictionary_to_buffer_desc.h" />
+    <ClInclude Include="Sources\aiva\utils\action_batcher.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

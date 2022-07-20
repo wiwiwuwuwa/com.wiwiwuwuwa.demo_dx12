@@ -25,6 +25,7 @@
     <ClCompile Include="Sources\aiva\layer1\grv_cbv_to_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gro_dictionary_to_buffer.cpp" />
     <ClCompile Include="Sources\aiva\utils\action_batcher.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\grv_rtv_to_texture_2d.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -71,6 +72,8 @@
     <ClInclude Include="Sources\aiva\layer1\gro_dictionary_to_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\gro_dictionary_to_buffer_desc.h" />
     <ClInclude Include="Sources\aiva\utils\action_batcher.h" />
+    <ClInclude Include="Sources\aiva\layer1\grv_rtv_to_texture_2d.h" />
+    <ClInclude Include="Sources\aiva\layer1\grv_rtv_to_texture_2d_desc.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

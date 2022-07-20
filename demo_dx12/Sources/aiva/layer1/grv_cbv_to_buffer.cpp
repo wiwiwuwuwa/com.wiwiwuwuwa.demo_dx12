@@ -3,7 +3,6 @@
 
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gr_buffer.h>
-#include <aiva/layer1/graphic_hardware.h>
 #include <aiva/utils/asserts.h>
 
 aiva::layer1::GrvCbvToBuffer::GrvCbvToBuffer(Engine const& engine, GrvCbvToBufferDesc const& desc) : mEngine{ engine }
@@ -51,9 +50,6 @@ std::optional<D3D12_CONSTANT_BUFFER_VIEW_DESC> aiva::layer1::GrvCbvToBuffer::Int
 	{
 		return {};
 	}
-
-	auto const device = mEngine.GraphicHardware().Device();
-	winrt::check_bool(device);
 
 	auto const aivaResource = aivaViewDesc.Resource;
 	aiva::utils::Asserts::CheckBool(aivaResource);

@@ -152,6 +152,7 @@
     <ClInclude Include="Sources\aiva\layer0\app.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_resource_buffer_format.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_resource_memory_type.h" />
+    <ClInclude Include="Sources\aiva\layer1\gr_buffer_descriptor.h" />
     <ClInclude Include="Sources\aiva\layer1\gr_constant_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\constant_packer.h" />
     <ClInclude Include="Sources\aiva\layer1\engine.h" />
@@ -160,7 +161,8 @@
     <ClInclude Include="Sources\aiva\layer1\graphic_executor.h" />
     <ClInclude Include="Sources\aiva\layer1\graphic_hardware.h" />
     <ClInclude Include="Sources\aiva\layer1\graphic_pipeline.h" />
-    <ClInclude Include="Sources\aiva\layer1\gr_linear_buffer.h" />
+    <ClInclude Include="Sources\aiva\layer1\gr_buffer.h" />
+    <ClInclude Include="Sources\aiva\layer1\gr_texture_2d_descriptor.h" />
     <ClInclude Include="Sources\aiva\layer1\i_constant_buffer_value.h" />
     <ClInclude Include="Sources\aiva\layer1\i_gpu_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\i_graphic_command.h" />
@@ -170,7 +172,7 @@
     <ClInclude Include="Sources\aiva\layer1\resource_system.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_material_compute.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_shader_compute.h" />
-    <ClInclude Include="Sources\aiva\layer1\gr_texture_buffer_2d.h" />
+    <ClInclude Include="Sources\aiva\layer1\gr_texture_2d.h" />
     <ClInclude Include="Sources\aiva\layer1\t_constant_buffer_value.h" />
     <ClInclude Include="Sources\aiva\layer2\scene_component.h" />
     <ClInclude Include="Sources\aiva\layer2\scene_actor.h" />
@@ -212,11 +214,11 @@
     <ClCompile Include="Sources\aiva\layer1\graphic_executor.cpp" />
     <ClCompile Include="Sources\aiva\layer1\graphic_hardware.cpp" />
     <ClCompile Include="Sources\aiva\layer1\graphic_pipeline.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\gr_linear_buffer.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gr_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_system.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_material_compute.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_shader_compute.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\gr_texture_buffer_2d.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gr_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer2\scene_actor.cpp" />
     <ClCompile Include="Sources\aiva\layer2\scene_component.cpp" />
     <ClCompile Include="Sources\aiva\layer2\scene_system.cpp" />

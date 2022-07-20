@@ -19,10 +19,10 @@
     <ClCompile Include="Sources\aiva\utils\changes_counter.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_dispatch.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gr_constant_buffer.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\gr_texture_buffer_2d.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gr_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_gpu_resource_memory_type.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_gpu_resource_buffer_format.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\gr_linear_buffer.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gr_buffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -56,11 +56,13 @@
     <ClInclude Include="Sources\aiva\utils\t_ev_action.h" />
     <ClInclude Include="Sources\aiva\utils\enum_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\constant_packer.h" />
-    <ClInclude Include="Sources\aiva\layer1\gr_texture_buffer_2d.h" />
+    <ClInclude Include="Sources\aiva\layer1\gr_texture_2d.h" />
     <ClInclude Include="Sources\aiva\layer1\i_gpu_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_resource_memory_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_resource_buffer_format.h" />
-    <ClInclude Include="Sources\aiva\layer1\gr_linear_buffer.h" />
+    <ClInclude Include="Sources\aiva\layer1\gr_buffer.h" />
+    <ClInclude Include="Sources\aiva\layer1\gr_buffer_descriptor.h" />
+    <ClInclude Include="Sources\aiva\layer1\gr_texture_2d_descriptor.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

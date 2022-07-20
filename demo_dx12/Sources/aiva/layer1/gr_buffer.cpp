@@ -17,7 +17,7 @@ aiva::layer1::GrBuffer::~GrBuffer()
 
 aiva::layer1::GrBufferDescriptor aiva::layer1::GrBuffer::GetDescriptor() const
 {
-	winrt::com_ptr<ID3D12Resource> resource = mInternalResource;
+	winrt::com_ptr<ID3D12Resource> const resource = mInternalResource;
 	winrt::check_bool(resource);
 
 	GrBufferDescriptor descriptor{};
@@ -43,8 +43,8 @@ aiva::layer1::GrBufferDescriptor aiva::layer1::GrBuffer::GetDescriptor() const
 
 aiva::layer1::GrBuffer& aiva::layer1::GrBuffer::SetDescriptor(GrBufferDescriptor const& descriptor)
 {
-	winrt::check_bool(mInternalResource);
 	UpdateInternalResource(descriptor);
+	return *this;
 }
 
 winrt::com_ptr<ID3D12Resource> const& aiva::layer1::GrBuffer::InternalResource()

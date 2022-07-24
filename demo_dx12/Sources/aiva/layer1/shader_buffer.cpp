@@ -46,13 +46,14 @@ std::size_t aiva::layer1::ShaderBuffer::ByteStride() const
 	return mReferenceStruct->SerializeToBinary().size();
 }
 
-void aiva::layer1::ShaderBuffer::Add(std::shared_ptr<ShaderStruct> const& shaderStruct)
+aiva::layer1::ShaderBuffer& aiva::layer1::ShaderBuffer::Add(std::shared_ptr<ShaderStruct> const& shaderStruct)
 {
 	aiva::utils::Asserts::CheckBool(mReferenceStruct);
 	aiva::utils::Asserts::CheckBool(shaderStruct);
 	aiva::utils::Asserts::CheckBool((*mReferenceStruct).HasSameFields(*shaderStruct));
 
 	mShaderStructs.push_back(shaderStruct);
+	return *this;
 }
 
 std::shared_ptr<const aiva::layer1::ShaderStruct> const& aiva::layer1::ShaderBuffer::Get(std::size_t index) const

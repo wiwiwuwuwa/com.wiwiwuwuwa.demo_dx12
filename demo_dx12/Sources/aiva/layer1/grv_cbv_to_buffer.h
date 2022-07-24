@@ -8,6 +8,7 @@
 namespace aiva::layer1
 {
 	struct Engine;
+	struct ShaderStruct;
 }
 
 namespace aiva::layer1
@@ -31,32 +32,51 @@ namespace aiva::layer1
 		Engine const& mEngine;
 
 	// ----------------------------------------------------
-	// High-Level Data
+	// Desc Data
 
 	public:
-		GrvCbvToBufferDesc const Desc() const;
+		GrvCbvToBufferDesc const& Desc() const;
 
 		GrvCbvToBuffer& Desc(GrvCbvToBufferDesc const& desc);
-
-	private:
-		void OnDescInternalResourceUpdated();
 
 	private:
 		GrvCbvToBufferDesc mDesc{};
 
 	// ----------------------------------------------------
-	// Low-Level Data
+	// Struct Data
 
 	public:
-		std::optional<D3D12_CONSTANT_BUFFER_VIEW_DESC> InternalResource();
+		ShaderStruct& Struct() const;
 
+		GrvCbvToBuffer& ApplyStructChanges();
+
+	private:
+		void InitializeStruct();
+
+		void TerminateStruct();
+
+	private:
+		std::shared_ptr<ShaderStruct> mStruct{};
+
+	// ----------------------------------------------------
+	// Updated Event
+
+	public:
 		aiva::utils::EvAction& OnInternalResourceUpdated();
 
 	private:
+		void RefreshInternalResourceUpdated(GrvCbvToBufferDesc const& previousDesc, GrvCbvToBufferDesc const& desiredDesc);
+
 		void NotifyInternalResourceUpdated();
 
 	private:
-		aiva::utils::EvAction mOnInternalResourceUpdated;
+		aiva::utils::EvAction mOnInternalResourceUpdated{};
+
+	// ----------------------------------------------------
+	// Internal Data
+
+	public:
+		std::optional<D3D12_CONSTANT_BUFFER_VIEW_DESC> InternalResource() const;
 	};
 }
 

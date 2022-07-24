@@ -42,7 +42,7 @@ namespace aiva::layer1
 	// Shader Structures
 
 	public:
-		void Add(std::shared_ptr<ShaderStruct> const& shaderStruct);
+		ShaderBuffer& Add(std::shared_ptr<ShaderStruct> const& shaderStruct);
 
 		std::shared_ptr<const ShaderStruct> const& Get(std::size_t index) const;
 

@@ -18,13 +18,13 @@ namespace aiva::layer1
 		static std::shared_ptr<ShaderBuffer> Create(TArgs&&... args);
 
 	private:
-		ShaderBuffer(std::shared_ptr<ShaderStruct> const& referenceStruct);
+		ShaderBuffer(std::shared_ptr<const ShaderStruct> const& referenceStruct);
 
 	public:
 		~ShaderBuffer();
 
 	private:
-		std::shared_ptr<ShaderStruct> mReferenceStruct{};
+		std::shared_ptr<const ShaderStruct> mReferenceStruct{};
 
 	// ----------------------------------------------------
 	// Serialization

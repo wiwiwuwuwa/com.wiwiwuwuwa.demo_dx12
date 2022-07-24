@@ -5,7 +5,7 @@
 #include <aiva/layer1/shader_struct.h>
 #include <aiva/utils/asserts.h>
 
-aiva::layer1::ShaderBuffer::ShaderBuffer(std::shared_ptr<ShaderStruct> const& referenceStruct) : mReferenceStruct{ referenceStruct }
+aiva::layer1::ShaderBuffer::ShaderBuffer(std::shared_ptr<const ShaderStruct> const& referenceStruct) : mReferenceStruct{ referenceStruct }
 {
 	aiva::utils::Asserts::CheckBool(referenceStruct);
 }

@@ -9,7 +9,7 @@ namespace aiva::layer1
 
 namespace aiva::layer1
 {
-	struct GrvUavToBufferDesc final
+	struct GrvSrvToBufferDesc final
 	{
 	// ----------------------------------------------------
 	// Resource

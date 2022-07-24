@@ -158,6 +158,8 @@
     <ClInclude Include="Sources\aiva\layer1\grv_dsv_to_texture_2d_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_rtv_to_texture_2d.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_rtv_to_texture_2d_desc.h" />
+    <ClInclude Include="Sources\aiva\layer1\grv_srv_to_buffer.h" />
+    <ClInclude Include="Sources\aiva\layer1\grv_srv_to_buffer_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_srv_to_texture_2d.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_srv_to_texture_2d_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_uav_to_buffer.h" />
@@ -233,6 +235,7 @@
     <ClCompile Include="Sources\aiva\layer1\grv_cbv_to_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_dsv_to_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_rtv_to_texture_2d.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\grv_srv_to_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_srv_to_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_uav_to_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_uav_to_texture_2d.cpp" />

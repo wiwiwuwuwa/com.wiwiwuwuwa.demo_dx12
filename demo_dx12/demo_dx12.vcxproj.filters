@@ -29,6 +29,8 @@
     <ClCompile Include="Sources\aiva\layer1\grv_dsv_to_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_srv_to_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_uav_to_texture_2d.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\shader_struct.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\shader_buffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -83,6 +85,13 @@
     <ClInclude Include="Sources\aiva\layer1\grv_srv_to_texture_2d.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_uav_to_texture_2d_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_uav_to_texture_2d.h" />
+    <ClInclude Include="Sources\aiva\layer1\i_shader_value.h" />
+    <ClInclude Include="Sources\aiva\layer1\t_shader_value.h" />
+    <ClInclude Include="Sources\aiva\layer1\shader_struct.h" />
+    <ClInclude Include="Sources\aiva\layer1\t_shader_array.h" />
+    <ClInclude Include="Sources\aiva\layer1\shader_consts.h" />
+    <ClInclude Include="Sources\aiva\utils\math_utils.h" />
+    <ClInclude Include="Sources\aiva\layer1\shader_buffer.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

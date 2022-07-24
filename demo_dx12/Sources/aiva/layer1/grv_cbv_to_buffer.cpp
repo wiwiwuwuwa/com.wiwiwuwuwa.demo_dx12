@@ -10,12 +10,14 @@
 
 aiva::layer1::GrvCbvToBuffer::GrvCbvToBuffer(Engine const& engine, GrvCbvToBufferDesc const& desc) : mEngine{ engine }
 {
+	InitializeStruct();
 	Desc(desc);
 }
 
 aiva::layer1::GrvCbvToBuffer::~GrvCbvToBuffer()
 {
 	Desc({});
+	TerminateStruct();
 }
 
 aiva::layer1::GrvCbvToBufferDesc const& aiva::layer1::GrvCbvToBuffer::Desc() const
@@ -32,6 +34,62 @@ aiva::layer1::GrvCbvToBuffer& aiva::layer1::GrvCbvToBuffer::Desc(GrvCbvToBufferD
 	RefreshInternalResourceUpdated(previousDesc, desiredDesc);
 
 	return *this;
+}
+
+aiva::layer1::ShaderStruct& aiva::layer1::GrvCbvToBuffer::Struct() const
+{
+	aiva::utils::Asserts::CheckBool(mStruct);
+	return *mStruct;
+}
+
+aiva::layer1::GrvCbvToBuffer& aiva::layer1::GrvCbvToBuffer::ApplyStructChanges()
+{
+	aiva::utils::Asserts::CheckBool(mStruct);
+
+	auto const& desc = Desc();
+	aiva::utils::Asserts::CheckBool(desc.Resource);
+
+	auto const& aivaResource = desc.Resource;
+	aiva::utils::Asserts::CheckBool(aivaResource);
+
+	auto const& currentDirectxResource = aivaResource->InternalResource();
+	winrt::check_bool(currentDirectxResource);
+
+	auto const& currentDirectxDesc = currentDirectxResource->GetDesc();
+	aiva::utils::Asserts::CheckBool(currentDirectxDesc.Width > 0);
+
+	auto const& binaryData = (*ShaderBuffer::Create(mStruct)).Add(mStruct).SerializeToBinary();
+	aiva::utils::Asserts::CheckBool(binaryData.size() > 0);
+
+	auto const& needUpdateAivaDesc = currentDirectxDesc.Width != binaryData.size();
+	if (needUpdateAivaDesc)
+	{
+		auto updatedAivaDesc = aivaResource->Desc();
+		updatedAivaDesc.Size = binaryData.size();
+
+		aivaResource->Desc(updatedAivaDesc);
+	}
+
+	auto const& updatedDirectxResource = aivaResource->InternalResource();
+	winrt::check_bool(updatedDirectxResource);
+
+	void* destinationMemory{};
+	winrt::check_hresult(updatedDirectxResource->Map(0, nullptr, &destinationMemory));
+	aiva::utils::Asserts::CheckBool(destinationMemory);
+	aiva::utils::Asserts::CheckBool(memcpy_s(destinationMemory, binaryData.size(), binaryData.data(), binaryData.size()) == 0);
+	updatedDirectxResource->Unmap(0, nullptr);
+
+	return *this;
+}
+
+void aiva::layer1::GrvCbvToBuffer::InitializeStruct()
+{
+	mStruct = ShaderStruct::Create();
+}
+
+void aiva::layer1::GrvCbvToBuffer::TerminateStruct()
+{
+	mStruct = {};
 }
 
 aiva::utils::EvAction& aiva::layer1::GrvCbvToBuffer::OnInternalResourceUpdated()

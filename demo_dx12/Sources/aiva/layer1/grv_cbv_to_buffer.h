@@ -43,22 +43,6 @@ namespace aiva::layer1
 		GrvCbvToBufferDesc mDesc{};
 
 	// ----------------------------------------------------
-	// Struct Data
-
-	public:
-		ShaderStruct& Struct() const;
-
-		GrvCbvToBuffer& ApplyStructChanges();
-
-	private:
-		void InitializeStruct();
-
-		void TerminateStruct();
-
-	private:
-		std::shared_ptr<ShaderStruct> mStruct{};
-
-	// ----------------------------------------------------
 	// Updated Event
 
 	public:

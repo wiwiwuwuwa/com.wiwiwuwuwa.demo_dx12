@@ -1,6 +1,8 @@
 #pragma once
 #include <pch.h>
 
+#include <aiva/layer1/e_gpu_descriptor_heap_type.h>
+#include <aiva/utils/ev_action.h>
 #include <aiva/utils/t_cache_refresh.h>
 
 namespace aiva::layer1
@@ -63,6 +65,35 @@ namespace aiva::layer1
 
 	private:
 		std::unordered_map<std::string, std::shared_ptr<IGpuResourceView>> mResourceViews{};
+
+	// ----------------------------------------------------
+	// Internal Resources Data
+
+	private:
+		void InitializeInternalResources();
+
+		void TerminateInternalResources();
+
+	private:
+		void RefreshInternalResources();
+
+		void RefreshDescriptorHeaps();
+
+		void RefreshRootSignature();
+
+	private:
+		std::unordered_map<EGpuDescriptorHeapType, winrt::com_ptr<ID3D12DescriptorHeap>> mDescriptorHeaps{};
+
+		winrt::com_ptr<ID3D12RootSignature> mRootSignature{};
+
+	// ----------------------------------------------------
+	// Internal Resources Events
+
+	public:
+		aiva::utils::EvAction& OnInternalResourceUpdated();
+
+	private:
+		aiva::utils::EvAction mOnInternalResourceUpdated{};
 	};
 }
 

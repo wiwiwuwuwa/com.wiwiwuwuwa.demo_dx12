@@ -34,6 +34,7 @@
     <ClCompile Include="Sources\aiva\layer1\grv_srv_to_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_gpu_descriptor_heap_type.cpp" />
     <ClCompile Include="Sources\aiva\layer1\shader_resource_descriptor.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\e_gpu_resource_view_type.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -95,6 +96,7 @@
     <ClInclude Include="Sources\aiva\layer1\grv_srv_to_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_descriptor_heap_type.h" />
     <ClInclude Include="Sources\aiva\layer1\shader_resource_descriptor.h" />
+    <ClInclude Include="Sources\aiva\layer1\e_gpu_resource_view_type.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

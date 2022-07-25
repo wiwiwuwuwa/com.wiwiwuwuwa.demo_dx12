@@ -153,6 +153,7 @@
     <ClInclude Include="Sources\aiva\layer1\e_gpu_descriptor_heap_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_resource_buffer_format.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_resource_memory_type.h" />
+    <ClInclude Include="Sources\aiva\layer1\e_gpu_resource_view_type.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_dsv_to_texture_2d.h" />
@@ -230,6 +231,7 @@
     <ClCompile Include="Sources\aiva\layer1\e_gpu_resource_buffer_format.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_gpu_resource_memory_type.cpp" />
     <ClCompile Include="Sources\aiva\layer1\engine.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\e_gpu_resource_view_type.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_dispatch.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_do_everything.cpp" />
     <ClCompile Include="Sources\aiva\layer1\graphic_executor.cpp" />

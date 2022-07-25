@@ -134,6 +134,7 @@
     <None Include="packages.config" />
     <None Include="Assets\resources\materials\checker.mat_cs" />
     <None Include="Assets\resources\shaders\checker.hlsl_cs" />
+    <None Include="demo_dx12_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme.txt" />

@@ -33,6 +33,12 @@ namespace aiva::layer1
 		Engine const& mEngine;
 
 	// ----------------------------------------------------
+	// IGpuResourceView
+
+	public:
+		EGpuDescriptorHeapType DescriptorHeapType() const override;
+
+	// ----------------------------------------------------
 	// Desc Data
 
 	public:

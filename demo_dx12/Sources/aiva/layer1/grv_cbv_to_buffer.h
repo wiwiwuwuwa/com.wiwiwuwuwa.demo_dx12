@@ -48,7 +48,7 @@ namespace aiva::layer1
 	public:
 		ShaderStruct& Struct() const;
 
-		GrvCbvToBuffer& ApplyStructChanges();
+		GrvCbvToBuffer& ApplyChanges();
 
 	private:
 		void InitializeStruct();

@@ -49,7 +49,7 @@ namespace aiva::layer1
 	public:
 		ShaderBuffer& Buffer() const;
 
-		GrvSrvToBuffer& ApplyBufferChanges();
+		GrvSrvToBuffer& ApplyChanges();
 
 	private:
 		void RefreshBufferData(std::shared_ptr<const ShaderStruct> const& shaderStruct);

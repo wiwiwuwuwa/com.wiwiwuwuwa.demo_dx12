@@ -42,7 +42,7 @@ aiva::layer1::ShaderStruct& aiva::layer1::GrvCbvToBuffer::Struct() const
 	return *mStruct;
 }
 
-aiva::layer1::GrvCbvToBuffer& aiva::layer1::GrvCbvToBuffer::ApplyStructChanges()
+aiva::layer1::GrvCbvToBuffer& aiva::layer1::GrvCbvToBuffer::ApplyChanges()
 {
 	aiva::utils::Asserts::CheckBool(mStruct);
 

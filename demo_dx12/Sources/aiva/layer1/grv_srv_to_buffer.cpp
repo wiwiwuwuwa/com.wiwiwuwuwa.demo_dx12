@@ -29,6 +29,8 @@ aiva::layer1::GrvSrvToBuffer& aiva::layer1::GrvSrvToBuffer::Desc(GrvSrvToBufferD
 	auto const desiredDesc = desc;
 
 	mDesc = desiredDesc;
+
+	RefreshBufferData(desiredDesc.Struct);
 	RefreshInternalResourceUpdated(previousDesc, desiredDesc);
 
 	return *this;
@@ -40,7 +42,7 @@ aiva::layer1::ShaderBuffer& aiva::layer1::GrvSrvToBuffer::Buffer() const
 	return *mBuffer;
 }
 
-aiva::layer1::GrvSrvToBuffer& aiva::layer1::GrvSrvToBuffer::ApplyBufferChanges()
+aiva::layer1::GrvSrvToBuffer& aiva::layer1::GrvSrvToBuffer::ApplyChanges()
 {
 	aiva::utils::Asserts::CheckBool(mBuffer);
 
@@ -82,8 +84,14 @@ aiva::layer1::GrvSrvToBuffer& aiva::layer1::GrvSrvToBuffer::ApplyBufferChanges()
 
 void aiva::layer1::GrvSrvToBuffer::RefreshBufferData(std::shared_ptr<const ShaderStruct> const& shaderStruct)
 {
-	aiva::utils::Asserts::CheckBool(shaderStruct);
-	mBuffer = ShaderBuffer::Create(shaderStruct);
+	if (shaderStruct)
+	{
+		mBuffer = ShaderBuffer::Create(shaderStruct);
+	}
+	else
+	{
+		mBuffer = {};
+	}
 }
 
 aiva::utils::EvAction& aiva::layer1::GrvSrvToBuffer::OnInternalResourceUpdated()

@@ -83,7 +83,7 @@
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <PackageCertificateKeyFile>demo_dx12_TemporaryKey.pfx</PackageCertificateKeyFile>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
-    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x64</AppxBundlePlatforms>
@@ -194,6 +194,9 @@
     <ClInclude Include="Sources\aiva\layer1\i_graphic_command_sync.h" />
     <ClInclude Include="Sources\aiva\layer1\i_cpu_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\i_shader_value.h" />
+    <ClInclude Include="Sources\aiva\layer1\ro_material_graphic.h" />
+    <ClInclude Include="Sources\aiva\layer1\ro_shader_fragment.h" />
+    <ClInclude Include="Sources\aiva\layer1\ro_shader_vertex.h" />
     <ClInclude Include="Sources\aiva\layer1\shader_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\shader_resource_descriptor.h" />
     <ClInclude Include="Sources\aiva\utils\math_utils.h" />
@@ -257,8 +260,11 @@
     <ClCompile Include="Sources\aiva\layer1\gr_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_system.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_material_compute.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\ro_material_graphic.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_shader_compute.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gr_texture_2d.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\ro_shader_fragment.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\ro_shader_vertex.cpp" />
     <ClCompile Include="Sources\aiva\layer1\shader_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\shader_resource_descriptor.cpp" />
     <ClCompile Include="Sources\aiva\layer1\shader_struct.cpp" />

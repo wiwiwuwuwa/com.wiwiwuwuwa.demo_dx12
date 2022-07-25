@@ -3,7 +3,10 @@
 
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/ro_material_compute.h>
+#include <aiva/layer1/ro_material_graphic.h>
 #include <aiva/layer1/ro_shader_compute.h>
+#include <aiva/layer1/ro_shader_fragment.h>
+#include <aiva/layer1/ro_shader_vertex.h>
 #include <aiva/utils/asserts.h>
 
 aiva::layer1::ResourceSystem::ResourceSystem(aiva::layer1::Engine const& engine) : mEngine{ engine }
@@ -103,7 +106,10 @@ void aiva::layer1::ResourceSystem::InitializeFactories()
 {
 	mFactories = {};
 	RegisterFactory<aiva::layer1::RoMaterialCompute>(".mat_cs");
+	RegisterFactory<aiva::layer1::RoMaterialGraphic>(".mat_gs");
 	RegisterFactory<aiva::layer1::RoShaderCompute>(".hlsl_cs");
+	RegisterFactory<aiva::layer1::RoShaderFragment>(".hlsl_ps");
+	RegisterFactory<aiva::layer1::RoShaderVertex>(".hlsl_vs");
 }
 
 void aiva::layer1::ResourceSystem::TerminateFactories()

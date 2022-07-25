@@ -68,7 +68,9 @@ void aiva::layer1::GraphicHardware::TerminateDirectX()
 	mSwapChain = {};
 	mIsTearingAllowed = {};
 	mCommandQueue = {};
+#if defined(_DEBUG)
 	mInfoQueue = {};
+#endif
 	mDevice = {};
 	mAdapter = {};
 	mFactory = {};
@@ -88,7 +90,7 @@ winrt::com_ptr<IDXGIFactory7> aiva::layer1::GraphicHardware::CreateFactory()
 #if defined(_DEBUG)
 	const UINT flags = DXGI_CREATE_FACTORY_DEBUG;
 #else
-	cosnt UINT flags = 0;
+	const UINT flags = 0;
 #endif
 
 	winrt::com_ptr<IDXGIFactory2> basicFactory{};

@@ -69,6 +69,9 @@ namespace aiva::layer1
 	// ----------------------------------------------------
 	// Internal Resources Data
 
+	public:
+		winrt::com_ptr<ID3D12RootSignature> InternalRootSignature() const;
+
 	private:
 		void InitializeInternalResources();
 

@@ -27,11 +27,13 @@ aiva::utils::TCacheRefresh<aiva::layer1::ShaderResourceDescriptor::EDirtyFlags>&
 
 void aiva::layer1::ShaderResourceDescriptor::InitializeCacheUpdater()
 {
-	mCacheUpdater = std::make_unique<decltype(mCacheUpdater)::element_type>();
+	mCacheUpdater = std::make_unique<decltype(mCacheUpdater)::element_type>(EDirtyFlags::All);
+	aiva::utils::Asserts::CheckBool(mCacheUpdater);
 }
 
 void aiva::layer1::ShaderResourceDescriptor::TerminateCacheUpdater()
 {
+	aiva::utils::Asserts::CheckBool(mCacheUpdater);
 	mCacheUpdater = {};
 }
 
@@ -77,6 +79,14 @@ aiva::layer1::ShaderResourceDescriptor& aiva::layer1::ShaderResourceDescriptor::
 void aiva::layer1::ShaderResourceDescriptor::OnResourceViewUpdated()
 {
 	CacheUpdater().MarkAsChanged(EDirtyFlags::All);
+}
+
+winrt::com_ptr<ID3D12RootSignature> aiva::layer1::ShaderResourceDescriptor::InternalRootSignature() const
+{
+	CacheUpdater().FlushChanges();
+
+	winrt::check_bool(mRootSignature);
+	return mRootSignature;
 }
 
 void aiva::layer1::ShaderResourceDescriptor::InitializeInternalResources()

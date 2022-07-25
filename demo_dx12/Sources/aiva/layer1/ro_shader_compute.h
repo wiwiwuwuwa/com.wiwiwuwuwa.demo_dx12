@@ -33,7 +33,7 @@ namespace aiva::layer1
 	// ICpuResource
 
 	public:
-		void Deserealize(std::vector<std::byte> const& binaryData) override;
+		void DeserealizeFromBinary(std::vector<std::byte> const& binaryData) override;
 
 	// ----------------------------------------------------
 	// Low-Level Data

@@ -5,22 +5,25 @@
 #include <aiva/layer1/graphic_hardware.h>
 #include <aiva/layer1/resource_system.h>
 #include <aiva/layer1/ro_shader_compute.h>
-#include <aiva/utils/asserts.h>
+#include <aiva/layer1/shader_resource_descriptor.h>
 
-aiva::layer1::RoMaterialCompute::RoMaterialCompute(aiva::layer1::Engine const& engine) : mEngine{ engine }
+aiva::layer1::RoMaterialCompute::RoMaterialCompute(Engine const& engine) : mEngine{ engine }
 {
-	InitializeLowLevelData();
+	InitializeCacheUpdater();
+	InitializeResourceDescriptor();
+	InitializeInternalResources();
 }
 
 aiva::layer1::RoMaterialCompute::~RoMaterialCompute()
 {
-	TerminateLowLevelData();
+	TerminateInternalResources();
+	TerminateResourceDescriptor();
+	TerminateCacheUpdater();
 }
 
-void aiva::layer1::RoMaterialCompute::Deserealize(std::vector<std::byte> const& binaryData)
+void aiva::layer1::RoMaterialCompute::DeserealizeFromBinary(std::vector<std::byte> const& binaryData)
 {
 	aiva::utils::Asserts::CheckBool(!binaryData.empty());
-	BeginChanges();
 
 	auto root = nlohmann::json::parse(binaryData);
 	{
@@ -28,123 +31,124 @@ void aiva::layer1::RoMaterialCompute::Deserealize(std::vector<std::byte> const& 
 		Shader(mEngine.ResourceSystem().GetResource<aiva::layer1::RoShaderCompute>(shader));
 	}
 
-	EndChanges();
+	CacheUpdater().MarkAsChanged(EDirtyFlags::All);
 }
 
-aiva::layer1::RoMaterialCompute& aiva::layer1::RoMaterialCompute::BeginChanges()
+aiva::utils::TCacheRefresh<aiva::layer1::RoMaterialCompute::EDirtyFlags>& aiva::layer1::RoMaterialCompute::CacheUpdater() const
 {
-	mChangesCounter.IncrementChanges();
-	return *this;
+	aiva::utils::Asserts::CheckBool(mCacheUpdater);
+	return *mCacheUpdater;
 }
 
-aiva::layer1::RoMaterialCompute& aiva::layer1::RoMaterialCompute::EndChanges()
+void aiva::layer1::RoMaterialCompute::InitializeCacheUpdater()
 {
-	mChangesCounter.DecrementChanges();
-	return *this;
+	mCacheUpdater = std::make_unique<decltype(mCacheUpdater)::element_type>(EDirtyFlags::All);
+	aiva::utils::Asserts::CheckBool(mCacheUpdater);
 }
 
-std::shared_ptr<aiva::layer1::RoShaderCompute> const& aiva::layer1::RoMaterialCompute::Shader() const
+void aiva::layer1::RoMaterialCompute::TerminateCacheUpdater()
 {
-	aiva::utils::Asserts::CheckBool(mShader);
+	aiva::utils::Asserts::CheckBool(mCacheUpdater);
+	mCacheUpdater = {};
+}
+
+std::shared_ptr<aiva::layer1::RoShaderCompute> aiva::layer1::RoMaterialCompute::Shader() const
+{
 	return mShader;
 }
 
-aiva::layer1::RoMaterialCompute& aiva::layer1::RoMaterialCompute::Shader(std::shared_ptr<aiva::layer1::RoShaderCompute> const& shader)
+aiva::layer1::RoMaterialCompute& aiva::layer1::RoMaterialCompute::Shader(std::shared_ptr<RoShaderCompute> const& shader)
 {
-	aiva::utils::Asserts::CheckBool(shader);
-
-	BeginChanges();
 	mShader = shader;
-	EndChanges();
+	CacheUpdater().MarkAsChanged(EDirtyFlags::All);
 
 	return *this;
 }
 
-winrt::com_ptr<ID3D12RootSignature> const& aiva::layer1::RoMaterialCompute::RootSignature() const
+aiva::layer1::ShaderResourceDescriptor& aiva::layer1::RoMaterialCompute::ResourceDescriptor() const
 {
-	winrt::check_bool(mRootSignature);
-	return mRootSignature;
+	aiva::utils::Asserts::CheckBool(mResourceDescriptor);
+	return *mResourceDescriptor;
 }
 
-winrt::com_ptr<ID3D12PipelineState> const& aiva::layer1::RoMaterialCompute::PipelineState() const
+void aiva::layer1::RoMaterialCompute::InitializeResourceDescriptor()
 {
-	winrt::check_bool(mPipelineState);
-	return mPipelineState;
+	mResourceDescriptor = decltype(mResourceDescriptor)::element_type::Create(mEngine);
+	aiva::utils::Asserts::CheckBool(mResourceDescriptor);
+
+	mResourceDescriptor->OnInternalResourceUpdated().connect(boost::bind(&RoMaterialCompute::OnResourceDescriptorUpdated, this));
 }
 
-void aiva::layer1::RoMaterialCompute::InitializeLowLevelData()
+void aiva::layer1::RoMaterialCompute::TerminateResourceDescriptor()
 {
-	mChangesCounter.OnChangesFinished().connect(boost::bind(&aiva::layer1::RoMaterialCompute::RefreshLowLevelData, this));
+	aiva::utils::Asserts::CheckBool(mResourceDescriptor);
+
+	mResourceDescriptor->OnInternalResourceUpdated().disconnect(boost::bind(&RoMaterialCompute::OnResourceDescriptorUpdated, this));
+	mResourceDescriptor = {};
 }
 
-void aiva::layer1::RoMaterialCompute::TerminateLowLevelData()
+void aiva::layer1::RoMaterialCompute::OnResourceDescriptorUpdated()
 {
-	mChangesCounter.OnChangesFinished().disconnect(boost::bind(&aiva::layer1::RoMaterialCompute::RefreshLowLevelData, this));
+	CacheUpdater().MarkAsChanged(EDirtyFlags::All);
 }
 
-void aiva::layer1::RoMaterialCompute::RefreshLowLevelData()
+winrt::com_ptr<ID3D12PipelineState> const& aiva::layer1::RoMaterialCompute::InternalPipelineState() const
 {
-	RefreshRootSignature();
-	RefreshComputePipelineState();
+	CacheUpdater().FlushChanges();
+
+	winrt::check_bool(mInternalPipelineState);
+	return mInternalPipelineState;
 }
 
-void aiva::layer1::RoMaterialCompute::RefreshRootSignature()
+void aiva::layer1::RoMaterialCompute::InitializeInternalResources()
+{
+	CacheUpdater().OnFlushRequested().connect(boost::bind(&RoMaterialCompute::RefreshInternalResources, this));
+}
+
+void aiva::layer1::RoMaterialCompute::TerminateInternalResources()
+{
+	CacheUpdater().OnFlushRequested().disconnect(boost::bind(&RoMaterialCompute::RefreshInternalResources, this));
+}
+
+void aiva::layer1::RoMaterialCompute::RefreshInternalResources()
+{
+	RefreshInternalPipelineState();
+	OnInternalResourcesUpdated()();
+}
+
+void aiva::layer1::RoMaterialCompute::RefreshInternalPipelineState()
 {
 	auto const& device = mEngine.GraphicHardware().Device();
 	winrt::check_bool(device);
 
-	D3D12_ROOT_SIGNATURE_DESC1 signatureDesc{};
-	signatureDesc.NumParameters = 0;
-	signatureDesc.pParameters = nullptr;
-	signatureDesc.NumStaticSamplers = 0;
-	signatureDesc.pStaticSamplers = nullptr;
-	signatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_NONE;
+	auto const& shader = Shader();
+	aiva::utils::Asserts::CheckBool(shader);
 
-	D3D12_VERSIONED_ROOT_SIGNATURE_DESC versionedDesc{};
-	versionedDesc.Version = D3D_ROOT_SIGNATURE_VERSION_1_1;
-	versionedDesc.Desc_1_1 = signatureDesc;
-
-	winrt::com_ptr<ID3DBlob> signatureBlob{};
-	winrt::com_ptr<ID3DBlob> errorMessages{};
-
-	HRESULT const serializationResult = D3D12SerializeVersionedRootSignature(&versionedDesc, signatureBlob.put(), errorMessages.put());
-	if (FAILED(serializationResult))
-	{
-		winrt::check_bool(errorMessages);
-		mEngine.LogToDebugConsole(static_cast<const char*>(errorMessages->GetBufferPointer()));
-		winrt::throw_hresult(serializationResult);
-	}
-
-	winrt::com_ptr<ID3D12RootSignature> rootSignature{};
-	winrt::check_hresult(device->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature)));
-
-	mRootSignature = rootSignature;
-}
-
-void aiva::layer1::RoMaterialCompute::RefreshComputePipelineState()
-{
-	auto const& shaderObject = Shader();
-	aiva::utils::Asserts::CheckBool(shaderObject);
-
-	auto const& shaderBytecode = shaderObject->Bytecode();
+	auto const& shaderBytecode = shader->Bytecode();
 	winrt::check_bool(shaderBytecode);
 
-	auto const& rootSignature = RootSignature();
+	auto const& resourceDescriptor = ResourceDescriptor();
+
+	auto const& rootSignature = resourceDescriptor.InternalRootSignature();
 	winrt::check_bool(rootSignature);
 
-	auto const& device = mEngine.GraphicHardware().Device();
-	winrt::check_bool(device);
-
-	D3D12_COMPUTE_PIPELINE_STATE_DESC pipelineDesc{};
+	auto pipelineDesc = D3D12_COMPUTE_PIPELINE_STATE_DESC{};
 	pipelineDesc.pRootSignature = rootSignature.get();
-	pipelineDesc.CS = { shaderBytecode->GetBufferPointer(), shaderBytecode->GetBufferSize() };
+	pipelineDesc.CS.pShaderBytecode = shaderBytecode->GetBufferPointer();
+	pipelineDesc.CS.BytecodeLength = shaderBytecode->GetBufferSize();
 	pipelineDesc.NodeMask = 0;
-	pipelineDesc.CachedPSO = { nullptr, 0 };
+	pipelineDesc.CachedPSO.pCachedBlob = nullptr;
+	pipelineDesc.CachedPSO.CachedBlobSizeInBytes = 0;
 	pipelineDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
 
-	winrt::com_ptr<ID3D12PipelineState> pipelineState{};
+	auto pipelineState = winrt::com_ptr<ID3D12PipelineState>{};
 	winrt::check_hresult(device->CreateComputePipelineState(&pipelineDesc, IID_PPV_ARGS(&pipelineState)));
 
 	winrt::check_bool(pipelineState);
-	mPipelineState = pipelineState;
+	mInternalPipelineState = pipelineState;
+}
+
+aiva::utils::EvAction& aiva::layer1::RoMaterialCompute::OnInternalResourcesUpdated()
+{
+	return mOnInternalResourcesUpdated;
 }

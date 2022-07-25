@@ -14,7 +14,7 @@ aiva::layer1::RoShaderCompute::~RoShaderCompute()
 
 }
 
-void aiva::layer1::RoShaderCompute::Deserealize(std::vector<std::byte> const& binaryData)
+void aiva::layer1::RoShaderCompute::DeserealizeFromBinary(std::vector<std::byte> const& binaryData)
 {
 	aiva::utils::Asserts::CheckBool(!binaryData.empty());
 

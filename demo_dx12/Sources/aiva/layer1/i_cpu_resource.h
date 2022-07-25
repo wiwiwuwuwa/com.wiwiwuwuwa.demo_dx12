@@ -12,6 +12,7 @@ namespace aiva::layer1
 	{
 	public:
 		virtual ~ICpuResource() = default;
-		virtual void Deserealize(std::vector<std::byte> const& binaryData) = 0;
+
+		virtual void DeserealizeFromBinary(std::vector<std::byte> const& binaryData) = 0;
 	};
 }

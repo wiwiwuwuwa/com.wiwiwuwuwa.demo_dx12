@@ -96,7 +96,7 @@ void aiva::layer1::ResourceSystem::DeserealizeResourceFromBinary(std::shared_ptr
 	aiva::utils::Asserts::CheckBool(resource);
 	aiva::utils::Asserts::CheckBool(!binary.empty());
 
-	resource->Deserealize(binary);
+	resource->DeserealizeFromBinary(binary);
 }
 
 void aiva::layer1::ResourceSystem::InitializeFactories()

@@ -20,6 +20,11 @@ aiva::layer1::EGpuDescriptorHeapType aiva::layer1::GrvUavToTexture2D::Descriptor
 	return EGpuDescriptorHeapType::CbvSrvUav;
 }
 
+aiva::layer1::EGpuResourceViewType aiva::layer1::GrvUavToTexture2D::ResourceViewType() const
+{
+	return EGpuResourceViewType::Uav;
+}
+
 aiva::layer1::GrvUavToTexture2DDesc const& aiva::layer1::GrvUavToTexture2D::Desc() const
 {
 	return mDesc;

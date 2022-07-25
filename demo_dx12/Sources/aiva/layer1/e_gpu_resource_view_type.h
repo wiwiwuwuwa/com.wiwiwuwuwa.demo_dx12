@@ -9,6 +9,8 @@ namespace aiva::layer1
 		Srv,
 		Uav,
 		Sampler,
+		Rtv,
+		Dsv,
 	};
 
 	EGpuResourceViewType FromInternalDescriptorRangeType(D3D12_DESCRIPTOR_RANGE_TYPE const rangeType);

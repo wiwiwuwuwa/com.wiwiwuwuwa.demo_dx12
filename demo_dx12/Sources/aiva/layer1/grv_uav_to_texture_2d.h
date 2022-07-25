@@ -36,6 +36,8 @@ namespace aiva::layer1
 	public:
 		EGpuDescriptorHeapType DescriptorHeapType() const override;
 
+		EGpuResourceViewType ResourceViewType() const override;
+
 		aiva::utils::EvAction& OnInternalResourceUpdated() override;
 
 	// ----------------------------------------------------

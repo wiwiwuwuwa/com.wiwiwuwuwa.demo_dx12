@@ -25,6 +25,11 @@ aiva::layer1::EGpuDescriptorHeapType aiva::layer1::GrvCbvToBuffer::DescriptorHea
 	return EGpuDescriptorHeapType::CbvSrvUav;
 }
 
+aiva::layer1::EGpuResourceViewType aiva::layer1::GrvCbvToBuffer::ResourceViewType() const
+{
+	return EGpuResourceViewType::Cbv;
+}
+
 aiva::layer1::GrvCbvToBufferDesc const& aiva::layer1::GrvCbvToBuffer::Desc() const
 {
 	return mDesc;

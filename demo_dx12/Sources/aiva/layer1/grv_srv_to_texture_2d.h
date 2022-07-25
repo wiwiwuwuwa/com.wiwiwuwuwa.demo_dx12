@@ -36,6 +36,8 @@ namespace aiva::layer1
 	public:
 		EGpuDescriptorHeapType DescriptorHeapType() const override;
 
+		aiva::utils::EvAction& OnInternalResourceUpdated() override;
+
 	// ----------------------------------------------------
 	// High-Level Data
 
@@ -55,8 +57,6 @@ namespace aiva::layer1
 
 	public:
 		std::optional<D3D12_SHADER_RESOURCE_VIEW_DESC> InternalResource();
-
-		aiva::utils::EvAction& OnInternalResourceUpdated();
 
 	private:
 		void NotifyInternalResourceUpdated();

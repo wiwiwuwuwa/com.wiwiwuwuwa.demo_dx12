@@ -36,6 +36,8 @@ namespace aiva::layer1
 	public:
 		EGpuDescriptorHeapType DescriptorHeapType() const override;
 
+		aiva::utils::EvAction& OnInternalResourceUpdated() override;
+
 	// ----------------------------------------------------
 	// High-Level Data
 
@@ -50,13 +52,11 @@ namespace aiva::layer1
 	private:
 		GrvDsvToTexture2DDesc mDesc{};
 
-		// ----------------------------------------------------
-		// Low-Level Data
+	// ----------------------------------------------------
+	// Low-Level Data
 
 	public:
 		std::optional<D3D12_DEPTH_STENCIL_VIEW_DESC> InternalResource();
-
-		aiva::utils::EvAction& OnInternalResourceUpdated();
 
 	private:
 		void NotifyInternalResourceUpdated();

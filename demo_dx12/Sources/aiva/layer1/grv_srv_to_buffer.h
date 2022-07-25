@@ -38,6 +38,8 @@ namespace aiva::layer1
 	public:
 		EGpuDescriptorHeapType DescriptorHeapType() const override;
 
+		aiva::utils::EvAction& OnInternalResourceUpdated() override;
+
 	// ----------------------------------------------------
 	// Desc Data
 
@@ -65,9 +67,6 @@ namespace aiva::layer1
 
 	// ----------------------------------------------------
 	// Updated Event
-
-	public:
-		aiva::utils::EvAction& OnInternalResourceUpdated();
 
 	private:
 		void RefreshInternalResourceUpdated(GrvSrvToBufferDesc const& previousDesc, GrvSrvToBufferDesc const& desiredDesc);

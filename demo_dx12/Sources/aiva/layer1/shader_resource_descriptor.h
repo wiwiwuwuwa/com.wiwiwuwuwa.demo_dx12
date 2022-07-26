@@ -3,12 +3,17 @@
 
 #include <aiva/layer1/e_gpu_descriptor_heap_type.h>
 #include <aiva/utils/ev_action.h>
-#include <aiva/utils/t_cache_refresh.h>
 
 namespace aiva::layer1
 {
 	struct Engine;
 	struct IGpuResourceView;
+}
+
+namespace aiva::utils
+{
+	template <typename, typename>
+	struct TCacheUpdater;
 }
 
 namespace aiva::layer1
@@ -41,8 +46,10 @@ namespace aiva::layer1
 			All = 1,
 		};
 
+		using CacheUpdaterType = aiva::utils::TCacheUpdater<EDirtyFlags, ShaderResourceDescriptor>;
+
 	public:
-		aiva::utils::TCacheRefresh<EDirtyFlags>& CacheUpdater() const;
+		CacheUpdaterType& CacheUpdater() const;
 
 	private:
 		void InitializeCacheUpdater();
@@ -50,7 +57,7 @@ namespace aiva::layer1
 		void TerminateCacheUpdater();
 
 	private:
-		std::unique_ptr<aiva::utils::TCacheRefresh<EDirtyFlags>> mCacheUpdater{};
+		std::unique_ptr<CacheUpdaterType> mCacheUpdater{};
 
 	// ----------------------------------------------------
 	// Resource Views
@@ -88,15 +95,6 @@ namespace aiva::layer1
 		std::unordered_map<EGpuDescriptorHeapType, winrt::com_ptr<ID3D12DescriptorHeap>> mDescriptorHeaps{};
 
 		winrt::com_ptr<ID3D12RootSignature> mRootSignature{};
-
-	// ----------------------------------------------------
-	// Internal Resources Events
-
-	public:
-		aiva::utils::EvAction& OnInternalResourceUpdated();
-
-	private:
-		aiva::utils::EvAction mOnInternalResourceUpdated{};
 	};
 }
 

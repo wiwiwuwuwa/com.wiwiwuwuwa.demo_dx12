@@ -65,7 +65,7 @@
     <ClInclude Include="Sources\aiva\layer1\ro_material_compute.h" />
     <ClInclude Include="Sources\aiva\utils\changes_counter.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_dispatch.h" />
-    <ClInclude Include="Sources\aiva\utils\t_cache_refresh.h" />
+    <ClInclude Include="Sources\aiva\utils\t_cache_updater.h" />
     <ClInclude Include="Sources\aiva\utils\t_ev_action.h" />
     <ClInclude Include="Sources\aiva\utils\enum_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\gr_texture_2d.h" />

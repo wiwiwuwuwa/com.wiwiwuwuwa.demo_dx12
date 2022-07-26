@@ -6,6 +6,7 @@
 #include <aiva/layer1/graphic_hardware.h>
 #include <aiva/layer1/i_gpu_resource_view.h>
 #include <aiva/utils/asserts.h>
+#include <aiva/utils/t_cache_updater.h>
 
 aiva::layer1::ShaderResourceDescriptor::ShaderResourceDescriptor(Engine const& engine) : mEngine{ engine }
 {
@@ -19,7 +20,7 @@ aiva::layer1::ShaderResourceDescriptor::~ShaderResourceDescriptor()
 	TerminateCacheUpdater();
 }
 
-aiva::utils::TCacheRefresh<aiva::layer1::ShaderResourceDescriptor::EDirtyFlags>& aiva::layer1::ShaderResourceDescriptor::CacheUpdater() const
+aiva::layer1::ShaderResourceDescriptor::CacheUpdaterType& aiva::layer1::ShaderResourceDescriptor::CacheUpdater() const
 {
 	aiva::utils::Asserts::CheckBool(mCacheUpdater);
 	return *mCacheUpdater;
@@ -27,7 +28,7 @@ aiva::utils::TCacheRefresh<aiva::layer1::ShaderResourceDescriptor::EDirtyFlags>&
 
 void aiva::layer1::ShaderResourceDescriptor::InitializeCacheUpdater()
 {
-	mCacheUpdater = std::make_unique<decltype(mCacheUpdater)::element_type>(EDirtyFlags::All);
+	mCacheUpdater = std::make_unique<CacheUpdaterType>();
 	aiva::utils::Asserts::CheckBool(mCacheUpdater);
 }
 
@@ -47,7 +48,7 @@ std::shared_ptr<aiva::layer1::IGpuResourceView> aiva::layer1::ShaderResourceDesc
 
 aiva::layer1::ShaderResourceDescriptor& aiva::layer1::ShaderResourceDescriptor::ResourceView(std::string const& key, std::shared_ptr<IGpuResourceView> const& value)
 {
-	CacheUpdater().MarkAsChanged(EDirtyFlags::All);
+	CacheUpdater().MarkAsChanged();
 
 	auto const& previousResourceIter = mResourceViews.find(key);
 	if (previousResourceIter != mResourceViews.end())
@@ -78,7 +79,7 @@ aiva::layer1::ShaderResourceDescriptor& aiva::layer1::ShaderResourceDescriptor::
 
 void aiva::layer1::ShaderResourceDescriptor::OnResourceViewUpdated()
 {
-	CacheUpdater().MarkAsChanged(EDirtyFlags::All);
+	CacheUpdater().MarkAsChanged();
 }
 
 winrt::com_ptr<ID3D12RootSignature> aiva::layer1::ShaderResourceDescriptor::InternalRootSignature() const
@@ -91,20 +92,18 @@ winrt::com_ptr<ID3D12RootSignature> aiva::layer1::ShaderResourceDescriptor::Inte
 
 void aiva::layer1::ShaderResourceDescriptor::InitializeInternalResources()
 {
-	CacheUpdater().OnFlushRequested().connect(boost::bind(&ShaderResourceDescriptor::RefreshInternalResources, this));
+	CacheUpdater().FlushExecutors().connect(boost::bind(&ShaderResourceDescriptor::RefreshInternalResources, this));
 }
 
 void aiva::layer1::ShaderResourceDescriptor::TerminateInternalResources()
 {
-	CacheUpdater().OnFlushRequested().disconnect(boost::bind(&ShaderResourceDescriptor::RefreshInternalResources, this));
+	CacheUpdater().FlushExecutors().disconnect(boost::bind(&ShaderResourceDescriptor::RefreshInternalResources, this));
 }
 
 void aiva::layer1::ShaderResourceDescriptor::RefreshInternalResources()
 {
 	RefreshDescriptorHeaps();
 	RefreshRootSignature();
-
-	OnInternalResourceUpdated()();
 }
 
 void aiva::layer1::ShaderResourceDescriptor::RefreshDescriptorHeaps()
@@ -250,9 +249,4 @@ void aiva::layer1::ShaderResourceDescriptor::RefreshRootSignature()
 	winrt::check_hresult(device->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature)));
 
 	mRootSignature = rootSignature;
-}
-
-aiva::utils::EvAction& aiva::layer1::ShaderResourceDescriptor::OnInternalResourceUpdated()
-{
-	return mOnInternalResourceUpdated;
 }

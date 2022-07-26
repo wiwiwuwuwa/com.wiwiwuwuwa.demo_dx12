@@ -219,7 +219,7 @@
     <ClInclude Include="Sources\aiva\utils\enum_utils.h" />
     <ClInclude Include="Sources\aiva\utils\ev_action.h" />
     <ClInclude Include="Sources\aiva\utils\action_batcher.h" />
-    <ClInclude Include="Sources\aiva\utils\t_cache_refresh.h" />
+    <ClInclude Include="Sources\aiva\utils\t_cache_updater.h" />
     <ClInclude Include="Sources\aiva\utils\t_ev_action.h" />
   </ItemGroup>
   <ItemGroup>

@@ -6,6 +6,7 @@
 #include <aiva/layer1/resource_system.h>
 #include <aiva/layer1/ro_shader_compute.h>
 #include <aiva/layer1/shader_resource_descriptor.h>
+#include <aiva/utils/t_cache_updater.h>
 
 aiva::layer1::RoMaterialCompute::RoMaterialCompute(Engine const& engine) : mEngine{ engine }
 {
@@ -31,10 +32,10 @@ void aiva::layer1::RoMaterialCompute::DeserealizeFromBinary(std::vector<std::byt
 		Shader(mEngine.ResourceSystem().GetResource<aiva::layer1::RoShaderCompute>(shader));
 	}
 
-	CacheUpdater().MarkAsChanged(EDirtyFlags::All);
+	CacheUpdater().MarkAsChanged();
 }
 
-aiva::utils::TCacheRefresh<aiva::layer1::RoMaterialCompute::EDirtyFlags>& aiva::layer1::RoMaterialCompute::CacheUpdater() const
+aiva::layer1::RoMaterialCompute::CacheUpdaterType& aiva::layer1::RoMaterialCompute::CacheUpdater() const
 {
 	aiva::utils::Asserts::CheckBool(mCacheUpdater);
 	return *mCacheUpdater;
@@ -42,7 +43,7 @@ aiva::utils::TCacheRefresh<aiva::layer1::RoMaterialCompute::EDirtyFlags>& aiva::
 
 void aiva::layer1::RoMaterialCompute::InitializeCacheUpdater()
 {
-	mCacheUpdater = std::make_unique<decltype(mCacheUpdater)::element_type>(EDirtyFlags::All);
+	mCacheUpdater = std::make_unique<CacheUpdaterType>();
 	aiva::utils::Asserts::CheckBool(mCacheUpdater);
 }
 
@@ -60,7 +61,7 @@ std::shared_ptr<aiva::layer1::RoShaderCompute> aiva::layer1::RoMaterialCompute::
 aiva::layer1::RoMaterialCompute& aiva::layer1::RoMaterialCompute::Shader(std::shared_ptr<RoShaderCompute> const& shader)
 {
 	mShader = shader;
-	CacheUpdater().MarkAsChanged(EDirtyFlags::All);
+	CacheUpdater().MarkAsChanged();
 
 	return *this;
 }
@@ -76,20 +77,20 @@ void aiva::layer1::RoMaterialCompute::InitializeResourceDescriptor()
 	mResourceDescriptor = decltype(mResourceDescriptor)::element_type::Create(mEngine);
 	aiva::utils::Asserts::CheckBool(mResourceDescriptor);
 
-	mResourceDescriptor->OnInternalResourceUpdated().connect(boost::bind(&RoMaterialCompute::OnResourceDescriptorUpdated, this));
+	mResourceDescriptor->CacheUpdater().OnMarkAsChanged().connect(boost::bind(&RoMaterialCompute::OnResourceDescriptorMarkedAsChanged, this));
 }
 
 void aiva::layer1::RoMaterialCompute::TerminateResourceDescriptor()
 {
 	aiva::utils::Asserts::CheckBool(mResourceDescriptor);
 
-	mResourceDescriptor->OnInternalResourceUpdated().disconnect(boost::bind(&RoMaterialCompute::OnResourceDescriptorUpdated, this));
+	mResourceDescriptor->CacheUpdater().OnMarkAsChanged().disconnect(boost::bind(&RoMaterialCompute::OnResourceDescriptorMarkedAsChanged, this));
 	mResourceDescriptor = {};
 }
 
-void aiva::layer1::RoMaterialCompute::OnResourceDescriptorUpdated()
+void aiva::layer1::RoMaterialCompute::OnResourceDescriptorMarkedAsChanged()
 {
-	CacheUpdater().MarkAsChanged(EDirtyFlags::All);
+	CacheUpdater().MarkAsChanged();
 }
 
 winrt::com_ptr<ID3D12PipelineState> const& aiva::layer1::RoMaterialCompute::InternalPipelineState() const
@@ -102,18 +103,17 @@ winrt::com_ptr<ID3D12PipelineState> const& aiva::layer1::RoMaterialCompute::Inte
 
 void aiva::layer1::RoMaterialCompute::InitializeInternalResources()
 {
-	CacheUpdater().OnFlushRequested().connect(boost::bind(&RoMaterialCompute::RefreshInternalResources, this));
+	CacheUpdater().FlushExecutors().connect(boost::bind(&RoMaterialCompute::RefreshInternalResources, this));
 }
 
 void aiva::layer1::RoMaterialCompute::TerminateInternalResources()
 {
-	CacheUpdater().OnFlushRequested().disconnect(boost::bind(&RoMaterialCompute::RefreshInternalResources, this));
+	CacheUpdater().FlushExecutors().disconnect(boost::bind(&RoMaterialCompute::RefreshInternalResources, this));
 }
 
 void aiva::layer1::RoMaterialCompute::RefreshInternalResources()
 {
 	RefreshInternalPipelineState();
-	OnInternalResourcesUpdated()();
 }
 
 void aiva::layer1::RoMaterialCompute::RefreshInternalPipelineState()
@@ -146,9 +146,4 @@ void aiva::layer1::RoMaterialCompute::RefreshInternalPipelineState()
 
 	winrt::check_bool(pipelineState);
 	mInternalPipelineState = pipelineState;
-}
-
-aiva::utils::EvAction& aiva::layer1::RoMaterialCompute::OnInternalResourcesUpdated()
-{
-	return mOnInternalResourcesUpdated;
 }

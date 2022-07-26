@@ -8,6 +8,7 @@
 #include <aiva/layer1/ro_shader_vertex.h>
 #include <aiva/layer1/shader_pipeline_descriptor.h>
 #include <aiva/layer1/shader_resource_descriptor.h>
+#include <aiva/utils/t_cache_updater.h>
 
 aiva::layer1::RoMaterialGraphic::RoMaterialGraphic(Engine const& engine) : mEngine{ engine }
 {
@@ -38,10 +39,10 @@ void aiva::layer1::RoMaterialGraphic::DeserealizeFromBinary(std::vector<std::byt
 		FragmentShader(mEngine.ResourceSystem().GetResource<aiva::layer1::RoShaderFragment>(fragmentShader));
 	}
 
-	CacheUpdater().MarkAsChanged(EDirtyFlags::All);
+	CacheUpdater().MarkAsChanged();
 }
 
-aiva::utils::TCacheRefresh<aiva::layer1::RoMaterialGraphic::EDirtyFlags>& aiva::layer1::RoMaterialGraphic::CacheUpdater() const
+aiva::layer1::RoMaterialGraphic::CacheUpdaterType& aiva::layer1::RoMaterialGraphic::CacheUpdater() const
 {
 	aiva::utils::Asserts::CheckBool(mCacheUpdater);
 	return *mCacheUpdater;
@@ -49,7 +50,7 @@ aiva::utils::TCacheRefresh<aiva::layer1::RoMaterialGraphic::EDirtyFlags>& aiva::
 
 void aiva::layer1::RoMaterialGraphic::InitializeCacheUpdater()
 {
-	mCacheUpdater = std::make_unique<decltype(mCacheUpdater)::element_type>(EDirtyFlags::All);
+	mCacheUpdater = std::make_unique<CacheUpdaterType>();
 	aiva::utils::Asserts::CheckBool(mCacheUpdater);
 }
 
@@ -67,7 +68,7 @@ std::shared_ptr<aiva::layer1::RoShaderVertex> aiva::layer1::RoMaterialGraphic::V
 aiva::layer1::RoMaterialGraphic& aiva::layer1::RoMaterialGraphic::VertexShader(std::shared_ptr<RoShaderVertex> const& vertexShader)
 {
 	mVertexShader = vertexShader;
-	CacheUpdater().MarkAsChanged(EDirtyFlags::All);
+	CacheUpdater().MarkAsChanged();
 
 	return *this;
 }
@@ -80,7 +81,7 @@ std::shared_ptr<aiva::layer1::RoShaderFragment> aiva::layer1::RoMaterialGraphic:
 aiva::layer1::RoMaterialGraphic& aiva::layer1::RoMaterialGraphic::FragmentShader(std::shared_ptr<RoShaderFragment> const& fragmentShader)
 {
 	mFragmentShader = fragmentShader;
-	CacheUpdater().MarkAsChanged(EDirtyFlags::All);
+	CacheUpdater().MarkAsChanged();
 
 	return *this;
 }
@@ -96,20 +97,20 @@ void aiva::layer1::RoMaterialGraphic::InitializePipelineDescriptor()
 	mPipelineDescriptor = decltype(mPipelineDescriptor)::element_type::Create(mEngine);
 	aiva::utils::Asserts::CheckBool(mPipelineDescriptor);
 
-	mPipelineDescriptor->OnInternalResourceUpdated().connect(boost::bind(&RoMaterialGraphic::OnPipelineDescriptorUpdated, this));
+	mPipelineDescriptor->CacheUpdater().OnMarkAsChanged().connect(boost::bind(&RoMaterialGraphic::OnPipelineDescriptorMarkedAsChanged, this));
 }
 
 void aiva::layer1::RoMaterialGraphic::TerminatePipelineDescriptor()
 {
 	aiva::utils::Asserts::CheckBool(mPipelineDescriptor);
 
-	mPipelineDescriptor->OnInternalResourceUpdated().disconnect(boost::bind(&RoMaterialGraphic::OnPipelineDescriptorUpdated, this));
+	mPipelineDescriptor->CacheUpdater().OnMarkAsChanged().disconnect(boost::bind(&RoMaterialGraphic::OnPipelineDescriptorMarkedAsChanged, this));
 	mPipelineDescriptor = {};
 }
 
-void aiva::layer1::RoMaterialGraphic::OnPipelineDescriptorUpdated()
+void aiva::layer1::RoMaterialGraphic::OnPipelineDescriptorMarkedAsChanged()
 {
-	CacheUpdater().MarkAsChanged(EDirtyFlags::All);
+	CacheUpdater().MarkAsChanged();
 }
 
 aiva::layer1::ShaderResourceDescriptor& aiva::layer1::RoMaterialGraphic::ResourceDescriptor() const
@@ -123,20 +124,20 @@ void aiva::layer1::RoMaterialGraphic::InitializeResourceDescriptor()
 	mResourceDescriptor = decltype(mResourceDescriptor)::element_type::Create(mEngine);
 	aiva::utils::Asserts::CheckBool(mResourceDescriptor);
 
-	mResourceDescriptor->OnInternalResourceUpdated().connect(boost::bind(&RoMaterialGraphic::OnResourceDescriptorUpdated, this));
+	mResourceDescriptor->CacheUpdater().OnMarkAsChanged().connect(boost::bind(&RoMaterialGraphic::OnResourceDescriptorMarkedAsChanged, this));
 }
 
 void aiva::layer1::RoMaterialGraphic::TerminateResourceDescriptor()
 {
 	aiva::utils::Asserts::CheckBool(mResourceDescriptor);
 
-	mResourceDescriptor->OnInternalResourceUpdated().disconnect(boost::bind(&RoMaterialGraphic::OnResourceDescriptorUpdated, this));
+	mResourceDescriptor->CacheUpdater().OnMarkAsChanged().disconnect(boost::bind(&RoMaterialGraphic::OnResourceDescriptorMarkedAsChanged, this));
 	mResourceDescriptor = {};
 }
 
-void aiva::layer1::RoMaterialGraphic::OnResourceDescriptorUpdated()
+void aiva::layer1::RoMaterialGraphic::OnResourceDescriptorMarkedAsChanged()
 {
-	CacheUpdater().MarkAsChanged(EDirtyFlags::All);
+	CacheUpdater().MarkAsChanged();
 }
 
 winrt::com_ptr<ID3D12PipelineState> const& aiva::layer1::RoMaterialGraphic::InternalPipelineState() const
@@ -149,18 +150,17 @@ winrt::com_ptr<ID3D12PipelineState> const& aiva::layer1::RoMaterialGraphic::Inte
 
 void aiva::layer1::RoMaterialGraphic::InitializeInternalResources()
 {
-	CacheUpdater().OnFlushRequested().connect(boost::bind(&RoMaterialGraphic::RefreshInternalResources, this));
+	CacheUpdater().FlushExecutors().connect(boost::bind(&RoMaterialGraphic::RefreshInternalResources, this));
 }
 
 void aiva::layer1::RoMaterialGraphic::TerminateInternalResources()
 {
-	CacheUpdater().OnFlushRequested().disconnect(boost::bind(&RoMaterialGraphic::RefreshInternalResources, this));
+	CacheUpdater().FlushExecutors().disconnect(boost::bind(&RoMaterialGraphic::RefreshInternalResources, this));
 }
 
 void aiva::layer1::RoMaterialGraphic::RefreshInternalResources()
 {
 	RefreshInternalPipelineState();
-	OnInternalResourcesUpdated()();
 }
 
 void aiva::layer1::RoMaterialGraphic::RefreshInternalPipelineState()
@@ -193,9 +193,4 @@ void aiva::layer1::RoMaterialGraphic::RefreshInternalPipelineState()
 
 	//winrt::check_bool(pipelineState);
 	//mInternalPipelineState = pipelineState;
-}
-
-aiva::utils::EvAction& aiva::layer1::RoMaterialGraphic::OnInternalResourcesUpdated()
-{
-	return mOnInternalResourcesUpdated;
 }

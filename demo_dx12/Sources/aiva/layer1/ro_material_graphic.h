@@ -3,7 +3,6 @@
 
 #include <aiva/layer1/i_cpu_resource.h>
 #include <aiva/utils/ev_action.h>
-#include <aiva/utils/t_cache_refresh.h>
 
 namespace aiva::layer1
 {
@@ -12,6 +11,12 @@ namespace aiva::layer1
 	struct RoShaderVertex;
 	struct ShaderPipelineDescriptor;
 	struct ShaderResourceDescriptor;
+}
+
+namespace aiva::utils
+{
+	template <typename, typename>
+	struct TCacheUpdater;
 }
 
 namespace aiva::layer1
@@ -50,8 +55,10 @@ namespace aiva::layer1
 			All = 1,
 		};
 
+		using CacheUpdaterType = aiva::utils::TCacheUpdater<EDirtyFlags, RoMaterialGraphic>;
+
 	public:
-		aiva::utils::TCacheRefresh<EDirtyFlags>& CacheUpdater() const;
+		CacheUpdaterType& CacheUpdater() const;
 
 	private:
 		void InitializeCacheUpdater();
@@ -59,7 +66,7 @@ namespace aiva::layer1
 		void TerminateCacheUpdater();
 
 	private:
-		std::unique_ptr<aiva::utils::TCacheRefresh<EDirtyFlags>> mCacheUpdater{};
+		std::unique_ptr<CacheUpdaterType> mCacheUpdater{};
 
 	// ----------------------------------------------------
 	// Vertex Shader
@@ -95,7 +102,7 @@ namespace aiva::layer1
 		void TerminatePipelineDescriptor();
 
 	private:
-		void OnPipelineDescriptorUpdated();
+		void OnPipelineDescriptorMarkedAsChanged();
 
 	private:
 		std::shared_ptr<ShaderPipelineDescriptor> mPipelineDescriptor{};
@@ -112,7 +119,7 @@ namespace aiva::layer1
 		void TerminateResourceDescriptor();
 
 	private:
-		void OnResourceDescriptorUpdated();
+		void OnResourceDescriptorMarkedAsChanged();
 
 	private:
 		std::shared_ptr<ShaderResourceDescriptor> mResourceDescriptor{};
@@ -135,15 +142,6 @@ namespace aiva::layer1
 
 	private:
 		winrt::com_ptr<ID3D12PipelineState> mInternalPipelineState{};
-
-	// ----------------------------------------------------
-	// Internal Resources Events
-
-	public:
-		aiva::utils::EvAction& OnInternalResourcesUpdated();
-
-	private:
-		aiva::utils::EvAction mOnInternalResourcesUpdated{};
 	};
 }
 

@@ -165,32 +165,76 @@ void aiva::layer1::RoMaterialGraphic::RefreshInternalResources()
 
 void aiva::layer1::RoMaterialGraphic::RefreshInternalPipelineState()
 {
-	//auto const& device = mEngine.GraphicHardware().Device();
-	//winrt::check_bool(device);
+	auto const& device = mEngine.GraphicHardware().Device();
+	winrt::check_bool(device);
 
-	//auto const& shader = Shader();
-	//aiva::utils::Asserts::CheckBool(shader);
+	auto pipelineDesc = D3D12_GRAPHICS_PIPELINE_STATE_DESC{};
 
-	//auto const& shaderBytecode = shader->Bytecode();
-	//winrt::check_bool(shaderBytecode);
+	{ // Root Signature
+		auto const& rootSignature = ResourceDescriptor().InternalRootSignature();
+		pipelineDesc.pRootSignature = rootSignature.get();
+	}
 
-	//auto const& resourceDescriptor = ResourceDescriptor();
+	{ // Vertex Shader
+		auto const& vertexShader = VertexShader();
+		aiva::utils::Asserts::CheckBool(vertexShader);
 
-	//auto const& rootSignature = resourceDescriptor.InternalRootSignature();
-	//winrt::check_bool(rootSignature);
+		auto const& shaderBytecode = vertexShader->Bytecode();
+		winrt::check_bool(shaderBytecode);
 
-	//auto pipelineDesc = D3D12_COMPUTE_PIPELINE_STATE_DESC{};
-	//pipelineDesc.pRootSignature = rootSignature.get();
-	//pipelineDesc.CS.pShaderBytecode = shaderBytecode->GetBufferPointer();
-	//pipelineDesc.CS.BytecodeLength = shaderBytecode->GetBufferSize();
-	//pipelineDesc.NodeMask = 0;
-	//pipelineDesc.CachedPSO.pCachedBlob = nullptr;
-	//pipelineDesc.CachedPSO.CachedBlobSizeInBytes = 0;
-	//pipelineDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
+		pipelineDesc.VS.pShaderBytecode = shaderBytecode->GetBufferPointer();
+		pipelineDesc.VS.BytecodeLength = shaderBytecode->GetBufferSize();
+	}
 
-	//auto pipelineState = winrt::com_ptr<ID3D12PipelineState>{};
-	//winrt::check_hresult(device->CreateComputePipelineState(&pipelineDesc, IID_PPV_ARGS(&pipelineState)));
+	{ // Fragment Shader
+		auto const& fragmentShader = FragmentShader();
+		aiva::utils::Asserts::CheckBool(fragmentShader);
 
-	//winrt::check_bool(pipelineState);
-	//mInternalPipelineState = pipelineState;
+		auto const& shaderBytecode = fragmentShader->Bytecode();
+		winrt::check_bool(shaderBytecode);
+
+		pipelineDesc.PS.pShaderBytecode = shaderBytecode->GetBufferPointer();
+		pipelineDesc.PS.BytecodeLength = shaderBytecode->GetBufferSize();
+	}
+
+	{ // Rasterizer State
+		auto const& descriptor = PipelineDescriptor();
+
+		pipelineDesc.RasterizerState.FillMode = ToInternalEnum(descriptor.FillMode());
+		pipelineDesc.RasterizerState.CullMode = ToInternalEnum(descriptor.CullMode());
+		pipelineDesc.RasterizerState.DepthClipEnable = true;
+	}
+
+	{ // Depth-Stencil State
+		auto const& descriptor = PipelineDescriptor();
+
+		pipelineDesc.DepthStencilState.DepthEnable = descriptor.DepthTest();
+		pipelineDesc.DepthStencilState.DepthWriteMask = descriptor.DepthWrite() ? D3D12_DEPTH_WRITE_MASK_ALL : D3D12_DEPTH_WRITE_MASK_ZERO;
+		pipelineDesc.DepthStencilState.DepthFunc = ToInternalEnum(descriptor.DepthFunc());
+	}
+
+	{ // Render Targets
+		auto const& descriptor = PipelineDescriptor();
+		auto const& renderTargets = descriptor.RenderTargets();
+
+		pipelineDesc.NumRenderTargets = std::min(std::size(renderTargets), std::size(pipelineDesc.RTVFormats));
+		std::transform(std::cbegin(renderTargets), std::cend(renderTargets), std::begin(pipelineDesc.RTVFormats), [](auto const& depthTarget) { return ToInternalEnum(depthTarget); });
+	}
+
+	{ // Depth-Stencil Target
+		auto const& descriptor = PipelineDescriptor();
+
+		pipelineDesc.DSVFormat = ToInternalEnum(descriptor.DepthTarget());
+	}
+
+	{ // Sample Desc
+		pipelineDesc.SampleDesc.Count = 1;
+		pipelineDesc.SampleDesc.Quality = 0;
+	}
+
+	auto pipelineState = winrt::com_ptr<ID3D12PipelineState>{};
+	winrt::check_hresult(device->CreateGraphicsPipelineState(&pipelineDesc, IID_PPV_ARGS(&pipelineState)));
+
+	winrt::check_bool(pipelineState);
+	mInternalPipelineState = pipelineState;
 }

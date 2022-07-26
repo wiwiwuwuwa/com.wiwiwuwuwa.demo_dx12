@@ -1,6 +1,10 @@
 #pragma once
 #include <pch.h>
 
+#include <aiva/layer1/e_gpu_comparison_func.h>
+#include <aiva/layer1/e_gpu_cull_mode.h>
+#include <aiva/layer1/e_gpu_fill_mode.h>
+#include <aiva/layer1/e_gpu_resource_buffer_format.h>
 #include <aiva/utils/ev_action.h>
 
 namespace aiva::layer1
@@ -56,6 +60,83 @@ namespace aiva::layer1
 
 	private:
 		std::unique_ptr<CacheUpdaterType> mCacheUpdater{};
+
+	// ----------------------------------------------------
+	// Fill Mode
+
+	public:
+		EGpuFillMode FillMode() const;
+
+		ShaderPipelineDescriptor& FillMode(EGpuFillMode const fillMode);
+
+	private:
+		EGpuFillMode mFillMode{ EGpuFillMode::Solid };
+
+	// ----------------------------------------------------
+	// Cull Mode
+
+	public:
+		EGpuCullMode CullMode() const;
+
+		ShaderPipelineDescriptor& CullMode(EGpuCullMode const cullMode);
+
+	private:
+		EGpuCullMode mCullMode{ EGpuCullMode::Back };
+
+	// ----------------------------------------------------
+	// Depth Test
+
+	public:
+		bool DepthTest() const;
+
+		ShaderPipelineDescriptor& DepthTest(bool const depthTest);
+
+	private:
+		bool mDepthTest{ true };
+
+	// ----------------------------------------------------
+	// Depth Write
+
+	public:
+		bool DepthWrite() const;
+
+		ShaderPipelineDescriptor& DepthWrite(bool const depthWrite);
+
+	private:
+		bool mDepthWrite{ true };
+
+	// ----------------------------------------------------
+	// Depth Func
+
+	public:
+		EGpuComparisonFunc DepthFunc() const;
+
+		ShaderPipelineDescriptor& DepthFunc(EGpuComparisonFunc const depthFunc);
+
+	private:
+		EGpuComparisonFunc mDepthFunc{ EGpuComparisonFunc::LessEqual };
+
+	// ----------------------------------------------------
+	// Render Targets
+
+	public:
+		std::vector<EGpuResourceBufferFormat> RenderTargets() const;
+
+		ShaderPipelineDescriptor& RenderTargets(std::vector<EGpuResourceBufferFormat> const& renderTargets);
+
+	private:
+		std::vector<EGpuResourceBufferFormat> mRenderTargets = { EGpuResourceBufferFormat::R32G32B32A32_FLOAT };
+
+	// ----------------------------------------------------
+	// Depth Target
+
+	public:
+		EGpuResourceBufferFormat DepthTarget() const;
+
+		ShaderPipelineDescriptor& DepthTarget(EGpuResourceBufferFormat const depthTarget);
+
+	private:
+		EGpuResourceBufferFormat mDepthTarget{ EGpuResourceBufferFormat::D32_FLOAT };
 	};
 }
 

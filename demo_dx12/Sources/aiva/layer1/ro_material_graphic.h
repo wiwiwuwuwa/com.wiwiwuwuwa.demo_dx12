@@ -10,6 +10,7 @@ namespace aiva::layer1
 	struct Engine;
 	struct RoShaderFragment;
 	struct RoShaderVertex;
+	struct ShaderPipelineDescriptor;
 	struct ShaderResourceDescriptor;
 }
 
@@ -61,7 +62,7 @@ namespace aiva::layer1
 		std::unique_ptr<aiva::utils::TCacheRefresh<EDirtyFlags>> mCacheUpdater{};
 
 	// ----------------------------------------------------
-	// Resource Vertex Shader
+	// Vertex Shader
 
 	public:
 		std::shared_ptr<RoShaderVertex> VertexShader() const;
@@ -72,7 +73,7 @@ namespace aiva::layer1
 		std::shared_ptr<RoShaderVertex> mVertexShader{};
 
 	// ----------------------------------------------------
-	// Resource Fragment Shader
+	// Fragment Shader
 
 	public:
 		std::shared_ptr<RoShaderFragment> FragmentShader() const;
@@ -81,6 +82,23 @@ namespace aiva::layer1
 
 	private:
 		std::shared_ptr<RoShaderFragment> mFragmentShader{};
+
+	// ----------------------------------------------------
+	// Pipeline Descriptor
+
+	public:
+		ShaderPipelineDescriptor& PipelineDescriptor() const;
+
+	private:
+		void InitializePipelineDescriptor();
+
+		void TerminatePipelineDescriptor();
+
+	private:
+		void OnPipelineDescriptorUpdated();
+
+	private:
+		std::shared_ptr<ShaderPipelineDescriptor> mPipelineDescriptor{};
 
 	// ----------------------------------------------------
 	// Resource Descriptor

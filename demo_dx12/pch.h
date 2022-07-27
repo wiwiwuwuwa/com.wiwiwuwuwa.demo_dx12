@@ -23,6 +23,7 @@
 #include <utility>
 #include <vector>
 #include <boost/bind.hpp>
+#include <boost/function.hpp>
 #include <boost/core/noncopyable.hpp>
 #include <boost/core/span.hpp>
 #include <boost/signals2.hpp>
@@ -34,6 +35,7 @@
 #include <dxgi1_6.h>
 #include <d3dcompiler.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <nlohmann/json.hpp>
 #include <tinyutf8/tinyutf8.h>
 

@@ -4,68 +4,72 @@
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/graphic_hardware.h>
 #include <aiva/utils/asserts.h>
+#include <aiva/utils/t_cache_updater.h>
 
-aiva::layer1::GrBuffer::GrBuffer(Engine const& engine, GrBufferDesc const& desc) : mEngine{ engine }
+aiva::layer1::GrBuffer::GrBuffer(Engine const& engine) : mEngine{ engine }
 {
-	Desc(desc);
+	InitializeCacheUpdater();
+	InitializeInternalResources();
 }
 
 aiva::layer1::GrBuffer::~GrBuffer()
 {
-
+	TerminateInternalResources();
+	TerminateCacheUpdater();
 }
 
-aiva::layer1::GrBufferDesc aiva::layer1::GrBuffer::Desc() const
+aiva::layer1::GrBuffer::CacheUpdaterType& aiva::layer1::GrBuffer::CacheUpdater() const
 {
-	winrt::com_ptr<ID3D12Resource> const resource = mInternalResource;
-	winrt::check_bool(resource);
-
-	GrBufferDesc desc{};
-
-	{
-		D3D12_HEAP_PROPERTIES heapProperties{};
-		D3D12_HEAP_FLAGS heapFlags{};
-		winrt::check_hresult(resource->GetHeapProperties(&heapProperties, &heapFlags));
-
-		desc.MemoryType = FromInternalEnum(heapProperties.Type);
-		desc.SupportShaderAtomics = heapFlags & D3D12_HEAP_FLAG_ALLOW_SHADER_ATOMICS;
-	}
-
-	{
-		D3D12_RESOURCE_DESC resourceDesc = resource->GetDesc();
-
-		desc.Size = resourceDesc.Width;
-		desc.SupportUnorderedAccess = resourceDesc.Flags & D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
-	}
-
-	return desc;
+	aiva::utils::Asserts::CheckBool(mCacheUpdater);
+	return *mCacheUpdater;
 }
 
-aiva::layer1::GrBuffer& aiva::layer1::GrBuffer::Desc(GrBufferDesc const& descriptor)
+void aiva::layer1::GrBuffer::InitializeCacheUpdater()
 {
-	UpdateInternalResource(descriptor);
+	mCacheUpdater = std::make_unique<CacheUpdaterType>();
+	aiva::utils::Asserts::CheckBool(mCacheUpdater);
+}
+
+void aiva::layer1::GrBuffer::TerminateCacheUpdater()
+{
+	aiva::utils::Asserts::CheckBool(mCacheUpdater);
+	mCacheUpdater = {};
+}
+
+std::optional<aiva::layer1::GrBufferDesc> const& aiva::layer1::GrBuffer::Desc() const
+{
+	return mDesc;
+}
+
+aiva::layer1::GrBuffer& aiva::layer1::GrBuffer::Desc(std::optional<GrBufferDesc> const& desc)
+{
+	mDesc = desc;
+	CacheUpdater().MarkAsChanged();
+
 	return *this;
 }
 
-winrt::com_ptr<ID3D12Resource> const aiva::layer1::GrBuffer::InternalResource()
+void aiva::layer1::GrBuffer::InitializeInternalResources()
 {
-	winrt::com_ptr<ID3D12Resource> const resource = mInternalResource;
-	winrt::check_bool(resource);
-
-	return resource;
+	CacheUpdater().FlushExecutors().connect(boost::bind(&GrBuffer::RefreshInternalResources, this));
 }
 
-aiva::utils::EvAction& aiva::layer1::GrBuffer::OnInternalResourceUpdated()
+void aiva::layer1::GrBuffer::TerminateInternalResources()
 {
-	return mOnInternalResourceUpdated;
+	CacheUpdater().FlushExecutors().disconnect(boost::bind(&GrBuffer::RefreshInternalResources, this));
 }
 
-void aiva::layer1::GrBuffer::UpdateInternalResource(GrBufferDesc const& desc)
+void aiva::layer1::GrBuffer::RefreshInternalResources()
+{
+	mInternalResource = Desc() ? CreateInternalResource(mEngine, *Desc()) : decltype(mInternalResource){};
+}
+
+winrt::com_ptr<ID3D12Resource> aiva::layer1::GrBuffer::CreateInternalResource(Engine const& engine, GrBufferDesc const& desc)
 {
 	aiva::utils::Asserts::CheckBool(!(desc.SupportShaderAtomics && desc.MemoryType != EGpuResourceMemoryType::GpuOnly));
 	aiva::utils::Asserts::CheckBool(desc.Size > 0);
 
-	auto const& device = mEngine.GraphicHardware().Device();
+	auto const& device = engine.GraphicHardware().Device();
 	winrt::check_bool(device);
 
 	D3D12_HEAP_PROPERTIES heapProperties{};
@@ -100,7 +104,11 @@ void aiva::layer1::GrBuffer::UpdateInternalResource(GrBufferDesc const& desc)
 	winrt::check_hresult(device->CreateCommittedResource(&heapProperties, heapFlags, &resourceDesc, resourceStates, nullptr, IID_PPV_ARGS(&resource)));
 
 	winrt::check_bool(resource);
-	mInternalResource = resource;
+	return resource;
+}
 
-	OnInternalResourceUpdated()();
+winrt::com_ptr<ID3D12Resource> const aiva::layer1::GrBuffer::InternalResource()
+{
+	CacheUpdater().FlushChanges();
+	return mInternalResource;
 }

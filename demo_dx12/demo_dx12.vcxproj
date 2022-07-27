@@ -164,9 +164,12 @@
     <ClInclude Include="Sources\aiva\layer1\e_gpu_comparison_func.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_descriptor_heap_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_fill_mode.h" />
+    <ClInclude Include="Sources\aiva\layer1\e_gpu_primitive_topology.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_resource_buffer_format.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_resource_memory_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_resource_view_type.h" />
+    <ClInclude Include="Sources\aiva\layer1\gca_draw_mesh.h" />
+    <ClInclude Include="Sources\aiva\layer1\gca_set_viewports.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_dsv_to_texture_2d.h" />
@@ -248,12 +251,15 @@
     <ClCompile Include="Sources\aiva\layer1\e_gpu_comparison_func.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_gpu_descriptor_heap_type.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_gpu_fill_mode.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\e_gpu_primitive_topology.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_gpu_resource_buffer_format.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_gpu_resource_memory_type.cpp" />
     <ClCompile Include="Sources\aiva\layer1\engine.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_gpu_resource_view_type.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_dispatch.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_do_everything.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gca_draw_mesh.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gca_set_viewports.cpp" />
     <ClCompile Include="Sources\aiva\layer1\graphic_executor.cpp" />
     <ClCompile Include="Sources\aiva\layer1\graphic_hardware.cpp" />
     <ClCompile Include="Sources\aiva\layer1\graphic_pipeline.cpp" />
@@ -285,6 +291,36 @@
     <ClCompile Include="Sources\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\resources\materials\checker.mat_gs">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </None>
+    <None Include="Assets\resources\shaders\checker.hlsl_ps">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </None>
+    <None Include="Assets\resources\shaders\checker.hlsl_vs">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </None>
     <None Include="demo_dx12_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="PropertySheet.props" />

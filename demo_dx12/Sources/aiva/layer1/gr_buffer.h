@@ -10,6 +10,12 @@ namespace aiva::layer1
 	struct Engine;
 }
 
+namespace aiva::utils
+{
+	template <typename, typename>
+	struct TCacheUpdater;
+}
+
 namespace aiva::layer1
 {
 	struct GrBuffer final : private boost::noncopyable, public std::enable_shared_from_this<GrBuffer>, public aiva::layer1::IGpuResource
@@ -22,7 +28,7 @@ namespace aiva::layer1
 		static std::shared_ptr<GrBuffer> Create(TArgs&&... args);
 
 	private:
-		GrBuffer(Engine const& engine, GrBufferDesc const& desc);
+		GrBuffer(Engine const& engine);
 
 	public:
 		~GrBuffer();
@@ -31,12 +37,38 @@ namespace aiva::layer1
 		aiva::layer1::Engine const& mEngine;
 
 	// ----------------------------------------------------
+	// Cache Refresh
+
+	public:
+		enum class EDirtyFlags
+		{
+			None = 0,
+			All = 1,
+		};
+
+		using CacheUpdaterType = aiva::utils::TCacheUpdater<EDirtyFlags, GrBuffer>;
+
+	public:
+		CacheUpdaterType& CacheUpdater() const;
+
+	private:
+		void InitializeCacheUpdater();
+
+		void TerminateCacheUpdater();
+
+	private:
+		std::unique_ptr<CacheUpdaterType> mCacheUpdater{};
+
+	// ----------------------------------------------------
 	// High-Level Data
 
 	public:
-		GrBufferDesc Desc() const;
+		std::optional<GrBufferDesc> const& Desc() const;
 
-		GrBuffer& Desc(GrBufferDesc const& desc);
+		GrBuffer& Desc(std::optional<GrBufferDesc> const& desc);
+
+	private:
+		std::optional<GrBufferDesc> mDesc{};
 
 	// ----------------------------------------------------
 	// Low-Level Data
@@ -44,15 +76,18 @@ namespace aiva::layer1
 	public:
 		winrt::com_ptr<ID3D12Resource> const InternalResource();
 
-		aiva::utils::EvAction& OnInternalResourceUpdated();
+	private:
+		void InitializeInternalResources();
+
+		void TerminateInternalResources();
 
 	private:
-		void UpdateInternalResource(GrBufferDesc const& desc);
+		void RefreshInternalResources();
+
+		static winrt::com_ptr<ID3D12Resource> CreateInternalResource(Engine const& engine, GrBufferDesc const& desc);
 
 	private:
 		winrt::com_ptr<ID3D12Resource> mInternalResource{};
-
-		aiva::utils::EvAction mOnInternalResourceUpdated{};
 	};
 }
 

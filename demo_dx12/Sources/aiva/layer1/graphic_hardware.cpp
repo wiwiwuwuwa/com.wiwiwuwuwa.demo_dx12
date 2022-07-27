@@ -140,6 +140,20 @@ winrt::com_ptr<ID3D12InfoQueue1> aiva::layer1::GraphicHardware::CreateInfoQueue(
 	infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
 	infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
 
+	{ // Ignore empty index buffer warnings
+		auto filter = D3D12_INFO_QUEUE_FILTER{};
+
+		std::vector<D3D12_MESSAGE_SEVERITY> severities = { D3D12_MESSAGE_SEVERITY_WARNING };
+		filter.DenyList.NumSeverities = severities.size();
+		filter.DenyList.pSeverityList = severities.data();
+
+		std::vector<D3D12_MESSAGE_ID> messageIDs = { D3D12_MESSAGE_ID_COMMAND_LIST_DRAW_INDEX_BUFFER_NOT_SET };
+		filter.DenyList.NumIDs = messageIDs.size();
+		filter.DenyList.pIDList = messageIDs.data();
+
+		infoQueue->PushStorageFilter(&filter);
+	}
+
 	return infoQueue;
 }
 #endif

@@ -26,6 +26,6 @@ void aiva::utils::Asserts::CheckBool(T const& value)
 {
 	if (!value)
 	{
-		throw std::exception{};
+		winrt::throw_last_error();
 	}
 }

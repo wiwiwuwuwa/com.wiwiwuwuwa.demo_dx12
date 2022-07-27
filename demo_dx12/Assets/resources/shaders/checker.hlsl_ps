@@ -1,0 +1,11 @@
+struct t_output
+{
+    float4 color0 : SV_Target;
+};
+
+t_output main()
+{
+    t_output OUT;
+    OUT.color0 = 1.0;
+    return OUT;
+}

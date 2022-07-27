@@ -56,7 +56,13 @@ aiva::layer1::ShaderResourceDescriptor& aiva::layer1::ShaderResourceDescriptor::
 		auto const& previousResourceView = previousResourceIter->second;
 		aiva::utils::Asserts::CheckBool(previousResourceView);
 
-		previousResourceView->OnInternalResourceUpdated().disconnect(boost::bind(&ShaderResourceDescriptor::OnResourceViewUpdated, this));
+		auto const& previosConnectionIter = mResourceConnections.find(key);
+		aiva::utils::Asserts::CheckBool(previosConnectionIter != mResourceConnections.end());
+
+		auto const& previousConnectionView = previosConnectionIter->second;
+		previousConnectionView.disconnect();
+
+		mResourceConnections.erase(previosConnectionIter);
 		mResourceViews.erase(previousResourceIter);
 	}
 
@@ -71,15 +77,37 @@ aiva::layer1::ShaderResourceDescriptor& aiva::layer1::ShaderResourceDescriptor::
 		auto const& currentResourceView = currentResourceIter->second;
 		aiva::utils::Asserts::CheckBool(currentResourceView);
 
-		currentResourceView->OnInternalResourceUpdated().connect(boost::bind(&ShaderResourceDescriptor::OnResourceViewUpdated, this));
+		auto const& currentResourceConnection = currentResourceView->ConnectToMarkedAsChanged(boost::bind(&ShaderResourceDescriptor::OnResourceViewMarkedAsChanged, this));
+		mResourceConnections.insert_or_assign(key, currentResourceConnection);
 	}
 
 	return *this;
 }
 
-void aiva::layer1::ShaderResourceDescriptor::OnResourceViewUpdated()
+void aiva::layer1::ShaderResourceDescriptor::OnResourceViewMarkedAsChanged()
 {
 	CacheUpdater().MarkAsChanged();
+}
+
+std::vector<winrt::com_ptr<ID3D12DescriptorHeap>> aiva::layer1::ShaderResourceDescriptor::InternalDescriptorHeaps() const
+{
+	CacheUpdater().FlushChanges();
+
+	auto descriptorHeaps = std::vector<winrt::com_ptr<ID3D12DescriptorHeap>>{};
+
+	auto const& mainHeapIter = mDescriptorHeaps.find(EGpuDescriptorHeapType::CbvSrvUav);
+	if (mainHeapIter != mDescriptorHeaps.end())
+	{
+		descriptorHeaps.emplace_back(mainHeapIter->second);
+	}
+
+	auto const& samplerHeapIter = mDescriptorHeaps.find(EGpuDescriptorHeapType::Sampler);
+	if (samplerHeapIter != mDescriptorHeaps.end())
+	{
+		descriptorHeaps.emplace_back(samplerHeapIter->second);
+	}
+
+	return descriptorHeaps;
 }
 
 winrt::com_ptr<ID3D12RootSignature> aiva::layer1::ShaderResourceDescriptor::InternalRootSignature() const
@@ -124,7 +152,7 @@ void aiva::layer1::ShaderResourceDescriptor::RefreshDescriptorHeaps()
 		auto const& resourceView = pair->second;
 		aiva::utils::Asserts::CheckBool(resourceView);
 
-		auto& resourceViews = resourceViewsPerHeapType[resourceView->DescriptorHeapType()];
+		auto& resourceViews = resourceViewsPerHeapType[resourceView->HeapType()];
 		resourceViews.emplace_back(resourceView);
 	}
 
@@ -175,15 +203,15 @@ void aiva::layer1::ShaderResourceDescriptor::RefreshRootSignature()
 		auto registersCounters = std::unordered_map<EGpuResourceViewType, std::size_t>{};
 
 		auto resourceViewsPerName = std::vector<decltype(mResourceViews)::const_iterator>{};
-		for (auto iter = mResourceViews.cbegin(); iter != mResourceViews.cend(); iter++) { if (iter->second->DescriptorHeapType() == EGpuDescriptorHeapType::CbvSrvUav) { resourceViewsPerName.push_back(iter); }; };
+		for (auto iter = mResourceViews.cbegin(); iter != mResourceViews.cend(); iter++) { if (iter->second->HeapType() == EGpuDescriptorHeapType::CbvSrvUav) { resourceViewsPerName.push_back(iter); }; };
 		std::sort(resourceViewsPerName.begin(), resourceViewsPerName.end(), [](auto const& a, auto const& b) { return a->first < b->first; });
 		
 		for (const auto& pair : resourceViewsPerName)
 		{
 			auto& descriptorRange = mainDescriptorRanges.emplace_back();
-			descriptorRange.RangeType = ToInternalDescriptorRangeType(pair->second->ResourceViewType());
+			descriptorRange.RangeType = ToInternalDescriptorRangeType(pair->second->ViewType());
 			descriptorRange.NumDescriptors = 1;
-			descriptorRange.BaseShaderRegister = registersCounters[pair->second->ResourceViewType()]++;
+			descriptorRange.BaseShaderRegister = registersCounters[pair->second->ViewType()]++;
 			descriptorRange.RegisterSpace = 0;
 			descriptorRange.Flags = D3D12_DESCRIPTOR_RANGE_FLAG_NONE;
 			descriptorRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
@@ -202,15 +230,15 @@ void aiva::layer1::ShaderResourceDescriptor::RefreshRootSignature()
 		auto registersCounters = std::unordered_map<EGpuResourceViewType, std::size_t>{};
 
 		auto resourceViewsPerName = std::vector<decltype(mResourceViews)::const_iterator>{};
-		for (auto iter = mResourceViews.cbegin(); iter != mResourceViews.cend(); iter++) { if (iter->second->DescriptorHeapType() == EGpuDescriptorHeapType::CbvSrvUav) { resourceViewsPerName.push_back(iter); }; };
+		for (auto iter = mResourceViews.cbegin(); iter != mResourceViews.cend(); iter++) { if (iter->second->HeapType() == EGpuDescriptorHeapType::CbvSrvUav) { resourceViewsPerName.push_back(iter); }; };
 		std::sort(resourceViewsPerName.begin(), resourceViewsPerName.end(), [](auto const& a, auto const& b) { return a->first < b->first; });
 
 		for (const auto& pair : resourceViewsPerName)
 		{
 			auto& descriptorRange = samplerDescriptorRanges.emplace_back();
-			descriptorRange.RangeType = ToInternalDescriptorRangeType(pair->second->ResourceViewType());
+			descriptorRange.RangeType = ToInternalDescriptorRangeType(pair->second->ViewType());
 			descriptorRange.NumDescriptors = 1;
-			descriptorRange.BaseShaderRegister = registersCounters[pair->second->ResourceViewType()]++;
+			descriptorRange.BaseShaderRegister = registersCounters[pair->second->ViewType()]++;
 			descriptorRange.RegisterSpace = 0;
 			descriptorRange.Flags = D3D12_DESCRIPTOR_RANGE_FLAG_NONE;
 			descriptorRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;

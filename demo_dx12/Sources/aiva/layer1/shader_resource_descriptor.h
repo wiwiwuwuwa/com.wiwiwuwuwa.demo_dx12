@@ -2,6 +2,7 @@
 #include <pch.h>
 
 #include <aiva/layer1/e_gpu_descriptor_heap_type.h>
+#include <aiva/utils/asserts.h>
 #include <aiva/utils/ev_action.h>
 
 namespace aiva::layer1
@@ -65,18 +66,25 @@ namespace aiva::layer1
 	public:
 		std::shared_ptr<IGpuResourceView> ResourceView(std::string const& key) const;
 
+		template <typename TGpuResourceView>
+		std::shared_ptr<TGpuResourceView> ResourceView(std::string const& key) const;
+
 		ShaderResourceDescriptor& ResourceView(std::string const& key, std::shared_ptr<IGpuResourceView> const& value);
 
 	private:
-		void OnResourceViewUpdated();
+		void OnResourceViewMarkedAsChanged();
 
 	private:
 		std::unordered_map<std::string, std::shared_ptr<IGpuResourceView>> mResourceViews{};
+
+		std::unordered_map<std::string, boost::signals2::connection> mResourceConnections{};
 
 	// ----------------------------------------------------
 	// Internal Resources Data
 
 	public:
+		std::vector<winrt::com_ptr<ID3D12DescriptorHeap>> InternalDescriptorHeaps() const;
+
 		winrt::com_ptr<ID3D12RootSignature> InternalRootSignature() const;
 
 	private:
@@ -104,4 +112,16 @@ template <typename... TArgs>
 std::shared_ptr<aiva::layer1::ShaderResourceDescriptor> aiva::layer1::ShaderResourceDescriptor::Create(TArgs&&... args)
 {
 	return std::shared_ptr<ShaderResourceDescriptor>{new ShaderResourceDescriptor{ std::forward<TArgs>(args)... }};
+}
+
+template <typename TGpuResourceView>
+std::shared_ptr<TGpuResourceView> aiva::layer1::ShaderResourceDescriptor::ResourceView(std::string const& key) const
+{
+	auto const basicResourceView = ResourceView(key);
+	if (!basicResourceView) return {};
+
+	auto const specificResourceView = std::dynamic_pointer_cast<TGpuResourceView>(basicResourceView);
+	aiva::utils::Asserts::CheckBool(specificResourceView);
+
+	return specificResourceView;
 }

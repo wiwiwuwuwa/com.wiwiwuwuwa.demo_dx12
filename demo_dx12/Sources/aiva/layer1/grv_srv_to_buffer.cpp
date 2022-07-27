@@ -7,43 +7,110 @@
 #include <aiva/layer1/shader_buffer.h>
 #include <aiva/layer1/shader_struct.h>
 #include <aiva/utils/asserts.h>
+#include <aiva/utils/t_cache_updater.h>
 
-aiva::layer1::GrvSrvToBuffer::GrvSrvToBuffer(Engine const& engine, GrvSrvToBufferDesc const& desc) : mEngine{ engine }
+aiva::layer1::GrvSrvToBuffer::GrvSrvToBuffer(Engine const& engine) : mEngine{ engine }
 {
-	Desc(desc);
+	InitializeCacheUpdater();
+	InitializeBuffer();
+	InitializeInternalResources();
 }
 
 aiva::layer1::GrvSrvToBuffer::~GrvSrvToBuffer()
 {
-	Desc({});
+	TerminateInternalResources();
+	TerminateBuffer();
+	TerminateCacheUpdater();
 }
 
-aiva::layer1::EGpuDescriptorHeapType aiva::layer1::GrvSrvToBuffer::DescriptorHeapType() const
+aiva::layer1::GrvSrvToBuffer::CacheUpdaterType& aiva::layer1::GrvSrvToBuffer::CacheUpdater() const
+{
+	aiva::utils::Asserts::CheckBool(mCacheUpdater);
+	return *mCacheUpdater;
+}
+
+void aiva::layer1::GrvSrvToBuffer::InitializeCacheUpdater()
+{
+	mCacheUpdater = std::make_unique<CacheUpdaterType>();
+	aiva::utils::Asserts::CheckBool(mCacheUpdater);
+}
+
+void aiva::layer1::GrvSrvToBuffer::TerminateCacheUpdater()
+{
+	aiva::utils::Asserts::CheckBool(mCacheUpdater);
+	mCacheUpdater = {};
+}
+
+aiva::layer1::EGpuDescriptorHeapType aiva::layer1::GrvSrvToBuffer::HeapType() const
 {
 	return EGpuDescriptorHeapType::CbvSrvUav;
 }
 
-aiva::layer1::EGpuResourceViewType aiva::layer1::GrvSrvToBuffer::ResourceViewType() const
+aiva::layer1::EGpuResourceViewType aiva::layer1::GrvSrvToBuffer::ViewType() const
 {
 	return EGpuResourceViewType::Srv;
 }
 
-aiva::layer1::GrvSrvToBufferDesc const& aiva::layer1::GrvSrvToBuffer::Desc() const
+void aiva::layer1::GrvSrvToBuffer::CreateInternalResourceView(D3D12_CPU_DESCRIPTOR_HANDLE const destination) const
+{
+	CacheUpdater().FlushChanges();
+
+	auto const& device = mEngine.GraphicHardware().Device();
+	winrt::check_bool(device);
+
+	auto const& aivaDesc = Desc();
+	aiva::utils::Asserts::CheckBool(aivaDesc);
+
+	auto const& aivaBuffer = aivaDesc->Resource;
+	aiva::utils::Asserts::CheckBool(aivaBuffer);
+
+	auto const& directxBuffer = aivaBuffer->InternalResource();
+	winrt::check_bool(directxBuffer);
+
+	auto const& directxDesc = InternalResource();
+	aiva::utils::Asserts::CheckBool(directxDesc);
+
+	device->CreateShaderResourceView(directxBuffer.get(), &directxDesc.value(), destination);
+}
+
+boost::signals2::connection aiva::layer1::GrvSrvToBuffer::ConnectToMarkedAsChanged(boost::function<void()> const& listener) const
+{
+	return CacheUpdater().OnMarkAsChanged().connect([=](EDirtyFlags) { listener(); });
+}
+
+std::optional<aiva::layer1::GrvSrvToBufferDesc> const& aiva::layer1::GrvSrvToBuffer::Desc() const
 {
 	return mDesc;
 }
 
-aiva::layer1::GrvSrvToBuffer& aiva::layer1::GrvSrvToBuffer::Desc(GrvSrvToBufferDesc const& desc)
+aiva::layer1::GrvSrvToBuffer& aiva::layer1::GrvSrvToBuffer::Desc(std::optional<GrvSrvToBufferDesc> const& desc)
 {
-	auto const previousDesc = Desc();
-	auto const desiredDesc = desc;
+	if (mDesc)
+	{
+		Buffer().Struct({});
 
-	mDesc = desiredDesc;
+		aiva::utils::Asserts::CheckBool(mDesc->Resource);
+		mDesc->Resource->CacheUpdater().OnMarkAsChanged().disconnect(boost::bind(&GrvSrvToBuffer::OnDescResourceMarkedAsChanged, this));
+	}
 
-	RefreshBufferData(desiredDesc.Struct);
-	RefreshInternalResourceUpdated(previousDesc, desiredDesc);
+	mDesc = desc;
+	CacheUpdater().MarkAsChanged();
+
+	if (mDesc)
+	{
+		aiva::utils::Asserts::CheckBool(mDesc->Resource);
+		mDesc->Resource->CacheUpdater().OnMarkAsChanged().connect(boost::bind(&GrvSrvToBuffer::OnDescResourceMarkedAsChanged, this));
+
+		aiva::utils::Asserts::CheckBool(mDesc->Struct);
+		Buffer().Struct(mDesc->Struct);
+	}
 
 	return *this;
+}
+
+void aiva::layer1::GrvSrvToBuffer::OnDescResourceMarkedAsChanged() const
+{
+	CacheUpdater().MarkAsChanged();
 }
 
 aiva::layer1::ShaderBuffer& aiva::layer1::GrvSrvToBuffer::Buffer() const
@@ -52,87 +119,33 @@ aiva::layer1::ShaderBuffer& aiva::layer1::GrvSrvToBuffer::Buffer() const
 	return *mBuffer;
 }
 
-aiva::layer1::GrvSrvToBuffer& aiva::layer1::GrvSrvToBuffer::ApplyChanges()
+void aiva::layer1::GrvSrvToBuffer::InitializeBuffer()
+{
+	mBuffer = ShaderBuffer::Create();
+	aiva::utils::Asserts::CheckBool(mBuffer);
+
+	mBuffer->CacheUpdater().OnMarkAsChanged().connect(boost::bind(&GrvSrvToBuffer::OnBufferMarkedAsChanged, this));
+}
+
+void aiva::layer1::GrvSrvToBuffer::TerminateBuffer()
 {
 	aiva::utils::Asserts::CheckBool(mBuffer);
 
-	auto const& desc = Desc();
-	aiva::utils::Asserts::CheckBool(desc.Resource);
-
-	auto const& aivaResource = desc.Resource;
-	aiva::utils::Asserts::CheckBool(aivaResource);
-
-	auto const& currentDirectxResource = aivaResource->InternalResource();
-	winrt::check_bool(currentDirectxResource);
-
-	auto const& currentDirectxDesc = currentDirectxResource->GetDesc();
-	aiva::utils::Asserts::CheckBool(currentDirectxDesc.Width > 0);
-
-	auto const& binaryData = mBuffer->SerializeToBinary();
-	aiva::utils::Asserts::CheckBool(binaryData.size() > 0);
-
-	auto const& needUpdateAivaDesc = currentDirectxDesc.Width != binaryData.size();
-	if (needUpdateAivaDesc)
-	{
-		auto updatedAivaDesc = aivaResource->Desc();
-		updatedAivaDesc.Size = binaryData.size();
-
-		aivaResource->Desc(updatedAivaDesc);
-	}
-
-	auto const& updatedDirectxResource = aivaResource->InternalResource();
-	winrt::check_bool(updatedDirectxResource);
-
-	void* destinationMemory{};
-	winrt::check_hresult(updatedDirectxResource->Map(0, nullptr, &destinationMemory));
-	aiva::utils::Asserts::CheckBool(destinationMemory);
-	aiva::utils::Asserts::CheckBool(memcpy_s(destinationMemory, binaryData.size(), binaryData.data(), binaryData.size()) == 0);
-	updatedDirectxResource->Unmap(0, nullptr);
-
-	return *this;
+	mBuffer->CacheUpdater().OnMarkAsChanged().disconnect(boost::bind(&GrvSrvToBuffer::OnBufferMarkedAsChanged, this));
+	mBuffer = {};
 }
 
-void aiva::layer1::GrvSrvToBuffer::RefreshBufferData(std::shared_ptr<const ShaderStruct> const& shaderStruct)
+void aiva::layer1::GrvSrvToBuffer::OnBufferMarkedAsChanged() const
 {
-	if (shaderStruct)
-	{
-		mBuffer = ShaderBuffer::Create(shaderStruct);
-	}
-	else
-	{
-		mBuffer = {};
-	}
-}
-
-aiva::utils::EvAction& aiva::layer1::GrvSrvToBuffer::OnInternalResourceUpdated()
-{
-	return mOnInternalResourceUpdated;
-}
-
-void aiva::layer1::GrvSrvToBuffer::RefreshInternalResourceUpdated(GrvSrvToBufferDesc const& previousDesc, GrvSrvToBufferDesc const& desiredDesc)
-{
-	if (previousDesc.Resource)
-	{
-		previousDesc.Resource->OnInternalResourceUpdated().disconnect(boost::bind(&GrvSrvToBuffer::NotifyInternalResourceUpdated, this));
-	}
-
-	if (desiredDesc.Resource)
-	{
-		desiredDesc.Resource->OnInternalResourceUpdated().connect(boost::bind(&GrvSrvToBuffer::NotifyInternalResourceUpdated, this));
-	}
-
-	NotifyInternalResourceUpdated();
-}
-
-void aiva::layer1::GrvSrvToBuffer::NotifyInternalResourceUpdated()
-{
-	OnInternalResourceUpdated()();
+	CacheUpdater().MarkAsChanged();
 }
 
 std::optional<D3D12_SHADER_RESOURCE_VIEW_DESC> aiva::layer1::GrvSrvToBuffer::InternalResource() const
 {
+	CacheUpdater().FlushChanges();
+
 	auto const& aivaViewDesc = Desc();
-	if (!aivaViewDesc.Resource)
+	if (!aivaViewDesc)
 	{
 		return {};
 	}
@@ -140,18 +153,15 @@ std::optional<D3D12_SHADER_RESOURCE_VIEW_DESC> aiva::layer1::GrvSrvToBuffer::Int
 	auto const& aivaBuffer = mBuffer;
 	aiva::utils::Asserts::CheckBool(aivaBuffer);
 
-	auto const& aivaResource = aivaViewDesc.Resource;
+	auto const& aivaResource = aivaViewDesc->Resource;
 	aiva::utils::Asserts::CheckBool(aivaResource);
-
-	auto const& aivaResourceDesc = aivaResource->Desc();
-	aiva::utils::Asserts::CheckBool(aivaResourceDesc.SupportUnorderedAccess);
 
 	auto const& directxResource = aivaResource->InternalResource();
 	winrt::check_bool(directxResource);
 
 	auto const& directxResourceDesc = directxResource->GetDesc();
 
-	D3D12_SHADER_RESOURCE_VIEW_DESC directxViewDesc{};
+	auto directxViewDesc = D3D12_SHADER_RESOURCE_VIEW_DESC{};
 	directxViewDesc.Format = directxResourceDesc.Format;
 	directxViewDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
 	directxViewDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
@@ -161,4 +171,65 @@ std::optional<D3D12_SHADER_RESOURCE_VIEW_DESC> aiva::layer1::GrvSrvToBuffer::Int
 	directxViewDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
 
 	return directxViewDesc;
+}
+
+void aiva::layer1::GrvSrvToBuffer::InitializeInternalResources()
+{
+	CacheUpdater().FlushExecutors().connect(boost::bind(&GrvSrvToBuffer::RefreshInternalResources, this));
+}
+
+void aiva::layer1::GrvSrvToBuffer::TerminateInternalResources()
+{
+	CacheUpdater().FlushExecutors().disconnect(boost::bind(&GrvSrvToBuffer::RefreshInternalResources, this));
+}
+
+void aiva::layer1::GrvSrvToBuffer::RefreshInternalResources()
+{
+	auto const& desc = Desc();
+	if (!desc)
+	{
+		return;
+	}
+
+	auto const& buffer = mBuffer;
+	aiva::utils::Asserts::CheckBool(buffer);
+
+	auto const& binaryData = buffer->SerializeToBinary();
+	aiva::utils::Asserts::CheckBool(!binaryData.empty());
+
+	auto const& aivaResource = desc->Resource;
+	aiva::utils::Asserts::CheckBool(aivaResource);
+
+	auto const& needCreateAivaResourceDesc = !aivaResource->Desc();
+	if (needCreateAivaResourceDesc)
+	{
+		auto tempDesc = GrBufferDesc{};
+		tempDesc.MemoryType = EGpuResourceMemoryType::CpuToGpu;
+		tempDesc.Size = binaryData.size();
+		tempDesc.SupportShaderAtomics = false;
+		tempDesc.SupportUnorderedAccess = false;
+
+		aivaResource->Desc(tempDesc);
+	}
+
+	auto const& currentAivaResourceDesc = aivaResource->Desc();
+	aiva::utils::Asserts::CheckBool(currentAivaResourceDesc);
+	
+	auto const& needUpdateAivaResourceDesc = currentAivaResourceDesc->MemoryType != EGpuResourceMemoryType::CpuToGpu || currentAivaResourceDesc->Size != binaryData.size();
+	if (needUpdateAivaResourceDesc)
+	{
+		auto tempDesc = currentAivaResourceDesc;
+		tempDesc->Size = binaryData.size();
+
+		aivaResource->Desc(tempDesc);
+	}
+
+	auto const& directxResource = aivaResource->InternalResource();
+	winrt::check_bool(directxResource);
+
+	void* destinationMemory{};
+	winrt::check_hresult(directxResource->Map(0, nullptr, &destinationMemory));
+	aiva::utils::Asserts::CheckBool(destinationMemory);
+	aiva::utils::Asserts::CheckBool(memcpy_s(destinationMemory, binaryData.size(), binaryData.data(), binaryData.size()) == 0);
+	directxResource->Unmap(0, nullptr);
 }

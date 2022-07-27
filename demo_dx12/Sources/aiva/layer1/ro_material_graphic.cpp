@@ -197,6 +197,21 @@ void aiva::layer1::RoMaterialGraphic::RefreshInternalPipelineState()
 		pipelineDesc.PS.BytecodeLength = shaderBytecode->GetBufferSize();
 	}
 
+	{ // Blend State
+		pipelineDesc.BlendState.RenderTarget[0].SrcBlend = D3D12_BLEND_ONE;
+		pipelineDesc.BlendState.RenderTarget[0].DestBlend = D3D12_BLEND_ZERO;
+		pipelineDesc.BlendState.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+		pipelineDesc.BlendState.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+		pipelineDesc.BlendState.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+		pipelineDesc.BlendState.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+		pipelineDesc.BlendState.RenderTarget[0].LogicOp = D3D12_LOGIC_OP_NOOP;
+		pipelineDesc.BlendState.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+	}
+
+	{ // Sample Mask
+		pipelineDesc.SampleMask = UINT_MAX;
+	}
+
 	{ // Rasterizer State
 		auto const& descriptor = PipelineDescriptor();
 
@@ -211,6 +226,10 @@ void aiva::layer1::RoMaterialGraphic::RefreshInternalPipelineState()
 		pipelineDesc.DepthStencilState.DepthEnable = descriptor.DepthTest();
 		pipelineDesc.DepthStencilState.DepthWriteMask = descriptor.DepthWrite() ? D3D12_DEPTH_WRITE_MASK_ALL : D3D12_DEPTH_WRITE_MASK_ZERO;
 		pipelineDesc.DepthStencilState.DepthFunc = ToInternalEnum(descriptor.DepthFunc());
+	}
+
+	{ // Primitive Topology Type
+		pipelineDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	}
 
 	{ // Render Targets

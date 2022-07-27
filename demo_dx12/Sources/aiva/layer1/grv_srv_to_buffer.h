@@ -12,6 +12,12 @@ namespace aiva::layer1
 	struct ShaderStruct;
 }
 
+namespace aiva::utils
+{
+	template <typename, typename>
+	struct TCacheUpdater;
+}
+
 namespace aiva::layer1
 {
 	struct GrvSrvToBuffer final : private boost::noncopyable, public std::enable_shared_from_this<GrvSrvToBuffer>, public IGpuResourceView
@@ -24,7 +30,7 @@ namespace aiva::layer1
 		static std::shared_ptr<GrvSrvToBuffer> Create(TArgs&&... args);
 
 	private:
-		GrvSrvToBuffer(Engine const& engine, GrvSrvToBufferDesc const& desc);
+		GrvSrvToBuffer(Engine const& engine);
 
 	public:
 		~GrvSrvToBuffer();
@@ -33,25 +39,53 @@ namespace aiva::layer1
 		Engine const& mEngine;
 
 	// ----------------------------------------------------
+	// Cache Refresh
+
+	public:
+		enum class EDirtyFlags
+		{
+			None = 0,
+			All = 1,
+		};
+
+		using CacheUpdaterType = aiva::utils::TCacheUpdater<EDirtyFlags, GrvSrvToBuffer>;
+
+	public:
+		CacheUpdaterType& CacheUpdater() const;
+
+	private:
+		void InitializeCacheUpdater();
+
+		void TerminateCacheUpdater();
+
+	private:
+		std::unique_ptr<CacheUpdaterType> mCacheUpdater{};
+
+	// ----------------------------------------------------
 	// IGpuResourceView
 
 	public:
-		EGpuDescriptorHeapType DescriptorHeapType() const override;
+		EGpuDescriptorHeapType HeapType() const override;
 
-		EGpuResourceViewType ResourceViewType() const override;
+		EGpuResourceViewType ViewType() const override;
 
-		aiva::utils::EvAction& OnInternalResourceUpdated() override;
+		void CreateInternalResourceView(D3D12_CPU_DESCRIPTOR_HANDLE const destination) const override;
+
+		boost::signals2::connection ConnectToMarkedAsChanged(boost::function<void()> const& listener) const override;
 
 	// ----------------------------------------------------
 	// Desc Data
 
 	public:
-		GrvSrvToBufferDesc const& Desc() const;
+		std::optional<GrvSrvToBufferDesc> const& Desc() const;
 
-		GrvSrvToBuffer& Desc(GrvSrvToBufferDesc const& desc);
+		GrvSrvToBuffer& Desc(std::optional<GrvSrvToBufferDesc> const& desc);
 
 	private:
-		GrvSrvToBufferDesc mDesc{};
+		void OnDescResourceMarkedAsChanged() const;
+
+	private:
+		std::optional<GrvSrvToBufferDesc> mDesc{};
 
 	// ----------------------------------------------------
 	// Buffer Data
@@ -59,30 +93,30 @@ namespace aiva::layer1
 	public:
 		ShaderBuffer& Buffer() const;
 
-		GrvSrvToBuffer& ApplyChanges();
+	private:
+		void InitializeBuffer();
+
+		void TerminateBuffer();
 
 	private:
-		void RefreshBufferData(std::shared_ptr<const ShaderStruct> const& shaderStruct);
+		void OnBufferMarkedAsChanged() const;
 
 	private:
 		std::shared_ptr<ShaderBuffer> mBuffer{};
-
-	// ----------------------------------------------------
-	// Updated Event
-
-	private:
-		void RefreshInternalResourceUpdated(GrvSrvToBufferDesc const& previousDesc, GrvSrvToBufferDesc const& desiredDesc);
-
-		void NotifyInternalResourceUpdated();
-
-	private:
-		aiva::utils::EvAction mOnInternalResourceUpdated{};
 
 	// ----------------------------------------------------
 	// Internal Data
 
 	public:
 		std::optional<D3D12_SHADER_RESOURCE_VIEW_DESC> InternalResource() const;
+
+	private:
+		void InitializeInternalResources();
+
+		void TerminateInternalResources();
+
+	private:
+		void RefreshInternalResources();
 	};
 }
 

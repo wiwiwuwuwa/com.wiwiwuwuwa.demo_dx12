@@ -6,6 +6,12 @@ namespace aiva::layer1
 	struct ShaderStruct;
 }
 
+namespace aiva::utils
+{
+	template <typename, typename>
+	struct TCacheUpdater;
+}
+
 namespace aiva::layer1
 {
 	struct ShaderBuffer final : private boost::noncopyable, public std::enable_shared_from_this<ShaderBuffer>
@@ -18,38 +24,65 @@ namespace aiva::layer1
 		static std::shared_ptr<ShaderBuffer> Create(TArgs&&... args);
 
 	private:
-		ShaderBuffer(std::shared_ptr<const ShaderStruct> const& referenceStruct);
+		ShaderBuffer();
 
 	public:
 		~ShaderBuffer();
 
+	// ----------------------------------------------------
+	// Cache Refresh
+
+	public:
+		enum class EDirtyFlags
+		{
+			None = 0,
+			All = 1,
+		};
+
+		using CacheUpdaterType = aiva::utils::TCacheUpdater<EDirtyFlags, ShaderBuffer>;
+
+	public:
+		CacheUpdaterType& CacheUpdater() const;
+
 	private:
-		std::shared_ptr<const ShaderStruct> mReferenceStruct{};
+		void InitializeCacheUpdater();
+
+		void TerminateCacheUpdater();
+
+	private:
+		std::unique_ptr<CacheUpdaterType> mCacheUpdater{};
 
 	// ----------------------------------------------------
-	// Serialization
+	// Reference Struct
 
 	public:
-		std::vector<std::byte> SerializeToBinary() const;
+		std::shared_ptr<const ShaderStruct> const& Struct() const;
 
-	// ----------------------------------------------------
-	// Reference Structure
+		ShaderBuffer& Struct(std::shared_ptr<const ShaderStruct> const& referenceStruct);
 
-	public:
-		std::size_t ByteStride() const;
+	private:
+		std::shared_ptr<const ShaderStruct> mStruct{};
 
 	// ----------------------------------------------------
 	// Shader Structures
 
 	public:
-		ShaderBuffer& Add(std::shared_ptr<ShaderStruct> const& shaderStruct);
+		ShaderBuffer& Add(std::shared_ptr<const ShaderStruct> const& shaderStruct);
 
 		std::shared_ptr<const ShaderStruct> const& Get(std::size_t index) const;
 
 		std::size_t Num() const;
 
 	private:
-		std::vector<std::shared_ptr<ShaderStruct>> mShaderStructs{};
+		std::vector<std::shared_ptr<const ShaderStruct>> mShaderStructs{};
+
+	// ----------------------------------------------------
+	// Serialization
+
+	public:
+		std::size_t ByteStride() const;
+
+		std::vector<std::byte> SerializeToBinary() const;
 	};
 }
 

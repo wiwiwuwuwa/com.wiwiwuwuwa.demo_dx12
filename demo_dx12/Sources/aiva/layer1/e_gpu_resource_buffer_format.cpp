@@ -8,6 +8,9 @@ aiva::layer1::EGpuResourceBufferFormat aiva::layer1::FromInternalEnum(DXGI_FORMA
 	case DXGI_FORMAT_R32G32B32A32_FLOAT:
 		return EGpuResourceBufferFormat::R32G32B32A32_FLOAT;
 
+	case DXGI_FORMAT_R8G8B8A8_UNORM:
+		return EGpuResourceBufferFormat::R8G8B8A8_UNORM;
+
 	case DXGI_FORMAT_D32_FLOAT:
 		return EGpuResourceBufferFormat::D32_FLOAT;
 
@@ -23,6 +26,9 @@ DXGI_FORMAT aiva::layer1::ToInternalEnum(EGpuResourceBufferFormat const format)
 	{
 	case EGpuResourceBufferFormat::R32G32B32A32_FLOAT:
 		return DXGI_FORMAT_R32G32B32A32_FLOAT;
+
+	case EGpuResourceBufferFormat::R8G8B8A8_UNORM:
+		return DXGI_FORMAT_R8G8B8A8_UNORM;
 
 	case EGpuResourceBufferFormat::D32_FLOAT:
 		return DXGI_FORMAT_D32_FLOAT;

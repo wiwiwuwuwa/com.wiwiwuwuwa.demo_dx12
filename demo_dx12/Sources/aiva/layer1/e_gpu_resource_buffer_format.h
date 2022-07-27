@@ -8,6 +8,7 @@ namespace aiva::layer1
 	enum class EGpuResourceBufferFormat : std::uint8_t
 	{
 		R32G32B32A32_FLOAT,
+		R8G8B8A8_UNORM,
 		D32_FLOAT,
 	};
 

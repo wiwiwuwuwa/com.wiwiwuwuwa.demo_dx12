@@ -76,23 +76,75 @@ void aiva::layer2::World::TerminateSystems()
 	mSceneSystem = {};
 }
 
+#include <aiva/layer1/gr_buffer.h>
+#include <aiva/layer1/gca_draw_mesh.h>
+#include <aiva/layer1/grv_srv_to_buffer.h>
+#include <aiva/layer1/ro_material_graphic.h>
+#include <aiva/layer1/shader_buffer.h>
+#include <aiva/layer1/shader_pipeline_descriptor.h>
+#include <aiva/layer1/shader_resource_descriptor.h>
+#include <aiva/layer1/shader_struct.h>
+
+static std::shared_ptr<aiva::layer1::RoMaterialGraphic> GLOBAL_GRAPHIC_MATERIAL{};
+
 void aiva::layer2::World::InitializeRender()
 {
 	aiva::utils::Asserts::CheckBool(mEngine);
 	mEngine->GraphicPipeline().OnPopulateCommands().connect(boost::bind(&aiva::layer2::World::TickRender, this));
+
+	auto const& indexStructReference = aiva::layer1::ShaderStruct::Create();
+	{
+		auto index = std::uint32_t{};
+		indexStructReference->SetValue("m0_Index", &index);
+	}
+
+	auto indexBufferDesc = aiva::layer1::GrBufferDesc{};
+	indexBufferDesc.MemoryType = aiva::layer1::EGpuResourceMemoryType::CpuToGpu;
+	indexBufferDesc.Size = 0;
+	indexBufferDesc.SupportShaderAtomics = false;
+	indexBufferDesc.SupportUnorderedAccess = false;
+
+	auto const& indexBuffer = aiva::layer1::GrBuffer::Create(*mEngine);
+	indexBuffer->Desc(indexBufferDesc);
+
+	auto bufferViewDesc = aiva::layer1::GrvSrvToBufferDesc{};
+	bufferViewDesc.Resource = indexBuffer;
+	bufferViewDesc.Struct = indexStructReference;
+
+	auto const& bufferView = aiva::layer1::GrvSrvToBuffer::Create(*mEngine);
+	bufferView->Desc(bufferViewDesc);
+
+	for (std::uint32_t i = std::uint32_t{ 0 }; i < std::uint32_t{ 3 }; i++)
+	{
+		auto const& indexStruct = aiva::layer1::ShaderStruct::Create();
+		indexStruct->SetValue("m0_Index", &i);
+
+		bufferView->Buffer().Add(indexStruct);
+	}
+
+	auto const& material = mEngine->ResourceSystem().GetResource<aiva::layer1::RoMaterialGraphic>("resources\\materials\\checker.mat_gs");
+	material->PipelineDescriptor().FillMode(aiva::layer1::EGpuFillMode::Solid);
+	material->PipelineDescriptor().CullMode(aiva::layer1::EGpuCullMode::None);
+	material->PipelineDescriptor().DepthTest(false);
+	material->PipelineDescriptor().DepthWrite(false);
+	material->PipelineDescriptor().DepthFunc(aiva::layer1::EGpuComparisonFunc::Always);
+	material->PipelineDescriptor().RenderTargets({ aiva::layer1::EGpuResourceBufferFormat::R8G8B8A8_UNORM });
+	material->PipelineDescriptor().DepthTarget(aiva::layer1::EGpuResourceBufferFormat::D32_FLOAT);
+	material->ResourceDescriptor().ResourceView("t0_Indices", bufferView);
+
+	GLOBAL_GRAPHIC_MATERIAL = material;
 }
 
 void aiva::layer2::World::TickRender()
 {
 	aiva::utils::Asserts::CheckBool(mEngine);
 
-	aiva::layer1::GcaDispatch gcaDispatch{};
-	gcaDispatch.ThreadGroupCount = { 1, 1, 1 };
-	gcaDispatch.ComputeMaterial = mEngine->ResourceSystem().GetResource<aiva::layer1::RoMaterialCompute>("resources\\materials\\checker.mat_cs");
-	mEngine->GraphicExecutor().ExecuteCommand(gcaDispatch);
+	auto &const gcaDrawMesh = aiva::layer1::GcaDrawMesh{};
+	gcaDrawMesh.Material = GLOBAL_GRAPHIC_MATERIAL;
+	gcaDrawMesh.MeshTopology = aiva::layer1::EGpuPrimitiveTopology::TriangleList;
+	gcaDrawMesh.MeshIndicesKey = "t0_Indices";
 
-	aiva::layer1::GcaDoEveryting gcaDoEverything{};
-	mEngine->GraphicExecutor().ExecuteCommand(gcaDoEverything);
+	mEngine->GraphicExecutor().ExecuteCommand(gcaDrawMesh);
 }
 
 void aiva::layer2::World::TerminateRender()

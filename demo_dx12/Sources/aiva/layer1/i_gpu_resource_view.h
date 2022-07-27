@@ -19,9 +19,9 @@ namespace aiva::layer1
 	// Metadata
 
 	public:
-		virtual EGpuDescriptorHeapType DescriptorHeapType() const = 0;
+		virtual EGpuDescriptorHeapType HeapType() const = 0;
 
-		virtual EGpuResourceViewType ResourceViewType() const = 0;
+		virtual EGpuResourceViewType ViewType() const = 0;
 
 	// ----------------------------------------------------
 	// Actions
@@ -29,10 +29,6 @@ namespace aiva::layer1
 	public:
 		virtual void CreateInternalResourceView(D3D12_CPU_DESCRIPTOR_HANDLE const destination) const = 0;
 
-	// ----------------------------------------------------
-	// Events
-
-	public:
-		virtual aiva::utils::EvAction& OnInternalResourceUpdated() = 0;
+		virtual boost::signals2::connection ConnectToMarkedAsChanged(boost::function<void()> const& listener) const = 0;
 	};
 }

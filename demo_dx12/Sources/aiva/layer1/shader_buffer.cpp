@@ -4,22 +4,83 @@
 #include <aiva/layer1/shader_consts.h>
 #include <aiva/layer1/shader_struct.h>
 #include <aiva/utils/asserts.h>
+#include <aiva/utils/t_cache_updater.h>
 
-aiva::layer1::ShaderBuffer::ShaderBuffer(std::shared_ptr<const ShaderStruct> const& referenceStruct) : mReferenceStruct{ referenceStruct }
+aiva::layer1::ShaderBuffer::ShaderBuffer()
 {
-	aiva::utils::Asserts::CheckBool(referenceStruct);
+	InitializeCacheUpdater();
 }
 
 aiva::layer1::ShaderBuffer::~ShaderBuffer()
 {
+	TerminateCacheUpdater();
+}
 
+aiva::layer1::ShaderBuffer::CacheUpdaterType& aiva::layer1::ShaderBuffer::CacheUpdater() const
+{
+	aiva::utils::Asserts::CheckBool(mCacheUpdater);
+	return *mCacheUpdater;
+}
+
+void aiva::layer1::ShaderBuffer::InitializeCacheUpdater()
+{
+	mCacheUpdater = std::make_unique<CacheUpdaterType>();
+	aiva::utils::Asserts::CheckBool(mCacheUpdater);
+}
+
+void aiva::layer1::ShaderBuffer::TerminateCacheUpdater()
+{
+	aiva::utils::Asserts::CheckBool(mCacheUpdater);
+	mCacheUpdater = {};
+}
+
+std::shared_ptr<const aiva::layer1::ShaderStruct> const& aiva::layer1::ShaderBuffer::Struct() const
+{
+	return mStruct;
+}
+
+aiva::layer1::ShaderBuffer& aiva::layer1::ShaderBuffer::Struct(std::shared_ptr<const ShaderStruct> const& referenceStruct)
+{
+	mStruct = referenceStruct;
+	mShaderStructs = {};
+	CacheUpdater().MarkAsChanged();
+
+	return *this;
+}
+
+aiva::layer1::ShaderBuffer& aiva::layer1::ShaderBuffer::Add(std::shared_ptr<const ShaderStruct> const& shaderStruct)
+{
+	aiva::utils::Asserts::CheckBool(mStruct);
+	aiva::utils::Asserts::CheckBool(shaderStruct);
+	aiva::utils::Asserts::CheckBool((*mStruct).HasSameFields(*shaderStruct));
+
+	mShaderStructs.push_back(shaderStruct);
+	CacheUpdater().MarkAsChanged();
+
+	return *this;
+}
+
+std::shared_ptr<const aiva::layer1::ShaderStruct> const& aiva::layer1::ShaderBuffer::Get(std::size_t index) const
+{
+	return mShaderStructs.at(index);
+}
+
+std::size_t aiva::layer1::ShaderBuffer::Num() const
+{
+	return mShaderStructs.size();
+}
+
+std::size_t aiva::layer1::ShaderBuffer::ByteStride() const
+{
+	aiva::utils::Asserts::CheckBool(mStruct);
+	return mStruct->SerializeToBinary().size();
 }
 
 std::vector<std::byte> aiva::layer1::ShaderBuffer::SerializeToBinary() const
 {
-	std::vector<std::byte> totalBytes{};
+	auto totalBytes = std::vector<std::byte>{};
 
-	for (const auto& shaderStruct : mShaderStructs)
+	for (auto const& shaderStruct : mShaderStructs)
 	{
 		aiva::utils::Asserts::CheckBool(shaderStruct);
 
@@ -38,30 +99,4 @@ std::vector<std::byte> aiva::layer1::ShaderBuffer::SerializeToBinary() const
 	}
 
 	return totalBytes;
-}
-
-std::size_t aiva::layer1::ShaderBuffer::ByteStride() const
-{
-	aiva::utils::Asserts::CheckBool(mReferenceStruct);
-	return mReferenceStruct->SerializeToBinary().size();
-}
-
-aiva::layer1::ShaderBuffer& aiva::layer1::ShaderBuffer::Add(std::shared_ptr<ShaderStruct> const& shaderStruct)
-{
-	aiva::utils::Asserts::CheckBool(mReferenceStruct);
-	aiva::utils::Asserts::CheckBool(shaderStruct);
-	aiva::utils::Asserts::CheckBool((*mReferenceStruct).HasSameFields(*shaderStruct));
-
-	mShaderStructs.push_back(shaderStruct);
-	return *this;
-}
-
-std::shared_ptr<const aiva::layer1::ShaderStruct> const& aiva::layer1::ShaderBuffer::Get(std::size_t index) const
-{
-	return mShaderStructs.at(index);
-}
-
-std::size_t aiva::layer1::ShaderBuffer::Num() const
-{
-	return mShaderStructs.size();
 }

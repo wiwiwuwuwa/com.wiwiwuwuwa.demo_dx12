@@ -1,0 +1,30 @@
+struct t_input
+{
+    uint vertex_id : SV_VertexID;
+};
+
+struct t_output
+{
+    float4 position : SV_Position;
+};
+
+struct t_index_input
+{
+    uint index;
+};
+
+StructuredBuffer<t_index_input> indices : register(t0);
+
+t_output main(t_input IN)
+{
+    const float4 positions[] =
+    {
+        { -0.5, -0.5, 0.5, 1.0 },
+        { 0.0, 0.5, 0.5, 1.0 },
+        { 0.5, -0.5, 0.5, 1.0 },
+    };
+
+    t_output OUT;
+    OUT.position = positions[indices[IN.vertex_id].index];
+    return OUT;
+}

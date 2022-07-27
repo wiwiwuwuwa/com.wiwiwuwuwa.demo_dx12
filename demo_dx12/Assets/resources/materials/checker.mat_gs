@@ -1,0 +1,4 @@
+{
+    "vertex_shader": "resources\\shaders\\checker.hlsl_vs",
+    "fragment_shader": "resources\\shaders\\checker.hlsl_ps"
+}

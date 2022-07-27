@@ -42,6 +42,9 @@
     <ClCompile Include="Sources\aiva\layer1\e_gpu_fill_mode.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_gpu_cull_mode.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_gpu_comparison_func.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gca_draw_mesh.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\e_gpu_primitive_topology.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gca_set_viewports.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -111,6 +114,9 @@
     <ClInclude Include="Sources\aiva\layer1\e_gpu_fill_mode.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_cull_mode.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_comparison_func.h" />
+    <ClInclude Include="Sources\aiva\layer1\gca_draw_mesh.h" />
+    <ClInclude Include="Sources\aiva\layer1\e_gpu_primitive_topology.h" />
+    <ClInclude Include="Sources\aiva\layer1\gca_set_viewports.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">
@@ -149,6 +155,9 @@
     <None Include="Assets\resources\materials\checker.mat_cs" />
     <None Include="Assets\resources\shaders\checker.hlsl_cs" />
     <None Include="demo_dx12_TemporaryKey.pfx" />
+    <None Include="Assets\resources\materials\checker.mat_gs" />
+    <None Include="Assets\resources\shaders\checker.hlsl_ps" />
+    <None Include="Assets\resources\shaders\checker.hlsl_vs" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme.txt" />

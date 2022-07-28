@@ -8,8 +8,16 @@ namespace aiva::layer1
 {
 	struct GrTexture2DDesc final
 	{
-		// ----------------------------------------------------
-		// Data Layout
+	// ----------------------------------------------------
+	// Constructors
+
+	public:
+		GrTexture2DDesc();
+
+		GrTexture2DDesc(winrt::com_ptr<ID3D12Resource> const& resource);
+
+	// ----------------------------------------------------
+	// Data Layout
 
 	public:
 		EGpuResourceBufferFormat BufferFormat{};
@@ -18,8 +26,8 @@ namespace aiva::layer1
 
 		std::uint64_t Height{};
 
-		// ----------------------------------------------------
-		// Features
+	// ----------------------------------------------------
+	// Features
 
 	public:
 		bool SupportDepthStencil{};

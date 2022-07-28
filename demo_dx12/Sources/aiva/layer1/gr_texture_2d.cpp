@@ -4,67 +4,89 @@
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/graphic_hardware.h>
 #include <aiva/utils/asserts.h>
+#include <aiva/utils/t_cache_updater.h>
 
-aiva::layer1::GrTexture2D::GrTexture2D(aiva::layer1::Engine const& engine, GrTexture2DDesc const& desc) : mEngine{ engine }
+aiva::layer1::GrTexture2D::GrTexture2D(Engine const& engine) : mEngine{ engine }
 {
-	Desc(desc);
+	InitializeCacheUpdater();
+	InitializeInternalResources();
+}
+
+aiva::layer1::GrTexture2D::GrTexture2D(Engine const& engine, GrTexture2DDesc const& desc) : GrTexture2D(engine)
+{
+	Desc(desc, true);
+}
+
+aiva::layer1::GrTexture2D::GrTexture2D(Engine const& engine, winrt::com_ptr<ID3D12Resource> const& resource) : GrTexture2D(engine)
+{
+	winrt::check_bool(resource);
+
+	Desc(resource, false);
+	InternalResource(resource);
 }
 
 aiva::layer1::GrTexture2D::~GrTexture2D()
 {
-
+	TerminateInternalResources();
+	TerminateCacheUpdater();
 }
 
-aiva::layer1::GrTexture2DDesc aiva::layer1::GrTexture2D::Desc() const
+aiva::layer1::GrTexture2D::CacheUpdaterType& aiva::layer1::GrTexture2D::CacheUpdater() const
 {
-	winrt::com_ptr<ID3D12Resource> const resource = mInternalResource;
-	winrt::check_bool(resource);
-
-	GrTexture2DDesc desc{};
-
-	{
-		D3D12_HEAP_PROPERTIES heapProperties{};
-		D3D12_HEAP_FLAGS heapFlags{};
-		winrt::check_hresult(resource->GetHeapProperties(&heapProperties, &heapFlags));
-
-		desc.SupportShaderAtomics = heapFlags & D3D12_HEAP_FLAG_ALLOW_SHADER_ATOMICS;
-	}
-
-	{
-		D3D12_RESOURCE_DESC resourceDesc = resource->GetDesc();
-
-		desc.BufferFormat = FromInternalEnum(resourceDesc.Format);
-		desc.Width = resourceDesc.Width;
-		desc.Height = resourceDesc.Height;
-		desc.SupportDepthStencil = resourceDesc.Flags & D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
-		desc.SupportMipMapping = resourceDesc.MipLevels != 1;
-		desc.SupportRenderTarget = resourceDesc.Flags & D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
-		desc.SupportUnorderedAccess = resourceDesc.Flags & D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
-	}
-
-	return desc;
+	aiva::utils::Asserts::CheckBool(mCacheUpdater);
+	return *mCacheUpdater;
 }
 
-aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::Desc(GrTexture2DDesc const& desc)
+void aiva::layer1::GrTexture2D::InitializeCacheUpdater()
 {
-	UpdateInternalResource(desc);
+	mCacheUpdater = std::make_unique<CacheUpdaterType>();
+	aiva::utils::Asserts::CheckBool(mCacheUpdater);
+}
+
+void aiva::layer1::GrTexture2D::TerminateCacheUpdater()
+{
+	aiva::utils::Asserts::CheckBool(mCacheUpdater);
+	mCacheUpdater = {};
+}
+
+std::optional<aiva::layer1::GrTexture2DDesc> const& aiva::layer1::GrTexture2D::Desc() const
+{
+	return mDesc;
+}
+
+aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::Desc(std::optional<GrTexture2DDesc> const& desc)
+{
+	return Desc(desc, true);
+}
+
+aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::Desc(std::optional<GrTexture2DDesc> const& desc, bool const markAsChanged)
+{
+	mDesc = desc;
+
+	if (markAsChanged)
+	{
+		CacheUpdater().MarkAsChanged();
+	}
+
 	return *this;
 }
 
-winrt::com_ptr<ID3D12Resource> const& aiva::layer1::GrTexture2D::InternalResource()
+void aiva::layer1::GrTexture2D::InitializeInternalResources()
 {
-	winrt::com_ptr<ID3D12Resource> const resource = mInternalResource;
-	winrt::check_bool(resource);
-
-	return resource;
+	CacheUpdater().FlushExecutors().connect(boost::bind(&GrTexture2D::RefreshInternalResources, this));
 }
 
-aiva::utils::EvAction& aiva::layer1::GrTexture2D::OnInternalResourceUpdated()
+void aiva::layer1::GrTexture2D::TerminateInternalResources()
 {
-	return mOnInternalResourceUpdated;
+	CacheUpdater().FlushExecutors().disconnect(boost::bind(&GrTexture2D::RefreshInternalResources, this));
 }
 
-void aiva::layer1::GrTexture2D::UpdateInternalResource(GrTexture2DDesc const& desc)
+void aiva::layer1::GrTexture2D::RefreshInternalResources()
+{
+	mInternalResource = Desc() ? CreateInternalResource(mEngine, *Desc()) : decltype(mInternalResource){};
+}
+
+winrt::com_ptr<ID3D12Resource> aiva::layer1::GrTexture2D::CreateInternalResource(Engine const& engine, GrTexture2DDesc const& desc)
 {
 	aiva::utils::Asserts::CheckBool(desc.Width > 0);
 	aiva::utils::Asserts::CheckBool(desc.Height > 0);
@@ -74,7 +96,7 @@ void aiva::layer1::GrTexture2D::UpdateInternalResource(GrTexture2DDesc const& de
 	aiva::utils::Asserts::CheckBool(!(desc.SupportRenderTarget && desc.SupportDepthStencil));
 	aiva::utils::Asserts::CheckBool(!(desc.SupportDepthStencil && desc.SupportUnorderedAccess));
 
-	auto const& device = mEngine.GraphicHardware().Device();
+	auto const& device = engine.GraphicHardware().Device();
 	winrt::check_bool(device);
 
 	D3D12_HEAP_PROPERTIES heapProperties{};
@@ -109,7 +131,16 @@ void aiva::layer1::GrTexture2D::UpdateInternalResource(GrTexture2DDesc const& de
 	winrt::check_hresult(device->CreateCommittedResource(&heapProperties, heapFlags, &resourceDesc, resourceStates, nullptr, IID_PPV_ARGS(&resource)));
 
 	winrt::check_bool(resource);
-	mInternalResource = resource;
+	return resource;
+}
 
-	OnInternalResourceUpdated()();
+winrt::com_ptr<ID3D12Resource> const aiva::layer1::GrTexture2D::InternalResource()
+{
+	CacheUpdater().FlushChanges();
+	return mInternalResource;
+}
+
+aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::InternalResource(winrt::com_ptr<ID3D12Resource> const& resource)
+{
+	mInternalResource = resource;
 }

@@ -10,6 +10,12 @@ namespace aiva::layer1
 	struct Engine;
 }
 
+namespace aiva::utils
+{
+	template <typename, typename>
+	struct TCacheUpdater;
+}
+
 namespace aiva::layer1
 {
 	struct GrTexture2D final : private boost::noncopyable, public std::enable_shared_from_this<GrTexture2D>, public aiva::layer1::IGpuResource
@@ -22,7 +28,11 @@ namespace aiva::layer1
 		static std::shared_ptr<GrTexture2D> Create(TArgs&&... args);
 
 	private:
+		GrTexture2D(Engine const& engine);
+
 		GrTexture2D(Engine const& engine, GrTexture2DDesc const& desc);
+
+		GrTexture2D(Engine const& engine, winrt::com_ptr<ID3D12Resource> const& resource);
 
 	public:
 		~GrTexture2D();
@@ -31,28 +41,63 @@ namespace aiva::layer1
 		Engine const& mEngine;
 
 	// ----------------------------------------------------
+	// Cache Refresh
+
+	public:
+		enum class EDirtyFlags
+		{
+			None = 0,
+			All = 1,
+		};
+
+		using CacheUpdaterType = aiva::utils::TCacheUpdater<EDirtyFlags, GrTexture2D>;
+
+	public:
+		CacheUpdaterType& CacheUpdater() const;
+
+	private:
+		void InitializeCacheUpdater();
+
+		void TerminateCacheUpdater();
+
+	private:
+		std::unique_ptr<CacheUpdaterType> mCacheUpdater{};
+
+	// ----------------------------------------------------
 	// High-Level Data
 
 	public:
-		GrTexture2DDesc Desc() const;
+		std::optional<GrTexture2DDesc> const& Desc() const;
 
-		GrTexture2D& Desc(GrTexture2DDesc const& desc);
+		GrTexture2D& Desc(std::optional<GrTexture2DDesc> const& desc);
+
+	private:
+		GrTexture2D& Desc(std::optional<GrTexture2DDesc> const& desc, bool const markAsChanged);
+
+	private:
+		std::optional<GrTexture2DDesc> mDesc{};
 
 	// ----------------------------------------------------
 	// Low-Level Data
 
 	public:
-		winrt::com_ptr<ID3D12Resource> const& InternalResource();
-
-		aiva::utils::EvAction& OnInternalResourceUpdated();
+		winrt::com_ptr<ID3D12Resource> const InternalResource();
 
 	private:
-		void UpdateInternalResource(GrTexture2DDesc const& desc);
+		GrTexture2D& InternalResource(winrt::com_ptr<ID3D12Resource> const& resource);
+
+	private:
+		void InitializeInternalResources();
+
+		void TerminateInternalResources();
+
+	private:
+		void RefreshInternalResources();
+
+		static winrt::com_ptr<ID3D12Resource> CreateInternalResource(Engine const& engine, GrTexture2DDesc const& desc);
 
 	private:
 		winrt::com_ptr<ID3D12Resource> mInternalResource{};
-
-		aiva::utils::EvAction mOnInternalResourceUpdated{};
 	};
 }
 

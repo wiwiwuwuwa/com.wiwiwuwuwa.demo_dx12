@@ -154,7 +154,10 @@ void aiva::layer1::GcaDrawMesh::ExecuteDrawIndexedInstanced(Engine const& engine
 
 	auto const& indicesView = resources.ResourceView<GrvSrvToBuffer>(MeshIndicesKey);
 	aiva::utils::Asserts::CheckBool(indicesView);
+	auto const& indicesNum = indicesView->Buffer().Num();
 
-	//commandList->DrawIndexedInstanced(indicesView->Buffer().Num(), 1, 0, 0, 0);
-	commandList->DrawInstanced(indicesView->Buffer().Num(), 1, 0, 0);
+	auto const& instancesView = resources.ResourceView<GrvSrvToBuffer>(MeshInstancesKey);
+	auto const& instancesNum = instancesView ? instancesView->Buffer().Num() : std::size_t{ 1 };
+
+	commandList->DrawInstanced(indicesNum, instancesNum, 0, 0);
 }

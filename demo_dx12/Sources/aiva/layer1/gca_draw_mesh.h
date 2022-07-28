@@ -46,5 +46,7 @@ namespace aiva::layer1
 		EGpuPrimitiveTopology MeshTopology{};
 
 		std::string MeshIndicesKey{};
+
+		std::string MeshInstancesKey{};
 	};
 }

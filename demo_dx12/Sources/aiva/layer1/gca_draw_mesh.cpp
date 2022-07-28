@@ -58,6 +58,10 @@ void aiva::layer1::GcaDrawMesh::Execute(Engine const& engine) const
 	ExecuteSetGraphicRootSignature(engine);
 	ExecuteSetDescriptorHeaps(engine);
 	ExecuteIASetPrimitiveTopology(engine);
+
+	commandList->IASetIndexBuffer(nullptr);
+	commandList->IASetVertexBuffers(0, 0, nullptr);
+
 	ExecuteDrawIndexedInstanced(engine);
 
 	{
@@ -117,8 +121,8 @@ void aiva::layer1::GcaDrawMesh::ExecuteSetDescriptorHeaps(Engine const& engine) 
 
 	commandList->SetDescriptorHeaps(unpackedHeaps.size(), unpackedHeaps.size() > 0 ? unpackedHeaps.data() : nullptr);
 
-	//for (std::size_t i = {}; i < packedHeaps.size(); i++)
-	//	commandList->SetGraphicsRootDescriptorTable(i, packedHeaps[i]->GetGPUDescriptorHandleForHeapStart());
+	for (std::size_t i = {}; i < packedHeaps.size(); i++)
+		commandList->SetGraphicsRootDescriptorTable(i, packedHeaps[i]->GetGPUDescriptorHandleForHeapStart());
 }
 
 void aiva::layer1::GcaDrawMesh::ExecuteIASetPrimitiveTopology(Engine const& engine) const
@@ -142,5 +146,6 @@ void aiva::layer1::GcaDrawMesh::ExecuteDrawIndexedInstanced(Engine const& engine
 	auto const& indicesView = resources.ResourceView<GrvSrvToBuffer>(MeshIndicesKey);
 	aiva::utils::Asserts::CheckBool(indicesView);
 
-	commandList->DrawIndexedInstanced(indicesView->Buffer().Num(), 1, 0, 0, 0);
+	//commandList->DrawIndexedInstanced(indicesView->Buffer().Num(), 1, 0, 0, 0);
+	commandList->DrawInstanced(indicesView->Buffer().Num(), 1, 0, 0);
 }

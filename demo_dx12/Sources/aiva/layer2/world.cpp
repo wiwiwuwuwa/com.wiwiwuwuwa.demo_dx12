@@ -78,6 +78,7 @@ void aiva::layer2::World::TerminateSystems()
 
 #include <aiva/layer1/gr_buffer.h>
 #include <aiva/layer1/gca_draw_mesh.h>
+#include <aiva/layer1/gca_set_viewports.h>
 #include <aiva/layer1/grv_srv_to_buffer.h>
 #include <aiva/layer1/ro_material_graphic.h>
 #include <aiva/layer1/shader_buffer.h>
@@ -138,6 +139,10 @@ void aiva::layer2::World::InitializeRender()
 void aiva::layer2::World::TickRender()
 {
 	aiva::utils::Asserts::CheckBool(mEngine);
+
+	auto& const gcaSetViewports = aiva::layer1::GcaSetViewports{};
+
+	mEngine->GraphicExecutor().ExecuteCommand(gcaSetViewports);
 
 	auto &const gcaDrawMesh = aiva::layer1::GcaDrawMesh{};
 	gcaDrawMesh.Material = GLOBAL_GRAPHIC_MATERIAL;

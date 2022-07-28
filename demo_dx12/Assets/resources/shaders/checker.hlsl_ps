@@ -1,9 +1,14 @@
+struct t_input
+{
+    float4 position : SV_Position;
+};
+
 struct t_output
 {
     float4 color0 : SV_Target;
 };
 
-t_output main()
+t_output main(t_input IN)
 {
     t_output OUT;
     OUT.color0 = 1.0;

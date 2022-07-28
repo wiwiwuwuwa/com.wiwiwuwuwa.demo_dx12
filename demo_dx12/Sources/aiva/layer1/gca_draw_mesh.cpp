@@ -29,17 +29,17 @@ void aiva::layer1::GcaDrawMesh::Execute(Engine const& engine) const
 	UINT const currentBackBufferIndex = swapChain->GetCurrentBackBufferIndex();
 	winrt::com_ptr<ID3D12Resource> const currentBackBufferResource = renderTargetResources.at(currentBackBufferIndex);
 
-	{
-		D3D12_RESOURCE_BARRIER openBarrier{};
-		openBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-		openBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-		openBarrier.Transition.pResource = currentBackBufferResource.get();
-		openBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-		openBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-		openBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	//{
+	//	D3D12_RESOURCE_BARRIER openBarrier{};
+	//	openBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	//	openBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	//	openBarrier.Transition.pResource = currentBackBufferResource.get();
+	//	openBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+	//	openBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+	//	openBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
 
-		commandList->ResourceBarrier(1, &openBarrier);
-	}
+	//	commandList->ResourceBarrier(1, &openBarrier);
+	//}
 
 	{
 		SIZE_T const currentBackBufferHeapStart = renderTargetHeap->GetCPUDescriptorHandleForHeapStart().ptr;
@@ -52,8 +52,6 @@ void aiva::layer1::GcaDrawMesh::Execute(Engine const& engine) const
 		commandList->OMSetRenderTargets(1, &currentBackBufferHandle, false, nullptr);
 	}
 
-
-
 	ExecuteSetPipelineState(engine);
 	ExecuteSetGraphicRootSignature(engine);
 	ExecuteSetDescriptorHeaps(engine);
@@ -64,17 +62,17 @@ void aiva::layer1::GcaDrawMesh::Execute(Engine const& engine) const
 
 	ExecuteDrawIndexedInstanced(engine);
 
-	{
-		D3D12_RESOURCE_BARRIER closeBarrier{};
-		closeBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-		closeBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-		closeBarrier.Transition.pResource = currentBackBufferResource.get();
-		closeBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-		closeBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-		closeBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
+	//{
+	//	D3D12_RESOURCE_BARRIER closeBarrier{};
+	//	closeBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	//	closeBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	//	closeBarrier.Transition.pResource = currentBackBufferResource.get();
+	//	closeBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+	//	closeBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	//	closeBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
 
-		commandList->ResourceBarrier(1, &closeBarrier);
-	}
+	//	commandList->ResourceBarrier(1, &closeBarrier);
+	//}
 }
 
 void aiva::layer1::GcaDrawMesh::ExecuteSetPipelineState(Engine const& engine) const

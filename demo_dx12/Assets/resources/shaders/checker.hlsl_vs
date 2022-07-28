@@ -1,44 +1,30 @@
-struct t_input
+struct main_input
 {
-    uint vertex_id : SV_VertexID;
+    uint index_id : SV_VertexID;
 };
 
-struct t_output
+struct main_output
 {
     float4 position : SV_Position;
 };
 
-struct t_index_input
+struct t0_buffer_struct
 {
-    uint index;
+    uint4 vertex_id;
 };
 
-StructuredBuffer<t_index_input> indices : register(t0);
+StructuredBuffer<t0_buffer_struct> t0_buffer : register(t0);
 
-t_output main(t_input IN)
+main_output main(main_input IN)
 {
-/*
-    const float4 positions[] =
+    float4 positions[3] =
     {
         { -0.5, -0.5, 0.5, 1.0 },
         { 0.0, 0.5, 0.5, 1.0 },
         { 0.5, -0.5, 0.5, 1.0 },
     };
 
-    t_output OUT;
-    //OUT.position = positions[IN.vertex_id]; //positions[indices[IN.vertex_id].index];
-    OUT.position = positions[indices[IN.vertex_id].index];
-    return OUT;
-*/
-
-    t_output OUT;
-
-    if (IN.vertex_id == 0)
-        OUT.position = float4(0.0, 0.5, 0.5, 1.0);
-    else if (IN.vertex_id == 2)
-        OUT.position = float4(0.5, -0.5, 0.5, 1.0);
-    else if (IN.vertex_id == 1)
-        OUT.position = float4(-0.5, -0.5, 0.5, 1.0);
-
+    main_output OUT;
+    OUT.position = positions[t0_buffer[IN.index_id].vertex_id.x];
     return OUT;
 }

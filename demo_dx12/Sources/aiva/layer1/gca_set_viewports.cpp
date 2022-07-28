@@ -12,8 +12,8 @@ void aiva::layer1::GcaSetViewports::Execute(Engine const& engine) const
 	auto viewport = D3D12_VIEWPORT{};
 	viewport.TopLeftX = 0.0f;
 	viewport.TopLeftY = 0.0f;
-	viewport.Width = 100.0f;
-	viewport.Height = 100.0f;
+	viewport.Width = 640.0f;
+	viewport.Height = 480.0f;
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
 
@@ -22,8 +22,8 @@ void aiva::layer1::GcaSetViewports::Execute(Engine const& engine) const
 	auto rect = D3D12_RECT{};
 	rect.left = 0;
 	rect.top = 0;
-	rect.right = 100;
-	rect.bottom = 100;
+	rect.right = 640;
+	rect.bottom = 480;
 
 	commandList->RSSetScissorRects(1, &rect);
 }

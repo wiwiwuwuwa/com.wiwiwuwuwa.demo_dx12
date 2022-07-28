@@ -30,6 +30,10 @@ namespace aiva::layer1
 	private:
 		GrBuffer(Engine const& engine);
 
+		GrBuffer(Engine const& engine, GrBufferDesc const& desc);
+
+		GrBuffer(Engine const& engine, winrt::com_ptr<ID3D12Resource> const& resource);
+
 	public:
 		~GrBuffer();
 
@@ -68,6 +72,9 @@ namespace aiva::layer1
 		GrBuffer& Desc(std::optional<GrBufferDesc> const& desc);
 
 	private:
+		GrBuffer& Desc(std::optional<GrBufferDesc> const& desc, bool const markAsChanged);
+
+	private:
 		std::optional<GrBufferDesc> mDesc{};
 
 	// ----------------------------------------------------
@@ -75,6 +82,9 @@ namespace aiva::layer1
 
 	public:
 		winrt::com_ptr<ID3D12Resource> const InternalResource();
+
+	private:
+		GrBuffer& InternalResource(winrt::com_ptr<ID3D12Resource> const& resource);
 
 	private:
 		void InitializeInternalResources();

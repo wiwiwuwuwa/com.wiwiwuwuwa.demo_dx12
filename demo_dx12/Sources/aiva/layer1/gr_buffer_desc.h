@@ -8,6 +8,14 @@ namespace aiva::layer1
 	struct GrBufferDesc final
 	{
 	// ----------------------------------------------------
+	// Constructors
+		
+	public:
+		GrBufferDesc();
+
+		GrBufferDesc(winrt::com_ptr<ID3D12Resource> const& resource);
+
+	// ----------------------------------------------------
 	// Data Layout
 
 	public:

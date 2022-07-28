@@ -45,6 +45,7 @@
     <ClCompile Include="Sources\aiva\layer1\gca_draw_mesh.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_gpu_primitive_topology.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_set_viewports.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gr_buffer_desc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

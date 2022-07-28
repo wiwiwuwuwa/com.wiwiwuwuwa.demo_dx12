@@ -12,6 +12,19 @@ aiva::layer1::GrBuffer::GrBuffer(Engine const& engine) : mEngine{ engine }
 	InitializeInternalResources();
 }
 
+aiva::layer1::GrBuffer::GrBuffer(Engine const& engine, GrBufferDesc const& desc) : GrBuffer(engine)
+{
+	Desc(desc, true);
+}
+
+aiva::layer1::GrBuffer::GrBuffer(Engine const& engine, winrt::com_ptr<ID3D12Resource> const& resource) : GrBuffer(engine)
+{
+	winrt::check_bool(resource);
+
+	Desc(resource, false);
+	InternalResource(resource);
+}
+
 aiva::layer1::GrBuffer::~GrBuffer()
 {
 	TerminateInternalResources();
@@ -43,8 +56,17 @@ std::optional<aiva::layer1::GrBufferDesc> const& aiva::layer1::GrBuffer::Desc() 
 
 aiva::layer1::GrBuffer& aiva::layer1::GrBuffer::Desc(std::optional<GrBufferDesc> const& desc)
 {
+	return Desc(desc, true);
+}
+
+aiva::layer1::GrBuffer& aiva::layer1::GrBuffer::Desc(std::optional<GrBufferDesc> const& desc, bool const markAsChanged)
+{
 	mDesc = desc;
-	CacheUpdater().MarkAsChanged();
+
+	if (markAsChanged)
+	{
+		CacheUpdater().MarkAsChanged();
+	}
 
 	return *this;
 }
@@ -111,4 +133,9 @@ winrt::com_ptr<ID3D12Resource> const aiva::layer1::GrBuffer::InternalResource()
 {
 	CacheUpdater().FlushChanges();
 	return mInternalResource;
+}
+
+aiva::layer1::GrBuffer& aiva::layer1::GrBuffer::InternalResource(winrt::com_ptr<ID3D12Resource> const& resource)
+{
+	mInternalResource = resource;
 }

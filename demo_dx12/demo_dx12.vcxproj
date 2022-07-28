@@ -271,6 +271,7 @@
     <ClCompile Include="Sources\aiva\layer1\grv_uav_to_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_uav_to_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gr_buffer.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gr_buffer_desc.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_system.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_material_compute.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_material_graphic.cpp" />

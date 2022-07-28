@@ -7,9 +7,9 @@
 namespace aiva::layer1
 {
 	struct Engine;
+	struct MaterialPipelineDescriptor;
 	struct RoShaderFragment;
 	struct RoShaderVertex;
-	struct ShaderPipelineDescriptor;
 	struct ShaderResourceDescriptor;
 }
 
@@ -94,7 +94,7 @@ namespace aiva::layer1
 	// Pipeline Descriptor
 
 	public:
-		ShaderPipelineDescriptor& PipelineDescriptor() const;
+		MaterialPipelineDescriptor& PipelineDescriptor() const;
 
 	private:
 		void InitializePipelineDescriptor();
@@ -105,7 +105,7 @@ namespace aiva::layer1
 		void OnPipelineDescriptorMarkedAsChanged();
 
 	private:
-		std::shared_ptr<ShaderPipelineDescriptor> mPipelineDescriptor{};
+		std::shared_ptr<MaterialPipelineDescriptor> mPipelineDescriptor{};
 
 	// ----------------------------------------------------
 	// Resource Descriptor

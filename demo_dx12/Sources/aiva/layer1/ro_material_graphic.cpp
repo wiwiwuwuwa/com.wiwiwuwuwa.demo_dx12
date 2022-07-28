@@ -3,10 +3,10 @@
 
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/graphic_hardware.h>
+#include <aiva/layer1/material_pipeline_descriptor.h>
 #include <aiva/layer1/resource_system.h>
 #include <aiva/layer1/ro_shader_fragment.h>
 #include <aiva/layer1/ro_shader_vertex.h>
-#include <aiva/layer1/shader_pipeline_descriptor.h>
 #include <aiva/layer1/shader_resource_descriptor.h>
 #include <aiva/utils/t_cache_updater.h>
 
@@ -86,7 +86,7 @@ aiva::layer1::RoMaterialGraphic& aiva::layer1::RoMaterialGraphic::FragmentShader
 	return *this;
 }
 
-aiva::layer1::ShaderPipelineDescriptor& aiva::layer1::RoMaterialGraphic::PipelineDescriptor() const
+aiva::layer1::MaterialPipelineDescriptor& aiva::layer1::RoMaterialGraphic::PipelineDescriptor() const
 {
 	aiva::utils::Asserts::CheckBool(mPipelineDescriptor);
 	return *mPipelineDescriptor;

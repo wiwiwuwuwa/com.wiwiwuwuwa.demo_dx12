@@ -80,9 +80,9 @@ void aiva::layer2::World::TerminateSystems()
 #include <aiva/layer1/gca_draw_mesh.h>
 #include <aiva/layer1/gca_set_viewports.h>
 #include <aiva/layer1/grv_srv_to_buffer.h>
+#include <aiva/layer1/material_pipeline_descriptor.h>
 #include <aiva/layer1/ro_material_graphic.h>
 #include <aiva/layer1/shader_buffer.h>
-#include <aiva/layer1/shader_pipeline_descriptor.h>
 #include <aiva/layer1/shader_resource_descriptor.h>
 #include <aiva/layer1/shader_struct.h>
 

@@ -204,7 +204,7 @@
     <ClInclude Include="Sources\aiva\layer1\ro_shader_fragment.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_shader_vertex.h" />
     <ClInclude Include="Sources\aiva\layer1\shader_buffer.h" />
-    <ClInclude Include="Sources\aiva\layer1\shader_pipeline_descriptor.h" />
+    <ClInclude Include="Sources\aiva\layer1\material_pipeline_descriptor.h" />
     <ClInclude Include="Sources\aiva\layer1\shader_resource_descriptor.h" />
     <ClInclude Include="Sources\aiva\utils\math_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\resource_system.h" />
@@ -281,7 +281,7 @@
     <ClCompile Include="Sources\aiva\layer1\ro_shader_fragment.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_shader_vertex.cpp" />
     <ClCompile Include="Sources\aiva\layer1\shader_buffer.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\shader_pipeline_descriptor.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\material_pipeline_descriptor.cpp" />
     <ClCompile Include="Sources\aiva\layer1\shader_resource_descriptor.cpp" />
     <ClCompile Include="Sources\aiva\layer1\shader_struct.cpp" />
     <ClCompile Include="Sources\aiva\layer2\scene_actor.cpp" />

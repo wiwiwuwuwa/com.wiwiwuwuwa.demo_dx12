@@ -20,20 +20,20 @@ namespace aiva::utils
 
 namespace aiva::layer1
 {
-	struct ShaderPipelineDescriptor final : private boost::noncopyable, public std::enable_shared_from_this<ShaderPipelineDescriptor>
+	struct MaterialPipelineDescriptor final : private boost::noncopyable, public std::enable_shared_from_this<MaterialPipelineDescriptor>
 	{
 	// ----------------------------------------------------
 	// Main
 
 	public:
 		template <typename... TArgs>
-		static std::shared_ptr<ShaderPipelineDescriptor> Create(TArgs&&... args);
+		static std::shared_ptr<MaterialPipelineDescriptor> Create(TArgs&&... args);
 
 	private:
-		ShaderPipelineDescriptor(Engine const& engine);
+		MaterialPipelineDescriptor(Engine const& engine);
 
 	public:
-		~ShaderPipelineDescriptor();
+		~MaterialPipelineDescriptor();
 
 	private:
 		Engine const& mEngine;
@@ -48,7 +48,7 @@ namespace aiva::layer1
 			All = 1,
 		};
 
-		using CacheUpdaterType = aiva::utils::TCacheUpdater<EDirtyFlags, ShaderPipelineDescriptor>;
+		using CacheUpdaterType = aiva::utils::TCacheUpdater<EDirtyFlags, MaterialPipelineDescriptor>;
 
 	public:
 		CacheUpdaterType& CacheUpdater() const;
@@ -67,7 +67,7 @@ namespace aiva::layer1
 	public:
 		EGpuFillMode FillMode() const;
 
-		ShaderPipelineDescriptor& FillMode(EGpuFillMode const fillMode);
+		MaterialPipelineDescriptor& FillMode(EGpuFillMode const fillMode);
 
 	private:
 		EGpuFillMode mFillMode{ EGpuFillMode::Solid };
@@ -78,7 +78,7 @@ namespace aiva::layer1
 	public:
 		EGpuCullMode CullMode() const;
 
-		ShaderPipelineDescriptor& CullMode(EGpuCullMode const cullMode);
+		MaterialPipelineDescriptor& CullMode(EGpuCullMode const cullMode);
 
 	private:
 		EGpuCullMode mCullMode{ EGpuCullMode::Back };
@@ -89,7 +89,7 @@ namespace aiva::layer1
 	public:
 		bool DepthTest() const;
 
-		ShaderPipelineDescriptor& DepthTest(bool const depthTest);
+		MaterialPipelineDescriptor& DepthTest(bool const depthTest);
 
 	private:
 		bool mDepthTest{ true };
@@ -100,7 +100,7 @@ namespace aiva::layer1
 	public:
 		bool DepthWrite() const;
 
-		ShaderPipelineDescriptor& DepthWrite(bool const depthWrite);
+		MaterialPipelineDescriptor& DepthWrite(bool const depthWrite);
 
 	private:
 		bool mDepthWrite{ true };
@@ -111,7 +111,7 @@ namespace aiva::layer1
 	public:
 		EGpuComparisonFunc DepthFunc() const;
 
-		ShaderPipelineDescriptor& DepthFunc(EGpuComparisonFunc const depthFunc);
+		MaterialPipelineDescriptor& DepthFunc(EGpuComparisonFunc const depthFunc);
 
 	private:
 		EGpuComparisonFunc mDepthFunc{ EGpuComparisonFunc::LessEqual };
@@ -122,7 +122,7 @@ namespace aiva::layer1
 	public:
 		std::vector<EGpuResourceBufferFormat> RenderTargets() const;
 
-		ShaderPipelineDescriptor& RenderTargets(std::vector<EGpuResourceBufferFormat> const& renderTargets);
+		MaterialPipelineDescriptor& RenderTargets(std::vector<EGpuResourceBufferFormat> const& renderTargets);
 
 	private:
 		std::vector<EGpuResourceBufferFormat> mRenderTargets = { EGpuResourceBufferFormat::R32G32B32A32_FLOAT };
@@ -133,7 +133,7 @@ namespace aiva::layer1
 	public:
 		EGpuResourceBufferFormat DepthTarget() const;
 
-		ShaderPipelineDescriptor& DepthTarget(EGpuResourceBufferFormat const depthTarget);
+		MaterialPipelineDescriptor& DepthTarget(EGpuResourceBufferFormat const depthTarget);
 
 	private:
 		EGpuResourceBufferFormat mDepthTarget{ EGpuResourceBufferFormat::D32_FLOAT };
@@ -143,7 +143,7 @@ namespace aiva::layer1
 // --------------------------------------------------------
 
 template <typename... TArgs>
-std::shared_ptr<aiva::layer1::ShaderPipelineDescriptor> aiva::layer1::ShaderPipelineDescriptor::Create(TArgs&&... args)
+std::shared_ptr<aiva::layer1::MaterialPipelineDescriptor> aiva::layer1::MaterialPipelineDescriptor::Create(TArgs&&... args)
 {
-	return std::shared_ptr<ShaderPipelineDescriptor>{new ShaderPipelineDescriptor{ std::forward<TArgs>(args)... }};
+	return std::shared_ptr<MaterialPipelineDescriptor>{new MaterialPipelineDescriptor{ std::forward<TArgs>(args)... }};
 }

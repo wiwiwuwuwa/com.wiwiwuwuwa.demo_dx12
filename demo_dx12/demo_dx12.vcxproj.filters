@@ -38,7 +38,7 @@
     <ClCompile Include="Sources\aiva\layer1\ro_material_graphic.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_shader_fragment.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_shader_vertex.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\shader_pipeline_descriptor.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\material_pipeline_descriptor.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_gpu_fill_mode.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_gpu_cull_mode.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_gpu_comparison_func.cpp" />
@@ -112,7 +112,7 @@
     <ClInclude Include="Sources\aiva\layer1\ro_material_graphic.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_shader_vertex.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_shader_fragment.h" />
-    <ClInclude Include="Sources\aiva\layer1\shader_pipeline_descriptor.h" />
+    <ClInclude Include="Sources\aiva\layer1\material_pipeline_descriptor.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_fill_mode.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_cull_mode.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_comparison_func.h" />

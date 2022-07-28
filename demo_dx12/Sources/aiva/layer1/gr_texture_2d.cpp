@@ -143,4 +143,5 @@ winrt::com_ptr<ID3D12Resource> const aiva::layer1::GrTexture2D::InternalResource
 aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::InternalResource(winrt::com_ptr<ID3D12Resource> const& resource)
 {
 	mInternalResource = resource;
+	return *this;
 }

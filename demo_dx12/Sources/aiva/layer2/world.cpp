@@ -1,12 +1,15 @@
 #include <pch.h>
 #include <aiva/layer2/world.h>
 
+#include <aiva/layer1/e_gpu_descriptor_heap_type.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gca_dispatch.h>
 #include <aiva/layer1/gca_do_everything.h>
 #include <aiva/layer1/graphic_executor.h>
 #include <aiva/layer1/graphic_pipeline.h>
 #include <aiva/layer1/resource_system.h>
+#include <aiva/layer1/resource_view_heap.h>
+#include <aiva/layer1/resource_view_table.h>
 #include <aiva/layer1/ro_material_compute.h>
 #include <aiva/layer2/scene_system.h>
 #include <aiva/utils/asserts.h>
@@ -123,6 +126,10 @@ void aiva::layer2::World::InitializeRender()
 		bufferView->Buffer().Add(indexStruct);
 	}
 
+	auto const& resourceHeap = aiva::layer1::ResourceViewHeap::Create(*mEngine);
+	resourceHeap->ResourceType(aiva::layer1::EGpuDescriptorHeapType::CbvSrvUav);
+	resourceHeap->ResourceView("t0_Indices", bufferView);
+
 	auto const& material = mEngine->ResourceSystem().GetResource<aiva::layer1::RoMaterialGraphic>("resources\\materials\\checker.mat_gs");
 	material->PipelineDescriptor().FillMode(aiva::layer1::EGpuFillMode::Solid);
 	material->PipelineDescriptor().CullMode(aiva::layer1::EGpuCullMode::None);
@@ -131,7 +138,7 @@ void aiva::layer2::World::InitializeRender()
 	material->PipelineDescriptor().DepthFunc(aiva::layer1::EGpuComparisonFunc::Always);
 	material->PipelineDescriptor().RenderTargets({ aiva::layer1::EGpuResourceBufferFormat::R8G8B8A8_UNORM });
 	material->PipelineDescriptor().DepthTarget(aiva::layer1::EGpuResourceBufferFormat::D32_FLOAT);
-	material->ResourceDescriptor().ResourceView("t0_Indices", bufferView);
+	material->ResourceDescriptor().ResourceTable().ResourceHeap(aiva::layer1::EGpuDescriptorHeapType::CbvSrvUav, resourceHeap);	
 
 	GLOBAL_GRAPHIC_MATERIAL = material;
 }

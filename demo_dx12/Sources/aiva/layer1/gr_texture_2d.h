@@ -50,7 +50,7 @@ namespace aiva::layer1
 			All = 1,
 		};
 
-		using CacheUpdaterType = aiva::utils::TCacheUpdater<EDirtyFlags, GrTexture2D>;
+		using CacheUpdaterType = aiva::utils::TCacheUpdater<GrTexture2D, EDirtyFlags>;
 
 	public:
 		CacheUpdaterType& CacheUpdater() const;

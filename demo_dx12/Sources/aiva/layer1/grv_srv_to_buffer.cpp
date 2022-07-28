@@ -1,6 +1,8 @@
 #include <pch.h>
 #include <aiva/layer1/grv_srv_to_buffer.h>
 
+#include <aiva/layer1/e_gpu_descriptor_heap_type.h>
+#include <aiva/layer1/e_gpu_resource_view_type.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gr_buffer.h>
 #include <aiva/layer1/graphic_hardware.h>
@@ -51,7 +53,7 @@ aiva::layer1::EGpuResourceViewType aiva::layer1::GrvSrvToBuffer::ViewType() cons
 	return EGpuResourceViewType::Srv;
 }
 
-void aiva::layer1::GrvSrvToBuffer::CreateInternalResourceView(D3D12_CPU_DESCRIPTOR_HANDLE const destination) const
+void aiva::layer1::GrvSrvToBuffer::CreateView(D3D12_CPU_DESCRIPTOR_HANDLE const destination) const
 {
 	CacheUpdater().FlushChanges();
 
@@ -73,9 +75,9 @@ void aiva::layer1::GrvSrvToBuffer::CreateInternalResourceView(D3D12_CPU_DESCRIPT
 	device->CreateShaderResourceView(directxBuffer.get(), &directxDesc.value(), destination);
 }
 
-boost::signals2::connection aiva::layer1::GrvSrvToBuffer::ConnectToMarkedAsChanged(boost::function<void()> const& listener) const
+aiva::utils::TEvAction<aiva::utils::ECacheFlags>& aiva::layer1::GrvSrvToBuffer::OnMarkAsChanged()
 {
-	return CacheUpdater().OnMarkAsChanged().connect([=](EDirtyFlags) { listener(); });
+	return CacheUpdater().OnMarkAsChanged();
 }
 
 std::optional<aiva::layer1::GrvSrvToBufferDesc> const& aiva::layer1::GrvSrvToBuffer::Desc() const

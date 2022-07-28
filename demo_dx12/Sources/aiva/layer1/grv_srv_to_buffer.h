@@ -7,6 +7,9 @@
 
 namespace aiva::layer1
 {
+	enum class EGpuDescriptorHeapType : std::uint8_t;
+	enum class EGpuResourceViewType : std::uint8_t;
+
 	struct Engine;
 	struct ShaderBuffer;
 	struct ShaderStruct;
@@ -14,7 +17,9 @@ namespace aiva::layer1
 
 namespace aiva::utils
 {
-	template <typename, typename>
+	enum class ECacheFlags : std::uint8_t;
+
+	template <typename, typename = ECacheFlags>
 	struct TCacheUpdater;
 }
 
@@ -42,13 +47,7 @@ namespace aiva::layer1
 	// Cache Refresh
 
 	public:
-		enum class EDirtyFlags
-		{
-			None = 0,
-			All = 1,
-		};
-
-		using CacheUpdaterType = aiva::utils::TCacheUpdater<EDirtyFlags, GrvSrvToBuffer>;
+		using CacheUpdaterType = aiva::utils::TCacheUpdater<GrvSrvToBuffer>;
 
 	public:
 		CacheUpdaterType& CacheUpdater() const;
@@ -69,9 +68,9 @@ namespace aiva::layer1
 
 		EGpuResourceViewType ViewType() const override;
 
-		void CreateInternalResourceView(D3D12_CPU_DESCRIPTOR_HANDLE const destination) const override;
+		void CreateView(D3D12_CPU_DESCRIPTOR_HANDLE const destination) const override;
 
-		boost::signals2::connection ConnectToMarkedAsChanged(boost::function<void()> const& listener) const override;
+		aiva::utils::TEvAction<aiva::utils::ECacheFlags>& OnMarkAsChanged() override;
 
 	// ----------------------------------------------------
 	// Desc Data

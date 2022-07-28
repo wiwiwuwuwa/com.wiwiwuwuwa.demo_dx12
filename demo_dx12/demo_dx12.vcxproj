@@ -200,12 +200,15 @@
     <ClInclude Include="Sources\aiva\layer1\i_graphic_command_sync.h" />
     <ClInclude Include="Sources\aiva\layer1\i_cpu_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\i_shader_value.h" />
+    <ClInclude Include="Sources\aiva\layer1\resource_view_heap.h" />
+    <ClInclude Include="Sources\aiva\layer1\resource_view_table.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_material_graphic.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_shader_fragment.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_shader_vertex.h" />
     <ClInclude Include="Sources\aiva\layer1\shader_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\material_pipeline_descriptor.h" />
     <ClInclude Include="Sources\aiva\layer1\shader_resource_descriptor.h" />
+    <ClInclude Include="Sources\aiva\utils\e_cache_flags.h" />
     <ClInclude Include="Sources\aiva\utils\math_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\resource_system.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_material_compute.h" />
@@ -274,6 +277,8 @@
     <ClCompile Include="Sources\aiva\layer1\gr_buffer_desc.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gr_texture_2d_desc.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_system.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\resource_view_heap.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\resource_view_table.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_material_compute.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_material_graphic.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_shader_compute.cpp" />

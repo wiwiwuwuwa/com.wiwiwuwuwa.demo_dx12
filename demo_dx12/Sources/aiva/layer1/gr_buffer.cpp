@@ -138,4 +138,5 @@ winrt::com_ptr<ID3D12Resource> const aiva::layer1::GrBuffer::InternalResource()
 aiva::layer1::GrBuffer& aiva::layer1::GrBuffer::InternalResource(winrt::com_ptr<ID3D12Resource> const& resource)
 {
 	mInternalResource = resource;
+	return *this;
 }

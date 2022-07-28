@@ -50,7 +50,7 @@ namespace aiva::layer1
 			All = 1,
 		};
 
-		using CacheUpdaterType = aiva::utils::TCacheUpdater<EDirtyFlags, GrBuffer>;
+		using CacheUpdaterType = aiva::utils::TCacheUpdater<GrBuffer, EDirtyFlags>;
 
 	public:
 		CacheUpdaterType& CacheUpdater() const;

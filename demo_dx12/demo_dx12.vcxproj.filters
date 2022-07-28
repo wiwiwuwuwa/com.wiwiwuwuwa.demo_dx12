@@ -47,6 +47,8 @@
     <ClCompile Include="Sources\aiva\layer1\gca_set_viewports.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gr_buffer_desc.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gr_texture_2d_desc.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\resource_view_heap.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\resource_view_table.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -119,6 +121,9 @@
     <ClInclude Include="Sources\aiva\layer1\gca_draw_mesh.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_primitive_topology.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_set_viewports.h" />
+    <ClInclude Include="Sources\aiva\layer1\resource_view_heap.h" />
+    <ClInclude Include="Sources\aiva\utils\e_cache_flags.h" />
+    <ClInclude Include="Sources\aiva\layer1\resource_view_table.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

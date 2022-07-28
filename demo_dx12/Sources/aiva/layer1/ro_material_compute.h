@@ -53,7 +53,7 @@ namespace aiva::layer1
 			All = 1,
 		};
 
-		using CacheUpdaterType = aiva::utils::TCacheUpdater<EDirtyFlags, RoMaterialCompute>;
+		using CacheUpdaterType = aiva::utils::TCacheUpdater<RoMaterialCompute, EDirtyFlags>;
 
 	public:
 		CacheUpdaterType& CacheUpdater() const;

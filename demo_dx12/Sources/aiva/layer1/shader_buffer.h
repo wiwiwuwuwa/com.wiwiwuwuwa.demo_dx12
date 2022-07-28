@@ -39,7 +39,7 @@ namespace aiva::layer1
 			All = 1,
 		};
 
-		using CacheUpdaterType = aiva::utils::TCacheUpdater<EDirtyFlags, ShaderBuffer>;
+		using CacheUpdaterType = aiva::utils::TCacheUpdater<ShaderBuffer, EDirtyFlags>;
 
 	public:
 		CacheUpdaterType& CacheUpdater() const;

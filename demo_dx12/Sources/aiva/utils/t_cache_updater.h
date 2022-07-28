@@ -2,12 +2,13 @@
 #include <pch.h>
 
 #include <aiva/utils/asserts.h>
+#include <aiva/utils/e_cache_flags.h>
 #include <aiva/utils/enum_utils.h>
 #include <aiva/utils/t_ev_action.h>
 
 namespace aiva::utils
 {
-	template <typename TDirtyFlags>
+	template <typename TDirtyFlags = ECacheFlags>
 	struct TCacheUpdaterBase : private boost::noncopyable
 	{
 	// ----------------------------------------------------
@@ -47,7 +48,7 @@ namespace aiva::utils
 		TEvAction<TDirtyFlags> mFlushExecutors{};
 	};
 
-	template <typename TDirtyFlags, typename TOwnerType>
+	template <typename TOwnerType, typename TDirtyFlags = ECacheFlags>
 	struct TCacheUpdater final : public TCacheUpdaterBase<TDirtyFlags>
 	{
 		friend TOwnerType;

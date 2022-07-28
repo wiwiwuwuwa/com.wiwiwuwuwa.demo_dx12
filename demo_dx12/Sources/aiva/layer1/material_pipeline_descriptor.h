@@ -48,7 +48,7 @@ namespace aiva::layer1
 			All = 1,
 		};
 
-		using CacheUpdaterType = aiva::utils::TCacheUpdater<EDirtyFlags, MaterialPipelineDescriptor>;
+		using CacheUpdaterType = aiva::utils::TCacheUpdater<MaterialPipelineDescriptor, EDirtyFlags>;
 
 	public:
 		CacheUpdaterType& CacheUpdater() const;

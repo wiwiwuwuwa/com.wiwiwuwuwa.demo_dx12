@@ -1,9 +1,18 @@
 #pragma once
 #include <pch.h>
 
-#include <aiva/layer1/e_gpu_descriptor_heap_type.h>
-#include <aiva/layer1/e_gpu_resource_view_type.h>
-#include <aiva/utils/ev_action.h>
+#include <aiva/utils/t_ev_action.h>
+
+namespace aiva::layer1
+{
+	enum class EGpuDescriptorHeapType : std::uint8_t;
+	enum class EGpuResourceViewType : std::uint8_t;
+}
+
+namespace aiva::utils
+{
+	enum class ECacheFlags : std::uint8_t;
+}
 
 namespace aiva::layer1
 {
@@ -27,8 +36,8 @@ namespace aiva::layer1
 	// Actions
 
 	public:
-		virtual void CreateInternalResourceView(D3D12_CPU_DESCRIPTOR_HANDLE const destination) const = 0;
+		virtual void CreateView(D3D12_CPU_DESCRIPTOR_HANDLE const destination) const = 0;
 
-		virtual boost::signals2::connection ConnectToMarkedAsChanged(boost::function<void()> const& listener) const = 0;
+		virtual aiva::utils::TEvAction<aiva::utils::ECacheFlags>& OnMarkAsChanged() = 0;
 	};
 }

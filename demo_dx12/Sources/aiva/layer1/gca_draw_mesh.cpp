@@ -55,11 +55,8 @@ void aiva::layer1::GcaDrawMesh::Execute(Engine const& engine) const
 	ExecuteSetPipelineState(engine);
 	ExecuteSetGraphicRootSignature(engine);
 	ExecuteSetDescriptorHeaps(engine);
+	ExecuteSetGraphicsRootDescriptorTable(engine);
 	ExecuteIASetPrimitiveTopology(engine);
-
-	commandList->IASetIndexBuffer(nullptr);
-	commandList->IASetVertexBuffers(0, 0, nullptr);
-
 	ExecuteDrawIndexedInstanced(engine);
 
 	//{
@@ -118,9 +115,23 @@ void aiva::layer1::GcaDrawMesh::ExecuteSetDescriptorHeaps(Engine const& engine) 
 	std::transform(packedHeaps.cbegin(), packedHeaps.cend(), std::back_inserter(unpackedHeaps), [](auto const& heap) { return heap.get(); });
 
 	commandList->SetDescriptorHeaps(unpackedHeaps.size(), unpackedHeaps.size() > 0 ? unpackedHeaps.data() : nullptr);
+}
+
+void aiva::layer1::GcaDrawMesh::ExecuteSetGraphicsRootDescriptorTable(Engine const& engine) const
+{
+	auto const& commandList = engine.GraphicHardware().CommandList();
+	winrt::check_bool(commandList);
+
+	auto const& material = Material;
+	aiva::utils::Asserts::CheckBool(material);
+
+	auto const& packedHeaps = material->ResourceDescriptor().InternalDescriptorHeaps();
+	for (auto const& packedHeap : packedHeaps) winrt::check_bool(packedHeap);
 
 	for (std::size_t i = {}; i < packedHeaps.size(); i++)
+	{
 		commandList->SetGraphicsRootDescriptorTable(i, packedHeaps[i]->GetGPUDescriptorHandleForHeapStart());
+	}
 }
 
 void aiva::layer1::GcaDrawMesh::ExecuteIASetPrimitiveTopology(Engine const& engine) const

@@ -27,6 +27,8 @@ namespace aiva::layer1
 
 		void ExecuteSetDescriptorHeaps(Engine const& engine) const;
 
+		void ExecuteSetGraphicsRootDescriptorTable(Engine const& engine) const;
+
 		void ExecuteIASetPrimitiveTopology(Engine const& engine) const;
 
 		void ExecuteDrawIndexedInstanced(Engine const& engine) const;

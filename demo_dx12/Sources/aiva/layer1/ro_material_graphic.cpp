@@ -198,14 +198,10 @@ void aiva::layer1::RoMaterialGraphic::RefreshInternalPipelineState()
 	}
 
 	{ // Blend State
-		pipelineDesc.BlendState.RenderTarget[0].SrcBlend = D3D12_BLEND_ONE;
-		pipelineDesc.BlendState.RenderTarget[0].DestBlend = D3D12_BLEND_ZERO;
-		pipelineDesc.BlendState.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-		pipelineDesc.BlendState.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		pipelineDesc.BlendState.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
-		pipelineDesc.BlendState.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		pipelineDesc.BlendState.RenderTarget[0].LogicOp = D3D12_LOGIC_OP_NOOP;
-		pipelineDesc.BlendState.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+		std::for_each(std::begin(pipelineDesc.BlendState.RenderTarget), std::end(pipelineDesc.BlendState.RenderTarget), [](auto& rt)
+		{
+			rt.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+		});
 	}
 
 	{ // Sample Mask

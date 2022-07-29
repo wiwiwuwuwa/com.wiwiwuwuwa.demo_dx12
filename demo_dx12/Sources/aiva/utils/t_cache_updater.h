@@ -21,7 +21,7 @@ namespace aiva::utils
 	// User API
 
 	public:
-		void FlushChanges();
+		void FlushChanges(TDirtyFlags const dirtyFlags = TDirtyFlags::All);
 
 		TEvAction<TDirtyFlags>& OnMarkAsChanged();
 
@@ -66,21 +66,21 @@ aiva::utils::TCacheUpdaterBase<TDirtyFlags>::TCacheUpdaterBase(TDirtyFlags const
 }
 
 template <typename TDirtyFlags>
-void aiva::utils::TCacheUpdaterBase<TDirtyFlags>::FlushChanges()
+void aiva::utils::TCacheUpdaterBase<TDirtyFlags>::FlushChanges(TDirtyFlags const dirtyFlags /*= TDirtyFlags::All*/)
 {
-	auto const dirtyFlags = mDirtyFlags;
-	if (dirtyFlags == TDirtyFlags{})
+	auto const deltaFlags = EnumUtils::And(mDirtyFlags, dirtyFlags);
+	if (deltaFlags == TDirtyFlags{})
 	{
 		return;
 	}
 
-	mDirtyFlags = {};
+	mDirtyFlags = EnumUtils::Clear(mDirtyFlags, deltaFlags);
 
 	mIsFlushingCache = true;
-	FlushExecutors()(dirtyFlags);
+	FlushExecutors()(deltaFlags);
 	mIsFlushingCache = false;
 
-	OnFlushExecuted()(dirtyFlags);
+	OnFlushExecuted()(deltaFlags);
 }
 
 template <typename TDirtyFlags>
@@ -103,15 +103,14 @@ void aiva::utils::TCacheUpdaterBase<TDirtyFlags>::MarkAsChanged(TDirtyFlags cons
 		return;
 	}
 
-	auto const previousDirtyFlags = mDirtyFlags;
-	mDirtyFlags = EnumUtils::Or(mDirtyFlags, dirtyFlags);
-
-	if (previousDirtyFlags == mDirtyFlags)
+	auto const deltaFlags = EnumUtils::New(mDirtyFlags, dirtyFlags);
+	if (deltaFlags == TDirtyFlags{})
 	{
 		return;
 	}
 
-	OnMarkAsChanged()(dirtyFlags);
+	mDirtyFlags = EnumUtils::Or(mDirtyFlags, deltaFlags);
+	OnMarkAsChanged()(deltaFlags);
 }
 
 template <typename TDirtyFlags>

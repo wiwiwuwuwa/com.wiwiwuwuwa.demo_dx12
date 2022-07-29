@@ -41,6 +41,8 @@ namespace aiva::utils
 	private:
 		TDirtyFlags mDirtyFlags{};
 
+		bool mIsFlushingCache{};
+
 		TEvAction<TDirtyFlags> mOnMarkAsChanged{};
 
 		TEvAction<TDirtyFlags> mOnFlushExecuted{};
@@ -73,7 +75,11 @@ void aiva::utils::TCacheUpdaterBase<TDirtyFlags>::FlushChanges()
 	}
 
 	mDirtyFlags = {};
+
+	mIsFlushingCache = true;
 	FlushExecutors()(dirtyFlags);
+	mIsFlushingCache = false;
+
 	OnFlushExecuted()(dirtyFlags);
 }
 
@@ -92,7 +98,19 @@ aiva::utils::TEvAction<TDirtyFlags>& aiva::utils::TCacheUpdaterBase<TDirtyFlags>
 template <typename TDirtyFlags>
 void aiva::utils::TCacheUpdaterBase<TDirtyFlags>::MarkAsChanged(TDirtyFlags const dirtyFlags /*= TDirtyFlags::All*/)
 {
+	if (mIsFlushingCache)
+	{
+		return;
+	}
+
+	auto const previousDirtyFlags = mDirtyFlags;
 	mDirtyFlags = EnumUtils::Or(mDirtyFlags, dirtyFlags);
+
+	if (previousDirtyFlags == mDirtyFlags)
+	{
+		return;
+	}
+
 	OnMarkAsChanged()(dirtyFlags);
 }
 

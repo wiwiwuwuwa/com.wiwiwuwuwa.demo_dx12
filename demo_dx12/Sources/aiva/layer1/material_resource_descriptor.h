@@ -17,20 +17,20 @@ namespace aiva::utils
 
 namespace aiva::layer1
 {
-	struct ShaderResourceDescriptor final : private boost::noncopyable, public std::enable_shared_from_this<ShaderResourceDescriptor>
+	struct MaterialResourceDescriptor final : private boost::noncopyable, public std::enable_shared_from_this<MaterialResourceDescriptor>
 	{
 	// ----------------------------------------------------
 	// Main
 
 	public:
 		template <typename... TArgs>
-		static std::shared_ptr<ShaderResourceDescriptor> Create(TArgs&&... args);
+		static std::shared_ptr<MaterialResourceDescriptor> Create(TArgs&&... args);
 
 	private:
-		ShaderResourceDescriptor(Engine const& engine);
+		MaterialResourceDescriptor(Engine const& engine);
 
 	public:
-		~ShaderResourceDescriptor();
+		~MaterialResourceDescriptor();
 
 	private:
 		Engine const& mEngine;
@@ -39,7 +39,7 @@ namespace aiva::layer1
 	// Cache Refresh
 
 	public:
-		using CacheUpdaterType = aiva::utils::TCacheUpdater<ShaderResourceDescriptor>;
+		using CacheUpdaterType = aiva::utils::TCacheUpdater<MaterialResourceDescriptor>;
 
 	public:
 		CacheUpdaterType& CacheUpdater() const;
@@ -95,7 +95,7 @@ namespace aiva::layer1
 // --------------------------------------------------------
 
 template <typename... TArgs>
-std::shared_ptr<aiva::layer1::ShaderResourceDescriptor> aiva::layer1::ShaderResourceDescriptor::Create(TArgs&&... args)
+std::shared_ptr<aiva::layer1::MaterialResourceDescriptor> aiva::layer1::MaterialResourceDescriptor::Create(TArgs&&... args)
 {
-	return std::shared_ptr<ShaderResourceDescriptor>{new ShaderResourceDescriptor{ std::forward<TArgs>(args)... }};
+	return std::shared_ptr<MaterialResourceDescriptor>{new MaterialResourceDescriptor{ std::forward<TArgs>(args)... }};
 }

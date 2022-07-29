@@ -86,7 +86,7 @@ void aiva::layer2::World::TerminateSystems()
 #include <aiva/layer1/material_pipeline_descriptor.h>
 #include <aiva/layer1/ro_material_graphic.h>
 #include <aiva/layer1/shader_buffer.h>
-#include <aiva/layer1/shader_resource_descriptor.h>
+#include <aiva/layer1/material_resource_descriptor.h>
 #include <aiva/layer1/shader_struct.h>
 
 static std::shared_ptr<aiva::layer1::RoMaterialGraphic> GLOBAL_GRAPHIC_MATERIAL{};

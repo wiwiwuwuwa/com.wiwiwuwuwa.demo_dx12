@@ -10,7 +10,7 @@ namespace aiva::layer1
 	struct MaterialPipelineDescriptor;
 	struct RoShaderFragment;
 	struct RoShaderVertex;
-	struct ShaderResourceDescriptor;
+	struct MaterialResourceDescriptor;
 }
 
 namespace aiva::utils
@@ -111,7 +111,7 @@ namespace aiva::layer1
 	// Resource Descriptor
 
 	public:
-		ShaderResourceDescriptor& ResourceDescriptor() const;
+		MaterialResourceDescriptor& ResourceDescriptor() const;
 
 	private:
 		void InitializeResourceDescriptor();
@@ -122,7 +122,7 @@ namespace aiva::layer1
 		void OnResourceDescriptorMarkedAsChanged();
 
 	private:
-		std::shared_ptr<ShaderResourceDescriptor> mResourceDescriptor{};
+		std::shared_ptr<MaterialResourceDescriptor> mResourceDescriptor{};
 
 	// ----------------------------------------------------
 	// Internal Resources Data

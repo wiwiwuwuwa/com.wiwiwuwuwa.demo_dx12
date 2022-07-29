@@ -1,5 +1,5 @@
 #include <pch.h>
-#include <aiva/layer1/shader_resource_descriptor.h>
+#include <aiva/layer1/material_resource_descriptor.h>
 
 #include <aiva/layer1/e_gpu_descriptor_heap_type.h>
 #include <aiva/layer1/e_gpu_resource_view_type.h>
@@ -11,72 +11,72 @@
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/t_cache_updater.h>
 
-aiva::layer1::ShaderResourceDescriptor::ShaderResourceDescriptor(Engine const& engine) : mEngine{ engine }
+aiva::layer1::MaterialResourceDescriptor::MaterialResourceDescriptor(Engine const& engine) : mEngine{ engine }
 {
 	InitializeCacheUpdater();
 	InitializeResourceTable();
 	InitializeInternalResources();
 }
 
-aiva::layer1::ShaderResourceDescriptor::~ShaderResourceDescriptor()
+aiva::layer1::MaterialResourceDescriptor::~MaterialResourceDescriptor()
 {
 	TerminateInternalResources();
 	TerminateResourceTable();
 	TerminateCacheUpdater();
 }
 
-aiva::layer1::ShaderResourceDescriptor::CacheUpdaterType& aiva::layer1::ShaderResourceDescriptor::CacheUpdater() const
+aiva::layer1::MaterialResourceDescriptor::CacheUpdaterType& aiva::layer1::MaterialResourceDescriptor::CacheUpdater() const
 {
 	aiva::utils::Asserts::CheckBool(mCacheUpdater);
 	return *mCacheUpdater;
 }
 
-void aiva::layer1::ShaderResourceDescriptor::InitializeCacheUpdater()
+void aiva::layer1::MaterialResourceDescriptor::InitializeCacheUpdater()
 {
 	mCacheUpdater = std::make_unique<CacheUpdaterType>();
 	aiva::utils::Asserts::CheckBool(mCacheUpdater);
 }
 
-void aiva::layer1::ShaderResourceDescriptor::TerminateCacheUpdater()
+void aiva::layer1::MaterialResourceDescriptor::TerminateCacheUpdater()
 {
 	aiva::utils::Asserts::CheckBool(mCacheUpdater);
 	mCacheUpdater = {};
 }
 
-aiva::layer1::ResourceViewTable& aiva::layer1::ShaderResourceDescriptor::ResourceTable() const
+aiva::layer1::ResourceViewTable& aiva::layer1::MaterialResourceDescriptor::ResourceTable() const
 {
 	aiva::utils::Asserts::CheckBool(mResourceTable);
 	return *mResourceTable;
 }
 
-void aiva::layer1::ShaderResourceDescriptor::InitializeResourceTable()
+void aiva::layer1::MaterialResourceDescriptor::InitializeResourceTable()
 {
 	mResourceTable = ResourceViewTable::Create(mEngine);
 	aiva::utils::Asserts::CheckBool(mResourceTable);
 
-	mResourceTable->CacheUpdater().OnMarkAsChanged().connect(boost::bind(&ShaderResourceDescriptor::OnResourceTableMarkedAsChanged, this));
+	mResourceTable->CacheUpdater().OnMarkAsChanged().connect(boost::bind(&MaterialResourceDescriptor::OnResourceTableMarkedAsChanged, this));
 }
 
-void aiva::layer1::ShaderResourceDescriptor::TerminateResourceTable()
+void aiva::layer1::MaterialResourceDescriptor::TerminateResourceTable()
 {
 	aiva::utils::Asserts::CheckBool(mResourceTable);
 
-	mResourceTable->CacheUpdater().OnMarkAsChanged().disconnect(boost::bind(&ShaderResourceDescriptor::OnResourceTableMarkedAsChanged, this));
+	mResourceTable->CacheUpdater().OnMarkAsChanged().disconnect(boost::bind(&MaterialResourceDescriptor::OnResourceTableMarkedAsChanged, this));
 	mResourceTable = {};
 }
 
-void aiva::layer1::ShaderResourceDescriptor::OnResourceTableMarkedAsChanged()
+void aiva::layer1::MaterialResourceDescriptor::OnResourceTableMarkedAsChanged()
 {
 	CacheUpdater().MarkAsChanged();
 }
 
-std::vector<winrt::com_ptr<ID3D12DescriptorHeap>> aiva::layer1::ShaderResourceDescriptor::InternalDescriptorHeaps() const
+std::vector<winrt::com_ptr<ID3D12DescriptorHeap>> aiva::layer1::MaterialResourceDescriptor::InternalDescriptorHeaps() const
 {
 	CacheUpdater().FlushChanges();
 	return ResourceTable().InternalResource();
 }
 
-winrt::com_ptr<ID3D12RootSignature> aiva::layer1::ShaderResourceDescriptor::InternalRootSignature() const
+winrt::com_ptr<ID3D12RootSignature> aiva::layer1::MaterialResourceDescriptor::InternalRootSignature() const
 {
 	CacheUpdater().FlushChanges();
 
@@ -84,22 +84,22 @@ winrt::com_ptr<ID3D12RootSignature> aiva::layer1::ShaderResourceDescriptor::Inte
 	return mRootSignature;
 }
 
-void aiva::layer1::ShaderResourceDescriptor::InitializeInternalResources()
+void aiva::layer1::MaterialResourceDescriptor::InitializeInternalResources()
 {
-	CacheUpdater().FlushExecutors().connect(boost::bind(&ShaderResourceDescriptor::RefreshInternalResources, this));
+	CacheUpdater().FlushExecutors().connect(boost::bind(&MaterialResourceDescriptor::RefreshInternalResources, this));
 }
 
-void aiva::layer1::ShaderResourceDescriptor::TerminateInternalResources()
+void aiva::layer1::MaterialResourceDescriptor::TerminateInternalResources()
 {
-	CacheUpdater().FlushExecutors().disconnect(boost::bind(&ShaderResourceDescriptor::RefreshInternalResources, this));
+	CacheUpdater().FlushExecutors().disconnect(boost::bind(&MaterialResourceDescriptor::RefreshInternalResources, this));
 }
 
-void aiva::layer1::ShaderResourceDescriptor::RefreshInternalResources()
+void aiva::layer1::MaterialResourceDescriptor::RefreshInternalResources()
 {
 	RefreshRootSignature();
 }
 
-void aiva::layer1::ShaderResourceDescriptor::RefreshRootSignature()
+void aiva::layer1::MaterialResourceDescriptor::RefreshRootSignature()
 {
 	auto const& device = mEngine.GraphicHardware().Device();
 	winrt::check_bool(device);

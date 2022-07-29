@@ -9,7 +9,7 @@
 #include <aiva/layer1/resource_view_heap.h>
 #include <aiva/layer1/resource_view_table.h>
 #include <aiva/layer1/shader_buffer.h>
-#include <aiva/layer1/shader_resource_descriptor.h>
+#include <aiva/layer1/material_resource_descriptor.h>
 #include <aiva/utils/asserts.h>
 
 void aiva::layer1::GcaDrawMesh::Execute(Engine const& engine) const

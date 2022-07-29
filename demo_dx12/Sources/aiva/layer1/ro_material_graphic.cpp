@@ -7,7 +7,7 @@
 #include <aiva/layer1/resource_system.h>
 #include <aiva/layer1/ro_shader_fragment.h>
 #include <aiva/layer1/ro_shader_vertex.h>
-#include <aiva/layer1/shader_resource_descriptor.h>
+#include <aiva/layer1/material_resource_descriptor.h>
 #include <aiva/utils/t_cache_updater.h>
 
 aiva::layer1::RoMaterialGraphic::RoMaterialGraphic(Engine const& engine) : mEngine{ engine }
@@ -113,7 +113,7 @@ void aiva::layer1::RoMaterialGraphic::OnPipelineDescriptorMarkedAsChanged()
 	CacheUpdater().MarkAsChanged();
 }
 
-aiva::layer1::ShaderResourceDescriptor& aiva::layer1::RoMaterialGraphic::ResourceDescriptor() const
+aiva::layer1::MaterialResourceDescriptor& aiva::layer1::RoMaterialGraphic::ResourceDescriptor() const
 {
 	aiva::utils::Asserts::CheckBool(mResourceDescriptor);
 	return *mResourceDescriptor;

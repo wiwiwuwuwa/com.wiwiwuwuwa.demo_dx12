@@ -172,6 +172,7 @@
     <ClInclude Include="Sources\aiva\layer1\gca_clear_render_target.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_draw_mesh.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_set_render_target.h" />
+    <ClInclude Include="Sources\aiva\layer1\gca_set_scissor_rects.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_set_viewports.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer_desc.h" />
@@ -266,6 +267,7 @@
     <ClCompile Include="Sources\aiva\layer1\gca_dispatch.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_draw_mesh.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_set_render_target.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gca_set_scissor_rects.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_set_viewports.cpp" />
     <ClCompile Include="Sources\aiva\layer1\graphic_executor.cpp" />
     <ClCompile Include="Sources\aiva\layer1\graphic_hardware.cpp" />

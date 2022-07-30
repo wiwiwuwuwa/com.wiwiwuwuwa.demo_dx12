@@ -5,6 +5,7 @@
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gca_dispatch.h>
 #include <aiva/layer1/graphic_executor.h>
+#include <aiva/layer1/graphic_hardware.h>
 #include <aiva/layer1/graphic_pipeline.h>
 #include <aiva/layer1/resource_system.h>
 #include <aiva/layer1/resource_view_heap.h>
@@ -83,6 +84,7 @@ void aiva::layer2::World::TerminateSystems()
 #include <aiva/layer1/gca_clear_render_target.h>
 #include <aiva/layer1/gca_draw_mesh.h>
 #include <aiva/layer1/gca_set_render_target.h>
+#include <aiva/layer1/gca_set_scissor_rects.h>
 #include <aiva/layer1/gca_set_viewports.h>
 #include <aiva/layer1/grv_srv_to_buffer.h>
 #include <aiva/layer1/material_pipeline_descriptor.h>
@@ -149,6 +151,10 @@ void aiva::layer2::World::TickRender()
 {
 	aiva::utils::Asserts::CheckBool(mEngine);
 
+	auto const& renderTarget = mEngine->GraphicHardware().ScreenRenderTargetResource();
+	winrt::check_bool(renderTarget);
+	auto const& renderRect = glm::vec4{ 0.0f, 0.0f, renderTarget->GetDesc().Width, renderTarget->GetDesc().Height };
+
 	auto& gcaClearRenderTarget = aiva::layer1::GcaClearRenderTarget{};
 
 	//mEngine->GraphicExecutor().ExecuteCommand(gcaClearRenderTarget);
@@ -158,8 +164,14 @@ void aiva::layer2::World::TickRender()
 	mEngine->GraphicExecutor().ExecuteCommand(gcaSetRenderTarget);
 
 	auto& gcaSetViewports = aiva::layer1::GcaSetViewports{};
+	gcaSetViewports.Rect = renderRect;
 
 	mEngine->GraphicExecutor().ExecuteCommand(gcaSetViewports);
+
+	auto& gcaSetScissorRects = aiva::layer1::GcaSetScissorRects{};
+	gcaSetScissorRects.Rect = renderRect;
+
+	mEngine->GraphicExecutor().ExecuteCommand(gcaSetScissorRects);
 
 	auto& gcaDrawMesh = aiva::layer1::GcaDrawMesh{};
 	gcaDrawMesh.Material = GLOBAL_GRAPHIC_MATERIAL;

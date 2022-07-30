@@ -10,20 +10,12 @@ void aiva::layer1::GcaSetViewports::Execute(Engine const& engine) const
 	winrt::check_bool(commandList);
 
 	auto viewport = D3D12_VIEWPORT{};
-	viewport.TopLeftX = 0.0f;
-	viewport.TopLeftY = 0.0f;
-	viewport.Width = 640.0f;
-	viewport.Height = 480.0f;
+	viewport.TopLeftX = Rect.x;
+	viewport.TopLeftY = Rect.y;
+	viewport.Width = Rect.z - Rect.x;
+	viewport.Height = Rect.w - Rect.y;
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
 
 	commandList->RSSetViewports(1, &viewport);
-
-	auto rect = D3D12_RECT{};
-	rect.left = 0;
-	rect.top = 0;
-	rect.right = 640;
-	rect.bottom = 480;
-
-	commandList->RSSetScissorRects(1, &rect);
 }

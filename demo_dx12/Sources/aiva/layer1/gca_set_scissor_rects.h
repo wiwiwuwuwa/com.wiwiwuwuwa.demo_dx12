@@ -10,7 +10,7 @@ namespace aiva::layer1
 
 namespace aiva::layer1
 {
-	struct GcaSetViewports final : public IGraphicCommandAsync
+	struct GcaSetScissorRects final : public IGraphicCommandAsync
 	{
 	// ----------------------------------------------------
 	// IGraphicCommandAsync

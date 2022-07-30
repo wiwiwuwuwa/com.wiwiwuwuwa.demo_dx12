@@ -51,6 +51,7 @@
     <ClCompile Include="Sources\aiva\layer1\gca_set_render_target.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_clear_render_target.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_clear_depth_stencil.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gca_set_scissor_rects.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -128,6 +129,7 @@
     <ClInclude Include="Sources\aiva\layer1\gca_set_render_target.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_clear_render_target.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_clear_depth_stencil.h" />
+    <ClInclude Include="Sources\aiva\layer1\gca_set_scissor_rects.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

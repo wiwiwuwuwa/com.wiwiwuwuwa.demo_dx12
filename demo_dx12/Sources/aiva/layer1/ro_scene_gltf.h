@@ -8,6 +8,14 @@ namespace aiva::layer1
 	struct Engine;
 }
 
+namespace aiva::utils
+{
+	enum class ECacheFlags : std::uint8_t;
+
+	template <typename, typename = ECacheFlags>
+	struct TCacheUpdater;
+}
+
 namespace aiva::layer1
 {
 	struct RoSceneGltf final : public aiva::layer1::ICpuResource
@@ -33,6 +41,32 @@ namespace aiva::layer1
 
 	public:
 		void DeserealizeFromBinary(std::vector<std::byte> const& binaryData) override;
+
+	// ----------------------------------------------------
+	// Cache Refresh
+
+	public:
+		using CacheUpdaterType = aiva::utils::TCacheUpdater<RoSceneGltf>;
+
+	public:
+		CacheUpdaterType& CacheUpdater() const;
+
+	private:
+		void InitializeCacheUpdater();
+
+		void TerminateCacheUpdater();
+
+	private:
+		std::unique_ptr<CacheUpdaterType> mCacheUpdater{};
+
+	// ----------------------------------------------------
+	// Resource
+
+	public:
+		tinygltf::Model const& Model() const;
+
+	private:
+		tinygltf::Model mModel{};
 	};
 }
 
@@ -41,5 +75,5 @@ namespace aiva::layer1
 template <typename... Args>
 std::shared_ptr<aiva::layer1::RoSceneGltf> aiva::layer1::RoSceneGltf::Create(Args&&... args)
 {
-	return std::shared_ptr<aiva::layer1::RoShaderCompute>{new aiva::layer1::RoShaderCompute{ std::forward<Args>(args)... }};
+	return std::shared_ptr<aiva::layer1::RoSceneGltf>{new aiva::layer1::RoSceneGltf{ std::forward<Args>(args)... }};
 }

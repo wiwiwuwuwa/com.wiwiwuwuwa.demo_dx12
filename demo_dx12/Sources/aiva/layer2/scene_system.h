@@ -18,22 +18,23 @@ namespace aiva::layer2
 		template <typename... Args>
 		static std::shared_ptr<SceneSystem> Create(Args&&... args);
 
+	private:
+		SceneSystem(World const& world);
+
+	public:
 		~SceneSystem();
 
 	private:
-		SceneSystem(std::weak_ptr<aiva::layer2::World> const& world);
-
-	private:
-		std::weak_ptr<aiva::layer2::World> mWorld{};
+		World const& mWorld;
 
 	// ----------------------------------------------------
 	// Hierarchy
 
 	public:
-		aiva::layer2::SceneActor& CreateActor();
+		SceneActor& CreateActor();
 
 	private:
-		std::vector<std::shared_ptr<aiva::layer2::SceneActor>> mActors{};
+		std::vector<std::shared_ptr<SceneActor>> mActors{};
 	};
 }
 

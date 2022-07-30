@@ -5,6 +5,7 @@ namespace aiva::layer2
 {
 	struct SceneComponent;
 	struct SceneSystem;
+	struct World;
 }
 
 namespace aiva::layer2
@@ -17,31 +18,31 @@ namespace aiva::layer2
 	// ----------------------------------------------------
 	// Main
 
+	private:
+		SceneActor(World const& world);
+
 	public:
 		~SceneActor();
 
 	private:
-		SceneActor(std::weak_ptr<aiva::layer2::SceneSystem> const& scene);
-
-	private:
-		std::weak_ptr<aiva::layer2::SceneSystem> mScene{};
+		World const& mWorld;
 
 	// ----------------------------------------------------
 	// Hierarchy
 
 	public:
-		std::shared_ptr<aiva::layer2::SceneActor> Parent() const;
+		std::shared_ptr<SceneActor> Parent() const;
 
-		aiva::layer2::SceneActor& Parent(std::shared_ptr<aiva::layer2::SceneActor> const& desiredParent);
+		SceneActor& Parent(std::shared_ptr<SceneActor> const& desiredParent);
 
-		std::shared_ptr<aiva::layer2::SceneActor> GetChild(std::size_t const index) const;
+		std::shared_ptr<SceneActor> GetChild(std::size_t const index) const;
 
 		std::size_t NumChild() const;
 
 	private:
-		std::weak_ptr<aiva::layer2::SceneActor> mParent{};
+		std::weak_ptr<SceneActor> mParent{};
 
-		std::vector<std::weak_ptr<aiva::layer2::SceneActor>> mChildren{};
+		std::vector<std::weak_ptr<SceneActor>> mChildren{};
 
 	// ----------------------------------------------------
 	// Components
@@ -51,7 +52,7 @@ namespace aiva::layer2
 		T& CreateComponent();
 
 	private:
-		std::vector<std::shared_ptr<aiva::layer2::SceneComponent>> mComponents{};
+		std::vector<std::shared_ptr<SceneComponent>> mComponents{};
 	};
 }
 

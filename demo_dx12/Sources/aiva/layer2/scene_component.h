@@ -16,13 +16,13 @@ namespace aiva::layer2
 	// ----------------------------------------------------
 	// Main
 
+	private:
+		SceneComponent(SceneActor const& actor);
+
 	public:
 		virtual ~SceneComponent();
 
 	private:
-		SceneComponent(std::weak_ptr<aiva::layer2::SceneActor> const& actor);
-
-	private:
-		std::weak_ptr<aiva::layer2::SceneActor> mActor{};
+		SceneActor const& mActor;
 	};
 }

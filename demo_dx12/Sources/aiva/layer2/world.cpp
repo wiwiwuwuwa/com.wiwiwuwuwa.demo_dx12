@@ -69,7 +69,7 @@ aiva::layer2::SceneSystem& aiva::layer2::World::SceneSystem() const
 
 void aiva::layer2::World::InitializeSystems()
 {
-	mSceneSystem = aiva::layer2::SceneSystem::Create(weak_from_this());
+	mSceneSystem = aiva::layer2::SceneSystem::Create(*this);
 	aiva::utils::Asserts::CheckBool(mSceneSystem);
 }
 

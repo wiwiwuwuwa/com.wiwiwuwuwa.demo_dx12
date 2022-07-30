@@ -91,6 +91,19 @@ namespace aiva::layer1
 		uint64_t mTick{};
 
 	// ----------------------------------------------------
+	// Delta Time
+
+	public:
+		double DeltaTime() const;
+
+	private:
+		std::chrono::high_resolution_clock::time_point mDeltaTimeBegin{};
+
+		std::chrono::high_resolution_clock::time_point mDeltaTimeEnd{};
+
+		double mDeltaTime{};
+
+	// ----------------------------------------------------
 	// Debug
 
 	public:

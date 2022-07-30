@@ -72,11 +72,18 @@ void aiva::layer1::Engine::OnAppStart()
 	mGraphicPipeline = std::make_unique<aiva::layer1::GraphicPipeline>(*this);
 	mGraphicExecutor = std::make_unique<aiva::layer1::GraphicExecutor>(*this);
 
+	mDeltaTimeBegin = std::chrono::high_resolution_clock::now();
+	mDeltaTimeEnd = {};
+
 	OnStart()();
 }
 
 void aiva::layer1::Engine::OnAppUpdate()
 {
+	mDeltaTimeEnd = std::chrono::high_resolution_clock::now();
+	mDeltaTime = std::chrono::duration_cast<std::chrono::duration<double>>(mDeltaTimeEnd - mDeltaTimeBegin).count();
+	mDeltaTimeBegin = std::chrono::high_resolution_clock::now();
+
 	OnUpdate()();
 	OnRender()();
 
@@ -86,6 +93,9 @@ void aiva::layer1::Engine::OnAppUpdate()
 void aiva::layer1::Engine::OnAppFinish()
 {
 	OnFinish()();
+
+	mDeltaTimeEnd = {};
+	mDeltaTimeBegin = {};
 
 	mGraphicExecutor = {};
 	mGraphicPipeline = {};
@@ -116,6 +126,11 @@ aiva::utils::EvAction& aiva::layer1::Engine::OnFinish()
 uint64_t aiva::layer1::Engine::Tick() const
 {
 	return mTick;
+}
+
+double aiva::layer1::Engine::DeltaTime() const
+{
+	return mDeltaTime;
 }
 
 void aiva::layer1::Engine::LogToDebugConsole(std::string const& message) const

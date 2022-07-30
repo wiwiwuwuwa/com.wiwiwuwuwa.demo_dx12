@@ -112,6 +112,12 @@ namespace aiva::layer1
 
 	private:
 		winrt::com_ptr<ID3D12PipelineState> mInternalPipelineState{};
+
+	// ----------------------------------------------------
+	// Resource Barriers
+
+	public:
+		std::vector<D3D12_RESOURCE_BARRIER> PrepareBarriers(bool const active) const;
 	};
 }
 

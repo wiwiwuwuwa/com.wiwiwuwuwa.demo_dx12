@@ -94,6 +94,23 @@ void aiva::layer1::GcaDrawMesh::ExecuteIASetPrimitiveTopology(Engine const& engi
 	commandList->IASetPrimitiveTopology(ToInternalEnum(MeshTopology));
 }
 
+void aiva::layer1::GcaDrawMesh::ExecuteResourceBarrier(Engine const& engine) const
+{
+	auto const& commandList = engine.GraphicHardware().CommandList();
+	winrt::check_bool(commandList);
+
+	auto const& material = Material;
+	aiva::utils::Asserts::CheckBool(material);
+
+	auto const& barriers = material->PrepareBarriers(true);
+	if (std::empty(barriers))
+	{
+		return;
+	}
+
+	commandList->ResourceBarrier(std::size(barriers), std::data(barriers));
+}
+
 void aiva::layer1::GcaDrawMesh::ExecuteDrawIndexedInstanced(Engine const& engine) const
 {
 	auto const& commandList = engine.GraphicHardware().CommandList();

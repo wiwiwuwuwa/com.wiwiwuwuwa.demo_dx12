@@ -31,6 +31,8 @@ namespace aiva::layer1
 
 		void ExecuteIASetPrimitiveTopology(Engine const& engine) const;
 
+		void ExecuteResourceBarrier(Engine const& engine) const;
+
 		void ExecuteDrawIndexedInstanced(Engine const& engine) const;
 
 	// ----------------------------------------------------

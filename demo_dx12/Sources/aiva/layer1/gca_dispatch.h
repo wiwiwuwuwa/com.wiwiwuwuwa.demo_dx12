@@ -25,6 +25,8 @@ namespace aiva::layer1
 
 		void ExecuteSetComputeRootDescriptorTable(Engine const& engine) const;
 
+		void ExecuteResourceBarrier(Engine const& engine) const;
+
 		void ExecuteDispatch(Engine const& engine) const;
 
 	public:

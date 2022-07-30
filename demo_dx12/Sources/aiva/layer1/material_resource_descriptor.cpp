@@ -181,3 +181,9 @@ void aiva::layer1::MaterialResourceDescriptor::RefreshRootSignature()
 
 	mRootSignature = rootSignature;
 }
+
+std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::MaterialResourceDescriptor::PrepareBarriers(bool const active) const
+{
+	CacheUpdater().FlushChanges();
+	return ResourceTable().PrepareBarriers(active);
+}

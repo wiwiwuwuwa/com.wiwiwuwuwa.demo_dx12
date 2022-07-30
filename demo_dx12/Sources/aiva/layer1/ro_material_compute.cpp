@@ -145,3 +145,9 @@ void aiva::layer1::RoMaterialCompute::RefreshInternalPipelineState()
 	winrt::check_bool(pipelineState);
 	mInternalPipelineState = pipelineState;
 }
+
+std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::RoMaterialCompute::PrepareBarriers(bool const active) const
+{
+	CacheUpdater().FlushChanges();
+	return ResourceDescriptor().PrepareBarriers(active);
+}

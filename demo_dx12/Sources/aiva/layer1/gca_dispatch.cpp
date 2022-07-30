@@ -14,6 +14,7 @@ void aiva::layer1::GcaDispatch::Execute(aiva::layer1::Engine const& engine) cons
 	ExecuteSetComputeRootSignature(engine);
 	ExecuteSetDescriptorHeaps(engine);
 	ExecuteSetComputeRootDescriptorTable(engine);
+	ExecuteResourceBarrier(engine);
 	ExecuteDispatch(engine);
 }
 
@@ -79,6 +80,23 @@ void aiva::layer1::GcaDispatch::ExecuteSetComputeRootDescriptorTable(Engine cons
 	{
 		commandList->SetComputeRootDescriptorTable(i, packedHeaps[i]->GetGPUDescriptorHandleForHeapStart());
 	}
+}
+
+void aiva::layer1::GcaDispatch::ExecuteResourceBarrier(Engine const& engine) const
+{
+	auto const& commandList = engine.GraphicHardware().CommandList();
+	winrt::check_bool(commandList);
+
+	auto const& material = Material;
+	aiva::utils::Asserts::CheckBool(material);
+
+	auto const& barriers = material->PrepareBarriers(true);
+	if (std::empty(barriers))
+	{
+		return;
+	}
+
+	commandList->ResourceBarrier(std::size(barriers), std::data(barriers));
 }
 
 void aiva::layer1::GcaDispatch::ExecuteDispatch(Engine const& engine) const

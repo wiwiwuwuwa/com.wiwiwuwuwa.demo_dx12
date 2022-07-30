@@ -218,6 +218,7 @@
     <ClInclude Include="Sources\aiva\layer1\resource_view_heap.h" />
     <ClInclude Include="Sources\aiva\layer1\resource_view_table.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_material_graphic.h" />
+    <ClInclude Include="Sources\aiva\layer1\ro_scene_gltf.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_shader_fragment.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_shader_vertex.h" />
     <ClInclude Include="Sources\aiva\layer1\shader_buffer.h" />
@@ -264,6 +265,7 @@
   <ItemGroup>
     <ClCompile Include="External Sources\stb\stb_image.cpp" />
     <ClCompile Include="External Sources\stb\stb_image_write.cpp" />
+    <ClCompile Include="External Sources\tinygltf\tiny_gltf.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -303,6 +305,7 @@
     <ClCompile Include="Sources\aiva\layer1\resource_view_table.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_material_compute.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_material_graphic.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\ro_scene_gltf.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_shader_compute.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gr_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_shader_fragment.cpp" />

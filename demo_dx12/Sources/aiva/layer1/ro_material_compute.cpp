@@ -121,25 +121,23 @@ void aiva::layer1::RoMaterialCompute::RefreshInternalPipelineState()
 	auto const& device = mEngine.GraphicHardware().Device();
 	winrt::check_bool(device);
 
-	auto const& shader = Shader();
-	aiva::utils::Asserts::CheckBool(shader);
-
-	auto const& shaderBytecode = shader->Bytecode();
-	winrt::check_bool(shaderBytecode);
-
-	auto const& resourceDescriptor = ResourceDescriptor();
-
-	auto const& rootSignature = resourceDescriptor.InternalRootSignature();
-	winrt::check_bool(rootSignature);
-
 	auto pipelineDesc = D3D12_COMPUTE_PIPELINE_STATE_DESC{};
-	pipelineDesc.pRootSignature = rootSignature.get();
-	pipelineDesc.CS.pShaderBytecode = shaderBytecode->GetBufferPointer();
-	pipelineDesc.CS.BytecodeLength = shaderBytecode->GetBufferSize();
-	pipelineDesc.NodeMask = 0;
-	pipelineDesc.CachedPSO.pCachedBlob = nullptr;
-	pipelineDesc.CachedPSO.CachedBlobSizeInBytes = 0;
-	pipelineDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
+
+	{ // Root Signature
+		auto const& rootSignature = ResourceDescriptor().InternalRootSignature();
+		pipelineDesc.pRootSignature = rootSignature.get();
+	}
+
+	{ // Shader
+		auto const& shader = Shader();
+		aiva::utils::Asserts::CheckBool(shader);
+
+		auto const& shaderBytecode = shader->Bytecode();
+		winrt::check_bool(shaderBytecode);
+
+		pipelineDesc.CS.pShaderBytecode = shaderBytecode->GetBufferPointer();
+		pipelineDesc.CS.BytecodeLength = shaderBytecode->GetBufferSize();
+	}
 
 	auto pipelineState = winrt::com_ptr<ID3D12PipelineState>{};
 	winrt::check_hresult(device->CreateComputePipelineState(&pipelineDesc, IID_PPV_ARGS(&pipelineState)));

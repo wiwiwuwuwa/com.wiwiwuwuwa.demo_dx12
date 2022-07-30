@@ -14,11 +14,22 @@ namespace aiva::layer1
 	struct GcaDispatch final : public aiva::layer1::IGraphicCommandAsync
 	{
 	public:
-		void Execute(aiva::layer1::Engine const& engine) const override;
+		void Execute(Engine const& engine) const override;
+
+	private:
+		void ExecuteSetPipelineState(Engine const& engine) const;
+
+		void ExecuteSetComputeRootSignature(Engine const& engine) const;
+
+		void ExecuteSetDescriptorHeaps(Engine const& engine) const;
+
+		void ExecuteSetComputeRootDescriptorTable(Engine const& engine) const;
+
+		void ExecuteDispatch(Engine const& engine) const;
 
 	public:
 		glm::uvec3 ThreadGroupCount{};
 
-		std::shared_ptr<aiva::layer1::RoMaterialCompute> ComputeMaterial{};
+		std::shared_ptr<RoMaterialCompute> Material{};
 	};
 }

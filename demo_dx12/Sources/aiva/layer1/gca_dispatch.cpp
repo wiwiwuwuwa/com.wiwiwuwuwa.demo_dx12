@@ -9,6 +9,9 @@
 
 void aiva::layer1::GcaDispatch::Execute(aiva::layer1::Engine const& engine) const
 {
+	// TODO: Implement me
+	aiva::utils::Asserts::CheckBool(false);
+
 	auto const& commandList = engine.GraphicHardware().CommandList();
 	winrt::check_bool(commandList);
 

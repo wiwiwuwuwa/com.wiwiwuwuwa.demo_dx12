@@ -117,6 +117,12 @@ namespace aiva::layer1
 
 	public:
 		std::optional<D3D12_CPU_DESCRIPTOR_HANDLE> InternalDescriptorHandle(std::string const& viewKey) const;
+
+	// ----------------------------------------------------
+	// Resource Barriers
+
+	public:
+		std::vector<D3D12_RESOURCE_BARRIER> PrepareBarriers(bool const active) const;
 	};
 }
 

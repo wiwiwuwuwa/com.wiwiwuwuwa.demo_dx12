@@ -83,6 +83,7 @@ void aiva::layer2::World::TerminateSystems()
 #include <aiva/layer1/gca_clear_depth_stencil.h>
 #include <aiva/layer1/gca_clear_render_target.h>
 #include <aiva/layer1/gca_draw_mesh.h>
+#include <aiva/layer1/gca_present.h>
 #include <aiva/layer1/gca_set_render_target.h>
 #include <aiva/layer1/gca_set_scissor_rects.h>
 #include <aiva/layer1/gca_set_viewports.h>
@@ -151,13 +152,13 @@ void aiva::layer2::World::TickRender()
 {
 	aiva::utils::Asserts::CheckBool(mEngine);
 
-	auto const& renderTarget = mEngine->GraphicHardware().ScreenRenderTargetResource();
+	auto const& renderTarget = mEngine->GraphicHardware().ScreenViewRes();
 	winrt::check_bool(renderTarget);
 	auto const& renderRect = glm::vec4{ 0.0f, 0.0f, renderTarget->GetDesc().Width, renderTarget->GetDesc().Height };
 
 	auto& gcaClearRenderTarget = aiva::layer1::GcaClearRenderTarget{};
 
-	//mEngine->GraphicExecutor().ExecuteCommand(gcaClearRenderTarget);
+	mEngine->GraphicExecutor().ExecuteCommand(gcaClearRenderTarget);
 
 	auto& gcaSetRenderTarget = aiva::layer1::GcaSetRenderTarget{};
 
@@ -179,6 +180,10 @@ void aiva::layer2::World::TickRender()
 	gcaDrawMesh.MeshIndicesKey = "t0_Indices";
 
 	mEngine->GraphicExecutor().ExecuteCommand(gcaDrawMesh);
+
+	auto& gcaPresent = aiva::layer1::GcaPresent{};
+	
+	mEngine->GraphicExecutor().ExecuteCommand(gcaPresent);
 }
 
 void aiva::layer2::World::TerminateRender()

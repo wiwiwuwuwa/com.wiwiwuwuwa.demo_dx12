@@ -19,6 +19,11 @@ namespace aiva::layer1
 	public:
 		void Execute(Engine const& engine) const override;
 
+	private:
+		void ExecuteResourceBarrier(Engine const& engine) const;
+
+		void ExecuteSetRenderTargets(Engine const& engine) const;
+
 	// ----------------------------------------------------
 	// Resources
 

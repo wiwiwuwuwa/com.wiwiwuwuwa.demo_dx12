@@ -171,6 +171,7 @@
     <ClInclude Include="Sources\aiva\layer1\gca_clear_depth_stencil.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_clear_render_target.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_draw_mesh.h" />
+    <ClInclude Include="Sources\aiva\layer1\gca_present.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_set_render_target.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_set_scissor_rects.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_set_viewports.h" />
@@ -231,6 +232,7 @@
     <ClInclude Include="Sources\aiva\utils\enum_utils.h" />
     <ClInclude Include="Sources\aiva\utils\ev_action.h" />
     <ClInclude Include="Sources\aiva\utils\action_batcher.h" />
+    <ClInclude Include="Sources\aiva\utils\resource_barrier.h" />
     <ClInclude Include="Sources\aiva\utils\t_cache_updater.h" />
     <ClInclude Include="Sources\aiva\utils\t_ev_action.h" />
   </ItemGroup>
@@ -266,6 +268,7 @@
     <ClCompile Include="Sources\aiva\layer1\gca_clear_render_target.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_dispatch.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_draw_mesh.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gca_present.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_set_render_target.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_set_scissor_rects.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_set_viewports.cpp" />
@@ -301,6 +304,7 @@
     <ClCompile Include="Sources\aiva\layer2\world.cpp" />
     <ClCompile Include="Sources\aiva\utils\action_batcher.cpp" />
     <ClCompile Include="Sources\aiva\utils\changes_counter.cpp" />
+    <ClCompile Include="Sources\aiva\utils\resource_barrier.cpp" />
     <ClCompile Include="Sources\main.cpp" />
   </ItemGroup>
   <ItemGroup>

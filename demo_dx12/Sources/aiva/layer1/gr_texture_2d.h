@@ -4,6 +4,7 @@
 #include <aiva/layer1/i_gpu_resource.h>
 #include <aiva/layer1/gr_texture_2d_desc.h>
 #include <aiva/utils/ev_action.h>
+#include <aiva/utils/resource_barrier.h>
 
 namespace aiva::layer1
 {
@@ -91,10 +92,19 @@ namespace aiva::layer1
 	private:
 		void RefreshInternalResources();
 
-		static winrt::com_ptr<ID3D12Resource> CreateInternalResource(Engine const& engine, GrTexture2DDesc const& desc);
+		static winrt::com_ptr<ID3D12Resource> CreateInternalResource(Engine const& engine, GrTexture2DDesc const& desc, aiva::utils::ResourceBarrier& outBarrier);
 
 	private:
 		winrt::com_ptr<ID3D12Resource> mInternalResource{};
+
+	// ----------------------------------------------------
+	// Resource Barriers
+
+	public:
+		std::vector<D3D12_RESOURCE_BARRIER> PrepareBarriers(D3D12_RESOURCE_STATES const desiredState, std::optional<std::size_t> const subresource = {});
+
+	private:
+		aiva::utils::ResourceBarrier mResourceBarrier{};
 	};
 }
 

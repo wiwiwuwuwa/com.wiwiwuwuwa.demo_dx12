@@ -76,10 +76,18 @@ void aiva::layer1::GrTexture2D::TerminateInternalResources()
 
 void aiva::layer1::GrTexture2D::RefreshInternalResources()
 {
-	mInternalResource = Desc() ? CreateInternalResource(mEngine, *Desc()) : decltype(mInternalResource){};
+	if (Desc())
+	{
+		mInternalResource = CreateInternalResource(mEngine, *Desc(), mResourceBarrier);
+	}
+	else
+	{
+		mInternalResource = {};
+		mResourceBarrier = {};
+	}
 }
 
-winrt::com_ptr<ID3D12Resource> aiva::layer1::GrTexture2D::CreateInternalResource(Engine const& engine, GrTexture2DDesc const& desc)
+winrt::com_ptr<ID3D12Resource> aiva::layer1::GrTexture2D::CreateInternalResource(Engine const& engine, GrTexture2DDesc const& desc, aiva::utils::ResourceBarrier& outBarrier)
 {
 	aiva::utils::Asserts::CheckBool(desc.Width > 0);
 	aiva::utils::Asserts::CheckBool(desc.Height > 0);
@@ -119,6 +127,7 @@ winrt::com_ptr<ID3D12Resource> aiva::layer1::GrTexture2D::CreateInternalResource
 	resourceDesc.Flags |= desc.SupportUnorderedAccess ? D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS : resourceDesc.Flags;
 
 	D3D12_RESOURCE_STATES resourceStates = D3D12_RESOURCE_STATE_COMMON;
+	outBarrier = resourceStates;
 
 	winrt::com_ptr<ID3D12Resource> resource{};
 	winrt::check_hresult(device->CreateCommittedResource(&heapProperties, heapFlags, &resourceDesc, resourceStates, nullptr, IID_PPV_ARGS(&resource)));
@@ -137,4 +146,28 @@ aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::InternalResource(winrt::co
 {
 	mInternalResource = resource;
 	return *this;
+}
+
+std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::GrTexture2D::PrepareBarriers(D3D12_RESOURCE_STATES const desiredState, std::optional<std::size_t> const subresource)
+{
+	CacheUpdater().FlushChanges();
+
+	auto previousState = D3D12_RESOURCE_STATES{};
+	if (!mResourceBarrier.Transite(desiredState, subresource, previousState))
+	{
+		return {};
+	}
+
+	auto const& internalResource = InternalResource();
+	aiva::utils::Asserts::CheckBool(internalResource);
+
+	auto resourceBarrier = D3D12_RESOURCE_BARRIER{};
+	resourceBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	resourceBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	resourceBarrier.Transition.pResource = internalResource.get();
+	resourceBarrier.Transition.Subresource = subresource ? *subresource : D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+	resourceBarrier.Transition.StateBefore = previousState;
+	resourceBarrier.Transition.StateAfter = desiredState;
+
+	return { resourceBarrier };
 }

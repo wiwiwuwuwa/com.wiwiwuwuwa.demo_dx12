@@ -75,6 +75,20 @@ void aiva::layer1::GrvSrvToBuffer::CreateView(D3D12_CPU_DESCRIPTOR_HANDLE const 
 	device->CreateShaderResourceView(directxBuffer.get(), &directxDesc.value(), destination);
 }
 
+std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::GrvSrvToBuffer::PrepareBarriers(bool const active) const
+{
+	CacheUpdater().FlushChanges();
+
+	auto const& desc = Desc();
+	aiva::utils::Asserts::CheckBool(desc);
+
+	auto const& res = desc.value().Resource;
+	aiva::utils::Asserts::CheckBool(res);
+
+	auto const& state = active ? (D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE | D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE) : D3D12_RESOURCE_STATE_COMMON;
+	return res->PrepareBarriers(state);
+}
+
 aiva::utils::TEvAction<aiva::utils::ECacheFlags>& aiva::layer1::GrvSrvToBuffer::OnMarkAsChanged()
 {
 	return CacheUpdater().OnMarkAsChanged();

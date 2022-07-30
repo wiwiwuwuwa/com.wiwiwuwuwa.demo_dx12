@@ -74,6 +74,8 @@ namespace aiva::layer1
 
 		void CreateView(D3D12_CPU_DESCRIPTOR_HANDLE const destination) const override;
 
+		std::vector<D3D12_RESOURCE_BARRIER> PrepareBarriers(bool const active) const override;
+
 		aiva::utils::TEvAction<aiva::utils::ECacheFlags>& OnMarkAsChanged() override;
 
 	// ----------------------------------------------------

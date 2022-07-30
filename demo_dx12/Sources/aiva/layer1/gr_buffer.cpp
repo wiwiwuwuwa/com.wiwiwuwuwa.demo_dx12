@@ -76,10 +76,18 @@ void aiva::layer1::GrBuffer::TerminateInternalResources()
 
 void aiva::layer1::GrBuffer::RefreshInternalResources()
 {
-	mInternalResource = Desc() ? CreateInternalResource(mEngine, *Desc()) : decltype(mInternalResource){};
+	if (Desc())
+	{
+		mInternalResource = CreateInternalResource(mEngine, *Desc(), mResourceBarrier);
+	}
+	else
+	{
+		mInternalResource = {};
+		mResourceBarrier = {};
+	}
 }
 
-winrt::com_ptr<ID3D12Resource> aiva::layer1::GrBuffer::CreateInternalResource(Engine const& engine, GrBufferDesc const& desc)
+winrt::com_ptr<ID3D12Resource> aiva::layer1::GrBuffer::CreateInternalResource(Engine const& engine, GrBufferDesc const& desc, aiva::utils::ResourceBarrier& outBarrier)
 {
 	aiva::utils::Asserts::CheckBool(!(desc.SupportShaderAtomics && desc.MemoryType != EGpuResourceMemoryType::GpuOnly));
 	aiva::utils::Asserts::CheckBool(desc.Size > 0);
@@ -114,6 +122,7 @@ winrt::com_ptr<ID3D12Resource> aiva::layer1::GrBuffer::CreateInternalResource(En
 	D3D12_RESOURCE_STATES resourceStates = D3D12_RESOURCE_STATE_COMMON;
 	resourceStates |= desc.MemoryType == EGpuResourceMemoryType::CpuToGpu ? D3D12_RESOURCE_STATE_GENERIC_READ : resourceStates;
 	resourceStates |= desc.MemoryType == EGpuResourceMemoryType::GpuToCpu ? D3D12_RESOURCE_STATE_COPY_DEST : resourceStates;
+	outBarrier = resourceStates;
 
 	winrt::com_ptr<ID3D12Resource> resource{};
 	winrt::check_hresult(device->CreateCommittedResource(&heapProperties, heapFlags, &resourceDesc, resourceStates, nullptr, IID_PPV_ARGS(&resource)));
@@ -132,4 +141,28 @@ aiva::layer1::GrBuffer& aiva::layer1::GrBuffer::InternalResource(winrt::com_ptr<
 {
 	mInternalResource = resource;
 	return *this;
+}
+
+std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::GrBuffer::PrepareBarriers(D3D12_RESOURCE_STATES const desiredState, std::optional<std::size_t> const subresource)
+{
+	CacheUpdater().FlushChanges();
+
+	auto previousState = D3D12_RESOURCE_STATES{};
+	if (!mResourceBarrier.Transite(desiredState, subresource, previousState))
+	{
+		return {};
+	}
+
+	auto const& internalResource = InternalResource();
+	aiva::utils::Asserts::CheckBool(internalResource);
+
+	auto resourceBarrier = D3D12_RESOURCE_BARRIER{};
+	resourceBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	resourceBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	resourceBarrier.Transition.pResource = internalResource.get();
+	resourceBarrier.Transition.Subresource = subresource ? *subresource : D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+	resourceBarrier.Transition.StateBefore = previousState;
+	resourceBarrier.Transition.StateAfter = desiredState;
+
+	return { resourceBarrier };
 }

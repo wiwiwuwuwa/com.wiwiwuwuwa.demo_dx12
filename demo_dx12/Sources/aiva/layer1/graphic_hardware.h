@@ -8,6 +8,7 @@
 namespace aiva::layer1
 {
 	struct Engine;
+	struct GrvRtvToTexture2D;
 	struct ResourceViewHeap;
 }
 
@@ -117,9 +118,16 @@ namespace aiva::layer1
 	// Screen Render Targets
 
 	public:
-		D3D12_CPU_DESCRIPTOR_HANDLE ScreenRenderTargetHandle() const;
+		std::shared_ptr<ResourceViewHeap> ScreenViewHeap() const;
 
-		winrt::com_ptr<ID3D12Resource> ScreenRenderTargetResource() const;
+		std::string ScreenViewKey() const;
+
+	public:
+		std::shared_ptr<GrvRtvToTexture2D> ScreenViewObj() const;
+
+		winrt::com_ptr<ID3D12Resource> ScreenViewRes() const;
+
+		D3D12_CPU_DESCRIPTOR_HANDLE ScreenViewHandle() const;
 
 	private:
 		void InitializeScreenRenderTargets();

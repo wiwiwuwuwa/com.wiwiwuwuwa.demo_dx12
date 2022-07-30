@@ -301,43 +301,63 @@ winrt::com_ptr<ID3D12Fence1> const& aiva::layer1::GraphicHardware::Fence() const
 	return mFence;
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE aiva::layer1::GraphicHardware::ScreenRenderTargetHandle() const
+std::shared_ptr<aiva::layer1::ResourceViewHeap>  aiva::layer1::GraphicHardware::ScreenViewHeap() const
 {
-	auto const& screenRenderTargets = mScreenRenderTargets;
-	aiva::utils::Asserts::CheckBool(screenRenderTargets);
-
-	auto const& descriptorHandles = screenRenderTargets->InternalDescriptorHandles();
-	aiva::utils::Asserts::CheckBool(!descriptorHandles.empty());
-
-	auto const& swapChain = SwapChain();
-	winrt::check_bool(swapChain);
-
-	auto currentIndex = swapChain->GetCurrentBackBufferIndex();
-	aiva::utils::Asserts::CheckBool(currentIndex >= 0 && currentIndex < descriptorHandles.size());
-
-	return descriptorHandles.at(currentIndex);
+	aiva::utils::Asserts::CheckBool(mScreenRenderTargets);
+	return mScreenRenderTargets;
 }
 
-winrt::com_ptr<ID3D12Resource> aiva::layer1::GraphicHardware::ScreenRenderTargetResource() const
+std::string aiva::layer1::GraphicHardware::ScreenViewKey() const
 {
 	auto const& swapChain = SwapChain();
 	winrt::check_bool(swapChain);
 
-	auto currentIndex = SwapChain()->GetCurrentBackBufferIndex();
+	return std::to_string(swapChain->GetCurrentBackBufferIndex());
+}
 
-	auto const& screenHeap = mScreenRenderTargets;
-	aiva::utils::Asserts::CheckBool(screenHeap);
+std::shared_ptr<aiva::layer1::GrvRtvToTexture2D> aiva::layer1::GraphicHardware::ScreenViewObj() const
+{
+	auto const& viewHeap = ScreenViewHeap();
+	aiva::utils::Asserts::CheckBool(viewHeap);
 
-	auto const& screenView = screenHeap->ResourceView<GrvRtvToTexture2D>(std::to_string(currentIndex));
-	aiva::utils::Asserts::CheckBool(screenView);
+	auto const& viewKey = ScreenViewKey();
+	aiva::utils::Asserts::CheckBool(!viewKey.empty());
 
-	auto const& screenDesc = screenView->Desc();
-	aiva::utils::Asserts::CheckBool(screenDesc);
+	auto const& viewObj = viewHeap->ResourceView<GrvRtvToTexture2D>(viewKey);
+	aiva::utils::Asserts::CheckBool(viewObj);
 
-	auto const& screenTexture = screenDesc->Resource;
-	aiva::utils::Asserts::CheckBool(screenTexture);
+	return viewObj;
+}
 
-	return screenTexture->InternalResource();
+winrt::com_ptr<ID3D12Resource> aiva::layer1::GraphicHardware::ScreenViewRes() const
+{
+	auto const& viewObj = ScreenViewObj();
+	aiva::utils::Asserts::CheckBool(viewObj);
+
+	auto const& viewDesc = viewObj->Desc();
+	aiva::utils::Asserts::CheckBool(viewDesc);
+
+	auto const& viewPtr = viewDesc->Resource;
+	aiva::utils::Asserts::CheckBool(viewPtr);
+
+	auto const& viewRes = viewPtr->InternalResource();
+	winrt::check_bool(viewRes);
+
+	return viewRes;
+}
+
+D3D12_CPU_DESCRIPTOR_HANDLE aiva::layer1::GraphicHardware::ScreenViewHandle() const
+{
+	auto const& viewHeap = ScreenViewHeap();
+	aiva::utils::Asserts::CheckBool(viewHeap);
+
+	auto const& viewKey = ScreenViewKey();
+	aiva::utils::Asserts::CheckBool(!viewKey.empty());
+
+	auto const& viewHandle = viewHeap->InternalDescriptorHandle(viewKey);
+	aiva::utils::Asserts::CheckBool(viewHandle);
+
+	return *viewHandle;
 }
 
 void aiva::layer1::GraphicHardware::InitializeScreenRenderTargets()

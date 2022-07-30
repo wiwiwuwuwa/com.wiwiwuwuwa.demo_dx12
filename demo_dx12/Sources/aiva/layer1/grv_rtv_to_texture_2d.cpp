@@ -92,6 +92,20 @@ void aiva::layer1::GrvRtvToTexture2D::CreateView(D3D12_CPU_DESCRIPTOR_HANDLE con
 	device->CreateRenderTargetView(directxBuffer.get(), &directxDesc.value(), destination);
 }
 
+std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::GrvRtvToTexture2D::PrepareBarriers(bool const active) const
+{
+	CacheUpdater().FlushChanges();
+
+	auto const& desc = Desc();
+	aiva::utils::Asserts::CheckBool(desc);
+
+	auto const& res = desc.value().Resource;
+	aiva::utils::Asserts::CheckBool(res);
+
+	auto const& state = active ? D3D12_RESOURCE_STATE_RENDER_TARGET : D3D12_RESOURCE_STATE_COMMON;
+	return res->PrepareBarriers(state, desc->MipLevel);
+}
+
 aiva::utils::TEvAction<aiva::utils::ECacheFlags>& aiva::layer1::GrvRtvToTexture2D::OnMarkAsChanged()
 {
 	return CacheUpdater().OnMarkAsChanged();

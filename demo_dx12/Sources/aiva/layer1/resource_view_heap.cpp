@@ -205,3 +205,21 @@ std::optional<D3D12_CPU_DESCRIPTOR_HANDLE> aiva::layer1::ResourceViewHeap::Inter
 
 	return InternalDescriptorHandles().at(viewIndex);
 }
+
+std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::ResourceViewHeap::PrepareBarriers(bool const active) const
+{
+	CacheUpdater().FlushChanges();
+
+	auto barriers = std::vector<D3D12_RESOURCE_BARRIER>{};
+
+	auto const& resourceViews = ResourceViews();
+	std::for_each(std::cbegin(resourceViews), std::cend(resourceViews), [&barriers, active](auto const& resourceView)
+	{
+		aiva::utils::Asserts::CheckBool(resourceView.second);
+
+		auto const& resourceBarriers = resourceView.second->PrepareBarriers(active);
+		std::copy(std::cbegin(resourceBarriers), std::cend(resourceBarriers), std::back_inserter(barriers));
+	});
+
+	return barriers;
+}

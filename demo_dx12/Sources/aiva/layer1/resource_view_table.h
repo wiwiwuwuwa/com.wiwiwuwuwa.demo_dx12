@@ -79,6 +79,12 @@ namespace aiva::layer1
 
 	public:
 		std::vector<winrt::com_ptr<ID3D12DescriptorHeap>> InternalResource() const;
+
+	// ----------------------------------------------------
+	// Resource Barriers
+
+	public:
+		std::vector<D3D12_RESOURCE_BARRIER> PrepareBarriers(bool const active) const;
 	};
 }
 

@@ -14,42 +14,12 @@
 
 void aiva::layer1::GcaDrawMesh::Execute(Engine const& engine) const
 {
-	{
-		auto const& commandList = engine.GraphicHardware().CommandList();
-		winrt::check_bool(commandList);
-
-		auto barrier = D3D12_RESOURCE_BARRIER{};
-		barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-		barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-		barrier.Transition.pResource = engine.GraphicHardware().ScreenRenderTargetResource().get();
-		barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-		barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-		barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
-
-		commandList->ResourceBarrier(1, &barrier);
-	}
-
 	ExecuteSetPipelineState(engine);
 	ExecuteSetGraphicRootSignature(engine);
 	ExecuteSetDescriptorHeaps(engine);
 	ExecuteSetGraphicsRootDescriptorTable(engine);
 	ExecuteIASetPrimitiveTopology(engine);
 	ExecuteDrawIndexedInstanced(engine);
-
-	{
-		auto const& commandList = engine.GraphicHardware().CommandList();
-		winrt::check_bool(commandList);
-
-		auto barrier = D3D12_RESOURCE_BARRIER{};
-		barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-		barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-		barrier.Transition.pResource = engine.GraphicHardware().ScreenRenderTargetResource().get();
-		barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-		barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-		barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
-
-		commandList->ResourceBarrier(1, &barrier);
-	}
 }
 
 void aiva::layer1::GcaDrawMesh::ExecuteSetPipelineState(Engine const& engine) const

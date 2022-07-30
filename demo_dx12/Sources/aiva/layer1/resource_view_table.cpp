@@ -103,3 +103,21 @@ std::vector<winrt::com_ptr<ID3D12DescriptorHeap>> aiva::layer1::ResourceViewTabl
 	std::for_each(tableResource.cbegin(), tableResource.cend(), [](auto const& res) { winrt::check_bool(res); });
 	return tableResource;
 }
+
+std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::ResourceViewTable::PrepareBarriers(bool const active) const
+{
+	CacheUpdater().FlushChanges();
+
+	auto barriers = std::vector<D3D12_RESOURCE_BARRIER>{};
+
+	auto const& resourceHeaps = ResourceHeaps();
+	std::for_each(std::cbegin(resourceHeaps), std::cend(resourceHeaps), [&barriers, active](auto const resourceHeap)
+	{
+			aiva::utils::Asserts::CheckBool(resourceHeap.second);
+
+			auto const& resourceBarriers = resourceHeap.second->PrepareBarriers(active);
+			std::copy(std::cbegin(resourceBarriers), std::cend(resourceBarriers), std::back_inserter(barriers));
+	});
+
+	return barriers;
+}

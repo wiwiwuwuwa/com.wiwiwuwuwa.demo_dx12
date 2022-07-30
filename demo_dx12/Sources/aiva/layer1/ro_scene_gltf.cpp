@@ -58,3 +58,8 @@ void aiva::layer1::RoSceneGltf::TerminateCacheUpdater()
 	aiva::utils::Asserts::CheckBool(mCacheUpdater);
 	mCacheUpdater = {};
 }
+
+tinygltf::Model const& aiva::layer1::RoSceneGltf::Model() const
+{
+	return mModel;
+}

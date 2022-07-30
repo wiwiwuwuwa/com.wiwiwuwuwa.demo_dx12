@@ -72,9 +72,6 @@ namespace aiva::layer1
 		GrBuffer& Desc(std::optional<GrBufferDesc> const& desc);
 
 	private:
-		GrBuffer& Desc(std::optional<GrBufferDesc> const& desc, bool const markAsChanged);
-
-	private:
 		std::optional<GrBufferDesc> mDesc{};
 
 	// ----------------------------------------------------

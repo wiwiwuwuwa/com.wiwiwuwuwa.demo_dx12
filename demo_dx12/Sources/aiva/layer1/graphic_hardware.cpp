@@ -2,15 +2,22 @@
 #include <aiva/layer1/graphic_hardware.h>
 
 #include <aiva/layer0/app.h>
+#include <aiva/layer1/e_gpu_descriptor_heap_type.h>
 #include <aiva/layer1/engine.h>
+#include <aiva/layer1/gr_texture_2d.h>
+#include <aiva/layer1/grv_rtv_to_texture_2d.h>
+#include <aiva/layer1/resource_view_heap.h>
+#include <aiva/utils/asserts.h>
 
 aiva::layer1::GraphicHardware::GraphicHardware(aiva::layer1::Engine const& engine) : mEngine{ engine }
 {
 	InitializeDirectX();
+	InitializeScreenRenderTargets();
 }
 
 aiva::layer1::GraphicHardware::~GraphicHardware()
 {
+	TerminateScreenRenderTargets();
 	TerminateDirectX();
 }
 
@@ -42,12 +49,6 @@ void aiva::layer1::GraphicHardware::InitializeDirectX()
 	mSwapChain = CreateSwapChain(mFactory, mCommandQueue, mEngine.App()->Window(), mIsTearingAllowed);
 	winrt::check_bool(mSwapChain);
 
-	mDescriptorHeap = CreateDescriptorHeap(mDevice);
-	winrt::check_bool(mDescriptorHeap);
-
-	mRenderTargetViews = CreateRenderTargetViews(mDevice, mSwapChain, mDescriptorHeap);
-	for (const winrt::com_ptr<ID3D12Resource>& rtv : mRenderTargetViews) winrt::check_bool(rtv);
-
 	mCommandAllocator = CreateCommandAllocator(mDevice);
 	winrt::check_bool(mCommandAllocator);
 
@@ -63,8 +64,6 @@ void aiva::layer1::GraphicHardware::TerminateDirectX()
 	mFence = {};
 	mCommandList = {};
 	mCommandAllocator = {};
-	mRenderTargetViews = {};
-	mDescriptorHeap = {};
 	mSwapChain = {};
 	mIsTearingAllowed = {};
 	mCommandQueue = {};
@@ -212,50 +211,6 @@ winrt::com_ptr<IDXGISwapChain4> aiva::layer1::GraphicHardware::CreateSwapChain(w
 	return specificSwapChain;
 }
 
-winrt::com_ptr<ID3D12DescriptorHeap> aiva::layer1::GraphicHardware::CreateDescriptorHeap(winrt::com_ptr<ID3D12Device9> const& device)
-{
-	winrt::check_bool(device);
-
-	D3D12_DESCRIPTOR_HEAP_DESC desc{};
-	desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-	desc.NumDescriptors = static_cast<UINT>(SWAP_CHAIN_BUFFERS_COUNT);
-	desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	desc.NodeMask = 0;
-
-	winrt::com_ptr<ID3D12DescriptorHeap> descriptorHeap{};
-	winrt::check_hresult(device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&descriptorHeap)));
-
-	return descriptorHeap;
-}
-
-std::array<winrt::com_ptr<ID3D12Resource>, aiva::layer1::GraphicHardware::SWAP_CHAIN_BUFFERS_COUNT> aiva::layer1::GraphicHardware::CreateRenderTargetViews(winrt::com_ptr<ID3D12Device9> const& device, winrt::com_ptr<IDXGISwapChain4> const& swapChain, winrt::com_ptr<ID3D12DescriptorHeap> const& descriptorHeap)
-{
-	winrt::check_bool(device);
-	winrt::check_bool(swapChain);
-	winrt::check_bool(descriptorHeap);
-
-	const SIZE_T heapStart = descriptorHeap->GetCPUDescriptorHandleForHeapStart().ptr;
-	const UINT heapOffset = device->GetDescriptorHandleIncrementSize(descriptorHeap->GetDesc().Type);
-
-	std::array<winrt::com_ptr<ID3D12Resource>, aiva::layer1::GraphicHardware::SWAP_CHAIN_BUFFERS_COUNT> renderTargetViews{};
-
-	for (UINT i = 0; i < renderTargetViews.size(); i++)
-	{
-		winrt::com_ptr<ID3D12Resource> backBuffer{};
-		winrt::check_hresult(swapChain->GetBuffer(i, IID_PPV_ARGS(&backBuffer)));
-
-		D3D12_CPU_DESCRIPTOR_HANDLE handle{};
-		handle.ptr = heapStart + static_cast<SIZE_T>(heapOffset * i);
-
-		device->CreateRenderTargetView(backBuffer.get(), nullptr, handle);
-		winrt::check_bool(backBuffer);
-
-		renderTargetViews[i] = backBuffer;
-	}
-
-	return renderTargetViews;
-}
-
 winrt::com_ptr<ID3D12CommandAllocator> aiva::layer1::GraphicHardware::CreateCommandAllocator(winrt::com_ptr<ID3D12Device9> const& device)
 {
 	winrt::check_bool(device);
@@ -331,16 +286,6 @@ winrt::com_ptr<IDXGISwapChain4> const& aiva::layer1::GraphicHardware::SwapChain(
 	return mSwapChain;
 }
 
-winrt::com_ptr<ID3D12DescriptorHeap> const& aiva::layer1::GraphicHardware::DescriptorHeap() const
-{
-	return mDescriptorHeap;
-}
-
-std::array<winrt::com_ptr<ID3D12Resource>, aiva::layer1::GraphicHardware::SWAP_CHAIN_BUFFERS_COUNT> const& aiva::layer1::GraphicHardware::RenderTargetViews() const
-{
-	return mRenderTargetViews;
-}
-
 winrt::com_ptr<ID3D12CommandAllocator> const& aiva::layer1::GraphicHardware::CommandAllocator() const
 {
 	return mCommandAllocator;
@@ -354,4 +299,78 @@ winrt::com_ptr<ID3D12GraphicsCommandList6> const& aiva::layer1::GraphicHardware:
 winrt::com_ptr<ID3D12Fence1> const& aiva::layer1::GraphicHardware::Fence() const
 {
 	return mFence;
+}
+
+D3D12_CPU_DESCRIPTOR_HANDLE aiva::layer1::GraphicHardware::ScreenRenderTargetHandle() const
+{
+	auto const& screenRenderTargets = mScreenRenderTargets;
+	aiva::utils::Asserts::CheckBool(screenRenderTargets);
+
+	auto const& descriptorHandles = screenRenderTargets->InternalDescriptorHandles();
+	aiva::utils::Asserts::CheckBool(!descriptorHandles.empty());
+
+	auto const& swapChain = SwapChain();
+	winrt::check_bool(swapChain);
+
+	auto currentIndex = swapChain->GetCurrentBackBufferIndex();
+	aiva::utils::Asserts::CheckBool(currentIndex >= 0 && currentIndex < descriptorHandles.size());
+
+	return descriptorHandles.at(currentIndex);
+}
+
+winrt::com_ptr<ID3D12Resource> aiva::layer1::GraphicHardware::ScreenRenderTargetResource() const
+{
+	auto const& swapChain = SwapChain();
+	winrt::check_bool(swapChain);
+
+	auto currentIndex = SwapChain()->GetCurrentBackBufferIndex();
+
+	auto const& screenHeap = mScreenRenderTargets;
+	aiva::utils::Asserts::CheckBool(screenHeap);
+
+	auto const& screenView = screenHeap->ResourceView<GrvRtvToTexture2D>(std::to_string(currentIndex));
+	aiva::utils::Asserts::CheckBool(screenView);
+
+	auto const& screenDesc = screenView->Desc();
+	aiva::utils::Asserts::CheckBool(screenDesc);
+
+	auto const& screenTexture = screenDesc->Resource;
+	aiva::utils::Asserts::CheckBool(screenTexture);
+
+	return screenTexture->InternalResource();
+}
+
+void aiva::layer1::GraphicHardware::InitializeScreenRenderTargets()
+{
+	auto const& screenRenderTargets = ResourceViewHeap::Create(mEngine);
+	aiva::utils::Asserts::CheckBool(screenRenderTargets);
+
+	screenRenderTargets->ResourceType(EGpuDescriptorHeapType::Rtv);
+
+	auto const& swapChain = SwapChain();
+	winrt::check_bool(swapChain);
+
+	auto swapDesc = DXGI_SWAP_CHAIN_DESC1{};
+	winrt::check_hresult(swapChain->GetDesc1(&swapDesc));
+
+	for (std::size_t i = {}; i < std::size_t{ swapDesc.BufferCount }; i++)
+	{
+		auto directxResource = winrt::com_ptr<ID3D12Resource>{};
+		winrt::check_hresult(swapChain->GetBuffer(i, IID_PPV_ARGS(&directxResource)));
+
+		auto aivaView = GrvRtvToTexture2D::Create(mEngine, directxResource);
+		aiva::utils::Asserts::CheckBool(aivaView);
+
+		auto const key = std::to_string(i);
+
+		aiva::utils::Asserts::CheckBool(key.size() == 1); // otherwise sorting will be incorrect
+		screenRenderTargets->ResourceView(std::to_string(i), aivaView);
+	}
+
+	mScreenRenderTargets = screenRenderTargets;
+}
+
+void aiva::layer1::GraphicHardware::TerminateScreenRenderTargets()
+{
+	mScreenRenderTargets = {};
 }

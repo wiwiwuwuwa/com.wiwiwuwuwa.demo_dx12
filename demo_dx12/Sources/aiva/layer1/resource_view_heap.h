@@ -69,7 +69,7 @@ namespace aiva::layer1
 	// Resource Views
 
 	private:
-		using ResourceViewsMap = std::unordered_map<std::string, std::shared_ptr<IGpuResourceView>>;
+		using ResourceViewsMap = std::map<std::string, std::shared_ptr<IGpuResourceView>>;
 
 	public:
 		std::shared_ptr<IGpuResourceView> ResourceView(std::string const& key) const;
@@ -79,7 +79,7 @@ namespace aiva::layer1
 
 		ResourceViewHeap& ResourceView(std::string const& key, std::shared_ptr<IGpuResourceView> const& value);
 
-		std::vector<std::shared_ptr<IGpuResourceView>> SortedResourceViews() const;
+		ResourceViewsMap const& ResourceViews() const;
 
 	private:
 		void OnResourceViewMarkedAsChanged();
@@ -91,7 +91,9 @@ namespace aiva::layer1
 	// Internal Resources
 
 	public:
-		winrt::com_ptr<ID3D12DescriptorHeap> const& InternalResource() const;
+		winrt::com_ptr<ID3D12DescriptorHeap> const& InternalDescriptorHeap() const;
+
+		std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> const& InternalDescriptorHandles() const;
 
 	private:
 		void InitializeInternalResources();
@@ -101,10 +103,20 @@ namespace aiva::layer1
 	private:
 		void RefreshInternalResources();
 
-		static winrt::com_ptr<ID3D12DescriptorHeap> CreateInternalResource(Engine const& engine, std::vector<std::shared_ptr<IGpuResourceView>> const& resourceViews);
+		void RefreshInternalDescriptorHeap();
+
+		void RefreshInternalDescriptorHandles();
 
 	private:
-		winrt::com_ptr<ID3D12DescriptorHeap> mInternalResource{};
+		winrt::com_ptr<ID3D12DescriptorHeap> mInternalDescriptorHeap{};
+
+		std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> mInternalDescriptorHandles{};
+
+	// ----------------------------------------------------
+	// Descriptor Handles Utils
+
+	public:
+		std::optional<D3D12_CPU_DESCRIPTOR_HANDLE> InternalDescriptorHandle(std::string const& viewKey) const;
 	};
 }
 

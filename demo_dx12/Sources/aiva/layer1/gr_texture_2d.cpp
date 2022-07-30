@@ -14,15 +14,17 @@ aiva::layer1::GrTexture2D::GrTexture2D(Engine const& engine) : mEngine{ engine }
 
 aiva::layer1::GrTexture2D::GrTexture2D(Engine const& engine, GrTexture2DDesc const& desc) : GrTexture2D(engine)
 {
-	Desc(desc, true);
+	Desc(desc);
 }
 
 aiva::layer1::GrTexture2D::GrTexture2D(Engine const& engine, winrt::com_ptr<ID3D12Resource> const& resource) : GrTexture2D(engine)
 {
 	winrt::check_bool(resource);
 
-	Desc(resource, false);
+	Desc(resource);
 	InternalResource(resource);
+
+	CacheUpdater().ClearChanges();
 }
 
 aiva::layer1::GrTexture2D::~GrTexture2D()
@@ -56,17 +58,8 @@ std::optional<aiva::layer1::GrTexture2DDesc> const& aiva::layer1::GrTexture2D::D
 
 aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::Desc(std::optional<GrTexture2DDesc> const& desc)
 {
-	return Desc(desc, true);
-}
-
-aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::Desc(std::optional<GrTexture2DDesc> const& desc, bool const markAsChanged)
-{
 	mDesc = desc;
-
-	if (markAsChanged)
-	{
-		CacheUpdater().MarkAsChanged();
-	}
+	CacheUpdater().MarkAsChanged();
 
 	return *this;
 }

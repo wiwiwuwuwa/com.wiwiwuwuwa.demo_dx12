@@ -14,6 +14,7 @@
 #include <iostream>
 #include <iterator>
 #include <list>
+#include <map>
 #include <memory>
 #include <optional>
 #include <string>

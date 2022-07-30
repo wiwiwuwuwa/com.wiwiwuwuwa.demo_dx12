@@ -4,7 +4,6 @@
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Sources\aiva\layer0\app.cpp" />
     <ClCompile Include="Sources\aiva\layer1\engine.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\gca_do_everything.cpp" />
     <ClCompile Include="Sources\aiva\layer1\graphic_executor.cpp" />
     <ClCompile Include="Sources\aiva\layer1\graphic_hardware.cpp" />
     <ClCompile Include="Sources\aiva\layer1\graphic_pipeline.cpp" />
@@ -49,12 +48,14 @@
     <ClCompile Include="Sources\aiva\layer1\gr_texture_2d_desc.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_view_heap.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_view_table.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gca_set_render_target.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gca_clear_render_target.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\gca_clear_depth_stencil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="Sources\aiva\layer0\app.h" />
     <ClInclude Include="Sources\aiva\layer1\engine.h" />
-    <ClInclude Include="Sources\aiva\layer1\gca_do_everything.h" />
     <ClInclude Include="Sources\aiva\layer1\graphic_executor.h" />
     <ClInclude Include="Sources\aiva\layer1\graphic_hardware.h" />
     <ClInclude Include="Sources\aiva\layer1\graphic_pipeline.h" />
@@ -124,6 +125,9 @@
     <ClInclude Include="Sources\aiva\layer1\resource_view_heap.h" />
     <ClInclude Include="Sources\aiva\utils\e_cache_flags.h" />
     <ClInclude Include="Sources\aiva\layer1\resource_view_table.h" />
+    <ClInclude Include="Sources\aiva\layer1\gca_set_render_target.h" />
+    <ClInclude Include="Sources\aiva\layer1\gca_clear_render_target.h" />
+    <ClInclude Include="Sources\aiva\layer1\gca_clear_depth_stencil.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

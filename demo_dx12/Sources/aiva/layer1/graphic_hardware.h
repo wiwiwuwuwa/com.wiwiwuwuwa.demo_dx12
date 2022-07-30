@@ -8,6 +8,7 @@
 namespace aiva::layer1
 {
 	struct Engine;
+	struct ResourceViewHeap;
 }
 
 namespace aiva::layer1
@@ -57,10 +58,6 @@ namespace aiva::layer1
 
 		static winrt::com_ptr<IDXGISwapChain4> CreateSwapChain(winrt::com_ptr<IDXGIFactory7> const& factory, winrt::com_ptr<ID3D12CommandQueue> const& commandQueue, CoreWindow const window, bool const isTearingAllowed);
 
-		static winrt::com_ptr<ID3D12DescriptorHeap> CreateDescriptorHeap(winrt::com_ptr<ID3D12Device9> const& device);
-
-		static std::array<winrt::com_ptr<ID3D12Resource>, SWAP_CHAIN_BUFFERS_COUNT> CreateRenderTargetViews(winrt::com_ptr<ID3D12Device9> const& device, winrt::com_ptr<IDXGISwapChain4> const& swapChain, winrt::com_ptr<ID3D12DescriptorHeap> const& descriptorHeap);
-
 		static winrt::com_ptr<ID3D12CommandAllocator> CreateCommandAllocator(winrt::com_ptr<ID3D12Device9> const& device);
 
 		static winrt::com_ptr<ID3D12GraphicsCommandList6> CreateCommandList(winrt::com_ptr<ID3D12Device9> const& device, winrt::com_ptr<ID3D12CommandAllocator> const& commandAllocator);
@@ -87,10 +84,6 @@ namespace aiva::layer1
 
 		winrt::com_ptr<IDXGISwapChain4> const& SwapChain() const;
 
-		winrt::com_ptr<ID3D12DescriptorHeap> const& DescriptorHeap() const;
-
-		std::array<winrt::com_ptr<ID3D12Resource>, SWAP_CHAIN_BUFFERS_COUNT> const& RenderTargetViews() const;
-
 		winrt::com_ptr<ID3D12CommandAllocator> const& CommandAllocator() const;
 
 		winrt::com_ptr<ID3D12GraphicsCommandList6> const& CommandList() const;
@@ -114,14 +107,26 @@ namespace aiva::layer1
 
 		winrt::com_ptr<IDXGISwapChain4> mSwapChain{};
 
-		winrt::com_ptr<ID3D12DescriptorHeap> mDescriptorHeap{};
-
-		std::array<winrt::com_ptr<ID3D12Resource>, SWAP_CHAIN_BUFFERS_COUNT> mRenderTargetViews{};
-
 		winrt::com_ptr<ID3D12CommandAllocator> mCommandAllocator{};
 
 		winrt::com_ptr<ID3D12GraphicsCommandList6> mCommandList{};
 
 		winrt::com_ptr<ID3D12Fence1> mFence{};
+
+	// ----------------------------------------------------
+	// Screen Render Targets
+
+	public:
+		D3D12_CPU_DESCRIPTOR_HANDLE ScreenRenderTargetHandle() const;
+
+		winrt::com_ptr<ID3D12Resource> ScreenRenderTargetResource() const;
+
+	private:
+		void InitializeScreenRenderTargets();
+
+		void TerminateScreenRenderTargets();
+
+	private:
+		std::shared_ptr<ResourceViewHeap> mScreenRenderTargets{};
 	};
 }

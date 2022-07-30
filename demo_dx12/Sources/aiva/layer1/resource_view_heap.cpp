@@ -96,16 +96,9 @@ aiva::layer1::ResourceViewHeap& aiva::layer1::ResourceViewHeap::ResourceView(std
 	return *this;
 }
 
-std::vector<std::shared_ptr<aiva::layer1::IGpuResourceView>> aiva::layer1::ResourceViewHeap::SortedResourceViews() const
+aiva::layer1::ResourceViewHeap::ResourceViewsMap const& aiva::layer1::ResourceViewHeap::ResourceViews() const
 {
-	auto viewsPerNames = std::vector<decltype(mResourceViews)::const_iterator>();
-	for (auto iter = mResourceViews.cbegin(); iter != mResourceViews.cend(); iter++) viewsPerNames.emplace_back(iter);
-	std::sort(viewsPerNames.begin(), viewsPerNames.end(), [](auto const& a, auto const& b) { return a->first < b->first; });
-
-	auto sortedViews = std::vector<decltype(viewsPerNames)::value_type::value_type::second_type>{};
-	std::transform(viewsPerNames.cbegin(), viewsPerNames.cend(), std::back_inserter(sortedViews), [](auto const& iter) { return iter->second; });
-
-	return sortedViews;
+	return mResourceViews;
 }
 
 void aiva::layer1::ResourceViewHeap::OnResourceViewMarkedAsChanged()
@@ -113,10 +106,16 @@ void aiva::layer1::ResourceViewHeap::OnResourceViewMarkedAsChanged()
 	CacheUpdater().MarkAsChanged();
 }
 
-winrt::com_ptr<ID3D12DescriptorHeap> const& aiva::layer1::ResourceViewHeap::InternalResource() const
+winrt::com_ptr<ID3D12DescriptorHeap> const& aiva::layer1::ResourceViewHeap::InternalDescriptorHeap() const
 {
 	CacheUpdater().FlushChanges();
-	return mInternalResource;
+	return mInternalDescriptorHeap;
+}
+
+std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> const& aiva::layer1::ResourceViewHeap::InternalDescriptorHandles() const
+{
+	CacheUpdater().FlushChanges();
+	return mInternalDescriptorHandles;
 }
 
 void aiva::layer1::ResourceViewHeap::InitializeInternalResources()
@@ -131,37 +130,78 @@ void aiva::layer1::ResourceViewHeap::TerminateInternalResources()
 
 void aiva::layer1::ResourceViewHeap::RefreshInternalResources()
 {
-	mInternalResource = !std::empty(mResourceViews) ? CreateInternalResource(mEngine, SortedResourceViews()) : decltype(mInternalResource){};
+	RefreshInternalDescriptorHeap();
+	RefreshInternalDescriptorHandles();
 }
 
-winrt::com_ptr<ID3D12DescriptorHeap> aiva::layer1::ResourceViewHeap::CreateInternalResource(Engine const& engine, std::vector<std::shared_ptr<IGpuResourceView>> const& resourceViews)
+void aiva::layer1::ResourceViewHeap::RefreshInternalDescriptorHeap()
 {
-	auto const& device = engine.GraphicHardware().Device();
+	if (std::empty(mResourceViews))
+	{
+		mInternalDescriptorHeap = {};
+		return;
+	}
+
+	auto const& device = mEngine.GraphicHardware().Device();
 	winrt::check_bool(device);
 
-	aiva::utils::Asserts::CheckBool(!std::empty(resourceViews));
-	std::for_each(resourceViews.cbegin(), resourceViews.cend(), [](auto const& resourceView) { aiva::utils::Asserts::CheckBool(resourceView); });
-
-	auto const heapType = resourceViews.front()->HeapType();
-	std::for_each(resourceViews.cbegin(), resourceViews.cend(), [heapType](auto const& resourceView) { aiva::utils::Asserts::CheckBool(resourceView->HeapType() == heapType); });
-
 	auto heapDesc = D3D12_DESCRIPTOR_HEAP_DESC{};
-	heapDesc.Type = ToInternalEnum(heapType);
-	heapDesc.NumDescriptors = std::size(resourceViews);
-	heapDesc.Flags = (heapType == EGpuDescriptorHeapType::CbvSrvUav ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE);
+	heapDesc.Type = ToInternalEnum(ResourceType());
+	heapDesc.NumDescriptors = std::size(mResourceViews);
+	heapDesc.Flags = (ResourceType() == EGpuDescriptorHeapType::CbvSrvUav ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE);
 	heapDesc.NodeMask = 0;
 
 	auto heapResource = winrt::com_ptr<ID3D12DescriptorHeap>();
 	winrt::check_hresult(device->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&heapResource)));
 
-	auto const incrementSize = std::size_t{ device->GetDescriptorHandleIncrementSize(ToInternalEnum(heapType)) };
-	for (std::size_t i = {}; i < resourceViews.size(); i++)
-	{
-		auto resourceHandle = heapResource->GetCPUDescriptorHandleForHeapStart();
-		resourceHandle.ptr += i * incrementSize;
+	winrt::check_bool(heapResource);
+	mInternalDescriptorHeap = heapResource;
+}
 
-		resourceViews.at(i)->CreateView(resourceHandle);
+void aiva::layer1::ResourceViewHeap::RefreshInternalDescriptorHandles()
+{
+	mInternalDescriptorHandles = {};
+
+	if (!mInternalDescriptorHeap)
+	{
+		return;
 	}
 
-	return heapResource;
+	auto const& device = mEngine.GraphicHardware().Device();
+	winrt::check_bool(device);
+
+	auto const& resourceViews = ResourceViews();
+	aiva::utils::Asserts::CheckBool(!resourceViews.empty());
+
+	auto const incrementSize = std::size_t{ device->GetDescriptorHandleIncrementSize(ToInternalEnum(ResourceType())) };
+	for (std::size_t i = {}; i < resourceViews.size(); i++)
+	{
+		auto const& resourceIter = std::next(resourceViews.cbegin(), i);
+		aiva::utils::Asserts::CheckBool(resourceIter != resourceViews.end());
+
+		auto const& resourceView = resourceIter->second;
+		aiva::utils::Asserts::CheckBool(resourceView);
+
+		auto resourceHandle = mInternalDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+		resourceHandle.ptr += i * incrementSize;
+
+		resourceView->CreateView(resourceHandle);
+		mInternalDescriptorHandles.emplace_back(resourceHandle);
+	}
+}
+
+std::optional<D3D12_CPU_DESCRIPTOR_HANDLE> aiva::layer1::ResourceViewHeap::InternalDescriptorHandle(std::string const& viewKey) const
+{
+	CacheUpdater().FlushChanges();
+
+	auto const& viewIter = ResourceViews().find(viewKey);
+	if (viewIter == ResourceViews().end())
+	{
+		return {};
+	}
+
+	auto const& viewIndex = std::distance(ResourceViews().cbegin(), viewIter);
+	aiva::utils::Asserts::CheckBool(viewIndex >= 0 & viewIndex < std::size(InternalDescriptorHandles()));
+
+	return InternalDescriptorHandles().at(viewIndex);
 }

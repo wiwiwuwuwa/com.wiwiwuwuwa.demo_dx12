@@ -14,15 +14,17 @@ aiva::layer1::GrBuffer::GrBuffer(Engine const& engine) : mEngine{ engine }
 
 aiva::layer1::GrBuffer::GrBuffer(Engine const& engine, GrBufferDesc const& desc) : GrBuffer(engine)
 {
-	Desc(desc, true);
+	Desc(desc);
 }
 
 aiva::layer1::GrBuffer::GrBuffer(Engine const& engine, winrt::com_ptr<ID3D12Resource> const& resource) : GrBuffer(engine)
 {
 	winrt::check_bool(resource);
 
-	Desc(resource, false);
+	Desc(resource);
 	InternalResource(resource);
+
+	CacheUpdater().ClearChanges();
 }
 
 aiva::layer1::GrBuffer::~GrBuffer()
@@ -56,17 +58,8 @@ std::optional<aiva::layer1::GrBufferDesc> const& aiva::layer1::GrBuffer::Desc() 
 
 aiva::layer1::GrBuffer& aiva::layer1::GrBuffer::Desc(std::optional<GrBufferDesc> const& desc)
 {
-	return Desc(desc, true);
-}
-
-aiva::layer1::GrBuffer& aiva::layer1::GrBuffer::Desc(std::optional<GrBufferDesc> const& desc, bool const markAsChanged)
-{
 	mDesc = desc;
-
-	if (markAsChanged)
-	{
-		CacheUpdater().MarkAsChanged();
-	}
+	CacheUpdater().MarkAsChanged();
 
 	return *this;
 }

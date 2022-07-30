@@ -72,9 +72,6 @@ namespace aiva::layer1
 		GrTexture2D& Desc(std::optional<GrTexture2DDesc> const& desc);
 
 	private:
-		GrTexture2D& Desc(std::optional<GrTexture2DDesc> const& desc, bool const markAsChanged);
-
-	private:
 		std::optional<GrTexture2DDesc> mDesc{};
 
 	// ----------------------------------------------------

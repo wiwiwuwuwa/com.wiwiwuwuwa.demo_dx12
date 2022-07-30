@@ -33,6 +33,8 @@ namespace aiva::utils
 	protected:
 		void MarkAsChanged(TDirtyFlags const dirtyFlags = TDirtyFlags::All);
 
+		void ClearChanges(TDirtyFlags const dirtyFlags = TDirtyFlags::All);
+
 		TEvAction<TDirtyFlags>& FlushExecutors();
 
 	// ----------------------------------------------------
@@ -111,6 +113,12 @@ void aiva::utils::TCacheUpdaterBase<TDirtyFlags>::MarkAsChanged(TDirtyFlags cons
 
 	mDirtyFlags = EnumUtils::Or(mDirtyFlags, deltaFlags);
 	OnMarkAsChanged()(deltaFlags);
+}
+
+template <typename TDirtyFlags>
+void aiva::utils::TCacheUpdaterBase<TDirtyFlags>::ClearChanges(TDirtyFlags const dirtyFlags /*= TDirtyFlags::All*/)
+{
+	mDirtyFlags = EnumUtils::Clear(mDirtyFlags, dirtyFlags);
 }
 
 template <typename TDirtyFlags>

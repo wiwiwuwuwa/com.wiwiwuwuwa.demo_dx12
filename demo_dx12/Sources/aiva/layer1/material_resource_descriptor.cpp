@@ -113,12 +113,12 @@ void aiva::layer1::MaterialResourceDescriptor::RefreshRootSignature()
 	{
 		auto registersCounters = std::unordered_map<EGpuResourceViewType, std::size_t>{};
 		
-		for (auto const& resourceView : mainResourceHeap->SortedResourceViews())
+		for (auto const& resourceView : mainResourceHeap->ResourceViews())
 		{
 			auto& descriptorRange = mainDescriptorRanges.emplace_back();
-			descriptorRange.RangeType = ToInternalDescriptorRangeType(resourceView->ViewType());
+			descriptorRange.RangeType = ToInternalDescriptorRangeType(resourceView.second->ViewType());
 			descriptorRange.NumDescriptors = 1;
-			descriptorRange.BaseShaderRegister = registersCounters[resourceView->ViewType()]++;
+			descriptorRange.BaseShaderRegister = registersCounters[resourceView.second->ViewType()]++;
 			descriptorRange.RegisterSpace = 0;
 			descriptorRange.Flags = D3D12_DESCRIPTOR_RANGE_FLAG_NONE;
 			descriptorRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
@@ -136,12 +136,12 @@ void aiva::layer1::MaterialResourceDescriptor::RefreshRootSignature()
 	{
 		auto registersCounters = std::unordered_map<EGpuResourceViewType, std::size_t>{};
 
-		for (auto const& resourceView : samplerResourceHeap->SortedResourceViews())
+		for (auto const& resourceView : samplerResourceHeap->ResourceViews())
 		{
 			auto& descriptorRange = samplerDescriptorRanges.emplace_back();
-			descriptorRange.RangeType = ToInternalDescriptorRangeType(resourceView->ViewType());
+			descriptorRange.RangeType = ToInternalDescriptorRangeType(resourceView.second->ViewType());
 			descriptorRange.NumDescriptors = 1;
-			descriptorRange.BaseShaderRegister = registersCounters[resourceView->ViewType()]++;
+			descriptorRange.BaseShaderRegister = registersCounters[resourceView.second->ViewType()]++;
 			descriptorRange.RegisterSpace = 0;
 			descriptorRange.Flags = D3D12_DESCRIPTOR_RANGE_FLAG_NONE;
 			descriptorRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;

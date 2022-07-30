@@ -4,7 +4,6 @@
 #include <aiva/layer1/e_gpu_descriptor_heap_type.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gca_dispatch.h>
-#include <aiva/layer1/gca_do_everything.h>
 #include <aiva/layer1/graphic_executor.h>
 #include <aiva/layer1/graphic_pipeline.h>
 #include <aiva/layer1/resource_system.h>
@@ -80,7 +79,10 @@ void aiva::layer2::World::TerminateSystems()
 }
 
 #include <aiva/layer1/gr_buffer.h>
+#include <aiva/layer1/gca_clear_depth_stencil.h>
+#include <aiva/layer1/gca_clear_render_target.h>
 #include <aiva/layer1/gca_draw_mesh.h>
+#include <aiva/layer1/gca_set_render_target.h>
 #include <aiva/layer1/gca_set_viewports.h>
 #include <aiva/layer1/grv_srv_to_buffer.h>
 #include <aiva/layer1/material_pipeline_descriptor.h>
@@ -147,11 +149,19 @@ void aiva::layer2::World::TickRender()
 {
 	aiva::utils::Asserts::CheckBool(mEngine);
 
-	auto& const gcaSetViewports = aiva::layer1::GcaSetViewports{};
+	auto& gcaClearRenderTarget = aiva::layer1::GcaClearRenderTarget{};
+
+	//mEngine->GraphicExecutor().ExecuteCommand(gcaClearRenderTarget);
+
+	auto& gcaSetRenderTarget = aiva::layer1::GcaSetRenderTarget{};
+
+	mEngine->GraphicExecutor().ExecuteCommand(gcaSetRenderTarget);
+
+	auto& gcaSetViewports = aiva::layer1::GcaSetViewports{};
 
 	mEngine->GraphicExecutor().ExecuteCommand(gcaSetViewports);
 
-	auto &const gcaDrawMesh = aiva::layer1::GcaDrawMesh{};
+	auto& gcaDrawMesh = aiva::layer1::GcaDrawMesh{};
 	gcaDrawMesh.Material = GLOBAL_GRAPHIC_MATERIAL;
 	gcaDrawMesh.MeshTopology = aiva::layer1::EGpuPrimitiveTopology::TriangleList;
 	gcaDrawMesh.MeshIndicesKey = "t0_Indices";

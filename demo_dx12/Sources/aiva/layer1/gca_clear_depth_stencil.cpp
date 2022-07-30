@@ -1,0 +1,21 @@
+#include <pch.h>
+#include <aiva/layer1/gca_clear_depth_stencil.h>
+
+#include <aiva/layer1/engine.h>
+#include <aiva/layer1/graphic_hardware.h>
+#include <aiva/layer1/resource_view_heap.h>
+#include <aiva/utils/asserts.h>
+
+void aiva::layer1::GcaClearDepthStencil::Execute(Engine const& engine) const
+{
+	auto const& commandList = engine.GraphicHardware().CommandList();
+	winrt::check_bool(commandList);
+
+	auto const& heap = Heap;
+	aiva::utils::Asserts::CheckBool(heap);
+
+	auto const& handle = heap->InternalDescriptorHandle(View);
+	aiva::utils::Asserts::CheckBool(handle);
+
+	commandList->ClearDepthStencilView(*handle, D3D12_CLEAR_FLAG_DEPTH, Depth, {}, {}, {});
+}

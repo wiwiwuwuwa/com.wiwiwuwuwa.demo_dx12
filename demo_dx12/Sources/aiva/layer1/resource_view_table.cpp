@@ -98,7 +98,7 @@ std::vector<winrt::com_ptr<ID3D12DescriptorHeap>> aiva::layer1::ResourceViewTabl
 	std::for_each(heapsPerTypes.cbegin(), heapsPerTypes.cend(), [](auto const& iter) { aiva::utils::Asserts::CheckBool(iter->second); });
 
 	auto tableResource = std::vector<winrt::com_ptr<ID3D12DescriptorHeap>>{};
-	std::transform(heapsPerTypes.cbegin(), heapsPerTypes.cend(), std::back_inserter(tableResource), [](auto const& iter) { return iter->second->InternalResource(); });
+	std::transform(heapsPerTypes.cbegin(), heapsPerTypes.cend(), std::back_inserter(tableResource), [](auto const& iter) { return iter->second->InternalDescriptorHeap(); });
 
 	std::for_each(tableResource.cbegin(), tableResource.cend(), [](auto const& res) { winrt::check_bool(res); });
 	return tableResource;

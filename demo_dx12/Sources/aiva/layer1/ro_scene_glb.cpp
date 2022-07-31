@@ -1,21 +1,21 @@
 #include <pch.h>
-#include <aiva/layer1/ro_scene_gltf.h>
+#include <aiva/layer1/ro_scene_glb.h>
 
 #include <aiva/layer1/engine.h>
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/t_cache_updater.h>
 
-aiva::layer1::RoSceneGltf::RoSceneGltf(aiva::layer1::Engine const& engine) : mEngine{ engine }
+aiva::layer1::RoSceneGlb::RoSceneGlb(aiva::layer1::Engine const& engine) : mEngine{ engine }
 {
 	InitializeCacheUpdater();
 }
 
-aiva::layer1::RoSceneGltf::~RoSceneGltf()
+aiva::layer1::RoSceneGlb::~RoSceneGlb()
 {
 	TerminateCacheUpdater();
 }
 
-void aiva::layer1::RoSceneGltf::DeserealizeFromBinary(std::vector<std::byte> const& binaryData)
+void aiva::layer1::RoSceneGlb::DeserealizeFromBinary(std::vector<std::byte> const& binaryData)
 {
 	aiva::utils::Asserts::CheckBool(!binaryData.empty());
 
@@ -41,25 +41,25 @@ void aiva::layer1::RoSceneGltf::DeserealizeFromBinary(std::vector<std::byte> con
 	CacheUpdater().MarkAsChanged();
 }
 
-aiva::layer1::RoSceneGltf::CacheUpdaterType& aiva::layer1::RoSceneGltf::CacheUpdater() const
+aiva::layer1::RoSceneGlb::CacheUpdaterType& aiva::layer1::RoSceneGlb::CacheUpdater() const
 {
 	aiva::utils::Asserts::CheckBool(mCacheUpdater);
 	return *mCacheUpdater;
 }
 
-void aiva::layer1::RoSceneGltf::InitializeCacheUpdater()
+void aiva::layer1::RoSceneGlb::InitializeCacheUpdater()
 {
 	mCacheUpdater = std::make_unique<CacheUpdaterType>();
 	aiva::utils::Asserts::CheckBool(mCacheUpdater);
 }
 
-void aiva::layer1::RoSceneGltf::TerminateCacheUpdater()
+void aiva::layer1::RoSceneGlb::TerminateCacheUpdater()
 {
 	aiva::utils::Asserts::CheckBool(mCacheUpdater);
 	mCacheUpdater = {};
 }
 
-tinygltf::Model const& aiva::layer1::RoSceneGltf::Model() const
+tinygltf::Model const& aiva::layer1::RoSceneGlb::Model() const
 {
 	return mModel;
 }

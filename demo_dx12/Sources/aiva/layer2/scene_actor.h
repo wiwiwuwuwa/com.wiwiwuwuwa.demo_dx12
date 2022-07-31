@@ -28,6 +28,17 @@ namespace aiva::layer2
 		World const& mWorld;
 
 	// ----------------------------------------------------
+	// Name
+
+	public:
+		std::string const& Name() const;
+
+		SceneActor& Name(std::string const& name);
+
+	private:
+		std::string mName{};
+
+	// ----------------------------------------------------
 	// Hierarchy
 
 	public:

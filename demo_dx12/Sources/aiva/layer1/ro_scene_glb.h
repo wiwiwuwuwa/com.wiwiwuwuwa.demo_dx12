@@ -18,20 +18,20 @@ namespace aiva::utils
 
 namespace aiva::layer1
 {
-	struct RoSceneGltf final : public aiva::layer1::ICpuResource
+	struct RoSceneGlb final : public aiva::layer1::ICpuResource
 	{
 	// ----------------------------------------------------
 	// Main
 
 	public:
 		template <typename... Args>
-		static std::shared_ptr<aiva::layer1::RoSceneGltf> Create(Args&&... args);
+		static std::shared_ptr<aiva::layer1::RoSceneGlb> Create(Args&&... args);
 
 	private:
-		RoSceneGltf(aiva::layer1::Engine const& engine);
+		RoSceneGlb(aiva::layer1::Engine const& engine);
 
 	public:
-		~RoSceneGltf();
+		~RoSceneGlb();
 
 	private:
 		aiva::layer1::Engine const& mEngine;
@@ -46,7 +46,7 @@ namespace aiva::layer1
 	// Cache Refresh
 
 	public:
-		using CacheUpdaterType = aiva::utils::TCacheUpdater<RoSceneGltf>;
+		using CacheUpdaterType = aiva::utils::TCacheUpdater<RoSceneGlb>;
 
 	public:
 		CacheUpdaterType& CacheUpdater() const;
@@ -73,7 +73,7 @@ namespace aiva::layer1
 // --------------------------------------------------------
 
 template <typename... Args>
-std::shared_ptr<aiva::layer1::RoSceneGltf> aiva::layer1::RoSceneGltf::Create(Args&&... args)
+std::shared_ptr<aiva::layer1::RoSceneGlb> aiva::layer1::RoSceneGlb::Create(Args&&... args)
 {
-	return std::shared_ptr<aiva::layer1::RoSceneGltf>{new aiva::layer1::RoSceneGltf{ std::forward<Args>(args)... }};
+	return std::shared_ptr<aiva::layer1::RoSceneGlb>{new aiva::layer1::RoSceneGlb{ std::forward<Args>(args)... }};
 }

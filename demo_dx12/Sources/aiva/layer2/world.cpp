@@ -11,6 +11,7 @@
 #include <aiva/layer1/resource_view_heap.h>
 #include <aiva/layer1/resource_view_table.h>
 #include <aiva/layer1/ro_material_compute.h>
+#include <aiva/layer1/ro_scene_glb.h>
 #include <aiva/layer2/scene_system.h>
 #include <aiva/utils/asserts.h>
 
@@ -71,6 +72,11 @@ void aiva::layer2::World::InitializeSystems()
 {
 	mSceneSystem = aiva::layer2::SceneSystem::Create(*this);
 	aiva::utils::Asserts::CheckBool(mSceneSystem);
+
+	auto const& sceneResource = mEngine->ResourceSystem().GetResource<aiva::layer1::RoSceneGlb>("resources\\scenes\\main.scene_glb");
+	aiva::utils::Asserts::CheckBool(sceneResource);
+
+	mSceneSystem->LoadScene(*sceneResource);
 }
 
 void aiva::layer2::World::TerminateSystems()

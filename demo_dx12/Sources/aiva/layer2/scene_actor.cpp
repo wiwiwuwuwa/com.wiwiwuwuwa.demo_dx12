@@ -19,6 +19,17 @@ aiva::layer2::SceneActor::~SceneActor()
 	}
 }
 
+std::string const& aiva::layer2::SceneActor::Name() const
+{
+	return mName;
+}
+
+aiva::layer2::SceneActor& aiva::layer2::SceneActor::Name(std::string const& name)
+{
+	mName = name;
+	return *this;
+}
+
 std::shared_ptr<aiva::layer2::SceneActor> aiva::layer2::SceneActor::Parent() const
 {
 	return mParent.lock();

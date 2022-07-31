@@ -1,6 +1,11 @@
 #pragma once
 #include <pch.h>
 
+namespace aiva::layer1
+{
+	struct RoSceneGlb;
+}
+
 namespace aiva::layer2
 {
 	struct SceneActor;
@@ -35,6 +40,12 @@ namespace aiva::layer2
 
 	private:
 		std::vector<std::shared_ptr<SceneActor>> mActors{};
+
+	// ----------------------------------------------------
+	// Scenes
+
+	public:
+		void LoadScene(aiva::layer1::RoSceneGlb const& scene);
 	};
 }
 

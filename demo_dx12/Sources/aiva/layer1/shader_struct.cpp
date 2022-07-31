@@ -53,3 +53,38 @@ bool aiva::layer1::ShaderStruct::HasSameFields(ShaderStruct const& other) const
 
 	return std::all_of(mValues.cbegin(), mValues.cend(), [&](auto const& pair) { return other.mValues.find(pair.first) != other.mValues.end(); });
 }
+
+bool aiva::layer1::ShaderStruct::GetStruct(std::string const& key, std::shared_ptr<IShaderValue> *const value) const
+{
+	aiva::utils::Asserts::CheckBool(value);
+
+	auto const& valueIter = mValues.find(key);
+	if (valueIter == mValues.end())
+	{
+		*value = {};
+		return false;
+	}
+
+	auto const& basicValue = valueIter->second;
+	aiva::utils::Asserts::CheckBool(basicValue);
+
+	*value = basicValue;
+	return true;
+}
+
+void aiva::layer1::ShaderStruct::SetStruct(std::string const& key, std::shared_ptr<IShaderValue> const*const value)
+{
+	if (value)
+	{
+		auto const& basicValue = *value;
+		aiva::utils::Asserts::CheckBool(basicValue);
+
+		mValues.insert_or_assign(key, basicValue);
+		return;
+	}
+	else
+	{
+		mValues.erase(key);
+		return;
+	}
+}

@@ -1,10 +1,17 @@
 ﻿#include <pch.h>
 #include <aiva/layer2/scene_system.h>
 
+#include <aiva/layer1/e_gpu_descriptor_heap_type.h>
+#include <aiva/layer1/e_gpu_resource_memory_type.h>
 #include <aiva/layer1/engine.h>
+#include <aiva/layer1/gr_buffer.h>
+#include <aiva/layer1/grv_srv_to_buffer.h>
 #include <aiva/layer1/resource_system.h>
+#include <aiva/layer1/resource_view_heap.h>
 #include <aiva/layer1/ro_material_graphic.h>
 #include <aiva/layer1/ro_scene_gltf.h>
+#include <aiva/layer1/scene_gltf_utils.h>
+#include <aiva/layer1/shader_struct.h>
 #include <aiva/layer2/scene_actor.h>
 #include <aiva/layer2/world.h>
 #include <aiva/utils/asserts.h>
@@ -40,6 +47,11 @@ void aiva::layer2::SceneSystem::LoadScene(aiva::layer1::RoSceneGltf const& scene
 		auto const& resourcePath = gltfMaterial.extras.Get("path").Get<std::string>();
 		auto const& aivaMaterial = aivaMaterials.emplace_back(mWorld.Engine().ResourceSystem().GetResource<aiva::layer1::RoMaterialGraphic>(resourcePath));
 	}
+
+	// ----------------------------------------------------
+	// NEW
+
+	//auto const meshMaterials = aiva::layer1::SceneGltfUtils::LoadMeshMaterials(scene);
 
 	// ----------------------------------------------------
 	// Actors

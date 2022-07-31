@@ -14,6 +14,11 @@ aiva::layer1::ResourceViewHeap::ResourceViewHeap(Engine const& engine) : mEngine
 	InitializeInternalResources();
 }
 
+aiva::layer1::ResourceViewHeap::ResourceViewHeap(Engine const& engine, EGpuDescriptorHeapType const resourceType) : ResourceViewHeap(engine)
+{
+	ResourceType(resourceType);
+}
+
 aiva::layer1::ResourceViewHeap::~ResourceViewHeap()
 {
 	TerminateInternalResources();

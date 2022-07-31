@@ -179,6 +179,9 @@
     <ClInclude Include="Sources\aiva\layer1\e_gpu_resource_buffer_format.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_resource_memory_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_gpu_resource_view_type.h" />
+    <ClInclude Include="Sources\aiva\layer1\e_value_type.h" />
+    <ClInclude Include="Sources\aiva\layer1\shader_value_utils.h" />
+    <ClInclude Include="Sources\aiva\layer1\value_type_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_clear_depth_stencil.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_clear_render_target.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_draw_mesh.h" />
@@ -217,6 +220,7 @@
     <ClInclude Include="Sources\aiva\layer1\i_shader_value.h" />
     <ClInclude Include="Sources\aiva\layer1\resource_view_heap.h" />
     <ClInclude Include="Sources\aiva\layer1\resource_view_table.h" />
+    <ClInclude Include="Sources\aiva\layer1\scene_gltf_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_material_graphic.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_scene_gltf.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_shader_fragment.h" />
@@ -280,6 +284,8 @@
     <ClCompile Include="Sources\aiva\layer1\e_gpu_resource_memory_type.cpp" />
     <ClCompile Include="Sources\aiva\layer1\engine.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_gpu_resource_view_type.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\shader_value_utils.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\value_type_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_clear_depth_stencil.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_clear_render_target.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_dispatch.cpp" />
@@ -307,6 +313,7 @@
     <ClCompile Include="Sources\aiva\layer1\ro_material_compute.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_material_graphic.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_scene_gltf.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\scene_gltf_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_shader_compute.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gr_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_shader_fragment.cpp" />

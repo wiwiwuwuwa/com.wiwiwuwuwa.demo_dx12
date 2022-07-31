@@ -5,6 +5,11 @@
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/t_cache_updater.h>
 
+aiva::layer1::Engine const& aiva::layer1::RoSceneGltf::Engine() const
+{
+	return mEngine;
+}
+
 aiva::layer1::RoSceneGltf::RoSceneGltf(aiva::layer1::Engine const& engine) : mEngine{ engine }
 {
 	InitializeCacheUpdater();

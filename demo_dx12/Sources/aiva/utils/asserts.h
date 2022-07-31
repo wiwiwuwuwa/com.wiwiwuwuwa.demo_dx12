@@ -1,8 +1,6 @@
 #pragma once
 #include <pch.h>
 
-#include <stdexcept>
-
 namespace aiva::utils
 {
 	struct Asserts final
@@ -12,7 +10,7 @@ namespace aiva::utils
 
 	public:
 		template <typename T>
-		static void CheckBool(T const& value);
+		static void CheckBool(T const& value, std::string const& message = {});
 
 	private:
 		Asserts() = delete;
@@ -22,10 +20,10 @@ namespace aiva::utils
 // --------------------------------------------------------
 
 template <typename T>
-void aiva::utils::Asserts::CheckBool(T const& value)
+void aiva::utils::Asserts::CheckBool(T const& value, std::string const& message /*= {}*/)
 {
 	if (!value)
 	{
-		winrt::throw_last_error();
+		throw std::runtime_error{ message };
 	}
 }

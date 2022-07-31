@@ -18,6 +18,11 @@ aiva::layer1::GrvSrvToBuffer::GrvSrvToBuffer(Engine const& engine) : mEngine{ en
 	InitializeInternalResources();
 }
 
+aiva::layer1::GrvSrvToBuffer::GrvSrvToBuffer(Engine const& engine, GrvSrvToBufferDesc const& desc) : GrvSrvToBuffer(engine)
+{
+	Desc(desc);
+}
+
 aiva::layer1::GrvSrvToBuffer::~GrvSrvToBuffer()
 {
 	TerminateInternalResources();

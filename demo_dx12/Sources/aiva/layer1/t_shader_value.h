@@ -19,7 +19,7 @@ namespace aiva::layer1
 		static std::shared_ptr<TShaderValue> Create(TArgs&&... args);
 
 	private:
-		TShaderValue(TValue const& value);
+		TShaderValue(TValue const& value = {});
 
 	public:
 		~TShaderValue();
@@ -29,6 +29,10 @@ namespace aiva::layer1
 
 	public:
 		std::vector<std::byte> SerializeToBinary() const override;
+
+		void DeserealizeFromBinary(boost::span<const std::byte> const& binary) override;
+
+		std::size_t MinBinarySize() const override;
 
 	// ----------------------------------------------------
 	// High-Level Data
@@ -51,7 +55,7 @@ std::shared_ptr<aiva::layer1::TShaderValue<TValue>> aiva::layer1::TShaderValue<T
 }
 
 template <typename TValue>
-aiva::layer1::TShaderValue<TValue>::TShaderValue(TValue const& value) : mValue{ value }
+aiva::layer1::TShaderValue<TValue>::TShaderValue(TValue const& value /*={}*/) : mValue{value}
 {
 
 }
@@ -74,7 +78,22 @@ std::vector<std::byte> aiva::layer1::TShaderValue<TValue>::SerializeToBinary() c
 }
 
 template <typename TValue>
+void aiva::layer1::TShaderValue<TValue>::DeserealizeFromBinary(boost::span<const std::byte> const& binary)
+{
+	aiva::utils::Asserts::CheckBool(!std::empty(binary), "Binary data is empty");
+	aiva::utils::Asserts::CheckBool(std::size(binary) >= sizeof(TValue), "Binary data is too small");
+
+	aiva::utils::Asserts::CheckBool(memcpy_s(&mValue, sizeof(mValue), std::data(binary), std::size(binary)) == 0, "Failed to memcpy_s");
+}
+
+template <typename TValue>
 TValue const& aiva::layer1::TShaderValue<TValue>::Value() const
 {
 	return mValue;
+}
+
+template <typename TValue>
+std::size_t aiva::layer1::TShaderValue<TValue>::MinBinarySize() const
+{
+	return sizeof(TValue);
 }

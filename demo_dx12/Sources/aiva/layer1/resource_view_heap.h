@@ -31,6 +31,8 @@ namespace aiva::layer1
 	private:
 		ResourceViewHeap(Engine const& engine);
 
+		ResourceViewHeap(Engine const& engine, EGpuDescriptorHeapType const resourceType);
+
 	public:
 		~ResourceViewHeap();
 

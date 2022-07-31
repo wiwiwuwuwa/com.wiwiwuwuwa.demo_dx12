@@ -14,6 +14,8 @@
 
 #include <cstring>
 
+#include <exception>
+
 #include <filesystem>
 
 #include <fstream>
@@ -33,6 +35,8 @@
 #include <optional>
 
 #include <ratio>
+
+#include <stdexcept>
 
 #include <string>
 

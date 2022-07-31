@@ -27,6 +27,8 @@ namespace aiva::layer1
 		template <typename... Args>
 		static std::shared_ptr<aiva::layer1::RoSceneGltf> Create(Args&&... args);
 
+		Engine const& Engine() const;
+
 	private:
 		RoSceneGltf(aiva::layer1::Engine const& engine);
 

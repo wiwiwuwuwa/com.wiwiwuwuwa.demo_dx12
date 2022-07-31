@@ -45,6 +45,17 @@ namespace aiva::layer1
 		template <typename TValue>
 		void SetArray(std::string const& key, std::vector<TValue> const*const value);
 
+		template <typename TValue>
+		bool GetStruct(std::string const& key, std::shared_ptr<TShaderValue<TValue>> *const value) const;
+
+		template <typename TValue>
+		void SetStruct(std::string const& key, std::shared_ptr<TShaderValue<TValue>> const*const value) const;
+
+	public:
+		bool GetStruct(std::string const& key, std::shared_ptr<IShaderValue> *const value) const;
+
+		void SetStruct(std::string const& key, std::shared_ptr<IShaderValue> const*const value);
+
 		bool HasSameFields(ShaderStruct const& other) const;
 
 	private:
@@ -138,4 +149,29 @@ void aiva::layer1::ShaderStruct::SetArray(std::string const& key, std::vector<TV
 		mValues.erase(key);
 		return;
 	}
+}
+
+template <typename TValue>
+bool aiva::layer1::ShaderStruct::GetStruct(std::string const& key, std::shared_ptr<TShaderValue<TValue>> *const value) const
+{
+	aiva::utils::Asserts::CheckBool(value);
+
+	auto basicValue = std::shared_ptr<IShaderValue>{};
+	if (!GetStruct(key, &basicValue))
+	{
+		*value = {};
+		return false;
+	}
+
+	auto const& specificValue = std::dynamic_pointer_cast<TShaderValue<TValue>>(basicValue);
+	aiva::utils::Asserts::CheckBool(specificValue);
+
+	*value = specificValue;
+	return true;
+}
+
+template <typename TValue>
+void aiva::layer1::ShaderStruct::SetStruct(std::string const& key, std::shared_ptr<TShaderValue<TValue>> const*const value) const
+{
+	SetStruct(key, value);
 }

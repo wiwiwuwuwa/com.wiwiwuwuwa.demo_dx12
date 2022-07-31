@@ -37,6 +37,8 @@ namespace aiva::layer1
 	private:
 		GrvSrvToBuffer(Engine const& engine);
 
+		GrvSrvToBuffer(Engine const& engine, GrvSrvToBufferDesc const& desc);
+
 	public:
 		~GrvSrvToBuffer();
 

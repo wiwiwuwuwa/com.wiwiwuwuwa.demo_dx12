@@ -33,6 +33,9 @@ namespace aiva::layer1
 	// High-Level Data
 
 	public:
+		using MapType = std::unordered_map<std::string, std::shared_ptr<IShaderValue>>;
+
+	public:
 		template <typename TValue>
 		bool GetValue(std::string const& key, TValue *const value) const;
 
@@ -56,10 +59,12 @@ namespace aiva::layer1
 
 		void SetStruct(std::string const& key, std::shared_ptr<IShaderValue> const*const value);
 
+		std::size_t Num() const;
+
 		bool HasSameFields(ShaderStruct const& other) const;
 
 	private:
-		std::unordered_map<std::string, std::shared_ptr<IShaderValue>> mValues{};
+		MapType mValues{};
 	};
 }
 

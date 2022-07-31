@@ -63,7 +63,7 @@ std::vector<std::shared_ptr<aiva::layer1::ResourceViewHeap>> aiva::layer1::Scene
 		auto const aivaMesh = ResourceViewHeap::Create(gltf.Engine(), EGpuDescriptorHeapType::CbvSrvUav);
 		aivaMeshes.emplace_back(aivaMesh);
 
-		{ // Indices
+		{ // indices
 			static auto const INDEX_KEY = "m0_INDEX";
 			static auto const INDICES_KEY = "m0_INDICES";
 
@@ -99,6 +99,75 @@ std::vector<std::shared_ptr<aiva::layer1::ResourceViewHeap>> aiva::layer1::Scene
 					aivaStruct->SetStruct(INDEX_KEY, &aivaValue);
 
 					aivaView->Buffer().Add(aivaStruct);
+				}
+			}
+		}
+
+		{ // vertices
+			static auto const VERTICES_KEY = "m1_VERTICES";
+
+			auto aivaViewDesc = GrvSrvToBufferDesc{};
+			{
+				auto aivaBufferDesc = GrBufferDesc{};
+				aivaBufferDesc.MemoryType = EGpuResourceMemoryType::CpuToGpu;
+
+				auto const aivaBuffer = GrBuffer::Create(gltf.Engine(), aivaBufferDesc);
+				aivaViewDesc.Resource = aivaBuffer;
+			}
+
+			{
+				auto const aivaRefStruct = ShaderStruct::Create();
+				aivaViewDesc.Struct = aivaRefStruct;
+
+				for (auto const& gltfAttribute : gltfPrimitive.attributes)
+				{
+					auto const& gltfSemantic = gltfAttribute.first;
+					auto const& gltfAccessor = gltf.Model().accessors.at(gltfAttribute.second);
+
+					auto const aivaRefValue = ShaderValueUtils::CreateFromGltf(gltfAccessor.type, gltfAccessor.componentType);
+					aivaRefStruct->SetValue(gltfSemantic, &aivaRefValue);
+				}
+			}
+
+			auto const aivaView = GrvSrvToBuffer::Create(gltf.Engine(), aivaViewDesc);
+			aivaMesh->ResourceView(VERTICES_KEY, aivaView);
+
+			{
+				auto aivaStructs = std::vector<std::shared_ptr<ShaderStruct>>{};
+
+				{ // first pass: create empty structures
+					auto const& gltfAttribute = *std::cbegin(gltfPrimitive.attributes);
+					auto const& gltfAccessor = gltf.Model().accessors.at(gltfAttribute.second);
+					auto const& gltfVerticesCount = gltfAccessor.count;
+
+					for (std::size_t i = {}; i < gltfVerticesCount; i++)
+					{
+						auto const aivaStruct = ShaderStruct::Create();
+						aivaStructs.emplace_back(aivaStruct);
+					}
+				}
+
+				{ // second pass: merge structs
+					for (std::size_t attributeID = {}; attributeID < std::size(gltfPrimitive.attributes); attributeID++)
+					{
+						auto const& gltfAttribute = *std::next(std::cbegin(gltfPrimitive.attributes), attributeID);
+						auto const& gltfSemantic = gltfAttribute.first;
+
+						auto const aivaValues = LoadBufferByAccessor(gltf, gltfAttribute.second);
+						for (std::size_t structureID = {}; structureID < std::size(aivaStructs); structureID++)
+						{
+							auto const& aivaStruct = aivaStructs.at(structureID);
+							auto const& aivaValue = aivaValues.at(structureID);
+							aivaStruct->SetStruct(gltfSemantic, &aivaValue);
+						}
+					}
+				}
+
+				{ // third pass: fill srv buffer
+					for (auto const& aivaStruct : aivaStructs)
+					{
+						aivaView->Buffer().Add(aivaStruct);
+					}
 				}
 			}
 		}

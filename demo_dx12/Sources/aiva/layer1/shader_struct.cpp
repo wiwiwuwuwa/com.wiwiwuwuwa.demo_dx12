@@ -88,3 +88,8 @@ void aiva::layer1::ShaderStruct::SetStruct(std::string const& key, std::shared_p
 		return;
 	}
 }
+
+std::size_t aiva::layer1::ShaderStruct::Num() const
+{
+	return std::size(mValues);
+}

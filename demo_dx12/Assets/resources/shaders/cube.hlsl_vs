@@ -1,0 +1,30 @@
+struct main_input
+{
+    uint index_id : SV_VertexID;
+};
+
+struct main_output
+{
+    float4 position : SV_Position;
+};
+
+struct t0_buffer_struct
+{
+    uint4 vertex_id;
+};
+
+StructuredBuffer<t0_buffer_struct> t0_buffer : register(t0);
+
+main_output main(main_input IN)
+{
+    float4 positions[3] =
+    {
+        { -0.5, -0.5, 0.5, 1.0 },
+        { 0.0, 0.5, 0.5, 1.0 },
+        { 0.5, -0.5, 0.5, 1.0 },
+    };
+
+    main_output OUT;
+    OUT.position = positions[t0_buffer[IN.index_id].vertex_id.x];
+    return OUT;
+}

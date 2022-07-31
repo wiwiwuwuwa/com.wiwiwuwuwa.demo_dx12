@@ -32,6 +32,12 @@ void aiva::layer2::World::Run()
 	mEngine->Run();
 }
 
+aiva::layer1::Engine& aiva::layer2::World::Engine() const
+{
+	aiva::utils::Asserts::CheckBool(mEngine);
+	return *mEngine;
+}
+
 void aiva::layer2::World::InitializeEngine()
 {
 	mEngine = std::make_unique<aiva::layer1::Engine>();

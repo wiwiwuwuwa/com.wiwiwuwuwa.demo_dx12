@@ -33,6 +33,9 @@ namespace aiva::layer2
 
 	// ----------------------------------------------------
 
+	public:
+		aiva::layer1::Engine& Engine() const;
+
 	private:
 		void InitializeEngine();
 

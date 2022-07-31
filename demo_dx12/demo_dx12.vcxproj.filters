@@ -186,6 +186,9 @@
     <None Include="Assets\resources\shaders\checker.hlsl_ps" />
     <None Include="Assets\resources\shaders\checker.hlsl_vs" />
     <None Include="Assets\resources\scenes\main.scene_gltf" />
+    <None Include="Assets\resources\materials\cube.mat_gs" />
+    <None Include="Assets\resources\shaders\cube.hlsl_ps" />
+    <None Include="Assets\resources\shaders\cube.hlsl_vs" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme.txt" />

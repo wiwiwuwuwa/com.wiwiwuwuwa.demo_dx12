@@ -1,6 +1,9 @@
 ﻿#include <pch.h>
 #include <aiva/layer2/scene_system.h>
 
+#include <aiva/layer1/engine.h>
+#include <aiva/layer1/resource_system.h>
+#include <aiva/layer1/ro_material_graphic.h>
 #include <aiva/layer1/ro_scene_gltf.h>
 #include <aiva/layer2/scene_actor.h>
 #include <aiva/layer2/world.h>
@@ -25,7 +28,24 @@ void aiva::layer2::SceneSystem::LoadScene(aiva::layer1::RoSceneGltf const& scene
 {
 	auto const& gltfModel = scene.Model();
 
+	// ----------------------------------------------------
+	// Materials
+
+	auto aivaMaterials = std::vector<std::shared_ptr<aiva::layer1::RoMaterialGraphic>>{};
+
+	for (std::size_t i = {}; i < gltfModel.materials.size(); i++)
+	{
+		auto const& gltfMaterial = gltfModel.materials.at(i);
+
+		auto const& resourcePath = gltfMaterial.extras.Get("path").Get<std::string>();
+		auto const& aivaMaterial = aivaMaterials.emplace_back(mWorld.Engine().ResourceSystem().GetResource<aiva::layer1::RoMaterialGraphic>(resourcePath));
+	}
+
+	// ----------------------------------------------------
+	// Actors
+
 	auto aivaNodes = std::vector<std::shared_ptr<SceneActor>>();
+
 	for (std::size_t i = {}; i < gltfModel.nodes.size(); i++)
 	{
 		auto const& gltfNode = gltfModel.nodes.at(i);

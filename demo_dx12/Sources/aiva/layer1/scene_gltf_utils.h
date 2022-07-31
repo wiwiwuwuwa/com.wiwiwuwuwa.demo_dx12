@@ -27,11 +27,25 @@ namespace aiva::layer1
 	// ----------------------------------------------------
 	// Utils
 
+	public:
+		using MaterialArray = std::vector<std::shared_ptr<RoMaterialGraphic>>;
+
+		using MeshArray = std::vector<std::shared_ptr<ResourceViewHeap>>;
+
+		using VertexArray = std::vector<std::shared_ptr<IShaderValue>>;
+
+		using MaterialPerNodeMap = std::unordered_map<std::size_t, std::shared_ptr<RoMaterialGraphic>>;
+
+	public:
+		static MaterialPerNodeMap LoadMaterials(RoSceneGltf const& gltf);
+
 	private:
-		static std::vector<std::shared_ptr<RoMaterialGraphic>> LoadGraphicMaterials(RoSceneGltf const& gltf);
+		static MaterialArray LoadGraphicMaterials(RoSceneGltf const& gltf);
 
-		static std::vector<std::shared_ptr<ResourceViewHeap>> LoadMeshMaterials(RoSceneGltf const& gltf);
+		static MeshArray LoadMeshMaterials(RoSceneGltf const& gltf);
 
-		static std::vector<std::shared_ptr<IShaderValue>> LoadBufferByAccessor(RoSceneGltf const& gltf, std::size_t const accessorID);
+		static VertexArray LoadBufferByAccessor(RoSceneGltf const& gltf, std::size_t const accessorID);
+
+		static MaterialPerNodeMap LoadNodeMaterials(RoSceneGltf const& gltf, MaterialArray const& materials, MeshArray const& meshes);
 	};
 }

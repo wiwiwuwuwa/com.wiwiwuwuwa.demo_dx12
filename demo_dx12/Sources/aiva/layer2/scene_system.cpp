@@ -38,20 +38,7 @@ void aiva::layer2::SceneSystem::LoadScene(aiva::layer1::RoSceneGltf const& scene
 	// ----------------------------------------------------
 	// Materials
 
-	auto aivaMaterials = std::vector<std::shared_ptr<aiva::layer1::RoMaterialGraphic>>{};
-
-	for (std::size_t i = {}; i < gltfModel.materials.size(); i++)
-	{
-		auto const& gltfMaterial = gltfModel.materials.at(i);
-
-		auto const& resourcePath = gltfMaterial.extras.Get("path").Get<std::string>();
-		auto const& aivaMaterial = aivaMaterials.emplace_back(mWorld.Engine().ResourceSystem().GetResource<aiva::layer1::RoMaterialGraphic>(resourcePath));
-	}
-
-	// ----------------------------------------------------
-	// NEW
-
-	//auto const meshMaterials = aiva::layer1::SceneGltfUtils::LoadMeshMaterials(scene);
+	auto const aivaMaterials = aiva::layer1::SceneGltfUtils::LoadMaterials(scene);
 
 	// ----------------------------------------------------
 	// Actors

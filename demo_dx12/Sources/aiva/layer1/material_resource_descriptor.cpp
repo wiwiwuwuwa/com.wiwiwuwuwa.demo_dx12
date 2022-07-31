@@ -187,3 +187,10 @@ std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::MaterialResourceDescriptor::Pr
 	CacheUpdater().FlushChanges();
 	return ResourceTable().PrepareBarriers(active);
 }
+
+void aiva::layer1::MaterialResourceDescriptor::CopyPropertiesFrom(MaterialResourceDescriptor const& source)
+{
+	ResourceTable().CopyPropertiesFrom(source.ResourceTable());
+
+	CacheUpdater().MarkAsChanged();
+}

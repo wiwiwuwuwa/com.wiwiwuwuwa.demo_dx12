@@ -289,3 +289,13 @@ std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::RoMaterialGraphic::PrepareBarr
 	CacheUpdater().FlushChanges();
 	return ResourceDescriptor().PrepareBarriers(active);
 }
+
+void aiva::layer1::RoMaterialGraphic::CopyPropertiesFrom(RoMaterialGraphic const& source)
+{
+	VertexShader(source.VertexShader());
+	FragmentShader(source.FragmentShader());
+	PipelineDescriptor().CopyPropertiesFrom(source.PipelineDescriptor());
+	ResourceDescriptor().CopyPropertiesFrom(source.ResourceDescriptor());
+
+	CacheUpdater().MarkAsChanged();
+}

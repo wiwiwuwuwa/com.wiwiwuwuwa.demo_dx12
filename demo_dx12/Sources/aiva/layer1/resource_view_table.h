@@ -85,6 +85,12 @@ namespace aiva::layer1
 
 	public:
 		std::vector<D3D12_RESOURCE_BARRIER> PrepareBarriers(bool const active) const;
+
+	// ----------------------------------------------------
+	// Copying
+
+	public:
+		void CopyPropertiesFrom(ResourceViewTable const& source);
 	};
 }
 

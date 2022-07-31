@@ -228,3 +228,25 @@ std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::ResourceViewHeap::PrepareBarri
 
 	return barriers;
 }
+
+void aiva::layer1::ResourceViewHeap::CopyPropertiesFrom(ResourceViewHeap const& source)
+{
+	ResourceType(source.ResourceType());
+
+	auto keysToRemove = std::vector<std::string>{};
+	for (auto const& resourceView : ResourceViews())
+	{
+		keysToRemove.emplace_back(resourceView.first);
+	}
+	for (auto const& keyToRemove : keysToRemove)
+	{
+		ResourceView(keyToRemove, {});
+	}
+
+	for (auto const& sourceResourceView : source.ResourceViews())
+	{
+		ResourceView(sourceResourceView.first, sourceResourceView.second);
+	}
+
+	CacheUpdater().MarkAsChanged();
+}

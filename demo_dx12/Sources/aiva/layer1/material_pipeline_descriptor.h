@@ -137,6 +137,12 @@ namespace aiva::layer1
 
 	private:
 		EGpuResourceBufferFormat mDepthTarget{ EGpuResourceBufferFormat::D32_FLOAT };
+
+	// ----------------------------------------------------
+	// Copying
+
+	public:
+		void CopyPropertiesFrom(MaterialPipelineDescriptor const& source);
 	};
 }
 

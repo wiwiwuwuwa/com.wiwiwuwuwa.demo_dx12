@@ -129,3 +129,16 @@ aiva::layer1::MaterialPipelineDescriptor& aiva::layer1::MaterialPipelineDescript
 	CacheUpdater().MarkAsChanged();
 	return *this;
 }
+
+void aiva::layer1::MaterialPipelineDescriptor::CopyPropertiesFrom(MaterialPipelineDescriptor const& source)
+{
+	FillMode(source.FillMode());
+	CullMode(source.CullMode());
+	DepthTest(source.DepthTest());
+	DepthWrite(source.DepthWrite());
+	DepthFunc(source.DepthFunc());
+	RenderTargets(source.RenderTargets());
+	DepthTarget(source.DepthTarget());
+
+	CacheUpdater().MarkAsChanged();
+}

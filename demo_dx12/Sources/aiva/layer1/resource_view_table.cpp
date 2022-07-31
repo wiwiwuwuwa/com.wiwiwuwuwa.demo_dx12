@@ -121,3 +121,26 @@ std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::ResourceViewTable::PrepareBarr
 
 	return barriers;
 }
+
+void aiva::layer1::ResourceViewTable::CopyPropertiesFrom(ResourceViewTable const& source)
+{
+	auto keysToRemove = std::vector<EGpuDescriptorHeapType>{};
+	for (auto const& resourceHeap : ResourceHeaps())
+	{
+		keysToRemove.emplace_back(resourceHeap.first);
+	}
+	for (auto const& keyToRemove : keysToRemove)
+	{
+		ResourceHeap(keyToRemove, {});
+	}
+
+	for (auto const& sourceResourceHeap : source.ResourceHeaps())
+	{
+		auto const copiedResourceHeap = ResourceViewHeap::Create(mEngine);
+		copiedResourceHeap->CopyPropertiesFrom(*sourceResourceHeap.second);
+
+		ResourceHeap(sourceResourceHeap.first, copiedResourceHeap);
+	}
+
+	CacheUpdater().MarkAsChanged();
+}

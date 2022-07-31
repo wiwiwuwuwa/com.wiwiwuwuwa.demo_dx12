@@ -45,6 +45,44 @@ namespace aiva::layer2
 		std::vector<std::weak_ptr<SceneActor>> mChildren{};
 
 	// ----------------------------------------------------
+	// Transformations
+
+	// --------------------------------
+	// Main
+
+	public:
+		glm::vec3 const& LocalPosition() const;
+
+		SceneActor& LocalPosition(glm::vec3 const& position);
+
+	private:
+		glm::vec3 mLocalPosition = glm::zero<glm::vec3>();
+
+	public:
+		glm::quat const& LocalRotation() const;
+
+		SceneActor& LocalRotation(glm::quat const& rotation);
+
+	private:
+		glm::quat mLocalRotation = glm::identity<glm::quat>();
+
+	public:
+		glm::vec3 const& LocalScale() const;
+
+		SceneActor& LocalScale(glm::vec3 const& scale);
+
+	private:
+		glm::vec3 mLocalScale = glm::one<glm::vec3>();
+
+	// --------------------------------
+	// Extensions
+
+	public:
+		glm::mat4 LocalTransform() const;
+
+		glm::mat4 WorldTransform() const;
+
+	// ----------------------------------------------------
 	// Components
 
 	public:

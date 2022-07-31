@@ -12,6 +12,7 @@
 #include <aiva/layer1/resource_view_table.h>
 #include <aiva/layer1/ro_material_compute.h>
 #include <aiva/layer1/ro_scene_gltf.h>
+#include <aiva/layer2/render_system.h>
 #include <aiva/layer2/scene_system.h>
 #include <aiva/utils/asserts.h>
 
@@ -68,21 +69,41 @@ aiva::layer2::SceneSystem& aiva::layer2::World::SceneSystem() const
 	return *mSceneSystem;
 }
 
+aiva::layer2::RenderSystem& aiva::layer2::World::RenderSystem() const
+{
+	aiva::utils::Asserts::CheckBool(mSceneSystem);
+	return *mRenderSystem;
+}
+
 void aiva::layer2::World::InitializeSystems()
 {
-	mSceneSystem = aiva::layer2::SceneSystem::Create(*this);
-	aiva::utils::Asserts::CheckBool(mSceneSystem);
+	{
+		mSceneSystem = aiva::layer2::SceneSystem::Create(*this);
+		aiva::utils::Asserts::CheckBool(mSceneSystem);
 
-	auto const& sceneResource = mEngine->ResourceSystem().GetResource<aiva::layer1::RoSceneGltf>("resources\\scenes\\main.scene_gltf");
-	aiva::utils::Asserts::CheckBool(sceneResource);
+		auto const& sceneResource = mEngine->ResourceSystem().GetResource<aiva::layer1::RoSceneGltf>("resources\\scenes\\main.scene_gltf");
+		aiva::utils::Asserts::CheckBool(sceneResource);
 
-	mSceneSystem->LoadScene(*sceneResource);
+		mSceneSystem->LoadScene(*sceneResource);
+	}
+
+	{
+		mRenderSystem = RenderSystem::Create(*this);
+		aiva::utils::Asserts::CheckBool(mRenderSystem);
+	}
 }
 
 void aiva::layer2::World::TerminateSystems()
 {
-	aiva::utils::Asserts::CheckBool(mSceneSystem);
-	mSceneSystem = {};
+	{
+		aiva::utils::Asserts::CheckBool(mRenderSystem);
+		mRenderSystem = {};
+	}
+
+	{
+		aiva::utils::Asserts::CheckBool(mSceneSystem);
+		mSceneSystem = {};
+	}
 }
 
 #include <aiva/layer1/gr_buffer.h>
@@ -149,7 +170,7 @@ void aiva::layer2::World::InitializeRender()
 	material->PipelineDescriptor().DepthFunc(aiva::layer1::EGpuComparisonFunc::Always);
 	material->PipelineDescriptor().RenderTargets({ aiva::layer1::EGpuResourceBufferFormat::R8G8B8A8_UNORM });
 	material->PipelineDescriptor().DepthTarget(aiva::layer1::EGpuResourceBufferFormat::D32_FLOAT);
-	material->ResourceDescriptor().ResourceTable().ResourceHeap(aiva::layer1::EGpuDescriptorHeapType::CbvSrvUav, resourceHeap);	
+	material->ResourceDescriptor().ResourceTable().ResourceHeap(aiva::layer1::EGpuDescriptorHeapType::CbvSrvUav, resourceHeap);
 
 	GLOBAL_GRAPHIC_MATERIAL = material;
 }
@@ -188,7 +209,7 @@ void aiva::layer2::World::TickRender()
 	mEngine->GraphicExecutor().ExecuteCommand(gcaDrawMesh);
 
 	auto& gcaPresent = aiva::layer1::GcaPresent{};
-	
+
 	mEngine->GraphicExecutor().ExecuteCommand(gcaPresent);
 }
 

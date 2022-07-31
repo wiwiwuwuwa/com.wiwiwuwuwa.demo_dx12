@@ -7,7 +7,6 @@
     <ClCompile Include="Sources\aiva\layer1\graphic_executor.cpp" />
     <ClCompile Include="Sources\aiva\layer1\graphic_hardware.cpp" />
     <ClCompile Include="Sources\aiva\layer1\graphic_pipeline.cpp" />
-    <ClCompile Include="Sources\aiva\layer2\world.cpp" />
     <ClCompile Include="Sources\main.cpp" />
     <ClCompile Include="Sources\aiva\layer2\scene_system.cpp" />
     <ClCompile Include="Sources\aiva\layer2\scene_actor.cpp" />
@@ -58,6 +57,8 @@
     <ClCompile Include="External Sources\stb\stb_image_write.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_scene_gltf.cpp" />
     <ClCompile Include="External Sources\tinygltf\tiny_gltf.cpp" />
+    <ClCompile Include="Sources\aiva\layer2\render_system.cpp" />
+    <ClCompile Include="Sources\aiva\layer2\world.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -69,7 +70,6 @@
     <ClInclude Include="Sources\aiva\layer1\i_graphic_command.h" />
     <ClInclude Include="Sources\aiva\layer1\i_graphic_command_async.h" />
     <ClInclude Include="Sources\aiva\layer1\i_graphic_command_sync.h" />
-    <ClInclude Include="Sources\aiva\layer2\world.h" />
     <ClInclude Include="Sources\aiva\utils\asserts.h" />
     <ClInclude Include="Sources\aiva\utils\d3dx12.h" />
     <ClInclude Include="Sources\aiva\utils\ev_action.h" />
@@ -142,6 +142,8 @@
     <ClInclude Include="External Sources\stb\stb_image_write.h" />
     <ClInclude Include="External Sources\tinygltf\tiny_gltf.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_scene_gltf.h" />
+    <ClInclude Include="Sources\aiva\layer2\render_system.h" />
+    <ClInclude Include="Sources\aiva\layer2\world.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

@@ -1,9 +1,6 @@
 #pragma once
 #include <pch.h>
 
-#include <memory>
-#include <boost/core/noncopyable.hpp>
-
 namespace aiva::layer1
 {
 	struct Engine;
@@ -11,6 +8,7 @@ namespace aiva::layer1
 
 namespace aiva::layer2
 {
+	struct RenderSystem;
 	struct SceneSystem;
 }
 
@@ -52,7 +50,9 @@ namespace aiva::layer2
 	// Systems
 
 	public:
-		aiva::layer2::SceneSystem& SceneSystem() const;
+		SceneSystem& SceneSystem() const;
+
+		RenderSystem& RenderSystem() const;
 
 	private:
 		void InitializeSystems();
@@ -61,6 +61,8 @@ namespace aiva::layer2
 
 	private:
 		std::shared_ptr<aiva::layer2::SceneSystem> mSceneSystem{};
+
+		std::shared_ptr<aiva::layer2::RenderSystem> mRenderSystem{};
 
 	// ----------------------------------------------------
 	// Render

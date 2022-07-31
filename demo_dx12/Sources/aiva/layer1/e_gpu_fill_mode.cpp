@@ -34,3 +34,47 @@ D3D12_FILL_MODE aiva::layer1::ToInternalEnum(EGpuFillMode const fillMode)
 		return {};
 	}
 }
+
+bool aiva::layer1::TryParse(std::string const& enumStr, EGpuFillMode& enumVal)
+{
+	if (enumStr == "Wireframe")
+	{
+		enumVal = EGpuFillMode::Wireframe;
+		return true;
+	}
+
+	if (enumStr == "Solid")
+	{
+		enumVal = EGpuFillMode::Solid;
+		return true;
+	}
+
+	enumVal = {};
+	return false;
+}
+
+std::string aiva::layer1::ToString(EGpuFillMode const fillMode)
+{
+	switch (fillMode)
+	{
+	case EGpuFillMode::Wireframe:
+		return "Wireframe";
+
+	case EGpuFillMode::Solid:
+		return "Solid";
+
+	default:
+		aiva::utils::Asserts::CheckBool(false);
+		return {};
+	}
+}
+
+void aiva::layer1::from_json(nlohmann::json const& j, EGpuFillMode& p)
+{
+	aiva::utils::Asserts::CheckBool(TryParse(j.get<std::string>(), p));
+}
+
+void aiva::layer1::to_json(nlohmann::json& j, EGpuFillMode const& p)
+{
+	j = ToString(p);
+}

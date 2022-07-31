@@ -32,11 +32,41 @@ void aiva::layer1::RoMaterialGraphic::DeserealizeFromBinary(std::vector<std::byt
 
 	auto root = nlohmann::json::parse(binaryData);
 	{
-		auto vertexShader = root.at("vertex_shader").get<std::string>();
+		auto const& vertexShader = root.at("vertex_shader").get<std::string>();
 		VertexShader(mEngine.ResourceSystem().GetResource<aiva::layer1::RoShaderVertex>(vertexShader));
 
-		auto fragmentShader = root.at("fragment_shader").get<std::string>();
+		auto const& fragmentShader = root.at("fragment_shader").get<std::string>();
 		FragmentShader(mEngine.ResourceSystem().GetResource<aiva::layer1::RoShaderFragment>(fragmentShader));
+
+		auto const& pipelineDescriptor = root.at("pipeline_descriptor");
+		{
+			auto const& fillMode = pipelineDescriptor.at("fill_mode").get<EGpuFillMode>();
+			PipelineDescriptor().FillMode(fillMode);
+
+			auto const& cullMode = pipelineDescriptor.at("cull_mode").get<EGpuCullMode>();
+			PipelineDescriptor().CullMode(cullMode);
+
+			auto const& depthTest = pipelineDescriptor.at("depth_test").get<bool>();
+			PipelineDescriptor().DepthTest(depthTest);
+
+			auto const& depthWrite = pipelineDescriptor.at("depth_write").get<bool>();
+			PipelineDescriptor().DepthWrite(depthWrite);
+
+			auto const& depthFunc = pipelineDescriptor.at("depth_func").get<EGpuComparisonFunc>();
+			PipelineDescriptor().DepthFunc(depthFunc);
+
+			{
+				auto const& rtJsons = pipelineDescriptor.at("render_targets");
+
+				auto rtEnums = std::vector<EGpuResourceBufferFormat>{};
+				std::transform(std::cbegin(rtJsons), std::cend(rtJsons), std::back_inserter(rtEnums), [](auto const& rtJson) { return rtJson.get<EGpuResourceBufferFormat>(); });
+
+				PipelineDescriptor().RenderTargets(rtEnums);
+			}
+
+			auto const& depthTarget = pipelineDescriptor.at("depth_target").get<EGpuResourceBufferFormat>();
+			PipelineDescriptor().DepthTarget(depthTarget);
+		}
 	}
 
 	CacheUpdater().MarkAsChanged();

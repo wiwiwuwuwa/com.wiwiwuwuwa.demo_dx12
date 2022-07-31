@@ -24,7 +24,7 @@ void aiva::layer1::RoSceneGltf::DeserealizeFromBinary(std::vector<std::byte> con
 	auto model = tinygltf::Model{};
 	auto errors = std::string{};
 	auto warnings = std::string{};
-	if (!loader.LoadBinaryFromMemory(&model, &errors, &warnings, reinterpret_cast<const std::uint8_t*>(binaryData.data()), binaryData.size()))
+	if (!loader.LoadASCIIFromString(&model, &errors, &warnings, reinterpret_cast<const char*>(binaryData.data()), binaryData.size(), {}))
 	{
 		if (!errors.empty())
 		{

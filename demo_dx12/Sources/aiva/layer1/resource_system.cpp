@@ -4,7 +4,7 @@
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/ro_material_compute.h>
 #include <aiva/layer1/ro_material_graphic.h>
-#include <aiva/layer1/ro_scene_glb.h>
+#include <aiva/layer1/ro_scene_gltf.h>
 #include <aiva/layer1/ro_shader_compute.h>
 #include <aiva/layer1/ro_shader_fragment.h>
 #include <aiva/layer1/ro_shader_vertex.h>
@@ -108,7 +108,7 @@ void aiva::layer1::ResourceSystem::InitializeFactories()
 	mFactories = {};
 	RegisterFactory<aiva::layer1::RoMaterialCompute>(".mat_cs");
 	RegisterFactory<aiva::layer1::RoMaterialGraphic>(".mat_gs");
-	RegisterFactory<aiva::layer1::RoSceneGlb>(".scene_glb");
+	RegisterFactory<aiva::layer1::RoSceneGltf>(".scene_gltf");
 	RegisterFactory<aiva::layer1::RoShaderCompute>(".hlsl_cs");
 	RegisterFactory<aiva::layer1::RoShaderFragment>(".hlsl_ps");
 	RegisterFactory<aiva::layer1::RoShaderVertex>(".hlsl_vs");

@@ -1,7 +1,7 @@
 ﻿#include <pch.h>
 #include <aiva/layer2/scene_system.h>
 
-#include <aiva/layer1/ro_scene_glb.h>
+#include <aiva/layer1/ro_scene_gltf.h>
 #include <aiva/layer2/scene_actor.h>
 #include <aiva/layer2/world.h>
 #include <aiva/utils/asserts.h>
@@ -21,7 +21,7 @@ aiva::layer2::SceneActor& aiva::layer2::SceneSystem::CreateActor()
 	return *mActors.emplace_back(new SceneActor{ mWorld });
 }
 
-void aiva::layer2::SceneSystem::LoadScene(aiva::layer1::RoSceneGlb const& scene)
+void aiva::layer2::SceneSystem::LoadScene(aiva::layer1::RoSceneGltf const& scene)
 {
 	auto const& gltfModel = scene.Model();
 

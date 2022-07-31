@@ -3,7 +3,7 @@
 
 namespace aiva::layer1
 {
-	struct RoSceneGlb;
+	struct RoSceneGltf;
 }
 
 namespace aiva::layer2
@@ -45,7 +45,7 @@ namespace aiva::layer2
 	// Scenes
 
 	public:
-		void LoadScene(aiva::layer1::RoSceneGlb const& scene);
+		void LoadScene(aiva::layer1::RoSceneGltf const& scene);
 	};
 }
 

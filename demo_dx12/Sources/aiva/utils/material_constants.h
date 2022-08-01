@@ -15,8 +15,8 @@ namespace aiva::utils
 	// Constants
 
 	public:
-		static constexpr auto const* const MESH_ATTR_INDICES = "_MESH_ATTR_INDICES";
+		static constexpr auto const* const AIVA_MESH_INDICES = "_AIVA_MESH_INDICES";
 
-		static constexpr auto const* const MESH_ATTR_VERTICES = "_MESH_ATTR_VERTICES";
+		static constexpr auto const* const AIVA_MESH_VERTICES = "_AIVA_MESH_VERTICES";
 	};
 }

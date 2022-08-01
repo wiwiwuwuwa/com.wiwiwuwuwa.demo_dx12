@@ -2,11 +2,17 @@
 #include <aiva/layer2/scene_actor.h>
 
 #include <aiva/layer2/scene_system.h>
+#include <aiva/layer2/world.h>
 #include <aiva/utils/asserts.h>
 
-aiva::layer2::SceneActor::SceneActor(World const& world) : mWorld{ world }
+aiva::layer2::SceneActor::SceneActor(aiva::layer2::World const& world) : mWorld{ world }
 {
 
+}
+
+aiva::layer2::World const& aiva::layer2::SceneActor::World() const
+{
+	return mWorld;
 }
 
 aiva::layer2::SceneActor::~SceneActor()

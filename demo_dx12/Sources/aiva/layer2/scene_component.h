@@ -16,13 +16,16 @@ namespace aiva::layer2
 	// ----------------------------------------------------
 	// Main
 
-	private:
-		SceneComponent(SceneActor const& actor);
+	protected:
+		SceneComponent(SceneActor& actor);
 
 	public:
 		virtual ~SceneComponent();
 
+	public:
+		SceneActor& Actor() const;
+
 	private:
-		SceneActor const& mActor;
+		SceneActor& mActor;
 	};
 }

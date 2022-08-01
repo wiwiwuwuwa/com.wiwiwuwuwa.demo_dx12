@@ -62,6 +62,8 @@
     <ClCompile Include="Sources\aiva\layer1\scene_gltf_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer1\value_type_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer1\shader_value_utils.cpp" />
+    <ClCompile Include="Sources\aiva\layer2\sc_mesh_renderer.cpp" />
+    <ClCompile Include="Sources\aiva\layer2\sc_camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -151,6 +153,9 @@
     <ClInclude Include="Sources\aiva\layer1\e_value_type.h" />
     <ClInclude Include="Sources\aiva\layer1\value_type_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\shader_value_utils.h" />
+    <ClInclude Include="Sources\aiva\layer2\sc_mesh_renderer.h" />
+    <ClInclude Include="Sources\aiva\layer2\sc_camera.h" />
+    <ClInclude Include="Sources\aiva\utils\t_signal_aggregator.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

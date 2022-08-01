@@ -66,16 +66,6 @@ namespace aiva::layer2
 		std::shared_ptr<aiva::layer2::SceneSystem> mSceneSystem{};
 
 		std::shared_ptr<aiva::layer2::RenderSystem> mRenderSystem{};
-
-	// ----------------------------------------------------
-	// Render
-
-	public:
-		void InitializeRender();
-
-		void TickRender();
-
-		void TerminateRender();
 	};
 }
 

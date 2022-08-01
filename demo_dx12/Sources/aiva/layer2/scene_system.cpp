@@ -12,6 +12,8 @@
 #include <aiva/layer1/ro_scene_gltf.h>
 #include <aiva/layer1/scene_gltf_utils.h>
 #include <aiva/layer1/shader_struct.h>
+#include <aiva/layer2/sc_camera.h>
+#include <aiva/layer2/sc_mesh_renderer.h>
 #include <aiva/layer2/scene_actor.h>
 #include <aiva/layer2/world.h>
 #include <aiva/utils/asserts.h>
@@ -34,11 +36,6 @@ aiva::layer2::SceneActor& aiva::layer2::SceneSystem::CreateActor()
 void aiva::layer2::SceneSystem::LoadScene(aiva::layer1::RoSceneGltf const& scene)
 {
 	auto const& gltfModel = scene.Model();
-
-	// ----------------------------------------------------
-	// Materials
-
-	auto const aivaMaterials = aiva::layer1::SceneGltfUtils::LoadMaterials(scene);
 
 	// ----------------------------------------------------
 	// Actors
@@ -82,5 +79,41 @@ void aiva::layer2::SceneSystem::LoadScene(aiva::layer1::RoSceneGltf const& scene
 
 			aivaChildNode->Parent(aivaParentNode);
 		}
+	}
+
+	// ----------------------------------------------------
+	// Materials
+
+	auto const& aivaMaterials = aiva::layer1::SceneGltfUtils::LoadMaterials(scene);
+
+	for (auto const& pair : aivaMaterials)
+	{
+		auto& aivaNode = *aivaNodes.at(pair.first);
+		auto& meshRenderer = aivaNode.CreateComponent<ScMeshRenderer>();
+		meshRenderer.Material(pair.second);
+	}
+
+	// ----------------------------------------------------
+	// Cameras
+
+	for (std::size_t i = {}; i < std::size(gltfModel.nodes); i++)
+	{
+		auto const& gltfNode = gltfModel.nodes.at(i);
+		if (gltfNode.camera == -1)
+		{
+			continue;
+		}
+
+		auto const& gltfCamera = gltfModel.cameras.at(gltfNode.camera);
+		if (gltfCamera.type != "perspective")
+		{
+			continue;
+		}
+
+		auto& aivaNode = *aivaNodes.at(i);
+		auto& aivaCamera = aivaNode.CreateComponent<ScCamera>();
+		aivaCamera.FovY(gltfCamera.perspective.yfov);
+		aivaCamera.ZNear(gltfCamera.perspective.znear);
+		aivaCamera.ZFar(gltfCamera.perspective.zfar);
 	}
 }

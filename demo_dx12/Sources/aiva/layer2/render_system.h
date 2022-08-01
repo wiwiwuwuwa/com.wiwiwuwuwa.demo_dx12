@@ -1,8 +1,12 @@
 #pragma once
 #include <pch.h>
 
+#include <aiva/utils/t_signal_aggregator.h>
+
 namespace aiva::layer2
 {
+	struct ScCamera;
+	struct ScMeshRenderer;
 	struct World;
 }
 
@@ -25,6 +29,35 @@ namespace aiva::layer2
 
 	private:
 		World const& mWorld;
+
+	// ----------------------------------------------------
+	// Events
+
+	public:
+		using EvPopulateCameras = boost::signals2::signal<std::shared_ptr<ScCamera>(), aiva::utils::TSignalAggregator<std::vector<std::shared_ptr<ScCamera>>>>;
+
+		using EvPopulateMeshRenderers = boost::signals2::signal<std::shared_ptr<ScMeshRenderer>(), aiva::utils::TSignalAggregator<std::vector<std::shared_ptr<ScMeshRenderer>>>>;
+
+	public:
+		EvPopulateCameras& OnPopulateCameras();
+
+		EvPopulateMeshRenderers& OnPopulateMeshRenderers();
+
+	private:
+		EvPopulateCameras mOnPopulateCameras{};
+
+		EvPopulateMeshRenderers mOnPopulateMeshRenderers{};
+
+	// ----------------------------------------------------
+	// Renderer
+
+	private:
+		void InitializeRenderer();
+
+		void TerminateRenderer();
+
+	private:
+		void ExecuteRenderer();
 	};
 }
 

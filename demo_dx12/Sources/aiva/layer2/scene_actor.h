@@ -24,8 +24,11 @@ namespace aiva::layer2
 	public:
 		~SceneActor();
 
+	public:
+		aiva::layer2::World const& World() const;
+
 	private:
-		World const& mWorld;
+		aiva::layer2::World const& mWorld;
 
 	// ----------------------------------------------------
 	// Name
@@ -110,5 +113,8 @@ namespace aiva::layer2
 template <typename T>
 T& aiva::layer2::SceneActor::CreateComponent()
 {
-	return *mComponents.emplace_back(new T{ weak_from_this() });
+	auto const componentPtr = std::shared_ptr<T>(new T{ *this });
+	mComponents.emplace_back(componentPtr);
+
+	return *componentPtr;
 }

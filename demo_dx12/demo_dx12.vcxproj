@@ -229,6 +229,8 @@
     <ClInclude Include="Sources\aiva\layer1\material_pipeline_descriptor.h" />
     <ClInclude Include="Sources\aiva\layer1\material_resource_descriptor.h" />
     <ClInclude Include="Sources\aiva\layer2\render_system.h" />
+    <ClInclude Include="Sources\aiva\layer2\sc_camera.h" />
+    <ClInclude Include="Sources\aiva\layer2\sc_mesh_renderer.h" />
     <ClInclude Include="Sources\aiva\layer2\world.h" />
     <ClInclude Include="Sources\aiva\utils\e_cache_flags.h" />
     <ClInclude Include="Sources\aiva\utils\math_utils.h" />
@@ -252,6 +254,7 @@
     <ClInclude Include="Sources\aiva\utils\resource_barrier.h" />
     <ClInclude Include="Sources\aiva\utils\t_cache_updater.h" />
     <ClInclude Include="Sources\aiva\utils\t_ev_action.h" />
+    <ClInclude Include="Sources\aiva\utils\t_signal_aggregator.h" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -326,6 +329,8 @@
     <ClCompile Include="Sources\aiva\layer2\scene_actor.cpp" />
     <ClCompile Include="Sources\aiva\layer2\scene_component.cpp" />
     <ClCompile Include="Sources\aiva\layer2\scene_system.cpp" />
+    <ClCompile Include="Sources\aiva\layer2\sc_camera.cpp" />
+    <ClCompile Include="Sources\aiva\layer2\sc_mesh_renderer.cpp" />
     <ClCompile Include="Sources\aiva\layer2\world.cpp" />
     <ClCompile Include="Sources\aiva\utils\action_batcher.cpp" />
     <ClCompile Include="Sources\aiva\utils\changes_counter.cpp" />

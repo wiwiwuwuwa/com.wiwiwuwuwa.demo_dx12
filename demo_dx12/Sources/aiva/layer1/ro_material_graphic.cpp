@@ -290,7 +290,7 @@ std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::RoMaterialGraphic::PrepareBarr
 	return ResourceDescriptor().PrepareBarriers(active);
 }
 
-void aiva::layer1::RoMaterialGraphic::CopyPropertiesFrom(RoMaterialGraphic const& source)
+aiva::layer1::RoMaterialGraphic& aiva::layer1::RoMaterialGraphic::CopyPropertiesFrom(RoMaterialGraphic const& source)
 {
 	VertexShader(source.VertexShader());
 	FragmentShader(source.FragmentShader());
@@ -298,4 +298,14 @@ void aiva::layer1::RoMaterialGraphic::CopyPropertiesFrom(RoMaterialGraphic const
 	ResourceDescriptor().CopyPropertiesFrom(source.ResourceDescriptor());
 
 	CacheUpdater().MarkAsChanged();
+	return *this;
+}
+
+std::shared_ptr<aiva::layer1::RoMaterialGraphic> aiva::layer1::RoMaterialGraphic::Copy() const
+{
+	auto const copy = RoMaterialGraphic::Create(mEngine);
+	aiva::utils::Asserts::CheckBool(copy);
+
+	copy->CopyPropertiesFrom(*this);
+	return copy;
 }

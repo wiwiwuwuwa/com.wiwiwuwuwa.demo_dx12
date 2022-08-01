@@ -129,6 +129,9 @@ namespace aiva::layer1
 
 		D3D12_CPU_DESCRIPTOR_HANDLE ScreenViewHandle() const;
 
+	public:
+		glm::vec4 ScreenViewRect() const;
+
 	private:
 		void InitializeScreenRenderTargets();
 

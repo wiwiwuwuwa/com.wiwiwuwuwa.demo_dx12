@@ -155,7 +155,9 @@ namespace aiva::layer1
 	// Copying
 
 	public:
-		void CopyPropertiesFrom(RoMaterialGraphic const& source);
+		RoMaterialGraphic& CopyPropertiesFrom(RoMaterialGraphic const& source);
+
+		std::shared_ptr<RoMaterialGraphic> Copy() const;
 	};
 }
 

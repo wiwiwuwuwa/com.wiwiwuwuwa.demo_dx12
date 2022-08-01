@@ -14,6 +14,11 @@ aiva::layer1::GrvDsvToTexture2D::GrvDsvToTexture2D(Engine const& engine) : mEngi
 	InitializeCacheUpdater();
 }
 
+aiva::layer1::GrvDsvToTexture2D::GrvDsvToTexture2D(Engine const& engine, GrvDsvToTexture2DDesc const& desc) : GrvDsvToTexture2D{ engine }
+{
+	Desc(desc);
+}
+
 aiva::layer1::GrvDsvToTexture2D::~GrvDsvToTexture2D()
 {
 	TerminateCacheUpdater();
@@ -67,6 +72,20 @@ void aiva::layer1::GrvDsvToTexture2D::CreateView(D3D12_CPU_DESCRIPTOR_HANDLE con
 	aiva::utils::Asserts::CheckBool(directxDesc);
 
 	device->CreateDepthStencilView(directxBuffer.get(), &directxDesc.value(), destination);
+}
+
+std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::GrvDsvToTexture2D::PrepareBarriers(bool const active) const
+{
+	CacheUpdater().FlushChanges();
+
+	auto const& desc = Desc();
+	aiva::utils::Asserts::CheckBool(desc);
+
+	auto const& res = desc.value().Resource;
+	aiva::utils::Asserts::CheckBool(res);
+
+	auto const& state = active ? D3D12_RESOURCE_STATE_DEPTH_WRITE : D3D12_RESOURCE_STATE_COMMON;
+	return res->PrepareBarriers(state, desc->MipLevel);
 }
 
 aiva::utils::TEvAction<aiva::utils::ECacheFlags>& aiva::layer1::GrvDsvToTexture2D::OnMarkAsChanged()

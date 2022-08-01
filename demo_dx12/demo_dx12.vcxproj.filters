@@ -156,6 +156,7 @@
     <ClInclude Include="Sources\aiva\layer2\sc_mesh_renderer.h" />
     <ClInclude Include="Sources\aiva\layer2\sc_camera.h" />
     <ClInclude Include="Sources\aiva\utils\t_signal_aggregator.h" />
+    <ClInclude Include="Sources\aiva\utils\material_constants.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">
@@ -191,16 +192,11 @@
   <ItemGroup>
     <None Include="PropertySheet.props" />
     <None Include="packages.config" />
-    <None Include="Assets\resources\materials\checker.mat_cs" />
-    <None Include="Assets\resources\shaders\checker.hlsl_cs" />
     <None Include="demo_dx12_TemporaryKey.pfx" />
-    <None Include="Assets\resources\materials\checker.mat_gs" />
-    <None Include="Assets\resources\shaders\checker.hlsl_ps" />
-    <None Include="Assets\resources\shaders\checker.hlsl_vs" />
     <None Include="Assets\resources\scenes\main.scene_gltf" />
-    <None Include="Assets\resources\materials\cube.mat_gs" />
-    <None Include="Assets\resources\shaders\cube.hlsl_ps" />
-    <None Include="Assets\resources\shaders\cube.hlsl_vs" />
+    <None Include="Assets\resources\shaders\mesh_gbuffer.hlsl_ps" />
+    <None Include="Assets\resources\shaders\mesh_gbuffer.hlsl_vs" />
+    <None Include="Assets\resources\materials\mesh_gbuffer.mat_gs" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme.txt" />

@@ -360,6 +360,22 @@ D3D12_CPU_DESCRIPTOR_HANDLE aiva::layer1::GraphicHardware::ScreenViewHandle() co
 	return *viewHandle;
 }
 
+glm::vec4 aiva::layer1::GraphicHardware::ScreenViewRect() const
+{
+	auto const viewRes = ScreenViewRes();
+	winrt::check_bool(viewRes);
+
+	auto const viewDesc = viewRes->GetDesc();
+
+	auto viewRect = glm::vec4{};
+	viewRect.x = 0.0f;
+	viewRect.y = 0.0f;
+	viewRect.z = viewDesc.Width;
+	viewRect.w = viewDesc.Height;
+
+	return viewRect;
+}
+
 void aiva::layer1::GraphicHardware::InitializeScreenRenderTargets()
 {
 	auto const& screenRenderTargets = ResourceViewHeap::Create(mEngine);

@@ -35,6 +35,8 @@ namespace aiva::layer1
 	private:
 		GrvDsvToTexture2D(Engine const& engine);
 
+		GrvDsvToTexture2D(Engine const& engine, GrvDsvToTexture2DDesc const& desc);
+
 	public:
 		~GrvDsvToTexture2D();
 
@@ -67,6 +69,8 @@ namespace aiva::layer1
 		EGpuResourceViewType ViewType() const override;
 
 		void CreateView(D3D12_CPU_DESCRIPTOR_HANDLE const destination) const override;
+
+		std::vector<D3D12_RESOURCE_BARRIER> PrepareBarriers(bool const active) const override;
 
 		aiva::utils::TEvAction<aiva::utils::ECacheFlags>& OnMarkAsChanged() override;
 

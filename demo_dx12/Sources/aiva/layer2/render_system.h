@@ -3,6 +3,12 @@
 
 #include <aiva/utils/t_signal_aggregator.h>
 
+namespace aiva::layer1
+{
+	struct ResourceViewHeap;
+	struct RoMaterialGraphic;
+}
+
 namespace aiva::layer2
 {
 	struct ScCamera;
@@ -52,12 +58,45 @@ namespace aiva::layer2
 	// Renderer
 
 	private:
+		static constexpr std::size_t NUM_DEFFERED_BUFFERS = 4;
+
+	private:
 		void InitializeRenderer();
 
 		void TerminateRenderer();
 
 	private:
 		void ExecuteRenderer();
+
+	private:
+		void InitRTs();
+
+		void InitDSs();
+
+		void UseRTsDSs();
+
+		void ClearRTs();
+
+		void ClearDSs();
+
+		void UseViewports();
+
+		void UseScissorRects();
+
+		void DrawMeshRenderer(ScCamera const& const camera, ScMeshRenderer const& const meshRenderer);
+
+		void SetupCameraProperties(ScCamera const& const camera, aiva::layer1::RoMaterialGraphic const& const material);
+
+		void PresentST();
+
+		void ShutDSs();
+
+		void ShutRTs();
+
+	private:
+		std::shared_ptr<aiva::layer1::ResourceViewHeap> mRTs{};
+
+		std::shared_ptr<aiva::layer1::ResourceViewHeap> mDSs{};
 	};
 }
 

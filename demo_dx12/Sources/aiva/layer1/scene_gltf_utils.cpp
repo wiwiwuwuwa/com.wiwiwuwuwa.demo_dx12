@@ -16,6 +16,7 @@
 #include <aiva/layer1/shader_buffer.h>
 #include <aiva/layer1/shader_struct.h>
 #include <aiva/layer1/shader_value_utils.h>
+#include <aiva/utils/material_constants.h>
 
 aiva::layer1::SceneGltfUtils::SceneGltfUtils()
 {
@@ -76,7 +77,6 @@ aiva::layer1::SceneGltfUtils::MeshArray aiva::layer1::SceneGltfUtils::LoadMeshMa
 
 		{ // indices
 			static auto const INDEX_KEY = "m0_INDEX";
-			static auto const INDICES_KEY = "MESH_0_INDICES";
 
 			auto aivaViewDesc = GrvSrvToBufferDesc{};
 			{
@@ -100,7 +100,7 @@ aiva::layer1::SceneGltfUtils::MeshArray aiva::layer1::SceneGltfUtils::LoadMeshMa
 			}
 
 			auto const aivaView = GrvSrvToBuffer::Create(gltf.Engine(), aivaViewDesc);
-			aivaMesh->ResourceView(INDICES_KEY, aivaView);
+			aivaMesh->ResourceView(aiva::utils::MaterialConstants::MESH_ATTR_INDICES, aivaView);
 
 			{
 				auto const aivaValues = LoadBufferByAccessor(gltf, gltfPrimitive.indices);
@@ -115,8 +115,6 @@ aiva::layer1::SceneGltfUtils::MeshArray aiva::layer1::SceneGltfUtils::LoadMeshMa
 		}
 
 		{ // vertices
-			static auto const VERTICES_KEY = "MESH_1_VERTICES";
-
 			auto aivaViewDesc = GrvSrvToBufferDesc{};
 			{
 				auto aivaBufferDesc = GrBufferDesc{};
@@ -141,7 +139,7 @@ aiva::layer1::SceneGltfUtils::MeshArray aiva::layer1::SceneGltfUtils::LoadMeshMa
 			}
 
 			auto const aivaView = GrvSrvToBuffer::Create(gltf.Engine(), aivaViewDesc);
-			aivaMesh->ResourceView(VERTICES_KEY, aivaView);
+			aivaMesh->ResourceView(aiva::utils::MaterialConstants::MESH_ATTR_VERTICES, aivaView);
 
 			{
 				auto aivaStructs = std::vector<std::shared_ptr<ShaderStruct>>{};
@@ -230,11 +228,10 @@ aiva::layer1::SceneGltfUtils::MaterialPerNodeMap aiva::layer1::SceneGltfUtils::L
 		auto const& aivaMaterial = materials.at(gltfPrimitive.material);
 		auto const& aivaMesh = meshes.at(gltfNode.mesh);
 
-		auto const& materialInstance = RoMaterialGraphic::Create(gltf.Engine());
-		materialInstance->CopyPropertiesFrom(*aivaMaterial);
+		auto const materialInstance = aivaMaterial->Copy();
+		materialsPerNodes.insert_or_assign(nodeID, materialInstance);
 
 		auto materialHeap = materialInstance->ResourceDescriptor().ResourceTable().ResourceHeap(aivaMesh->ResourceType());
-
 		if (!materialHeap)
 		{
 			materialHeap = ResourceViewHeap::Create(gltf.Engine(), aivaMesh->ResourceType());

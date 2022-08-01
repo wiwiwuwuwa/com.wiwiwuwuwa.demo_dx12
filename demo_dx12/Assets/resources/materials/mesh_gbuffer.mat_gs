@@ -1,0 +1,14 @@
+{
+    "vertex_shader": "resources\\shaders\\mesh_gbuffer.hlsl_vs",
+    "fragment_shader": "resources\\shaders\\mesh_gbuffer.hlsl_ps",
+    "pipeline_descriptor": 
+    {
+        "fill_mode": "Solid",
+        "cull_mode": "Back",
+        "depth_test": true,
+        "depth_write": true,
+        "depth_func": "LessEqual",
+        "render_targets": [ "R32G32B32A32_FLOAT", "R32G32B32A32_FLOAT", "R32G32B32A32_FLOAT", "R32G32B32A32_FLOAT" ],
+        "depth_target": "D32_FLOAT"
+    }
+}

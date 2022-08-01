@@ -37,9 +37,17 @@ bool aiva::utils::ResourceBarrier::Transite(D3D12_RESOURCE_STATES const desiredS
 		auto const& subStateIter = mSubStates.find(*subresource);
 		if (subStateIter == mSubStates.end())
 		{
-			previousState = mMainState;
-			mSubStates.insert_or_assign(*subresource, desiredState);
-			return true;
+			if (mMainState == desiredState)
+			{
+				previousState = {};
+				return false;
+			}
+			else
+			{
+				previousState = mMainState;
+				mSubStates.insert_or_assign(*subresource, desiredState);
+				return true;
+			}
 		}
 
 		if (subStateIter->second == desiredState)

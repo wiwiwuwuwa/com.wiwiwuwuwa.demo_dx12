@@ -62,9 +62,11 @@ namespace aiva::layer1
 		using ResourceHeapMap = std::unordered_map<EGpuDescriptorHeapType, std::shared_ptr<ResourceViewHeap>>;
 
 	public:
-		std::shared_ptr<ResourceViewHeap> ResourceHeap(EGpuDescriptorHeapType const key) const;
+		std::shared_ptr<ResourceViewHeap> GetResourceHeap(EGpuDescriptorHeapType const key) const;
 
-		ResourceViewTable& ResourceHeap(EGpuDescriptorHeapType const key, std::shared_ptr<ResourceViewHeap> const& value);
+		std::shared_ptr<ResourceViewHeap> GetOrAddResourceHeap(EGpuDescriptorHeapType const key);
+
+		ResourceViewTable& SetResourceHeap(EGpuDescriptorHeapType const key, std::shared_ptr<ResourceViewHeap> const& value);
 
 		ResourceHeapMap const& ResourceHeaps() const;
 

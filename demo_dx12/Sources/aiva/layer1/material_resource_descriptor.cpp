@@ -108,7 +108,7 @@ void aiva::layer1::MaterialResourceDescriptor::RefreshRootSignature()
 	auto mainDescriptorRanges = std::vector<D3D12_DESCRIPTOR_RANGE1>{};
 	auto samplerDescriptorRanges = std::vector<D3D12_DESCRIPTOR_RANGE1>{};
 
-	auto const& mainResourceHeap = ResourceTable().ResourceHeap(EGpuDescriptorHeapType::CbvSrvUav);
+	auto const& mainResourceHeap = ResourceTable().GetResourceHeap(EGpuDescriptorHeapType::CbvSrvUav);
 	if (mainResourceHeap)
 	{
 		auto registersCounters = std::unordered_map<EGpuResourceViewType, std::size_t>{};
@@ -131,7 +131,7 @@ void aiva::layer1::MaterialResourceDescriptor::RefreshRootSignature()
 		rootParameter.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	}
 
-	auto const& samplerResourceHeap = ResourceTable().ResourceHeap(EGpuDescriptorHeapType::Sampler);
+	auto const& samplerResourceHeap = ResourceTable().GetResourceHeap(EGpuDescriptorHeapType::Sampler);
 	if (samplerResourceHeap)
 	{
 		auto registersCounters = std::unordered_map<EGpuResourceViewType, std::size_t>{};

@@ -35,7 +35,7 @@ void aiva::layer1::ResourceViewTable::TerminateCacheUpdater()
 	mCacheUpdater = {};
 }
 
-std::shared_ptr<aiva::layer1::ResourceViewHeap> aiva::layer1::ResourceViewTable::ResourceHeap(EGpuDescriptorHeapType const key) const
+std::shared_ptr<aiva::layer1::ResourceViewHeap> aiva::layer1::ResourceViewTable::GetResourceHeap(EGpuDescriptorHeapType const key) const
 {
 	auto const& resourceHeapIter = mResourceHeaps.find(key);
 	if (resourceHeapIter == mResourceHeaps.end())
@@ -46,7 +46,22 @@ std::shared_ptr<aiva::layer1::ResourceViewHeap> aiva::layer1::ResourceViewTable:
 	return resourceHeapIter->second;
 }
 
-aiva::layer1::ResourceViewTable& aiva::layer1::ResourceViewTable::ResourceHeap(EGpuDescriptorHeapType const key, std::shared_ptr<ResourceViewHeap> const& value)
+std::shared_ptr<aiva::layer1::ResourceViewHeap> aiva::layer1::ResourceViewTable::GetOrAddResourceHeap(EGpuDescriptorHeapType const key)
+{
+	auto const& heapIter = mResourceHeaps.find(key);
+	if (heapIter != mResourceHeaps.end())
+	{
+		return heapIter->second;
+	}
+
+	auto const& heapResource = ResourceViewHeap::Create(mEngine, key);
+	aiva::utils::Asserts::CheckBool(heapResource);
+
+	SetResourceHeap(key, heapResource);
+	return heapResource;
+}
+
+aiva::layer1::ResourceViewTable& aiva::layer1::ResourceViewTable::SetResourceHeap(EGpuDescriptorHeapType const key, std::shared_ptr<ResourceViewHeap> const& value)
 {
 	auto const& previousHeapIter = mResourceHeaps.find(key);
 	if (previousHeapIter != mResourceHeaps.end())
@@ -131,7 +146,7 @@ void aiva::layer1::ResourceViewTable::CopyPropertiesFrom(ResourceViewTable const
 	}
 	for (auto const& keyToRemove : keysToRemove)
 	{
-		ResourceHeap(keyToRemove, {});
+		SetResourceHeap(keyToRemove, {});
 	}
 
 	for (auto const& sourceResourceHeap : source.ResourceHeaps())
@@ -139,7 +154,7 @@ void aiva::layer1::ResourceViewTable::CopyPropertiesFrom(ResourceViewTable const
 		auto const copiedResourceHeap = ResourceViewHeap::Create(mEngine);
 		copiedResourceHeap->CopyPropertiesFrom(*sourceResourceHeap.second);
 
-		ResourceHeap(sourceResourceHeap.first, copiedResourceHeap);
+		SetResourceHeap(sourceResourceHeap.first, copiedResourceHeap);
 	}
 
 	CacheUpdater().MarkAsChanged();

@@ -121,7 +121,7 @@ void aiva::layer1::GcaDrawMesh::ExecuteDrawIndexedInstanced(Engine const& engine
 
 	auto const& resourcesDescriptor = material->ResourceDescriptor();
 
-	auto const& meshParamsHeap = resourcesDescriptor.ResourceTable().ResourceHeap(EGpuDescriptorHeapType::CbvSrvUav);
+	auto const& meshParamsHeap = resourcesDescriptor.ResourceTable().GetResourceHeap(EGpuDescriptorHeapType::CbvSrvUav);
 	aiva::utils::Asserts::CheckBool(meshParamsHeap);
 
 	auto const& meshIndicesView = meshParamsHeap->ResourceView<GrvSrvToBuffer>(MeshIndicesKey);

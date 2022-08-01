@@ -231,11 +231,11 @@ aiva::layer1::SceneGltfUtils::MaterialPerNodeMap aiva::layer1::SceneGltfUtils::L
 		auto const materialInstance = aivaMaterial->Copy();
 		materialsPerNodes.insert_or_assign(nodeID, materialInstance);
 
-		auto materialHeap = materialInstance->ResourceDescriptor().ResourceTable().ResourceHeap(aivaMesh->ResourceType());
+		auto materialHeap = materialInstance->ResourceDescriptor().ResourceTable().GetResourceHeap(aivaMesh->ResourceType());
 		if (!materialHeap)
 		{
 			materialHeap = ResourceViewHeap::Create(gltf.Engine(), aivaMesh->ResourceType());
-			materialInstance->ResourceDescriptor().ResourceTable().ResourceHeap(aivaMesh->ResourceType(), materialHeap);
+			materialInstance->ResourceDescriptor().ResourceTable().SetResourceHeap(aivaMesh->ResourceType(), materialHeap);
 		}
 
 		for (auto const& resourceView : aivaMesh->ResourceViews())

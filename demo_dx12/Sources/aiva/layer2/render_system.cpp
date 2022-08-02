@@ -4,6 +4,7 @@
 #include <aiva/layer1/e_gpu_descriptor_heap_type.h>
 #include <aiva/layer1/e_gpu_primitive_topology.h>
 #include <aiva/layer1/e_gpu_resource_buffer_format.h>
+#include <aiva/layer1/e_gpu_resource_memory_type.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gca_clear_depth_stencil.h>
 #include <aiva/layer1/gca_clear_render_target.h>
@@ -15,11 +16,17 @@
 #include <aiva/layer1/graphic_executor.h>
 #include <aiva/layer1/graphic_hardware.h>
 #include <aiva/layer1/graphic_pipeline.h>
+#include <aiva/layer1/gr_buffer.h>
 #include <aiva/layer1/gr_texture_2d.h>
-#include <aiva/layer1/grv_rtv_to_texture_2d.h>
 #include <aiva/layer1/grv_dsv_to_texture_2d.h>
+#include <aiva/layer1/grv_rtv_to_texture_2d.h>
+#include <aiva/layer1/grv_srv_to_buffer.h>
+#include <aiva/layer1/material_resource_descriptor.h>
 #include <aiva/layer1/resource_view_heap.h>
+#include <aiva/layer1/resource_view_table.h>
 #include <aiva/layer1/ro_material_graphic.h>
+#include <aiva/layer1/shader_buffer.h>
+#include <aiva/layer1/shader_struct.h>
 #include <aiva/layer2/sc_camera.h>
 #include <aiva/layer2/sc_mesh_renderer.h>
 #include <aiva/layer2/world.h>
@@ -206,14 +213,48 @@ void aiva::layer2::RenderSystem::DrawMeshRenderer(ScCamera const& const camera, 
 	auto drawMesh = aiva::layer1::GcaDrawMesh{};
 	drawMesh.Material = material;
 	drawMesh.MeshTopology = aiva::layer1::EGpuPrimitiveTopology::TriangleList;
-	drawMesh.MeshIndicesKey = aiva::utils::MaterialConstants::AIVA_MESH_INDICES;
+	drawMesh.MeshIndicesKey = aiva::utils::MaterialConstants::AIVA_BUFFER_INDICES;
 
 	mWorld.Engine().GraphicExecutor().ExecuteCommand(drawMesh);
 }
 
 void aiva::layer2::RenderSystem::SetupCameraProperties(ScCamera const& const camera, aiva::layer1::RoMaterialGraphic const& const material)
 {
+	auto const constantStruct = aiva::layer1::ShaderStruct::Create();
 
+	auto const constantMVP = camera.MatrixMVP();
+	constantStruct->SetValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_MVP, &constantMVP);
+
+	auto const constantHeap = material.ResourceDescriptor().ResourceTable().GetOrAddResourceHeap(aiva::layer1::EGpuDescriptorHeapType::CbvSrvUav);
+	aiva::utils::Asserts::CheckBool(constantHeap);
+
+	auto constantView = constantHeap->ResourceView<aiva::layer1::GrvSrvToBuffer>(aiva::utils::MaterialConstants::AIVA_BUFFER_CONSTANT);
+	if (!constantView)
+	{
+		constantView = aiva::layer1::GrvSrvToBuffer::Create(mWorld.Engine());
+		constantHeap->ResourceView(aiva::utils::MaterialConstants::AIVA_BUFFER_CONSTANT, constantView);
+	}
+
+	aiva::utils::Asserts::CheckBool(constantView, "Constant view is not valid");
+
+	auto constantViewDesc = constantView->Desc();
+	if (!constantViewDesc)
+	{
+		auto constantBufferDesc = aiva::layer1::GrBufferDesc{};
+		constantBufferDesc.MemoryType = aiva::layer1::EGpuResourceMemoryType::CpuToGpu;
+
+		auto constantBuffer = aiva::layer1::GrBuffer::Create(mWorld.Engine(), constantBufferDesc);
+		aiva::utils::Asserts::CheckBool(constantBuffer, "Constant buffer is not valid");
+
+		constantViewDesc = aiva::layer1::GrvSrvToBufferDesc{};
+		constantViewDesc->Resource = constantBuffer;
+	}
+
+	aiva::utils::Asserts::CheckBool(constantViewDesc, "Constant view desc is not valid");
+
+	constantViewDesc->Struct = constantStruct;
+	constantView->Desc(constantViewDesc);
+	constantView->Buffer().Add(constantStruct);
 }
 
 void aiva::layer2::RenderSystem::PresentST()

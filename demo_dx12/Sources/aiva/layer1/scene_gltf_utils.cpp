@@ -100,7 +100,7 @@ aiva::layer1::SceneGltfUtils::MeshArray aiva::layer1::SceneGltfUtils::LoadMeshMa
 			}
 
 			auto const aivaView = GrvSrvToBuffer::Create(gltf.Engine(), aivaViewDesc);
-			aivaMesh->ResourceView(aiva::utils::MaterialConstants::AIVA_MESH_INDICES, aivaView);
+			aivaMesh->ResourceView(aiva::utils::MaterialConstants::AIVA_BUFFER_INDICES, aivaView);
 
 			{
 				auto const aivaValues = LoadBufferByAccessor(gltf, gltfPrimitive.indices);
@@ -139,7 +139,7 @@ aiva::layer1::SceneGltfUtils::MeshArray aiva::layer1::SceneGltfUtils::LoadMeshMa
 			}
 
 			auto const aivaView = GrvSrvToBuffer::Create(gltf.Engine(), aivaViewDesc);
-			aivaMesh->ResourceView(aiva::utils::MaterialConstants::AIVA_MESH_VERTICES, aivaView);
+			aivaMesh->ResourceView(aiva::utils::MaterialConstants::AIVA_BUFFER_VERTICES, aivaView);
 
 			{
 				auto aivaStructs = std::vector<std::shared_ptr<ShaderStruct>>{};

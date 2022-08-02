@@ -12,11 +12,19 @@ namespace aiva::utils
 		MaterialConstants() = delete;
 
 	// ----------------------------------------------------
-	// Constants
+	// Constants To Buffers Inside Shaders
 
 	public:
-		static constexpr auto const* const AIVA_MESH_INDICES = "_AIVA_MESH_INDICES";
+		static constexpr auto const* const AIVA_BUFFER_CONSTANT = "m00_AIVA_BUFFER_CONSTANT";
 
-		static constexpr auto const* const AIVA_MESH_VERTICES = "_AIVA_MESH_VERTICES";
+		static constexpr auto const* const AIVA_BUFFER_INDICES = "m01_AIVA_BUFFER_INDICES";
+
+		static constexpr auto const* const AIVA_BUFFER_VERTICES = "m02_AIVA_BUFFER_VERTICES";
+
+	// ----------------------------------------------------
+	// Constants To Fields Inside Buffers
+
+	public:
+		static constexpr auto const* const AIVA_CONSTANT_MVP = "m00_AIVA_CONSTANT_MVP";
 	};
 }

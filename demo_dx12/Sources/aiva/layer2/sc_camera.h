@@ -49,6 +49,12 @@ namespace aiva::layer2
 		float mZFar = 256.0f;
 
 	// ----------------------------------------------------
+	// Camera Consts
+
+	public:
+		glm::mat4 MatrixMVP() const;
+
+	// ----------------------------------------------------
 	// Render Events
 
 	private:

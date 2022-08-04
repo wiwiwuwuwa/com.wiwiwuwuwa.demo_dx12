@@ -12,6 +12,9 @@ namespace aiva::layer1
 		GpuToCpu,
 	};
 
+	// ----------------------------------------------------
+	// DirectX
+
 	EResourceMemoryType FromInternalEnum(D3D12_HEAP_TYPE const heapType);
 
 	D3D12_HEAP_TYPE ToInternalEnum(EResourceMemoryType const memoryType);

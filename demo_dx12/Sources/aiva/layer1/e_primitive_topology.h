@@ -9,6 +9,9 @@ namespace aiva::layer1
 		TriangleList,
 	};
 
+	// ----------------------------------------------------
+	// DirectX
+
 	EPrimitiveTopology FromInternalEnum(D3D_PRIMITIVE_TOPOLOGY const primitiveTopology);
 
 	D3D_PRIMITIVE_TOPOLOGY ToInternalEnum(EPrimitiveTopology const primitiveTopology);

@@ -12,17 +12,29 @@ namespace aiva::layer1
 		D32_FLOAT,
 	};
 
+	// ----------------------------------------------------
+	// DirectX
+
 	EResourceBufferFormat FromInternalEnum(DXGI_FORMAT const format);
 
 	DXGI_FORMAT ToInternalEnum(EResourceBufferFormat const format);
+
+	// ----------------------------------------------------
+	// String
 
 	bool TryParse(std::string const& enumStr, EResourceBufferFormat& enumVal);
 
 	std::string ToString(EResourceBufferFormat const format);
 
+	// ----------------------------------------------------
+	// Json
+
 	void from_json(nlohmann::json const& j, EResourceBufferFormat& p);
 
 	void to_json(nlohmann::json& j, EResourceBufferFormat const& p);
+
+	// ----------------------------------------------------
+	// Utils
 
 	bool SupportsDepthStencil(EResourceBufferFormat const format);
 }

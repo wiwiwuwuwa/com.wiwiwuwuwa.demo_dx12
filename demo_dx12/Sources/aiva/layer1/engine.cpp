@@ -11,6 +11,21 @@
 
 aiva::layer1::Engine::Engine()
 {
+	InitializeApp();
+}
+
+aiva::layer1::Engine::~Engine()
+{
+	TerminateApp();
+}
+
+winrt::com_ptr<aiva::layer0::App> const& aiva::layer1::Engine::App() const
+{
+	return mApp;
+}
+
+void aiva::layer1::Engine::InitializeApp()
+{
 	mApp = winrt::make_self<aiva::layer0::App>();
 	winrt::check_bool(mApp);
 
@@ -19,7 +34,7 @@ aiva::layer1::Engine::Engine()
 	mApp->OnFinish().connect(boost::bind(&aiva::layer1::Engine::OnAppFinish, this));
 }
 
-aiva::layer1::Engine::~Engine()
+void aiva::layer1::Engine::TerminateApp()
 {
 	winrt::check_bool(mApp);
 
@@ -30,15 +45,56 @@ aiva::layer1::Engine::~Engine()
 	mApp = {};
 }
 
+void aiva::layer1::Engine::OnAppStart()
+{
+	InitializeSystems();
+	InitializeTime();
+
+	OnStart()();
+}
+
+void aiva::layer1::Engine::OnAppUpdate()
+{
+	RefreshTime();
+
+	OnUpdate()();
+	OnRender()();
+
+	RefreshTick();
+}
+
+void aiva::layer1::Engine::OnAppFinish()
+{
+	OnFinish()();
+
+	TerminateTime();
+	TerminateSystems();
+}
+
+aiva::utils::EvAction& aiva::layer1::Engine::OnStart()
+{
+	return mOnStart;
+}
+
+aiva::utils::EvAction& aiva::layer1::Engine::OnUpdate()
+{
+	return mOnUpdate;
+}
+
+aiva::utils::EvAction& aiva::layer1::Engine::OnRender()
+{
+	return mOnRender;
+}
+
+aiva::utils::EvAction& aiva::layer1::Engine::OnFinish()
+{
+	return mOnFinish;
+}
+
 void aiva::layer1::Engine::Run()
 {
 	winrt::check_bool(mApp);
 	CoreApplication::Run(*mApp);
-}
-
-winrt::com_ptr<aiva::layer0::App> const& aiva::layer1::Engine::App() const
-{
-	return mApp;
 }
 
 aiva::layer1::ResourceSystem& aiva::layer1::Engine::ResourceSystem() const
@@ -65,62 +121,20 @@ aiva::layer1::GraphicExecutor& aiva::layer1::Engine::GraphicExecutor() const
 	return *mGraphicExecutor;
 }
 
-void aiva::layer1::Engine::OnAppStart()
+void aiva::layer1::Engine::InitializeSystems()
 {
 	mResourceSystem = std::make_unique<aiva::layer1::ResourceSystem>(*this);
 	mGraphicHardware = std::make_unique<aiva::layer1::GraphicHardware>(*this);
 	mGraphicPipeline = std::make_unique<aiva::layer1::GraphicPipeline>(*this);
 	mGraphicExecutor = std::make_unique<aiva::layer1::GraphicExecutor>(*this);
-
-	mDeltaTimeBegin = std::chrono::high_resolution_clock::now();
-	mDeltaTimeEnd = {};
-
-	OnStart()();
 }
 
-void aiva::layer1::Engine::OnAppUpdate()
+void aiva::layer1::Engine::TerminateSystems()
 {
-	mDeltaTimeEnd = std::chrono::high_resolution_clock::now();
-	mDeltaTime = std::chrono::duration_cast<std::chrono::duration<double>>(mDeltaTimeEnd - mDeltaTimeBegin).count();
-	mDeltaTimeBegin = std::chrono::high_resolution_clock::now();
-
-	OnUpdate()();
-	OnRender()();
-
-	mTick++;
-}
-
-void aiva::layer1::Engine::OnAppFinish()
-{
-	OnFinish()();
-
-	mDeltaTimeEnd = {};
-	mDeltaTimeBegin = {};
-
 	mGraphicExecutor = {};
 	mGraphicPipeline = {};
 	mGraphicHardware = {};
 	mResourceSystem = {};
-}
-
-aiva::utils::EvAction& aiva::layer1::Engine::OnStart()
-{
-	return mOnStart;
-}
-
-aiva::utils::EvAction& aiva::layer1::Engine::OnUpdate()
-{
-	return mOnUpdate;
-}
-
-aiva::utils::EvAction& aiva::layer1::Engine::OnRender()
-{
-	return mOnRender;
-}
-
-aiva::utils::EvAction& aiva::layer1::Engine::OnFinish()
-{
-	return mOnFinish;
 }
 
 uint64_t aiva::layer1::Engine::Tick() const
@@ -128,7 +142,31 @@ uint64_t aiva::layer1::Engine::Tick() const
 	return mTick;
 }
 
+void aiva::layer1::Engine::RefreshTick()
+{
+	mTick++;
+}
+
 double aiva::layer1::Engine::DeltaTime() const
 {
 	return mDeltaTime;
+}
+
+void aiva::layer1::Engine::InitializeTime()
+{
+	mDeltaTimeBegin = std::chrono::high_resolution_clock::now();
+	mDeltaTimeEnd = {};
+}
+
+void aiva::layer1::Engine::TerminateTime()
+{
+	mDeltaTimeEnd = {};
+	mDeltaTimeBegin = {};
+}
+
+void aiva::layer1::Engine::RefreshTime()
+{
+	mDeltaTimeEnd = std::chrono::high_resolution_clock::now();
+	mDeltaTime = std::chrono::duration_cast<std::chrono::duration<double>>(mDeltaTimeEnd - mDeltaTimeBegin).count();
+	mDeltaTimeBegin = std::chrono::high_resolution_clock::now();
 }

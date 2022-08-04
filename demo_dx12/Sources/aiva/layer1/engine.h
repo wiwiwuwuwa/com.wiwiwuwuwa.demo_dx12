@@ -31,34 +31,26 @@ namespace aiva::layer1
 
 		~Engine();
 
-		void Run();
+	// ----------------------------------------------------
+	// App
 
+	public:
 		winrt::com_ptr<aiva::layer0::App> const& App() const;
 
-		aiva::layer1::ResourceSystem& ResourceSystem() const;
+	private:
+		void InitializeApp();
 
-		aiva::layer1::GraphicHardware& GraphicHardware() const;
-
-		aiva::layer1::GraphicPipeline& GraphicPipeline() const;
-
-		aiva::layer1::GraphicExecutor& GraphicExecutor() const;
+		void TerminateApp();
 
 	private:
 		void OnAppStart();
 
 		void OnAppUpdate();
 
-		void OnAppFinish();	
+		void OnAppFinish();
 
+	private:
 		winrt::com_ptr<aiva::layer0::App> mApp{};
-
-		std::unique_ptr<aiva::layer1::ResourceSystem> mResourceSystem{};
-
-		std::unique_ptr<aiva::layer1::GraphicHardware> mGraphicHardware{};
-
-		std::unique_ptr<aiva::layer1::GraphicPipeline> mGraphicPipeline{};
-
-		std::unique_ptr<aiva::layer1::GraphicExecutor> mGraphicExecutor{};
 
 	// ----------------------------------------------------
 	// Events
@@ -82,19 +74,62 @@ namespace aiva::layer1
 		aiva::utils::EvAction mOnFinish{};
 
 	// ----------------------------------------------------
-	// Time
+	// Loop
+
+	public:
+		void Run();
+
+	// ----------------------------------------------------
+	// Systems
+
+	public:
+		aiva::layer1::ResourceSystem& ResourceSystem() const;
+
+		aiva::layer1::GraphicHardware& GraphicHardware() const;
+
+		aiva::layer1::GraphicPipeline& GraphicPipeline() const;
+
+		aiva::layer1::GraphicExecutor& GraphicExecutor() const;
+
+	private:
+		void InitializeSystems();
+
+		void TerminateSystems();
+
+	private:
+		std::unique_ptr<aiva::layer1::ResourceSystem> mResourceSystem{};
+
+		std::unique_ptr<aiva::layer1::GraphicHardware> mGraphicHardware{};
+
+		std::unique_ptr<aiva::layer1::GraphicPipeline> mGraphicPipeline{};
+
+		std::unique_ptr<aiva::layer1::GraphicExecutor> mGraphicExecutor{};
+
+	// ----------------------------------------------------
+	// Tick
 
 	public:
 		uint64_t Tick() const;
 
 	private:
+		void RefreshTick();
+
+	private:
 		uint64_t mTick{};
 
 	// ----------------------------------------------------
-	// Delta Time
+	// Time
 
 	public:
 		double DeltaTime() const;
+
+	private:
+		void InitializeTime();
+
+		void TerminateTime();
+
+	private:
+		void RefreshTime();
 
 	private:
 		std::chrono::high_resolution_clock::time_point mDeltaTimeBegin{};

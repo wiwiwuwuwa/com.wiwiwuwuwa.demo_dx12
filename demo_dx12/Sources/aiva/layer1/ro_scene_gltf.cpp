@@ -3,6 +3,7 @@
 
 #include <aiva/layer1/engine.h>
 #include <aiva/utils/asserts.h>
+#include <aiva/utils/logger.h>
 #include <aiva/utils/t_cache_updater.h>
 
 aiva::layer1::Engine const& aiva::layer1::RoSceneGltf::Engine() const
@@ -33,12 +34,12 @@ void aiva::layer1::RoSceneGltf::DeserealizeFromBinary(std::vector<std::byte> con
 	{
 		if (!errors.empty())
 		{
-			mEngine.LogToDebugConsole(errors);
+			aiva::utils::Logger::LogToDebugConsole(errors);
 		}
 
 		if (!warnings.empty())
 		{
-			mEngine.LogToDebugConsole(warnings);
+			aiva::utils::Logger::LogToDebugConsole(warnings);
 		}
 	}
 

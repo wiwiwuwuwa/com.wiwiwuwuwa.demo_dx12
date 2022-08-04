@@ -132,9 +132,3 @@ double aiva::layer1::Engine::DeltaTime() const
 {
 	return mDeltaTime;
 }
-
-void aiva::layer1::Engine::LogToDebugConsole(std::string const& message) const
-{
-	winrt::check_bool(mApp);
-	mApp->LogToDebugConsole("aiva: " + message + "\n");
-}

@@ -64,6 +64,7 @@
     <ClCompile Include="Sources\aiva\layer1\shader_value_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer2\sc_mesh_renderer.cpp" />
     <ClCompile Include="Sources\aiva\layer2\sc_camera.cpp" />
+    <ClCompile Include="Sources\aiva\utils\logger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -157,6 +158,7 @@
     <ClInclude Include="Sources\aiva\layer2\sc_camera.h" />
     <ClInclude Include="Sources\aiva\utils\t_signal_aggregator.h" />
     <ClInclude Include="Sources\aiva\utils\material_constants.h" />
+    <ClInclude Include="Sources\aiva\utils\logger.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

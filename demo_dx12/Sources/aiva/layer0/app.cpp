@@ -63,7 +63,3 @@ void aiva::layer0::App::SetWindow(CoreWindow const& window)
     mWindow = window;
 }
 
-void aiva::layer0::App::LogToDebugConsole(std::string const& message) const
-{
-    OutputDebugStringA(message.c_str());
-}

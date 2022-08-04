@@ -102,11 +102,5 @@ namespace aiva::layer1
 		std::chrono::high_resolution_clock::time_point mDeltaTimeEnd{};
 
 		double mDeltaTime{};
-
-	// ----------------------------------------------------
-	// Debug
-
-	public:
-		void LogToDebugConsole(std::string const& message) const;
 	};
 }

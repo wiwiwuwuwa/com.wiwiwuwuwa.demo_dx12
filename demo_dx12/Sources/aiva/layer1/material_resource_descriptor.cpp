@@ -9,6 +9,7 @@
 #include <aiva/layer1/resource_view_heap.h>
 #include <aiva/layer1/resource_view_table.h>
 #include <aiva/utils/asserts.h>
+#include <aiva/utils/logger.h>
 #include <aiva/utils/t_cache_updater.h>
 
 aiva::layer1::MaterialResourceDescriptor::MaterialResourceDescriptor(Engine const& engine) : mEngine{ engine }
@@ -172,7 +173,7 @@ void aiva::layer1::MaterialResourceDescriptor::RefreshRootSignature()
 	if (FAILED(serializationResult))
 	{
 		winrt::check_bool(errorMessages);
-		mEngine.LogToDebugConsole(static_cast<const char*>(errorMessages->GetBufferPointer()));
+		aiva::utils::Logger::LogToDebugConsole(static_cast<const char*>(errorMessages->GetBufferPointer()));
 		winrt::throw_hresult(serializationResult);
 	}
 

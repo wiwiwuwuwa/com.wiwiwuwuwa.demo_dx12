@@ -233,6 +233,7 @@
     <ClInclude Include="Sources\aiva\layer2\sc_mesh_renderer.h" />
     <ClInclude Include="Sources\aiva\layer2\world.h" />
     <ClInclude Include="Sources\aiva\utils\e_cache_flags.h" />
+    <ClInclude Include="Sources\aiva\utils\logger.h" />
     <ClInclude Include="Sources\aiva\utils\material_constants.h" />
     <ClInclude Include="Sources\aiva\utils\math_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\resource_system.h" />
@@ -335,6 +336,7 @@
     <ClCompile Include="Sources\aiva\layer2\world.cpp" />
     <ClCompile Include="Sources\aiva\utils\action_batcher.cpp" />
     <ClCompile Include="Sources\aiva\utils\changes_counter.cpp" />
+    <ClCompile Include="Sources\aiva\utils\logger.cpp" />
     <ClCompile Include="Sources\aiva\utils\resource_barrier.cpp" />
     <ClCompile Include="Sources\main.cpp" />
   </ItemGroup>

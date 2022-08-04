@@ -109,13 +109,13 @@ namespace aiva::layer1
 	// Tick
 
 	public:
-		uint64_t Tick() const;
+		uintmax_t Tick() const;
 
 	private:
 		void RefreshTick();
 
 	private:
-		uint64_t mTick{};
+		uintmax_t mTick{};
 
 	// ----------------------------------------------------
 	// Time

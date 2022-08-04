@@ -220,41 +220,42 @@ void aiva::layer2::RenderSystem::DrawMeshRenderer(ScCamera const& const camera, 
 
 void aiva::layer2::RenderSystem::SetupCameraProperties(ScCamera const& const camera, aiva::layer1::RoMaterialGraphic const& const material)
 {
-	auto const constantStruct = aiva::layer1::ShaderStruct::Create();
+	// TODO: Impl
+	//auto const constantStruct = aiva::layer1::ShaderStruct::Create();
 
-	auto const constantMVP = camera.MatrixMVP();
-	constantStruct->SetValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_MVP, &constantMVP);
+	//auto const constantMVP = camera.MatrixMVP();
+	//constantStruct->SetValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_MVP, &constantMVP);
 
-	auto const constantHeap = material.ResourceDescriptor().ResourceTable().GetOrAddResourceHeap(aiva::layer1::EDescriptorHeapType::CbvSrvUav);
-	aiva::utils::Asserts::CheckBool(constantHeap);
+	//auto const constantHeap = material.ResourceDescriptor().ResourceTable().GetOrAddResourceHeap(aiva::layer1::EDescriptorHeapType::CbvSrvUav);
+	//aiva::utils::Asserts::CheckBool(constantHeap);
 
-	auto constantView = constantHeap->ResourceView<aiva::layer1::GrvSrvToBuffer>(aiva::utils::MaterialConstants::AIVA_BUFFER_CONSTANT);
-	if (!constantView)
-	{
-		constantView = aiva::layer1::GrvSrvToBuffer::Create(mWorld.Engine());
-		constantHeap->ResourceView(aiva::utils::MaterialConstants::AIVA_BUFFER_CONSTANT, constantView);
-	}
+	//auto constantView = constantHeap->ResourceView<aiva::layer1::GrvSrvToBuffer>(aiva::utils::MaterialConstants::AIVA_BUFFER_CONSTANT);
+	//if (!constantView)
+	//{
+	//	constantView = aiva::layer1::GrvSrvToBuffer::Create(mWorld.Engine());
+	//	constantHeap->ResourceView(aiva::utils::MaterialConstants::AIVA_BUFFER_CONSTANT, constantView);
+	//}
 
-	aiva::utils::Asserts::CheckBool(constantView, "Constant view is not valid");
+	//aiva::utils::Asserts::CheckBool(constantView, "Constant view is not valid");
 
-	auto constantViewDesc = constantView->Desc();
-	if (!constantViewDesc)
-	{
-		auto constantBufferDesc = aiva::layer1::GrBufferDesc{};
-		constantBufferDesc.MemoryType = aiva::layer1::EResourceMemoryType::CpuToGpu;
+	//auto constantViewDesc = constantView->Desc();
+	//if (!constantViewDesc)
+	//{
+	//	auto constantBufferDesc = aiva::layer1::GrBufferDesc{};
+	//	constantBufferDesc.MemoryType = aiva::layer1::EResourceMemoryType::CpuToGpu;
 
-		auto constantBuffer = aiva::layer1::GrBuffer::Create(mWorld.Engine(), constantBufferDesc);
-		aiva::utils::Asserts::CheckBool(constantBuffer, "Constant buffer is not valid");
+	//	auto constantBuffer = aiva::layer1::GrBuffer::Create(mWorld.Engine(), constantBufferDesc);
+	//	aiva::utils::Asserts::CheckBool(constantBuffer, "Constant buffer is not valid");
 
-		constantViewDesc = aiva::layer1::GrvSrvToBufferDesc{};
-		constantViewDesc->Resource = constantBuffer;
-	}
+	//	constantViewDesc = aiva::layer1::GrvSrvToBufferDesc{};
+	//	constantViewDesc->Resource = constantBuffer;
+	//}
 
-	aiva::utils::Asserts::CheckBool(constantViewDesc, "Constant view desc is not valid");
+	//aiva::utils::Asserts::CheckBool(constantViewDesc, "Constant view desc is not valid");
 
-	constantViewDesc->Struct = constantStruct;
-	constantView->Desc(constantViewDesc);
-	constantView->Buffer().Add(constantStruct);
+	//constantViewDesc->Struct = constantStruct;
+	//constantView->Desc(constantViewDesc);
+	//constantView->Buffer().Add(constantStruct);
 }
 
 void aiva::layer2::RenderSystem::PresentST()

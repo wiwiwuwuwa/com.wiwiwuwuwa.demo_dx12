@@ -1,117 +1,73 @@
 #pragma once
 #include <pch.h>
 
-#include <aiva/layer1/i_gpu_resource.h>
-#include <aiva/layer1/gr_buffer_desc.h>
-#include <aiva/utils/ev_action.h>
-#include <aiva/utils/resource_barrier.h>
+#include <aiva/layer1/a_graphic_resource.h>
+#include <aiva/layer1/e_resource_memory_type.h>
 
 namespace aiva::layer1
 {
 	struct Engine;
-}
-
-namespace aiva::utils
-{	
-	template <typename, typename>
-	struct TCacheUpdater;
+	struct GraphicResourceFactory;
 }
 
 namespace aiva::layer1
 {
-	struct GrBuffer final : private boost::noncopyable, public std::enable_shared_from_this<GrBuffer>, public aiva::layer1::IGpuResource
+	struct GrBuffer final : public AGraphicResource
 	{
 	// ----------------------------------------------------
 	// Main
 
-	public:
-		template <typename... TArgs>
-		static std::shared_ptr<GrBuffer> Create(TArgs&&... args);
+	private:
+		friend GraphicResourceFactory;
 
 	private:
-		GrBuffer(Engine const& engine);
-
-		GrBuffer(Engine const& engine, GrBufferDesc const& desc);
-
-		GrBuffer(Engine const& engine, winrt::com_ptr<ID3D12Resource> const& resource);
-
-	public:
-		~GrBuffer();
-
-	private:
-		aiva::layer1::Engine const& mEngine;
+		GrBuffer(aiva::layer1::Engine const& engine);
 
 	// ----------------------------------------------------
-	// Cache Refresh
+	// Metadata
 
 	public:
-		enum class EDirtyFlags
-		{
-			None = 0,
-			All = 1,
-		};
+		EResourceMemoryType MemoryType() const;
 
-		using CacheUpdaterType = aiva::utils::TCacheUpdater<GrBuffer, EDirtyFlags>;
+		GrBuffer& MemoryType(EResourceMemoryType const memoryType);
+
+	private:
+		EResourceMemoryType mMemoryType{};
+
+	// --------------------------------
 
 	public:
-		CacheUpdaterType& CacheUpdater() const;
+		std::size_t Size() const;
+
+		GrBuffer& Size(std::size_t const size);
 
 	private:
-		void InitializeCacheUpdater();
+		std::size_t mSize{};
 
-		void TerminateCacheUpdater();
+	// --------------------------------
+
+	public:
+		bool SupportShaderAtomics() const;
+
+		GrBuffer& SupportShaderAtomics(bool const support);
 
 	private:
-		std::unique_ptr<CacheUpdaterType> mCacheUpdater{};
+		bool mSupportShaderAtomics{};
+
+	// --------------------------------
+
+	public:
+		bool SupportUnorderedAccess() const;
+
+		GrBuffer& SupportUnorderedAccess(bool const support);
+
+	private:
+		bool mSupportUnorderedAccess{};
 
 	// ----------------------------------------------------
-	// High-Level Data
+	// Internal Resource
 
-	public:
-		std::optional<GrBufferDesc> const& Desc() const;
-
-		GrBuffer& Desc(std::optional<GrBufferDesc> const& desc);
-
-	private:
-		std::optional<GrBufferDesc> mDesc{};
-
-	// ----------------------------------------------------
-	// Low-Level Data
-
-	public:
-		winrt::com_ptr<ID3D12Resource> const InternalResource();
-
-	private:
-		GrBuffer& InternalResource(winrt::com_ptr<ID3D12Resource> const& resource);
-
-	private:
-		void InitializeInternalResources();
-
-		void TerminateInternalResources();
-
-	private:
-		void RefreshInternalResources();
-
-		static winrt::com_ptr<ID3D12Resource> CreateInternalResource(Engine const& engine, GrBufferDesc const& desc, aiva::utils::ResourceBarrier& outBarrier);
-
-	private:
-		winrt::com_ptr<ID3D12Resource> mInternalResource{};
-
-	// ----------------------------------------------------
-	// Resource Barriers
-
-	public:
-		std::vector<D3D12_RESOURCE_BARRIER> PrepareBarriers(D3D12_RESOURCE_STATES const desiredState, std::optional<std::size_t> const subresource = {});
-
-	private:
-		aiva::utils::ResourceBarrier mResourceBarrier{};
+	protected:
+		void RefreshInternalResource(winrt::com_ptr<ID3D12Resource>& resource, aiva::utils::ResourceBarrier& barrier) override;
 	};
-}
-
-// --------------------------------------------------------
-
-template <typename... TArgs>
-std::shared_ptr<aiva::layer1::GrBuffer> aiva::layer1::GrBuffer::Create(TArgs&&... args)
-{
-	return std::shared_ptr<GrBuffer>{new GrBuffer{ std::forward<TArgs>(args)... }};
 }

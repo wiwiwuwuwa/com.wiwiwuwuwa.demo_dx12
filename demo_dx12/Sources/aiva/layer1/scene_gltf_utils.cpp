@@ -5,6 +5,7 @@
 #include <aiva/layer1/e_resource_memory_type.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gr_buffer.h>
+#include <aiva/layer1/graphic_resource_factory.h>
 #include <aiva/layer1/grv_srv_to_buffer.h>
 #include <aiva/layer1/i_shader_value.h>
 #include <aiva/layer1/material_resource_descriptor.h>
@@ -81,10 +82,7 @@ aiva::layer1::SceneGltfUtils::MeshArray aiva::layer1::SceneGltfUtils::LoadMeshMa
 			auto aivaViewDesc = GrvSrvToBufferDesc{};
 			{
 				{
-					auto aivaBufferDesc = GrBufferDesc{};
-					aivaBufferDesc.MemoryType = EResourceMemoryType::CpuToGpu;
-
-					auto const aivaBuffer = GrBuffer::Create(gltf.Engine(), aivaBufferDesc);
+					auto const aivaBuffer = GraphicResourceFactory::Create<GrBuffer>(gltf.Engine());
 					aivaViewDesc.Resource = aivaBuffer;
 				}
 
@@ -117,10 +115,7 @@ aiva::layer1::SceneGltfUtils::MeshArray aiva::layer1::SceneGltfUtils::LoadMeshMa
 		{ // vertices
 			auto aivaViewDesc = GrvSrvToBufferDesc{};
 			{
-				auto aivaBufferDesc = GrBufferDesc{};
-				aivaBufferDesc.MemoryType = EResourceMemoryType::CpuToGpu;
-
-				auto const aivaBuffer = GrBuffer::Create(gltf.Engine(), aivaBufferDesc);
+				auto const aivaBuffer = GraphicResourceFactory::Create<GrBuffer>(gltf.Engine());
 				aivaViewDesc.Resource = aivaBuffer;
 			}
 

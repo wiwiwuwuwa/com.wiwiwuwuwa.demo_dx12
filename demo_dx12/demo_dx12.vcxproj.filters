@@ -43,7 +43,6 @@
     <ClCompile Include="Sources\aiva\layer1\gca_draw_mesh.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_primitive_topology.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_set_viewports.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\gr_buffer_desc.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gr_texture_2d_desc.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_view_heap.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_view_table.cpp" />
@@ -65,6 +64,7 @@
     <ClCompile Include="Sources\aiva\layer2\sc_mesh_renderer.cpp" />
     <ClCompile Include="Sources\aiva\layer2\sc_camera.cpp" />
     <ClCompile Include="Sources\aiva\utils\logger.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\a_graphic_resource.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -93,11 +93,9 @@
     <ClInclude Include="Sources\aiva\utils\t_ev_action.h" />
     <ClInclude Include="Sources\aiva\utils\enum_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\gr_texture_2d.h" />
-    <ClInclude Include="Sources\aiva\layer1\i_gpu_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\e_resource_memory_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_resource_buffer_format.h" />
     <ClInclude Include="Sources\aiva\layer1\gr_buffer.h" />
-    <ClInclude Include="Sources\aiva\layer1\gr_buffer_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\gr_texture_2d_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\i_gpu_resource_view.h" />
     <ClInclude Include="Sources\aiva\utils\action_batcher.h" />
@@ -159,6 +157,9 @@
     <ClInclude Include="Sources\aiva\utils\t_signal_aggregator.h" />
     <ClInclude Include="Sources\aiva\utils\material_constants.h" />
     <ClInclude Include="Sources\aiva\utils\logger.h" />
+    <ClInclude Include="Sources\aiva\layer1\a_graphic_resource.h" />
+    <ClInclude Include="Sources\aiva\layer1\graphic_resource_factory.h" />
+    <ClInclude Include="Sources\aiva\layer1\i_gpu_resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

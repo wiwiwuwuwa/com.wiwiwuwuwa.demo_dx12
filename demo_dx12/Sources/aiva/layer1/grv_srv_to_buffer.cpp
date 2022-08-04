@@ -111,7 +111,7 @@ aiva::layer1::GrvSrvToBuffer& aiva::layer1::GrvSrvToBuffer::Desc(std::optional<G
 		Buffer().Struct({});
 
 		aiva::utils::Asserts::CheckBool(mDesc->Resource);
-		mDesc->Resource->CacheUpdater().OnMarkAsChanged().disconnect(boost::bind(&GrvSrvToBuffer::OnDescResourceMarkedAsChanged, this));
+		mDesc->Resource->OnMarkAsChanged().disconnect(boost::bind(&GrvSrvToBuffer::OnDescResourceMarkedAsChanged, this));
 	}
 
 	mDesc = desc;
@@ -120,7 +120,7 @@ aiva::layer1::GrvSrvToBuffer& aiva::layer1::GrvSrvToBuffer::Desc(std::optional<G
 	if (mDesc)
 	{
 		aiva::utils::Asserts::CheckBool(mDesc->Resource);
-		mDesc->Resource->CacheUpdater().OnMarkAsChanged().connect(boost::bind(&GrvSrvToBuffer::OnDescResourceMarkedAsChanged, this));
+		mDesc->Resource->OnMarkAsChanged().connect(boost::bind(&GrvSrvToBuffer::OnDescResourceMarkedAsChanged, this));
 
 		aiva::utils::Asserts::CheckBool(mDesc->Struct);
 		Buffer().Struct(mDesc->Struct);
@@ -221,29 +221,10 @@ void aiva::layer1::GrvSrvToBuffer::RefreshInternalResources()
 	auto const& aivaResource = desc->Resource;
 	aiva::utils::Asserts::CheckBool(aivaResource);
 
-	auto const& needCreateAivaResourceDesc = !aivaResource->Desc();
-	if (needCreateAivaResourceDesc)
-	{
-		auto tempDesc = GrBufferDesc{};
-		tempDesc.MemoryType = EResourceMemoryType::CpuToGpu;
-		tempDesc.Size = binaryData.size();
-		tempDesc.SupportShaderAtomics = false;
-		tempDesc.SupportUnorderedAccess = false;
-
-		aivaResource->Desc(tempDesc);
-	}
-
-	auto const& currentAivaResourceDesc = aivaResource->Desc();
-	aiva::utils::Asserts::CheckBool(currentAivaResourceDesc);
-	
-	auto const& needUpdateAivaResourceDesc = currentAivaResourceDesc->MemoryType != EResourceMemoryType::CpuToGpu || currentAivaResourceDesc->Size != binaryData.size();
-	if (needUpdateAivaResourceDesc)
-	{
-		auto tempDesc = currentAivaResourceDesc;
-		tempDesc->Size = binaryData.size();
-
-		aivaResource->Desc(tempDesc);
-	}
+	aivaResource->MemoryType(EResourceMemoryType::CpuToGpu);
+	aivaResource->Size(binaryData.size());
+	aivaResource->SupportShaderAtomics(false);
+	aivaResource->SupportUnorderedAccess(false);
 
 	auto const& directxResource = aivaResource->InternalResource();
 	winrt::check_bool(directxResource);

@@ -171,6 +171,7 @@
     <ClInclude Include="External Sources\tinyutf8\tinyutf8.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Sources\aiva\layer0\app.h" />
+    <ClInclude Include="Sources\aiva\layer1\a_graphic_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\e_cull_mode.h" />
     <ClInclude Include="Sources\aiva\layer1\e_comparison_func.h" />
     <ClInclude Include="Sources\aiva\layer1\e_descriptor_heap_type.h" />
@@ -180,6 +181,8 @@
     <ClInclude Include="Sources\aiva\layer1\e_resource_memory_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_resource_view_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_value_type.h" />
+    <ClInclude Include="Sources\aiva\layer1\graphic_resource_factory.h" />
+    <ClInclude Include="Sources\aiva\layer1\i_gpu_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\shader_value_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\value_type_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_clear_depth_stencil.h" />
@@ -203,7 +206,6 @@
     <ClInclude Include="Sources\aiva\layer1\grv_uav_to_buffer_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_uav_to_texture_2d.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_uav_to_texture_2d_desc.h" />
-    <ClInclude Include="Sources\aiva\layer1\gr_buffer_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\engine.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_dispatch.h" />
     <ClInclude Include="Sources\aiva\layer1\graphic_executor.h" />
@@ -211,7 +213,6 @@
     <ClInclude Include="Sources\aiva\layer1\graphic_pipeline.h" />
     <ClInclude Include="Sources\aiva\layer1\gr_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\gr_texture_2d_desc.h" />
-    <ClInclude Include="Sources\aiva\layer1\i_gpu_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\i_gpu_resource_view.h" />
     <ClInclude Include="Sources\aiva\layer1\i_graphic_command.h" />
     <ClInclude Include="Sources\aiva\layer1\i_graphic_command_async.h" />
@@ -280,6 +281,7 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Sources\aiva\layer0\app.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\a_graphic_resource.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_cull_mode.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_comparison_func.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_descriptor_heap_type.cpp" />
@@ -310,7 +312,6 @@
     <ClCompile Include="Sources\aiva\layer1\grv_uav_to_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_uav_to_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gr_buffer.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\gr_buffer_desc.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gr_texture_2d_desc.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_system.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_view_heap.cpp" />

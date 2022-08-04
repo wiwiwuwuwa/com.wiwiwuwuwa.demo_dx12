@@ -12,6 +12,12 @@ namespace aiva::utils
 	struct TCacheUpdaterBase : private boost::noncopyable
 	{
 	// ----------------------------------------------------
+	// Types
+
+	public:
+		using ActionType = TEvAction<TDirtyFlags>;
+
+	// ----------------------------------------------------
 	// Constructors
 
 	public:
@@ -23,9 +29,9 @@ namespace aiva::utils
 	public:
 		void FlushChanges(TDirtyFlags const dirtyFlags = TDirtyFlags::All);
 
-		TEvAction<TDirtyFlags>& OnMarkAsChanged();
+		ActionType& OnMarkAsChanged();
 
-		TEvAction<TDirtyFlags>& OnFlushExecuted();
+		ActionType& OnFlushExecuted();
 
 	// ----------------------------------------------------
 	// Owner API
@@ -35,7 +41,7 @@ namespace aiva::utils
 
 		void ClearChanges(TDirtyFlags const dirtyFlags = TDirtyFlags::All);
 
-		TEvAction<TDirtyFlags>& FlushExecutors();
+		ActionType& FlushExecutors();
 
 	// ----------------------------------------------------
 	// Self API
@@ -45,11 +51,11 @@ namespace aiva::utils
 
 		bool mIsFlushingCache{};
 
-		TEvAction<TDirtyFlags> mOnMarkAsChanged{};
+		ActionType mOnMarkAsChanged{};
 
-		TEvAction<TDirtyFlags> mOnFlushExecuted{};
+		ActionType mOnFlushExecuted{};
 
-		TEvAction<TDirtyFlags> mFlushExecutors{};
+		ActionType mFlushExecutors{};
 	};
 
 	template <typename TOwnerType, typename TDirtyFlags = ECacheFlags>
@@ -86,13 +92,13 @@ void aiva::utils::TCacheUpdaterBase<TDirtyFlags>::FlushChanges(TDirtyFlags const
 }
 
 template <typename TDirtyFlags>
-aiva::utils::TEvAction<TDirtyFlags>& aiva::utils::TCacheUpdaterBase<TDirtyFlags>::OnMarkAsChanged()
+typename aiva::utils::TCacheUpdaterBase<TDirtyFlags>::ActionType& aiva::utils::TCacheUpdaterBase<TDirtyFlags>::OnMarkAsChanged()
 {
 	return mOnMarkAsChanged;
 }
 
 template <typename TDirtyFlags>
-aiva::utils::TEvAction<TDirtyFlags>& aiva::utils::TCacheUpdaterBase<TDirtyFlags>::OnFlushExecuted()
+typename aiva::utils::TCacheUpdaterBase<TDirtyFlags>::ActionType& aiva::utils::TCacheUpdaterBase<TDirtyFlags>::OnFlushExecuted()
 {
 	return mOnFlushExecuted;
 }
@@ -122,7 +128,7 @@ void aiva::utils::TCacheUpdaterBase<TDirtyFlags>::ClearChanges(TDirtyFlags const
 }
 
 template <typename TDirtyFlags>
-aiva::utils::TEvAction<TDirtyFlags>& aiva::utils::TCacheUpdaterBase<TDirtyFlags>::FlushExecutors()
+typename aiva::utils::TCacheUpdaterBase<TDirtyFlags>::ActionType& aiva::utils::TCacheUpdaterBase<TDirtyFlags>::FlushExecutors()
 {
 	return mFlushExecutors;
 }

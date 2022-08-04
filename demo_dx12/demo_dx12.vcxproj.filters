@@ -72,9 +72,7 @@
     <ClInclude Include="Sources\aiva\layer1\graphic_executor.h" />
     <ClInclude Include="Sources\aiva\layer1\graphic_hardware.h" />
     <ClInclude Include="Sources\aiva\layer1\graphic_pipeline.h" />
-    <ClInclude Include="Sources\aiva\layer1\i_graphic_command.h" />
     <ClInclude Include="Sources\aiva\layer1\i_graphic_command_async.h" />
-    <ClInclude Include="Sources\aiva\layer1\i_graphic_command_sync.h" />
     <ClInclude Include="Sources\aiva\utils\asserts.h" />
     <ClInclude Include="Sources\aiva\utils\d3dx12.h" />
     <ClInclude Include="Sources\aiva\utils\ev_action.h" />

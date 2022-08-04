@@ -1,12 +1,17 @@
 #pragma once
 #include <pch.h>
 
-#include <aiva/layer1/i_graphic_command.h>
+namespace aiva::layer1
+{
+	struct Engine;
+}
 
 namespace aiva::layer1
 {
-	struct IGraphicCommandAsync : public aiva::layer1::IGraphicCommand
+	struct IGraphicCommandAsync
 	{
+		virtual ~IGraphicCommandAsync() = default;
 
+		virtual void Execute(Engine const& engine) const = 0;
 	};
 }

@@ -213,9 +213,7 @@
     <ClInclude Include="Sources\aiva\layer1\graphic_pipeline.h" />
     <ClInclude Include="Sources\aiva\layer1\gr_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\i_gpu_resource_view.h" />
-    <ClInclude Include="Sources\aiva\layer1\i_graphic_command.h" />
     <ClInclude Include="Sources\aiva\layer1\i_graphic_command_async.h" />
-    <ClInclude Include="Sources\aiva\layer1\i_graphic_command_sync.h" />
     <ClInclude Include="Sources\aiva\layer1\i_cpu_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\i_shader_value.h" />
     <ClInclude Include="Sources\aiva\layer1\resource_view_heap.h" />

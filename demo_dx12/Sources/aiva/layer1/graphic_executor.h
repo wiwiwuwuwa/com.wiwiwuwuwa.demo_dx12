@@ -5,7 +5,6 @@
 #include <type_traits>
 #include <boost/core/noncopyable.hpp>
 #include <aiva/layer1/i_graphic_command_async.h>
-#include <aiva/layer1/i_graphic_command_sync.h>
 
 namespace aiva::layer1
 {
@@ -20,21 +19,18 @@ namespace aiva::layer1
 	// Main
 
 	public:
-		GraphicExecutor(aiva::layer1::Engine const& engine);
+		GraphicExecutor(Engine const& engine);
 
 		~GraphicExecutor();
 
 	private:
-		aiva::layer1::Engine const& mEngine;
+		Engine const& mEngine;
 
 	// ----------------------------------------------------
 	// Commands
 
 	public:
-		template <typename T, typename std::enable_if_t<std::is_base_of_v<aiva::layer1::IGraphicCommandAsync, T>, bool> = true>
-		void ExecuteCommand(T const& command);
-
-		template <typename T, typename std::enable_if_t<std::is_base_of_v<aiva::layer1::IGraphicCommandSync, T>, bool> = true>
+		template <typename T>
 		void ExecuteCommand(T const& command);
 
 	private:
@@ -53,14 +49,8 @@ namespace aiva::layer1
 
 // --------------------------------------------------------
 
-template <typename T, typename std::enable_if_t<std::is_base_of_v<aiva::layer1::IGraphicCommandAsync, T>, bool>>
+template <typename T>
 void aiva::layer1::GraphicExecutor::ExecuteCommand(T const& command)
 {
 	mPendingCommands.emplace_back(std::make_unique<T>(command));
-}
-
-template <typename T, typename std::enable_if_t<std::is_base_of_v<aiva::layer1::IGraphicCommandSync, T>, bool>>
-void aiva::layer1::GraphicExecutor::ExecuteCommand(T const& command)
-{
-	command.Execute(mEngine);
 }

@@ -137,7 +137,7 @@ void aiva::layer1::Engine::TerminateSystems()
 	mResourceSystem = {};
 }
 
-uintmax_t aiva::layer1::Engine::Tick() const
+uint64_t aiva::layer1::Engine::Tick() const
 {
 	return mTick;
 }

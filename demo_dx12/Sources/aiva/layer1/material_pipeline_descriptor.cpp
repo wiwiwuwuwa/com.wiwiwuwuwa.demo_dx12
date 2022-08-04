@@ -32,13 +32,13 @@ void aiva::layer1::MaterialPipelineDescriptor::TerminateCacheUpdater()
 	mCacheUpdater = {};
 }
 
-aiva::layer1::EGpuFillMode aiva::layer1::MaterialPipelineDescriptor::FillMode() const
+aiva::layer1::EFillMode aiva::layer1::MaterialPipelineDescriptor::FillMode() const
 {
 	CacheUpdater().FlushChanges();
 	return mFillMode;
 }
 
-aiva::layer1::MaterialPipelineDescriptor& aiva::layer1::MaterialPipelineDescriptor::FillMode(EGpuFillMode const fillMode)
+aiva::layer1::MaterialPipelineDescriptor& aiva::layer1::MaterialPipelineDescriptor::FillMode(EFillMode const fillMode)
 {
 	mFillMode = fillMode;
 
@@ -46,13 +46,13 @@ aiva::layer1::MaterialPipelineDescriptor& aiva::layer1::MaterialPipelineDescript
 	return *this;
 }
 
-aiva::layer1::EGpuCullMode aiva::layer1::MaterialPipelineDescriptor::CullMode() const
+aiva::layer1::ECullMode aiva::layer1::MaterialPipelineDescriptor::CullMode() const
 {
 	CacheUpdater().FlushChanges();
 	return mCullMode;
 }
 
-aiva::layer1::MaterialPipelineDescriptor& aiva::layer1::MaterialPipelineDescriptor::CullMode(EGpuCullMode const cullMode)
+aiva::layer1::MaterialPipelineDescriptor& aiva::layer1::MaterialPipelineDescriptor::CullMode(ECullMode const cullMode)
 {
 	mCullMode = cullMode;
 
@@ -88,13 +88,13 @@ aiva::layer1::MaterialPipelineDescriptor& aiva::layer1::MaterialPipelineDescript
 	return *this;
 }
 
-aiva::layer1::EGpuComparisonFunc aiva::layer1::MaterialPipelineDescriptor::DepthFunc() const
+aiva::layer1::EComparisonFunc aiva::layer1::MaterialPipelineDescriptor::DepthFunc() const
 {
 	CacheUpdater().FlushChanges();
 	return mDepthFunc;
 }
 
-aiva::layer1::MaterialPipelineDescriptor& aiva::layer1::MaterialPipelineDescriptor::DepthFunc(EGpuComparisonFunc const depthFunc)
+aiva::layer1::MaterialPipelineDescriptor& aiva::layer1::MaterialPipelineDescriptor::DepthFunc(EComparisonFunc const depthFunc)
 {
 	mDepthFunc = depthFunc;
 
@@ -102,13 +102,13 @@ aiva::layer1::MaterialPipelineDescriptor& aiva::layer1::MaterialPipelineDescript
 	return *this;
 }
 
-std::vector<aiva::layer1::EGpuResourceBufferFormat> aiva::layer1::MaterialPipelineDescriptor::RenderTargets() const
+std::vector<aiva::layer1::EResourceBufferFormat> aiva::layer1::MaterialPipelineDescriptor::RenderTargets() const
 {
 	CacheUpdater().FlushChanges();
 	return mRenderTargets;
 }
 
-aiva::layer1::MaterialPipelineDescriptor& aiva::layer1::MaterialPipelineDescriptor::RenderTargets(std::vector<EGpuResourceBufferFormat> const& renderTargets)
+aiva::layer1::MaterialPipelineDescriptor& aiva::layer1::MaterialPipelineDescriptor::RenderTargets(std::vector<EResourceBufferFormat> const& renderTargets)
 {
 	mRenderTargets = renderTargets;
 
@@ -116,13 +116,13 @@ aiva::layer1::MaterialPipelineDescriptor& aiva::layer1::MaterialPipelineDescript
 	return *this;
 }
 
-aiva::layer1::EGpuResourceBufferFormat aiva::layer1::MaterialPipelineDescriptor::DepthTarget() const
+aiva::layer1::EResourceBufferFormat aiva::layer1::MaterialPipelineDescriptor::DepthTarget() const
 {
 	CacheUpdater().FlushChanges();
 	return mDepthTarget;
 }
 
-aiva::layer1::MaterialPipelineDescriptor& aiva::layer1::MaterialPipelineDescriptor::DepthTarget(EGpuResourceBufferFormat const depthTarget)
+aiva::layer1::MaterialPipelineDescriptor& aiva::layer1::MaterialPipelineDescriptor::DepthTarget(EResourceBufferFormat const depthTarget)
 {
 	mDepthTarget = depthTarget;
 

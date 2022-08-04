@@ -89,7 +89,7 @@ void aiva::layer1::GrBuffer::RefreshInternalResources()
 
 winrt::com_ptr<ID3D12Resource> aiva::layer1::GrBuffer::CreateInternalResource(Engine const& engine, GrBufferDesc const& desc, aiva::utils::ResourceBarrier& outBarrier)
 {
-	aiva::utils::Asserts::CheckBool(!(desc.SupportShaderAtomics && desc.MemoryType != EGpuResourceMemoryType::GpuOnly));
+	aiva::utils::Asserts::CheckBool(!(desc.SupportShaderAtomics && desc.MemoryType != EResourceMemoryType::GpuOnly));
 	aiva::utils::Asserts::CheckBool(desc.Size > 0);
 
 	auto const& device = engine.GraphicHardware().Device();
@@ -120,8 +120,8 @@ winrt::com_ptr<ID3D12Resource> aiva::layer1::GrBuffer::CreateInternalResource(En
 	resourceDesc.Flags |= desc.SupportUnorderedAccess ? D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS : resourceDesc.Flags;
 
 	D3D12_RESOURCE_STATES resourceStates = D3D12_RESOURCE_STATE_COMMON;
-	resourceStates |= desc.MemoryType == EGpuResourceMemoryType::CpuToGpu ? D3D12_RESOURCE_STATE_GENERIC_READ : resourceStates;
-	resourceStates |= desc.MemoryType == EGpuResourceMemoryType::GpuToCpu ? D3D12_RESOURCE_STATE_COPY_DEST : resourceStates;
+	resourceStates |= desc.MemoryType == EResourceMemoryType::CpuToGpu ? D3D12_RESOURCE_STATE_GENERIC_READ : resourceStates;
+	resourceStates |= desc.MemoryType == EResourceMemoryType::GpuToCpu ? D3D12_RESOURCE_STATE_COPY_DEST : resourceStates;
 	outBarrier = resourceStates;
 
 	winrt::com_ptr<ID3D12Resource> resource{};

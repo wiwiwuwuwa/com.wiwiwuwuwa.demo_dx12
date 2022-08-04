@@ -5,8 +5,8 @@
 
 namespace aiva::layer1
 {
-	enum class EGpuDescriptorHeapType : std::uint8_t;
-	enum class EGpuResourceViewType : std::uint8_t;
+	enum class EDescriptorHeapType : std::uint8_t;
+	enum class EResourceViewType : std::uint8_t;
 }
 
 namespace aiva::utils
@@ -28,9 +28,9 @@ namespace aiva::layer1
 	// Metadata
 
 	public:
-		virtual EGpuDescriptorHeapType HeapType() const = 0;
+		virtual EDescriptorHeapType HeapType() const = 0;
 
-		virtual EGpuResourceViewType ViewType() const = 0;
+		virtual EResourceViewType ViewType() const = 0;
 
 	// ----------------------------------------------------
 	// Actions

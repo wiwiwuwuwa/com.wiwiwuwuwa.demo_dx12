@@ -1,7 +1,7 @@
 #pragma once
 #include <pch.h>
 
-#include <aiva/layer1/e_gpu_primitive_topology.h>
+#include <aiva/layer1/e_primitive_topology.h>
 #include <aiva/layer1/i_graphic_command_async.h>
 
 namespace aiva::layer1
@@ -45,7 +45,7 @@ namespace aiva::layer1
 	// Metadata
 
 	public:
-		EGpuPrimitiveTopology MeshTopology{};
+		EPrimitiveTopology MeshTopology{};
 
 		std::string MeshIndicesKey{};
 

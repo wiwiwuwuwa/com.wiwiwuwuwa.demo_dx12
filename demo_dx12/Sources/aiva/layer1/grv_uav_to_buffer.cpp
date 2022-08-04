@@ -18,14 +18,14 @@
 //	Desc({});
 //}
 //
-//aiva::layer1::EGpuDescriptorHeapType aiva::layer1::GrvUavToBuffer::DescriptorHeapType() const
+//aiva::layer1::EDescriptorHeapType aiva::layer1::GrvUavToBuffer::DescriptorHeapType() const
 //{
-//	return EGpuDescriptorHeapType::CbvSrvUav;
+//	return EDescriptorHeapType::CbvSrvUav;
 //}
 //
-//aiva::layer1::EGpuResourceViewType aiva::layer1::GrvUavToBuffer::ResourceViewType() const
+//aiva::layer1::EResourceViewType aiva::layer1::GrvUavToBuffer::ResourceViewType() const
 //{
-//	return EGpuResourceViewType::Uav;
+//	return EResourceViewType::Uav;
 //}
 //
 //aiva::layer1::GrvUavToBufferDesc const& aiva::layer1::GrvUavToBuffer::Desc() const

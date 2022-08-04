@@ -1,10 +1,10 @@
 #pragma once
 #include <pch.h>
 
-#include <aiva/layer1/e_gpu_comparison_func.h>
-#include <aiva/layer1/e_gpu_cull_mode.h>
-#include <aiva/layer1/e_gpu_fill_mode.h>
-#include <aiva/layer1/e_gpu_resource_buffer_format.h>
+#include <aiva/layer1/e_comparison_func.h>
+#include <aiva/layer1/e_cull_mode.h>
+#include <aiva/layer1/e_fill_mode.h>
+#include <aiva/layer1/e_resource_buffer_format.h>
 #include <aiva/utils/ev_action.h>
 
 namespace aiva::layer1
@@ -65,23 +65,23 @@ namespace aiva::layer1
 	// Fill Mode
 
 	public:
-		EGpuFillMode FillMode() const;
+		EFillMode FillMode() const;
 
-		MaterialPipelineDescriptor& FillMode(EGpuFillMode const fillMode);
+		MaterialPipelineDescriptor& FillMode(EFillMode const fillMode);
 
 	private:
-		EGpuFillMode mFillMode{ EGpuFillMode::Solid };
+		EFillMode mFillMode{ EFillMode::Solid };
 
 	// ----------------------------------------------------
 	// Cull Mode
 
 	public:
-		EGpuCullMode CullMode() const;
+		ECullMode CullMode() const;
 
-		MaterialPipelineDescriptor& CullMode(EGpuCullMode const cullMode);
+		MaterialPipelineDescriptor& CullMode(ECullMode const cullMode);
 
 	private:
-		EGpuCullMode mCullMode{ EGpuCullMode::Back };
+		ECullMode mCullMode{ ECullMode::Back };
 
 	// ----------------------------------------------------
 	// Depth Test
@@ -109,34 +109,34 @@ namespace aiva::layer1
 	// Depth Func
 
 	public:
-		EGpuComparisonFunc DepthFunc() const;
+		EComparisonFunc DepthFunc() const;
 
-		MaterialPipelineDescriptor& DepthFunc(EGpuComparisonFunc const depthFunc);
+		MaterialPipelineDescriptor& DepthFunc(EComparisonFunc const depthFunc);
 
 	private:
-		EGpuComparisonFunc mDepthFunc{ EGpuComparisonFunc::LessEqual };
+		EComparisonFunc mDepthFunc{ EComparisonFunc::LessEqual };
 
 	// ----------------------------------------------------
 	// Render Targets
 
 	public:
-		std::vector<EGpuResourceBufferFormat> RenderTargets() const;
+		std::vector<EResourceBufferFormat> RenderTargets() const;
 
-		MaterialPipelineDescriptor& RenderTargets(std::vector<EGpuResourceBufferFormat> const& renderTargets);
+		MaterialPipelineDescriptor& RenderTargets(std::vector<EResourceBufferFormat> const& renderTargets);
 
 	private:
-		std::vector<EGpuResourceBufferFormat> mRenderTargets = { EGpuResourceBufferFormat::R32G32B32A32_FLOAT };
+		std::vector<EResourceBufferFormat> mRenderTargets = { EResourceBufferFormat::R32G32B32A32_FLOAT };
 
 	// ----------------------------------------------------
 	// Depth Target
 
 	public:
-		EGpuResourceBufferFormat DepthTarget() const;
+		EResourceBufferFormat DepthTarget() const;
 
-		MaterialPipelineDescriptor& DepthTarget(EGpuResourceBufferFormat const depthTarget);
+		MaterialPipelineDescriptor& DepthTarget(EResourceBufferFormat const depthTarget);
 
 	private:
-		EGpuResourceBufferFormat mDepthTarget{ EGpuResourceBufferFormat::D32_FLOAT };
+		EResourceBufferFormat mDepthTarget{ EResourceBufferFormat::D32_FLOAT };
 
 	// ----------------------------------------------------
 	// Copying

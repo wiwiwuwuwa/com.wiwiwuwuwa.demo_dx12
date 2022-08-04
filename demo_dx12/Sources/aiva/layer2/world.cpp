@@ -1,7 +1,7 @@
 #include <pch.h>
 #include <aiva/layer2/world.h>
 
-#include <aiva/layer1/e_gpu_descriptor_heap_type.h>
+#include <aiva/layer1/e_descriptor_heap_type.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gca_dispatch.h>
 #include <aiva/layer1/graphic_executor.h>

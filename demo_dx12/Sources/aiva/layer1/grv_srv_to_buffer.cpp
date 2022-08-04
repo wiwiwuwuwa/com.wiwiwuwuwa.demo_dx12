@@ -1,8 +1,8 @@
 #include <pch.h>
 #include <aiva/layer1/grv_srv_to_buffer.h>
 
-#include <aiva/layer1/e_gpu_descriptor_heap_type.h>
-#include <aiva/layer1/e_gpu_resource_view_type.h>
+#include <aiva/layer1/e_descriptor_heap_type.h>
+#include <aiva/layer1/e_resource_view_type.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gr_buffer.h>
 #include <aiva/layer1/graphic_hardware.h>
@@ -48,14 +48,14 @@ void aiva::layer1::GrvSrvToBuffer::TerminateCacheUpdater()
 	mCacheUpdater = {};
 }
 
-aiva::layer1::EGpuDescriptorHeapType aiva::layer1::GrvSrvToBuffer::HeapType() const
+aiva::layer1::EDescriptorHeapType aiva::layer1::GrvSrvToBuffer::HeapType() const
 {
-	return EGpuDescriptorHeapType::CbvSrvUav;
+	return EDescriptorHeapType::CbvSrvUav;
 }
 
-aiva::layer1::EGpuResourceViewType aiva::layer1::GrvSrvToBuffer::ViewType() const
+aiva::layer1::EResourceViewType aiva::layer1::GrvSrvToBuffer::ViewType() const
 {
-	return EGpuResourceViewType::Srv;
+	return EResourceViewType::Srv;
 }
 
 void aiva::layer1::GrvSrvToBuffer::CreateView(D3D12_CPU_DESCRIPTOR_HANDLE const destination) const
@@ -225,7 +225,7 @@ void aiva::layer1::GrvSrvToBuffer::RefreshInternalResources()
 	if (needCreateAivaResourceDesc)
 	{
 		auto tempDesc = GrBufferDesc{};
-		tempDesc.MemoryType = EGpuResourceMemoryType::CpuToGpu;
+		tempDesc.MemoryType = EResourceMemoryType::CpuToGpu;
 		tempDesc.Size = binaryData.size();
 		tempDesc.SupportShaderAtomics = false;
 		tempDesc.SupportUnorderedAccess = false;
@@ -236,7 +236,7 @@ void aiva::layer1::GrvSrvToBuffer::RefreshInternalResources()
 	auto const& currentAivaResourceDesc = aivaResource->Desc();
 	aiva::utils::Asserts::CheckBool(currentAivaResourceDesc);
 	
-	auto const& needUpdateAivaResourceDesc = currentAivaResourceDesc->MemoryType != EGpuResourceMemoryType::CpuToGpu || currentAivaResourceDesc->Size != binaryData.size();
+	auto const& needUpdateAivaResourceDesc = currentAivaResourceDesc->MemoryType != EResourceMemoryType::CpuToGpu || currentAivaResourceDesc->Size != binaryData.size();
 	if (needUpdateAivaResourceDesc)
 	{
 		auto tempDesc = currentAivaResourceDesc;

@@ -1,7 +1,7 @@
 #include <pch.h>
 #include <aiva/layer1/resource_view_heap.h>
 
-#include <aiva/layer1/e_gpu_descriptor_heap_type.h>
+#include <aiva/layer1/e_descriptor_heap_type.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/graphic_hardware.h>
 #include <aiva/layer1/i_gpu_resource_view.h>
@@ -14,7 +14,7 @@ aiva::layer1::ResourceViewHeap::ResourceViewHeap(Engine const& engine) : mEngine
 	InitializeInternalResources();
 }
 
-aiva::layer1::ResourceViewHeap::ResourceViewHeap(Engine const& engine, EGpuDescriptorHeapType const resourceType) : ResourceViewHeap(engine)
+aiva::layer1::ResourceViewHeap::ResourceViewHeap(Engine const& engine, EDescriptorHeapType const resourceType) : ResourceViewHeap(engine)
 {
 	ResourceType(resourceType);
 }
@@ -43,12 +43,12 @@ void aiva::layer1::ResourceViewHeap::TerminateCacheUpdater()
 	mCacheUpdater = {};
 }
 
-aiva::layer1::EGpuDescriptorHeapType aiva::layer1::ResourceViewHeap::ResourceType() const
+aiva::layer1::EDescriptorHeapType aiva::layer1::ResourceViewHeap::ResourceType() const
 {
 	return mResourceType;
 }
 
-aiva::layer1::ResourceViewHeap& aiva::layer1::ResourceViewHeap::ResourceType(EGpuDescriptorHeapType const resourceType)
+aiva::layer1::ResourceViewHeap& aiva::layer1::ResourceViewHeap::ResourceType(EDescriptorHeapType const resourceType)
 {
 	mResourceType = resourceType;
 	mResourceViews = {};
@@ -153,7 +153,7 @@ void aiva::layer1::ResourceViewHeap::RefreshInternalDescriptorHeap()
 	auto heapDesc = D3D12_DESCRIPTOR_HEAP_DESC{};
 	heapDesc.Type = ToInternalEnum(ResourceType());
 	heapDesc.NumDescriptors = std::size(mResourceViews);
-	heapDesc.Flags = (ResourceType() == EGpuDescriptorHeapType::CbvSrvUav ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE);
+	heapDesc.Flags = (ResourceType() == EDescriptorHeapType::CbvSrvUav ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE);
 	heapDesc.NodeMask = 0;
 
 	auto heapResource = winrt::com_ptr<ID3D12DescriptorHeap>();

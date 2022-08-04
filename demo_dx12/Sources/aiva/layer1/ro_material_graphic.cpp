@@ -40,10 +40,10 @@ void aiva::layer1::RoMaterialGraphic::DeserealizeFromBinary(std::vector<std::byt
 
 		auto const& pipelineDescriptor = root.at("pipeline_descriptor");
 		{
-			auto const& fillMode = pipelineDescriptor.at("fill_mode").get<EGpuFillMode>();
+			auto const& fillMode = pipelineDescriptor.at("fill_mode").get<EFillMode>();
 			PipelineDescriptor().FillMode(fillMode);
 
-			auto const& cullMode = pipelineDescriptor.at("cull_mode").get<EGpuCullMode>();
+			auto const& cullMode = pipelineDescriptor.at("cull_mode").get<ECullMode>();
 			PipelineDescriptor().CullMode(cullMode);
 
 			auto const& depthTest = pipelineDescriptor.at("depth_test").get<bool>();
@@ -52,19 +52,19 @@ void aiva::layer1::RoMaterialGraphic::DeserealizeFromBinary(std::vector<std::byt
 			auto const& depthWrite = pipelineDescriptor.at("depth_write").get<bool>();
 			PipelineDescriptor().DepthWrite(depthWrite);
 
-			auto const& depthFunc = pipelineDescriptor.at("depth_func").get<EGpuComparisonFunc>();
+			auto const& depthFunc = pipelineDescriptor.at("depth_func").get<EComparisonFunc>();
 			PipelineDescriptor().DepthFunc(depthFunc);
 
 			{
 				auto const& rtJsons = pipelineDescriptor.at("render_targets");
 
-				auto rtEnums = std::vector<EGpuResourceBufferFormat>{};
-				std::transform(std::cbegin(rtJsons), std::cend(rtJsons), std::back_inserter(rtEnums), [](auto const& rtJson) { return rtJson.get<EGpuResourceBufferFormat>(); });
+				auto rtEnums = std::vector<EResourceBufferFormat>{};
+				std::transform(std::cbegin(rtJsons), std::cend(rtJsons), std::back_inserter(rtEnums), [](auto const& rtJson) { return rtJson.get<EResourceBufferFormat>(); });
 
 				PipelineDescriptor().RenderTargets(rtEnums);
 			}
 
-			auto const& depthTarget = pipelineDescriptor.at("depth_target").get<EGpuResourceBufferFormat>();
+			auto const& depthTarget = pipelineDescriptor.at("depth_target").get<EResourceBufferFormat>();
 			PipelineDescriptor().DepthTarget(depthTarget);
 		}
 	}

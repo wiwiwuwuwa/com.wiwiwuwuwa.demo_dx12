@@ -1,20 +1,20 @@
 #include <pch.h>
-#include <aiva/layer1/e_gpu_cull_mode.h>
+#include <aiva/layer1/e_cull_mode.h>
 
 #include <aiva/utils/asserts.h>
 
-aiva::layer1::EGpuCullMode aiva::layer1::FromInternalEnum(D3D12_CULL_MODE const cullMode)
+aiva::layer1::ECullMode aiva::layer1::FromInternalEnum(D3D12_CULL_MODE const cullMode)
 {
 	switch (cullMode)
 	{
 	case D3D12_CULL_MODE_NONE:
-		return EGpuCullMode::None;
+		return ECullMode::None;
 
 	case D3D12_CULL_MODE_FRONT:
-		return EGpuCullMode::Front;
+		return ECullMode::Front;
 
 	case D3D12_CULL_MODE_BACK:
-		return EGpuCullMode::Back;
+		return ECullMode::Back;
 
 	default:
 		aiva::utils::Asserts::CheckBool(false);
@@ -22,17 +22,17 @@ aiva::layer1::EGpuCullMode aiva::layer1::FromInternalEnum(D3D12_CULL_MODE const 
 	}
 }
 
-D3D12_CULL_MODE aiva::layer1::ToInternalEnum(EGpuCullMode const cullMode)
+D3D12_CULL_MODE aiva::layer1::ToInternalEnum(ECullMode const cullMode)
 {
 	switch (cullMode)
 	{
-	case EGpuCullMode::None:
+	case ECullMode::None:
 		return D3D12_CULL_MODE_NONE;
 
-	case EGpuCullMode::Front:
+	case ECullMode::Front:
 		return D3D12_CULL_MODE_FRONT;
 
-	case EGpuCullMode::Back:
+	case ECullMode::Back:
 		return D3D12_CULL_MODE_BACK;
 
 	default:
@@ -41,23 +41,23 @@ D3D12_CULL_MODE aiva::layer1::ToInternalEnum(EGpuCullMode const cullMode)
 	}
 }
 
-bool aiva::layer1::TryParse(std::string const& enumStr, EGpuCullMode& enumVal)
+bool aiva::layer1::TryParse(std::string const& enumStr, ECullMode& enumVal)
 {
 	if (enumStr == "None")
 	{
-		enumVal = EGpuCullMode::None;
+		enumVal = ECullMode::None;
 		return true;
 	}
 
 	if (enumStr == "Front")
 	{
-		enumVal = EGpuCullMode::Front;
+		enumVal = ECullMode::Front;
 		return true;
 	}
 
 	if (enumStr == "Back")
 	{
-		enumVal = EGpuCullMode::Back;
+		enumVal = ECullMode::Back;
 		return true;
 	}
 
@@ -65,17 +65,17 @@ bool aiva::layer1::TryParse(std::string const& enumStr, EGpuCullMode& enumVal)
 	return false;
 }
 
-std::string aiva::layer1::ToString(EGpuCullMode const cullMode)
+std::string aiva::layer1::ToString(ECullMode const cullMode)
 {
 	switch (cullMode)
 	{
-	case EGpuCullMode::None:
+	case ECullMode::None:
 		return "None";
 
-	case EGpuCullMode::Front:
+	case ECullMode::Front:
 		return "Front";
 
-	case EGpuCullMode::Back:
+	case ECullMode::Back:
 		return "Back";
 
 	default:
@@ -84,12 +84,12 @@ std::string aiva::layer1::ToString(EGpuCullMode const cullMode)
 	}
 }
 
-void aiva::layer1::from_json(nlohmann::json const& j, EGpuCullMode& p)
+void aiva::layer1::from_json(nlohmann::json const& j, ECullMode& p)
 {
 	aiva::utils::Asserts::CheckBool(TryParse(j.get<std::string>(), p));
 }
 
-void aiva::layer1::to_json(nlohmann::json& j, EGpuCullMode const& p)
+void aiva::layer1::to_json(nlohmann::json& j, ECullMode const& p)
 {
 	j = ToString(p);
 }

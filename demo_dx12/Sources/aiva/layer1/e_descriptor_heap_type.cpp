@@ -1,23 +1,23 @@
 #include <pch.h>
-#include <aiva/layer1/e_gpu_descriptor_heap_type.h>
+#include <aiva/layer1/e_descriptor_heap_type.h>
 
 #include <aiva/utils/asserts.h>
 
-aiva::layer1::EGpuDescriptorHeapType aiva::layer1::FromInternalEnum(D3D12_DESCRIPTOR_HEAP_TYPE const heapType)
+aiva::layer1::EDescriptorHeapType aiva::layer1::FromInternalEnum(D3D12_DESCRIPTOR_HEAP_TYPE const heapType)
 {
 	switch (heapType)
 	{
 	case D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV:
-		return EGpuDescriptorHeapType::CbvSrvUav;
+		return EDescriptorHeapType::CbvSrvUav;
 
 	case D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER:
-		return EGpuDescriptorHeapType::Sampler;
+		return EDescriptorHeapType::Sampler;
 
 	case D3D12_DESCRIPTOR_HEAP_TYPE_RTV:
-		return EGpuDescriptorHeapType::Rtv;
+		return EDescriptorHeapType::Rtv;
 
 	case D3D12_DESCRIPTOR_HEAP_TYPE_DSV:
-		return EGpuDescriptorHeapType::Dsv;
+		return EDescriptorHeapType::Dsv;
 
 	default:
 		aiva::utils::Asserts::CheckBool(false);
@@ -25,20 +25,20 @@ aiva::layer1::EGpuDescriptorHeapType aiva::layer1::FromInternalEnum(D3D12_DESCRI
 	}
 }
 
-D3D12_DESCRIPTOR_HEAP_TYPE aiva::layer1::ToInternalEnum(EGpuDescriptorHeapType const heapType)
+D3D12_DESCRIPTOR_HEAP_TYPE aiva::layer1::ToInternalEnum(EDescriptorHeapType const heapType)
 {
 	switch (heapType)
 	{
-	case EGpuDescriptorHeapType::CbvSrvUav:
+	case EDescriptorHeapType::CbvSrvUav:
 		return D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 
-	case EGpuDescriptorHeapType::Sampler:
+	case EDescriptorHeapType::Sampler:
 		return D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
 
-	case EGpuDescriptorHeapType::Rtv:
+	case EDescriptorHeapType::Rtv:
 		return D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 
-	case EGpuDescriptorHeapType::Dsv:
+	case EDescriptorHeapType::Dsv:
 		return D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
 
 	default:

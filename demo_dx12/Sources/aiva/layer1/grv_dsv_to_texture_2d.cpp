@@ -1,8 +1,8 @@
 #include <pch.h>
 #include <aiva/layer1/grv_dsv_to_texture_2d.h>
 
-#include <aiva/layer1/e_gpu_descriptor_heap_type.h>
-#include <aiva/layer1/e_gpu_resource_view_type.h>
+#include <aiva/layer1/e_descriptor_heap_type.h>
+#include <aiva/layer1/e_resource_view_type.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gr_texture_2d.h>
 #include <aiva/layer1/graphic_hardware.h>
@@ -42,14 +42,14 @@ void aiva::layer1::GrvDsvToTexture2D::TerminateCacheUpdater()
 	mCacheUpdater = {};
 }
 
-aiva::layer1::EGpuDescriptorHeapType aiva::layer1::GrvDsvToTexture2D::HeapType() const
+aiva::layer1::EDescriptorHeapType aiva::layer1::GrvDsvToTexture2D::HeapType() const
 {
-	return EGpuDescriptorHeapType::Dsv;
+	return EDescriptorHeapType::Dsv;
 }
 
-aiva::layer1::EGpuResourceViewType aiva::layer1::GrvDsvToTexture2D::ViewType() const
+aiva::layer1::EResourceViewType aiva::layer1::GrvDsvToTexture2D::ViewType() const
 {
-	return EGpuResourceViewType::Dsv;
+	return EResourceViewType::Dsv;
 }
 
 void aiva::layer1::GrvDsvToTexture2D::CreateView(D3D12_CPU_DESCRIPTOR_HANDLE const destination) const

@@ -171,14 +171,14 @@
     <ClInclude Include="External Sources\tinyutf8\tinyutf8.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Sources\aiva\layer0\app.h" />
-    <ClInclude Include="Sources\aiva\layer1\e_gpu_cull_mode.h" />
-    <ClInclude Include="Sources\aiva\layer1\e_gpu_comparison_func.h" />
-    <ClInclude Include="Sources\aiva\layer1\e_gpu_descriptor_heap_type.h" />
-    <ClInclude Include="Sources\aiva\layer1\e_gpu_fill_mode.h" />
-    <ClInclude Include="Sources\aiva\layer1\e_gpu_primitive_topology.h" />
-    <ClInclude Include="Sources\aiva\layer1\e_gpu_resource_buffer_format.h" />
-    <ClInclude Include="Sources\aiva\layer1\e_gpu_resource_memory_type.h" />
-    <ClInclude Include="Sources\aiva\layer1\e_gpu_resource_view_type.h" />
+    <ClInclude Include="Sources\aiva\layer1\e_cull_mode.h" />
+    <ClInclude Include="Sources\aiva\layer1\e_comparison_func.h" />
+    <ClInclude Include="Sources\aiva\layer1\e_descriptor_heap_type.h" />
+    <ClInclude Include="Sources\aiva\layer1\e_fill_mode.h" />
+    <ClInclude Include="Sources\aiva\layer1\e_primitive_topology.h" />
+    <ClInclude Include="Sources\aiva\layer1\e_resource_buffer_format.h" />
+    <ClInclude Include="Sources\aiva\layer1\e_resource_memory_type.h" />
+    <ClInclude Include="Sources\aiva\layer1\e_resource_view_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_value_type.h" />
     <ClInclude Include="Sources\aiva\layer1\shader_value_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\value_type_utils.h" />
@@ -280,15 +280,15 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Sources\aiva\layer0\app.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\e_gpu_cull_mode.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\e_gpu_comparison_func.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\e_gpu_descriptor_heap_type.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\e_gpu_fill_mode.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\e_gpu_primitive_topology.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\e_gpu_resource_buffer_format.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\e_gpu_resource_memory_type.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\e_cull_mode.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\e_comparison_func.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\e_descriptor_heap_type.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\e_fill_mode.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\e_primitive_topology.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\e_resource_buffer_format.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\e_resource_memory_type.cpp" />
     <ClCompile Include="Sources\aiva\layer1\engine.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\e_gpu_resource_view_type.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\e_resource_view_type.cpp" />
     <ClCompile Include="Sources\aiva\layer1\shader_value_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer1\value_type_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_clear_depth_stencil.cpp" />

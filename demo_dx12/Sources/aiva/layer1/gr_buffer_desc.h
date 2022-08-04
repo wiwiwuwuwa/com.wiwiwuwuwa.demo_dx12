@@ -1,7 +1,7 @@
 #pragma once
 #include <pch.h>
 
-#include <aiva/layer1/e_gpu_resource_memory_type.h>
+#include <aiva/layer1/e_resource_memory_type.h>
 
 namespace aiva::layer1
 {
@@ -19,7 +19,7 @@ namespace aiva::layer1
 	// Data Layout
 
 	public:
-		EGpuResourceMemoryType MemoryType{};
+		EResourceMemoryType MemoryType{};
 
 		std::uint64_t Size{};
 

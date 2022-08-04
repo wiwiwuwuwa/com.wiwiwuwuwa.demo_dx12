@@ -3,7 +3,7 @@
 
 namespace aiva::layer1
 {
-	enum class EGpuDescriptorHeapType : std::uint8_t;
+	enum class EDescriptorHeapType : std::uint8_t;
 
 	struct Engine;
 	struct IGpuResourceView;
@@ -59,14 +59,14 @@ namespace aiva::layer1
 	// Resource Heaps
 
 	private:
-		using ResourceHeapMap = std::unordered_map<EGpuDescriptorHeapType, std::shared_ptr<ResourceViewHeap>>;
+		using ResourceHeapMap = std::unordered_map<EDescriptorHeapType, std::shared_ptr<ResourceViewHeap>>;
 
 	public:
-		std::shared_ptr<ResourceViewHeap> GetResourceHeap(EGpuDescriptorHeapType const key) const;
+		std::shared_ptr<ResourceViewHeap> GetResourceHeap(EDescriptorHeapType const key) const;
 
-		std::shared_ptr<ResourceViewHeap> GetOrAddResourceHeap(EGpuDescriptorHeapType const key);
+		std::shared_ptr<ResourceViewHeap> GetOrAddResourceHeap(EDescriptorHeapType const key);
 
-		ResourceViewTable& SetResourceHeap(EGpuDescriptorHeapType const key, std::shared_ptr<ResourceViewHeap> const& value);
+		ResourceViewTable& SetResourceHeap(EDescriptorHeapType const key, std::shared_ptr<ResourceViewHeap> const& value);
 
 		ResourceHeapMap const& ResourceHeaps() const;
 

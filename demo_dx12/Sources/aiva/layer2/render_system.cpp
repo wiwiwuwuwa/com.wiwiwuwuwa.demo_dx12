@@ -1,10 +1,10 @@
 #include <pch.h>
 #include <aiva/layer2/render_system.h>
 
-#include <aiva/layer1/e_gpu_descriptor_heap_type.h>
-#include <aiva/layer1/e_gpu_primitive_topology.h>
-#include <aiva/layer1/e_gpu_resource_buffer_format.h>
-#include <aiva/layer1/e_gpu_resource_memory_type.h>
+#include <aiva/layer1/e_descriptor_heap_type.h>
+#include <aiva/layer1/e_primitive_topology.h>
+#include <aiva/layer1/e_resource_buffer_format.h>
+#include <aiva/layer1/e_resource_memory_type.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gca_clear_depth_stencil.h>
 #include <aiva/layer1/gca_clear_render_target.h>
@@ -95,13 +95,13 @@ void aiva::layer2::RenderSystem::InitRTs()
 {
 	auto const viewRect = mWorld.Engine().GraphicHardware().ScreenViewRect();
 
-	mRTs = aiva::layer1::ResourceViewHeap::Create(mWorld.Engine(), aiva::layer1::EGpuDescriptorHeapType::Rtv);
+	mRTs = aiva::layer1::ResourceViewHeap::Create(mWorld.Engine(), aiva::layer1::EDescriptorHeapType::Rtv);
 	aiva::utils::Asserts::CheckBool(mRTs, "RT heap is not valid");
 
 	for (std::size_t i = {}; i < std::size_t{ NUM_DEFFERED_BUFFERS }; i++)
 	{
 		auto texBufferDesc = aiva::layer1::GrTexture2DDesc{};
-		texBufferDesc.BufferFormat = aiva::layer1::EGpuResourceBufferFormat::R32G32B32A32_FLOAT;
+		texBufferDesc.BufferFormat = aiva::layer1::EResourceBufferFormat::R32G32B32A32_FLOAT;
 		texBufferDesc.Width = viewRect.z;
 		texBufferDesc.Height = viewRect.w;
 		texBufferDesc.SupportRenderTarget = true;
@@ -124,11 +124,11 @@ void aiva::layer2::RenderSystem::InitDSs()
 {
 	auto const viewRect = mWorld.Engine().GraphicHardware().ScreenViewRect();
 
-	mDSs = aiva::layer1::ResourceViewHeap::Create(mWorld.Engine(), aiva::layer1::EGpuDescriptorHeapType::Dsv);
+	mDSs = aiva::layer1::ResourceViewHeap::Create(mWorld.Engine(), aiva::layer1::EDescriptorHeapType::Dsv);
 	aiva::utils::Asserts::CheckBool(mDSs, "DS heap is not valid");
 
 	auto texBufferDesc = aiva::layer1::GrTexture2DDesc{};
-	texBufferDesc.BufferFormat = aiva::layer1::EGpuResourceBufferFormat::D32_FLOAT;
+	texBufferDesc.BufferFormat = aiva::layer1::EResourceBufferFormat::D32_FLOAT;
 	texBufferDesc.Width = viewRect.z;
 	texBufferDesc.Height = viewRect.w;
 	texBufferDesc.SupportDepthStencil = true;
@@ -212,7 +212,7 @@ void aiva::layer2::RenderSystem::DrawMeshRenderer(ScCamera const& const camera, 
 
 	auto drawMesh = aiva::layer1::GcaDrawMesh{};
 	drawMesh.Material = material;
-	drawMesh.MeshTopology = aiva::layer1::EGpuPrimitiveTopology::TriangleList;
+	drawMesh.MeshTopology = aiva::layer1::EPrimitiveTopology::TriangleList;
 	drawMesh.MeshIndicesKey = aiva::utils::MaterialConstants::AIVA_BUFFER_INDICES;
 
 	mWorld.Engine().GraphicExecutor().ExecuteCommand(drawMesh);
@@ -225,7 +225,7 @@ void aiva::layer2::RenderSystem::SetupCameraProperties(ScCamera const& const cam
 	auto const constantMVP = camera.MatrixMVP();
 	constantStruct->SetValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_MVP, &constantMVP);
 
-	auto const constantHeap = material.ResourceDescriptor().ResourceTable().GetOrAddResourceHeap(aiva::layer1::EGpuDescriptorHeapType::CbvSrvUav);
+	auto const constantHeap = material.ResourceDescriptor().ResourceTable().GetOrAddResourceHeap(aiva::layer1::EDescriptorHeapType::CbvSrvUav);
 	aiva::utils::Asserts::CheckBool(constantHeap);
 
 	auto constantView = constantHeap->ResourceView<aiva::layer1::GrvSrvToBuffer>(aiva::utils::MaterialConstants::AIVA_BUFFER_CONSTANT);
@@ -241,7 +241,7 @@ void aiva::layer2::RenderSystem::SetupCameraProperties(ScCamera const& const cam
 	if (!constantViewDesc)
 	{
 		auto constantBufferDesc = aiva::layer1::GrBufferDesc{};
-		constantBufferDesc.MemoryType = aiva::layer1::EGpuResourceMemoryType::CpuToGpu;
+		constantBufferDesc.MemoryType = aiva::layer1::EResourceMemoryType::CpuToGpu;
 
 		auto constantBuffer = aiva::layer1::GrBuffer::Create(mWorld.Engine(), constantBufferDesc);
 		aiva::utils::Asserts::CheckBool(constantBuffer, "Constant buffer is not valid");

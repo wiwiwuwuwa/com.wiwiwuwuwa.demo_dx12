@@ -1,7 +1,7 @@
 #include <pch.h>
 #include <aiva/layer1/gca_draw_mesh.h>
 
-#include <aiva/layer1/e_gpu_descriptor_heap_type.h>
+#include <aiva/layer1/e_descriptor_heap_type.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/grv_srv_to_buffer.h>
 #include <aiva/layer1/ro_material_graphic.h>
@@ -121,7 +121,7 @@ void aiva::layer1::GcaDrawMesh::ExecuteDrawIndexedInstanced(Engine const& engine
 
 	auto const& resourcesDescriptor = material->ResourceDescriptor();
 
-	auto const& meshParamsHeap = resourcesDescriptor.ResourceTable().GetResourceHeap(EGpuDescriptorHeapType::CbvSrvUav);
+	auto const& meshParamsHeap = resourcesDescriptor.ResourceTable().GetResourceHeap(EDescriptorHeapType::CbvSrvUav);
 	aiva::utils::Asserts::CheckBool(meshParamsHeap);
 
 	auto const& meshIndicesView = meshParamsHeap->ResourceView<GrvSrvToBuffer>(MeshIndicesKey);

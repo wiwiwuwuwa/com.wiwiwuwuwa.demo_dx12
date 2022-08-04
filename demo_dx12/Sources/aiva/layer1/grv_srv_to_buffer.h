@@ -7,8 +7,8 @@
 
 namespace aiva::layer1
 {
-	enum class EGpuDescriptorHeapType : std::uint8_t;
-	enum class EGpuResourceViewType : std::uint8_t;
+	enum class EDescriptorHeapType : std::uint8_t;
+	enum class EResourceViewType : std::uint8_t;
 
 	struct Engine;
 	struct ShaderBuffer;
@@ -66,9 +66,9 @@ namespace aiva::layer1
 	// IGpuResourceView
 
 	public:
-		EGpuDescriptorHeapType HeapType() const override;
+		EDescriptorHeapType HeapType() const override;
 
-		EGpuResourceViewType ViewType() const override;
+		EResourceViewType ViewType() const override;
 
 		void CreateView(D3D12_CPU_DESCRIPTOR_HANDLE const destination) const override;
 

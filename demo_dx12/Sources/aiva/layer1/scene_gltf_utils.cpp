@@ -1,8 +1,8 @@
 #include <pch.h>
 #include <aiva/layer1/scene_gltf_utils.h>
 
-#include <aiva/layer1/e_gpu_descriptor_heap_type.h>
-#include <aiva/layer1/e_gpu_resource_memory_type.h>
+#include <aiva/layer1/e_descriptor_heap_type.h>
+#include <aiva/layer1/e_resource_memory_type.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gr_buffer.h>
 #include <aiva/layer1/grv_srv_to_buffer.h>
@@ -72,7 +72,7 @@ aiva::layer1::SceneGltfUtils::MeshArray aiva::layer1::SceneGltfUtils::LoadMeshMa
 		auto const& gltfMesh = gltfMeshes.at(i);
 		auto const& gltfPrimitive = gltfMesh.primitives.at(0);
 
-		auto const aivaMesh = ResourceViewHeap::Create(gltf.Engine(), EGpuDescriptorHeapType::CbvSrvUav);
+		auto const aivaMesh = ResourceViewHeap::Create(gltf.Engine(), EDescriptorHeapType::CbvSrvUav);
 		aivaMeshes.emplace_back(aivaMesh);
 
 		{ // indices
@@ -82,7 +82,7 @@ aiva::layer1::SceneGltfUtils::MeshArray aiva::layer1::SceneGltfUtils::LoadMeshMa
 			{
 				{
 					auto aivaBufferDesc = GrBufferDesc{};
-					aivaBufferDesc.MemoryType = EGpuResourceMemoryType::CpuToGpu;
+					aivaBufferDesc.MemoryType = EResourceMemoryType::CpuToGpu;
 
 					auto const aivaBuffer = GrBuffer::Create(gltf.Engine(), aivaBufferDesc);
 					aivaViewDesc.Resource = aivaBuffer;
@@ -118,7 +118,7 @@ aiva::layer1::SceneGltfUtils::MeshArray aiva::layer1::SceneGltfUtils::LoadMeshMa
 			auto aivaViewDesc = GrvSrvToBufferDesc{};
 			{
 				auto aivaBufferDesc = GrBufferDesc{};
-				aivaBufferDesc.MemoryType = EGpuResourceMemoryType::CpuToGpu;
+				aivaBufferDesc.MemoryType = EResourceMemoryType::CpuToGpu;
 
 				auto const aivaBuffer = GrBuffer::Create(gltf.Engine(), aivaBufferDesc);
 				aivaViewDesc.Resource = aivaBuffer;

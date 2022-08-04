@@ -1,8 +1,8 @@
 #include <pch.h>
 #include <aiva/layer1/material_resource_descriptor.h>
 
-#include <aiva/layer1/e_gpu_descriptor_heap_type.h>
-#include <aiva/layer1/e_gpu_resource_view_type.h>
+#include <aiva/layer1/e_descriptor_heap_type.h>
+#include <aiva/layer1/e_resource_view_type.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/graphic_hardware.h>
 #include <aiva/layer1/i_gpu_resource_view.h>
@@ -109,10 +109,10 @@ void aiva::layer1::MaterialResourceDescriptor::RefreshRootSignature()
 	auto mainDescriptorRanges = std::vector<D3D12_DESCRIPTOR_RANGE1>{};
 	auto samplerDescriptorRanges = std::vector<D3D12_DESCRIPTOR_RANGE1>{};
 
-	auto const& mainResourceHeap = ResourceTable().GetResourceHeap(EGpuDescriptorHeapType::CbvSrvUav);
+	auto const& mainResourceHeap = ResourceTable().GetResourceHeap(EDescriptorHeapType::CbvSrvUav);
 	if (mainResourceHeap)
 	{
-		auto registersCounters = std::unordered_map<EGpuResourceViewType, std::size_t>{};
+		auto registersCounters = std::unordered_map<EResourceViewType, std::size_t>{};
 		
 		for (auto const& resourceView : mainResourceHeap->ResourceViews())
 		{
@@ -132,10 +132,10 @@ void aiva::layer1::MaterialResourceDescriptor::RefreshRootSignature()
 		rootParameter.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	}
 
-	auto const& samplerResourceHeap = ResourceTable().GetResourceHeap(EGpuDescriptorHeapType::Sampler);
+	auto const& samplerResourceHeap = ResourceTable().GetResourceHeap(EDescriptorHeapType::Sampler);
 	if (samplerResourceHeap)
 	{
-		auto registersCounters = std::unordered_map<EGpuResourceViewType, std::size_t>{};
+		auto registersCounters = std::unordered_map<EResourceViewType, std::size_t>{};
 
 		for (auto const& resourceView : samplerResourceHeap->ResourceViews())
 		{

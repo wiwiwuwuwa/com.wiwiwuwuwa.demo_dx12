@@ -1,17 +1,17 @@
 #include <pch.h>
-#include <aiva/layer1/e_gpu_fill_mode.h>
+#include <aiva/layer1/e_fill_mode.h>
 
 #include <aiva/utils/asserts.h>
 
-aiva::layer1::EGpuFillMode aiva::layer1::FromInternalEnum(D3D12_FILL_MODE const fillMode)
+aiva::layer1::EFillMode aiva::layer1::FromInternalEnum(D3D12_FILL_MODE const fillMode)
 {
 	switch (fillMode)
 	{
 	case D3D12_FILL_MODE_WIREFRAME:
-		return EGpuFillMode::Wireframe;
+		return EFillMode::Wireframe;
 
 	case D3D12_FILL_MODE_SOLID:
-		return EGpuFillMode::Solid;
+		return EFillMode::Solid;
 
 	default:
 		aiva::utils::Asserts::CheckBool(false);
@@ -19,14 +19,14 @@ aiva::layer1::EGpuFillMode aiva::layer1::FromInternalEnum(D3D12_FILL_MODE const 
 	}
 }
 
-D3D12_FILL_MODE aiva::layer1::ToInternalEnum(EGpuFillMode const fillMode)
+D3D12_FILL_MODE aiva::layer1::ToInternalEnum(EFillMode const fillMode)
 {
 	switch (fillMode)
 	{
-	case EGpuFillMode::Wireframe:
+	case EFillMode::Wireframe:
 		return D3D12_FILL_MODE_WIREFRAME;
 
-	case EGpuFillMode::Solid:
+	case EFillMode::Solid:
 		return D3D12_FILL_MODE_SOLID;
 
 	default:
@@ -35,17 +35,17 @@ D3D12_FILL_MODE aiva::layer1::ToInternalEnum(EGpuFillMode const fillMode)
 	}
 }
 
-bool aiva::layer1::TryParse(std::string const& enumStr, EGpuFillMode& enumVal)
+bool aiva::layer1::TryParse(std::string const& enumStr, EFillMode& enumVal)
 {
 	if (enumStr == "Wireframe")
 	{
-		enumVal = EGpuFillMode::Wireframe;
+		enumVal = EFillMode::Wireframe;
 		return true;
 	}
 
 	if (enumStr == "Solid")
 	{
-		enumVal = EGpuFillMode::Solid;
+		enumVal = EFillMode::Solid;
 		return true;
 	}
 
@@ -53,14 +53,14 @@ bool aiva::layer1::TryParse(std::string const& enumStr, EGpuFillMode& enumVal)
 	return false;
 }
 
-std::string aiva::layer1::ToString(EGpuFillMode const fillMode)
+std::string aiva::layer1::ToString(EFillMode const fillMode)
 {
 	switch (fillMode)
 	{
-	case EGpuFillMode::Wireframe:
+	case EFillMode::Wireframe:
 		return "Wireframe";
 
-	case EGpuFillMode::Solid:
+	case EFillMode::Solid:
 		return "Solid";
 
 	default:
@@ -69,12 +69,12 @@ std::string aiva::layer1::ToString(EGpuFillMode const fillMode)
 	}
 }
 
-void aiva::layer1::from_json(nlohmann::json const& j, EGpuFillMode& p)
+void aiva::layer1::from_json(nlohmann::json const& j, EFillMode& p)
 {
 	aiva::utils::Asserts::CheckBool(TryParse(j.get<std::string>(), p));
 }
 
-void aiva::layer1::to_json(nlohmann::json& j, EGpuFillMode const& p)
+void aiva::layer1::to_json(nlohmann::json& j, EFillMode const& p)
 {
 	j = ToString(p);
 }

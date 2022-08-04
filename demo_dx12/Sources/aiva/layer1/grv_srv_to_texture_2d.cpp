@@ -15,14 +15,14 @@
 //	Desc({});
 //}
 //
-//aiva::layer1::EGpuDescriptorHeapType aiva::layer1::GrvSrvToTexture2D::DescriptorHeapType() const
+//aiva::layer1::EDescriptorHeapType aiva::layer1::GrvSrvToTexture2D::DescriptorHeapType() const
 //{
-//	return EGpuDescriptorHeapType::CbvSrvUav;
+//	return EDescriptorHeapType::CbvSrvUav;
 //}
 //
-//aiva::layer1::EGpuResourceViewType aiva::layer1::GrvSrvToTexture2D::ResourceViewType() const
+//aiva::layer1::EResourceViewType aiva::layer1::GrvSrvToTexture2D::ResourceViewType() const
 //{
-//	return EGpuResourceViewType::Srv;
+//	return EResourceViewType::Srv;
 //}
 //
 //aiva::layer1::GrvSrvToTexture2DDesc const& aiva::layer1::GrvSrvToTexture2D::Desc() const

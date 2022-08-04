@@ -34,9 +34,9 @@
 //	// IGpuResourceView
 //
 //	public:
-//		EGpuDescriptorHeapType DescriptorHeapType() const override;
+//		EDescriptorHeapType DescriptorHeapType() const override;
 //
-//		EGpuResourceViewType ResourceViewType() const override;
+//		EResourceViewType ResourceViewType() const override;
 //
 //		aiva::utils::EvAction& OnInternalResourceUpdated() override;
 //

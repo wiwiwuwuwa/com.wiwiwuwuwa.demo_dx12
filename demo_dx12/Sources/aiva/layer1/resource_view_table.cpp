@@ -1,7 +1,7 @@
 #include <pch.h>
 #include <aiva/layer1/resource_view_table.h>
 
-#include <aiva/layer1/e_gpu_descriptor_heap_type.h>
+#include <aiva/layer1/e_descriptor_heap_type.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/resource_view_heap.h>
 #include <aiva/utils/asserts.h>
@@ -35,7 +35,7 @@ void aiva::layer1::ResourceViewTable::TerminateCacheUpdater()
 	mCacheUpdater = {};
 }
 
-std::shared_ptr<aiva::layer1::ResourceViewHeap> aiva::layer1::ResourceViewTable::GetResourceHeap(EGpuDescriptorHeapType const key) const
+std::shared_ptr<aiva::layer1::ResourceViewHeap> aiva::layer1::ResourceViewTable::GetResourceHeap(EDescriptorHeapType const key) const
 {
 	auto const& resourceHeapIter = mResourceHeaps.find(key);
 	if (resourceHeapIter == mResourceHeaps.end())
@@ -46,7 +46,7 @@ std::shared_ptr<aiva::layer1::ResourceViewHeap> aiva::layer1::ResourceViewTable:
 	return resourceHeapIter->second;
 }
 
-std::shared_ptr<aiva::layer1::ResourceViewHeap> aiva::layer1::ResourceViewTable::GetOrAddResourceHeap(EGpuDescriptorHeapType const key)
+std::shared_ptr<aiva::layer1::ResourceViewHeap> aiva::layer1::ResourceViewTable::GetOrAddResourceHeap(EDescriptorHeapType const key)
 {
 	auto const& heapIter = mResourceHeaps.find(key);
 	if (heapIter != mResourceHeaps.end())
@@ -61,7 +61,7 @@ std::shared_ptr<aiva::layer1::ResourceViewHeap> aiva::layer1::ResourceViewTable:
 	return heapResource;
 }
 
-aiva::layer1::ResourceViewTable& aiva::layer1::ResourceViewTable::SetResourceHeap(EGpuDescriptorHeapType const key, std::shared_ptr<ResourceViewHeap> const& value)
+aiva::layer1::ResourceViewTable& aiva::layer1::ResourceViewTable::SetResourceHeap(EDescriptorHeapType const key, std::shared_ptr<ResourceViewHeap> const& value)
 {
 	auto const& previousHeapIter = mResourceHeaps.find(key);
 	if (previousHeapIter != mResourceHeaps.end())
@@ -139,7 +139,7 @@ std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::ResourceViewTable::PrepareBarr
 
 void aiva::layer1::ResourceViewTable::CopyPropertiesFrom(ResourceViewTable const& source)
 {
-	auto keysToRemove = std::vector<EGpuDescriptorHeapType>{};
+	auto keysToRemove = std::vector<EDescriptorHeapType>{};
 	for (auto const& resourceHeap : ResourceHeaps())
 	{
 		keysToRemove.emplace_back(resourceHeap.first);

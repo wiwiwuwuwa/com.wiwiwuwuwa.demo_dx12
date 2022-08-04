@@ -2,7 +2,7 @@
 #include <aiva/layer1/graphic_hardware.h>
 
 #include <aiva/layer0/app.h>
-#include <aiva/layer1/e_gpu_descriptor_heap_type.h>
+#include <aiva/layer1/e_descriptor_heap_type.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gr_texture_2d.h>
 #include <aiva/layer1/grv_rtv_to_texture_2d.h>
@@ -381,7 +381,7 @@ void aiva::layer1::GraphicHardware::InitializeScreenRenderTargets()
 	auto const& screenRenderTargets = ResourceViewHeap::Create(mEngine);
 	aiva::utils::Asserts::CheckBool(screenRenderTargets);
 
-	screenRenderTargets->ResourceType(EGpuDescriptorHeapType::Rtv);
+	screenRenderTargets->ResourceType(EDescriptorHeapType::Rtv);
 
 	auto const& swapChain = SwapChain();
 	winrt::check_bool(swapChain);

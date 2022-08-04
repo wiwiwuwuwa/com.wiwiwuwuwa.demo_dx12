@@ -9,7 +9,16 @@ namespace aiva::layer0
     struct App : winrt::implements<App, IFrameworkViewSource, IFrameworkView>
     {
     // ----------------------------------------------------
-    // App
+    // App Data
+
+    public:
+        CoreWindow const& Window() const;
+
+    private:
+        CoreWindow mWindow{ nullptr };
+
+    // ----------------------------------------------------
+    // App Events
 
     public:
         aiva::utils::EvAction& OnStart();
@@ -18,16 +27,12 @@ namespace aiva::layer0
 
         aiva::utils::EvAction& OnFinish();
 
-        CoreWindow const& Window() const;
-
     private:
         aiva::utils::EvAction mOnStart{};
 
         aiva::utils::EvAction mOnUpdate{};
 
         aiva::utils::EvAction mOnFinish{};
-
-        CoreWindow mWindow{ nullptr };
 
     // ----------------------------------------------------
     // IFrameworkViewSource

@@ -1,6 +1,11 @@
 #include <pch.h>
 #include <aiva/layer0/app.h>
 
+CoreWindow const& aiva::layer0::App::Window() const
+{
+    return mWindow;
+}
+
 aiva::utils::EvAction& aiva::layer0::App::OnStart()
 {
     return mOnStart;
@@ -14,11 +19,6 @@ aiva::utils::EvAction& aiva::layer0::App::OnUpdate()
 aiva::utils::EvAction& aiva::layer0::App::OnFinish()
 {
     return mOnFinish;
-}
-
-CoreWindow const& aiva::layer0::App::Window() const
-{
-    return mWindow;
 }
 
 IFrameworkView aiva::layer0::App::CreateView()

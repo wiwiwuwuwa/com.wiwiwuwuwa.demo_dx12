@@ -6,6 +6,7 @@
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gr_texture_2d.h>
 #include <aiva/layer1/graphic_hardware.h>
+#include <aiva/layer1/graphic_resource_factory.h>
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/t_cache_updater.h>
 
@@ -30,8 +31,11 @@ aiva::layer1::GrvRtvToTexture2D::GrvRtvToTexture2D(Engine const& engine, std::sh
 
 aiva::layer1::GrvRtvToTexture2D::GrvRtvToTexture2D(Engine const& engine, winrt::com_ptr<ID3D12Resource> const& resource) : GrvRtvToTexture2D(engine)
 {
+	auto texture = GraphicResourceFactory::Create<GrTexture2D>(mEngine);
+	texture->InternalResource(resource);
+
 	auto desc = GrvRtvToTexture2DDesc{};
-	desc.Resource = GrTexture2D::Create(mEngine, resource);
+	desc.Resource = texture;
 	desc.MipLevel = 0;
 
 	Desc(desc);
@@ -121,7 +125,7 @@ aiva::layer1::GrvRtvToTexture2D& aiva::layer1::GrvRtvToTexture2D::Desc(std::opti
 	if (mDesc)
 	{
 		aiva::utils::Asserts::CheckBool(mDesc->Resource);
-		mDesc->Resource->CacheUpdater().OnMarkAsChanged().disconnect(boost::bind(&GrvRtvToTexture2D::OnDescResourceMarkedAsChanged, this));
+		mDesc->Resource->OnMarkAsChanged().disconnect(boost::bind(&GrvRtvToTexture2D::OnDescResourceMarkedAsChanged, this));
 	}
 
 	mDesc = desc;
@@ -130,7 +134,7 @@ aiva::layer1::GrvRtvToTexture2D& aiva::layer1::GrvRtvToTexture2D::Desc(std::opti
 	if (mDesc)
 	{
 		aiva::utils::Asserts::CheckBool(mDesc->Resource);
-		mDesc->Resource->CacheUpdater().OnMarkAsChanged().connect(boost::bind(&GrvRtvToTexture2D::OnDescResourceMarkedAsChanged, this));
+		mDesc->Resource->OnMarkAsChanged().connect(boost::bind(&GrvRtvToTexture2D::OnDescResourceMarkedAsChanged, this));
 	}
 
 	return *this;
@@ -151,10 +155,7 @@ std::optional<D3D12_RENDER_TARGET_VIEW_DESC> aiva::layer1::GrvRtvToTexture2D::In
 
 	auto const& aivaResource = aivaViewDesc->Resource;
 	aiva::utils::Asserts::CheckBool(aivaResource);
-
-	auto const& aivaResourceDesc = aivaResource->Desc();
-	aiva::utils::Asserts::CheckBool(aivaResourceDesc);
-	aiva::utils::Asserts::CheckBool(aivaResourceDesc->SupportRenderTarget);
+	aiva::utils::Asserts::CheckBool(aivaResource->SupportRenderTarget());
 
 	auto const& directxResource = aivaResource->InternalResource();
 	winrt::check_bool(directxResource);

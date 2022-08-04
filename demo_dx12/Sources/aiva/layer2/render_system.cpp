@@ -18,6 +18,7 @@
 #include <aiva/layer1/graphic_pipeline.h>
 #include <aiva/layer1/gr_buffer.h>
 #include <aiva/layer1/gr_texture_2d.h>
+#include <aiva/layer1/graphic_resource_factory.h>
 #include <aiva/layer1/grv_dsv_to_texture_2d.h>
 #include <aiva/layer1/grv_rtv_to_texture_2d.h>
 #include <aiva/layer1/grv_srv_to_buffer.h>
@@ -100,15 +101,12 @@ void aiva::layer2::RenderSystem::InitRTs()
 
 	for (std::size_t i = {}; i < std::size_t{ NUM_DEFFERED_BUFFERS }; i++)
 	{
-		auto texBufferDesc = aiva::layer1::GrTexture2DDesc{};
-		texBufferDesc.BufferFormat = aiva::layer1::EResourceBufferFormat::R32G32B32A32_FLOAT;
-		texBufferDesc.Width = viewRect.z;
-		texBufferDesc.Height = viewRect.w;
-		texBufferDesc.SupportRenderTarget = true;
-		texBufferDesc.SupportUnorderedAccess = true;
-
-		auto texBufferResource = aiva::layer1::GrTexture2D::Create(mWorld.Engine(), texBufferDesc);
-		aiva::utils::Asserts::CheckBool(texBufferResource, "Tex buffer is not valid");
+		auto texBufferResource = aiva::layer1::GraphicResourceFactory::Create<aiva::layer1::GrTexture2D>(mWorld.Engine());
+		texBufferResource->Format(aiva::layer1::EResourceBufferFormat::R32G32B32A32_FLOAT);
+		texBufferResource->Width(viewRect.z);
+		texBufferResource->Height(viewRect.w);
+		texBufferResource->SupportRenderTarget(true);
+		texBufferResource->SupportUnorderedAccess(true);
 
 		auto texViewDesc = aiva::layer1::GrvRtvToTexture2DDesc{};
 		texViewDesc.Resource = texBufferResource;
@@ -127,14 +125,11 @@ void aiva::layer2::RenderSystem::InitDSs()
 	mDSs = aiva::layer1::ResourceViewHeap::Create(mWorld.Engine(), aiva::layer1::EDescriptorHeapType::Dsv);
 	aiva::utils::Asserts::CheckBool(mDSs, "DS heap is not valid");
 
-	auto texBufferDesc = aiva::layer1::GrTexture2DDesc{};
-	texBufferDesc.BufferFormat = aiva::layer1::EResourceBufferFormat::D32_FLOAT;
-	texBufferDesc.Width = viewRect.z;
-	texBufferDesc.Height = viewRect.w;
-	texBufferDesc.SupportDepthStencil = true;
-
-	auto texBufferResource = aiva::layer1::GrTexture2D::Create(mWorld.Engine(), texBufferDesc);
-	aiva::utils::Asserts::CheckBool(texBufferResource, "Tex buffer is not valid");
+	auto texBufferResource = aiva::layer1::GraphicResourceFactory::Create<aiva::layer1::GrTexture2D>(mWorld.Engine());
+	texBufferResource->Format(aiva::layer1::EResourceBufferFormat::D32_FLOAT);
+	texBufferResource->Width(viewRect.z);
+	texBufferResource->Height(viewRect.w);
+	texBufferResource->SupportDepthStencil(true);
 
 	auto texViewDesc = aiva::layer1::GrvDsvToTexture2DDesc{};
 	texViewDesc.Resource = texBufferResource;

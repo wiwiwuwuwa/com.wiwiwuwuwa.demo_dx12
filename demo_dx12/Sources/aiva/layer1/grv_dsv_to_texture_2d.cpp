@@ -103,7 +103,7 @@ aiva::layer1::GrvDsvToTexture2D& aiva::layer1::GrvDsvToTexture2D::Desc(std::opti
 	if (mDesc)
 	{
 		aiva::utils::Asserts::CheckBool(mDesc->Resource);
-		mDesc->Resource->CacheUpdater().OnMarkAsChanged().disconnect(boost::bind(&GrvDsvToTexture2D::OnDescResourceMarkedAsChanged, this));
+		mDesc->Resource->OnMarkAsChanged().disconnect(boost::bind(&GrvDsvToTexture2D::OnDescResourceMarkedAsChanged, this));
 	}
 
 	mDesc = desc;
@@ -112,7 +112,7 @@ aiva::layer1::GrvDsvToTexture2D& aiva::layer1::GrvDsvToTexture2D::Desc(std::opti
 	if (mDesc)
 	{
 		aiva::utils::Asserts::CheckBool(mDesc->Resource);
-		mDesc->Resource->CacheUpdater().OnMarkAsChanged().connect(boost::bind(&GrvDsvToTexture2D::OnDescResourceMarkedAsChanged, this));
+		mDesc->Resource->OnMarkAsChanged().connect(boost::bind(&GrvDsvToTexture2D::OnDescResourceMarkedAsChanged, this));
 	}
 
 	return *this;
@@ -133,10 +133,7 @@ std::optional<D3D12_DEPTH_STENCIL_VIEW_DESC> aiva::layer1::GrvDsvToTexture2D::In
 
 	auto const& aivaResource = aivaViewDesc->Resource;
 	aiva::utils::Asserts::CheckBool(aivaResource);
-
-	auto const& aivaResourceDesc = aivaResource->Desc();
-	aiva::utils::Asserts::CheckBool(aivaResourceDesc);
-	aiva::utils::Asserts::CheckBool(aivaResourceDesc->SupportDepthStencil);
+	aiva::utils::Asserts::CheckBool(aivaResource->SupportDepthStencil());
 
 	auto const& directxResource = aivaResource->InternalResource();
 	winrt::check_bool(directxResource);

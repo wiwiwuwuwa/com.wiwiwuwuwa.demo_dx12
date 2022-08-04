@@ -212,7 +212,6 @@
     <ClInclude Include="Sources\aiva\layer1\graphic_hardware.h" />
     <ClInclude Include="Sources\aiva\layer1\graphic_pipeline.h" />
     <ClInclude Include="Sources\aiva\layer1\gr_buffer.h" />
-    <ClInclude Include="Sources\aiva\layer1\gr_texture_2d_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\i_gpu_resource_view.h" />
     <ClInclude Include="Sources\aiva\layer1\i_graphic_command.h" />
     <ClInclude Include="Sources\aiva\layer1\i_graphic_command_async.h" />
@@ -312,7 +311,6 @@
     <ClCompile Include="Sources\aiva\layer1\grv_uav_to_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_uav_to_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gr_buffer.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\gr_texture_2d_desc.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_system.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_view_heap.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_view_table.cpp" />

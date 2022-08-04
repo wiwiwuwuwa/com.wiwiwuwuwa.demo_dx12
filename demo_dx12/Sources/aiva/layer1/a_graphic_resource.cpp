@@ -53,6 +53,16 @@ winrt::com_ptr<ID3D12Resource> const& aiva::layer1::AGraphicResource::InternalRe
 	return mInternalResource;
 }
 
+void aiva::layer1::AGraphicResource::InternalResource(winrt::com_ptr<ID3D12Resource> const& resource)
+{
+	winrt::check_bool(resource);
+
+	mInternalResource = resource;
+	RefreshSelfFromInternalResource(resource);
+
+	mCacheUpdater->ClearChanges();
+}
+
 void aiva::layer1::AGraphicResource::InitializeInternalResource()
 {
 	mCacheUpdater->FlushExecutors().connect(boost::bind(&AGraphicResource::ExecuteInternalResourceFlush, this));
@@ -67,7 +77,7 @@ void aiva::layer1::AGraphicResource::ExecuteInternalResourceFlush()
 {
 	mInternalResource = {};
 
-	RefreshInternalResource(mInternalResource, *mResourceBarrier);
+	RefreshInternalResourceFromSelf(mInternalResource, *mResourceBarrier);
 	aiva::utils::Asserts::CheckBool(mInternalResource, "Internal resource is not valid");
 }
 

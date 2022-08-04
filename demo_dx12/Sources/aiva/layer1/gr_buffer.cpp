@@ -74,7 +74,7 @@ aiva::layer1::GrBuffer& aiva::layer1::GrBuffer::SupportUnorderedAccess(bool cons
 	return *this;
 }
 
-void aiva::layer1::GrBuffer::RefreshInternalResource(winrt::com_ptr<ID3D12Resource>& resource, aiva::utils::ResourceBarrier& barrier)
+void aiva::layer1::GrBuffer::RefreshInternalResourceFromSelf(winrt::com_ptr<ID3D12Resource>& resource, aiva::utils::ResourceBarrier& barrier)
 {
 	aiva::utils::Asserts::CheckBool(!(SupportShaderAtomics() && MemoryType() != EResourceMemoryType::GpuOnly), "Shader atomics is not supported");
 	aiva::utils::Asserts::CheckBool(Size() > 0, "Size is not valid");
@@ -114,4 +114,22 @@ void aiva::layer1::GrBuffer::RefreshInternalResource(winrt::com_ptr<ID3D12Resour
 	winrt::com_ptr<ID3D12Resource> commitedResource{};
 	winrt::check_hresult(device->CreateCommittedResource(&heapProperties, heapFlags, &resourceDesc, resourceStates, nullptr, IID_PPV_ARGS(&commitedResource)));
 	resource = commitedResource;
+}
+
+void aiva::layer1::GrBuffer::RefreshSelfFromInternalResource(winrt::com_ptr<ID3D12Resource> const& resource)
+{
+	winrt::check_bool(resource);
+
+	auto heapProperties = D3D12_HEAP_PROPERTIES{};
+	auto heapFlags = D3D12_HEAP_FLAGS{};
+	winrt::check_hresult(resource->GetHeapProperties(&heapProperties, &heapFlags));
+
+	MemoryType(FromInternalEnum(heapProperties.Type));
+	SupportShaderAtomics(heapFlags & D3D12_HEAP_FLAG_ALLOW_SHADER_ATOMICS);
+
+	auto const resourceDesc = resource->GetDesc();
+	aiva::utils::Asserts::CheckBool(resourceDesc.Dimension == D3D12_RESOURCE_DIMENSION_BUFFER, "Resource is not a buffer");
+
+	Size(resourceDesc.Width);
+	SupportUnorderedAccess(resourceDesc.Flags & D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 }

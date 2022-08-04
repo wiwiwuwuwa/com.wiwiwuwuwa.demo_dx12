@@ -43,7 +43,6 @@
     <ClCompile Include="Sources\aiva\layer1\gca_draw_mesh.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_primitive_topology.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_set_viewports.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\gr_texture_2d_desc.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_view_heap.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_view_table.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_set_render_target.cpp" />
@@ -96,7 +95,6 @@
     <ClInclude Include="Sources\aiva\layer1\e_resource_memory_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_resource_buffer_format.h" />
     <ClInclude Include="Sources\aiva\layer1\gr_buffer.h" />
-    <ClInclude Include="Sources\aiva\layer1\gr_texture_2d_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\i_gpu_resource_view.h" />
     <ClInclude Include="Sources\aiva\utils\action_batcher.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_rtv_to_texture_2d.h" />

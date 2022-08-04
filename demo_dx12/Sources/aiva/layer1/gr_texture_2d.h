@@ -1,117 +1,115 @@
 #pragma once
 #include <pch.h>
 
-#include <aiva/layer1/i_gpu_resource.h>
-#include <aiva/layer1/gr_texture_2d_desc.h>
-#include <aiva/utils/ev_action.h>
-#include <aiva/utils/resource_barrier.h>
+#include <aiva/layer1/a_graphic_resource.h>
+#include <aiva/layer1/e_resource_buffer_format.h>
 
 namespace aiva::layer1
 {
 	struct Engine;
-}
-
-namespace aiva::utils
-{
-	template <typename, typename>
-	struct TCacheUpdater;
+	struct GraphicResourceFactory;
 }
 
 namespace aiva::layer1
 {
-	struct GrTexture2D final : private boost::noncopyable, public std::enable_shared_from_this<GrTexture2D>, public aiva::layer1::IGpuResource
+	struct GrTexture2D final : public AGraphicResource
 	{
 	// ----------------------------------------------------
 	// Main
 
-	public:
-		template <typename... TArgs>
-		static std::shared_ptr<GrTexture2D> Create(TArgs&&... args);
+	private:
+		friend GraphicResourceFactory;
 
 	private:
-		GrTexture2D(Engine const& engine);
-
-		GrTexture2D(Engine const& engine, GrTexture2DDesc const& desc);
-
-		GrTexture2D(Engine const& engine, winrt::com_ptr<ID3D12Resource> const& resource);
-
-	public:
-		~GrTexture2D();
-
-	private:
-		Engine const& mEngine;
+		GrTexture2D(aiva::layer1::Engine const& engine);
 
 	// ----------------------------------------------------
-	// Cache Refresh
+	// Metadata
 
 	public:
-		enum class EDirtyFlags
-		{
-			None = 0,
-			All = 1,
-		};
+		EResourceBufferFormat Format() const;
 
-		using CacheUpdaterType = aiva::utils::TCacheUpdater<GrTexture2D, EDirtyFlags>;
+		GrTexture2D& Format(EResourceBufferFormat const format);
+
+	private:
+		EResourceBufferFormat mFormat{};
+
+	// --------------------------------
 
 	public:
-		CacheUpdaterType& CacheUpdater() const;
+		std::size_t Width() const;
+
+		GrTexture2D& Width(std::size_t const width);
 
 	private:
-		void InitializeCacheUpdater();
+		std::size_t mWidth{};
 
-		void TerminateCacheUpdater();
+	// --------------------------------
+
+	public:
+		std::size_t Height() const;
+
+		GrTexture2D& Height(std::size_t const height);
 
 	private:
-		std::unique_ptr<CacheUpdaterType> mCacheUpdater{};
+		std::size_t mHeight{};
+
+	// --------------------------------
+
+	public:
+		bool SupportDepthStencil() const;
+
+		GrTexture2D& SupportDepthStencil(bool const support);
+
+	private:
+		bool mSupportDepthStencil{};
+
+	// --------------------------------
+
+	public:
+		bool SupportMipMapping() const;
+
+		GrTexture2D& SupportMipMapping(bool const support);
+
+	private:
+		bool mSupportMipMapping{};
+
+	// --------------------------------
+
+	public:
+		bool SupportRenderTarget() const;
+
+		GrTexture2D& SupportRenderTarget(bool const support);
+
+	private:
+		bool mSupportRenderTarget{};
+
+	// --------------------------------
+
+	public:
+		bool SupportShaderAtomics() const;
+
+		GrTexture2D& SupportShaderAtomics(bool const support);
+
+	private:
+		bool mSupportShaderAtomics{};
+
+	// --------------------------------
+
+	public:
+		bool SupportUnorderedAccess() const;
+
+		GrTexture2D& SupportUnorderedAccess(bool const support);
+
+	private:
+		bool mSupportUnorderedAccess{};
 
 	// ----------------------------------------------------
-	// High-Level Data
+	// Internal Resource
 
-	public:
-		std::optional<GrTexture2DDesc> const& Desc() const;
+	protected:
+		void RefreshInternalResourceFromSelf(winrt::com_ptr<ID3D12Resource>& resource, aiva::utils::ResourceBarrier& barrier) override;
 
-		GrTexture2D& Desc(std::optional<GrTexture2DDesc> const& desc);
-
-	private:
-		std::optional<GrTexture2DDesc> mDesc{};
-
-	// ----------------------------------------------------
-	// Low-Level Data
-
-	public:
-		winrt::com_ptr<ID3D12Resource> const InternalResource();
-
-	private:
-		GrTexture2D& InternalResource(winrt::com_ptr<ID3D12Resource> const& resource);
-
-	private:
-		void InitializeInternalResources();
-
-		void TerminateInternalResources();
-
-	private:
-		void RefreshInternalResources();
-
-		static winrt::com_ptr<ID3D12Resource> CreateInternalResource(Engine const& engine, GrTexture2DDesc const& desc, aiva::utils::ResourceBarrier& outBarrier);
-
-	private:
-		winrt::com_ptr<ID3D12Resource> mInternalResource{};
-
-	// ----------------------------------------------------
-	// Resource Barriers
-
-	public:
-		std::vector<D3D12_RESOURCE_BARRIER> PrepareBarriers(D3D12_RESOURCE_STATES const desiredState, std::optional<std::size_t> const subresource = {});
-
-	private:
-		aiva::utils::ResourceBarrier mResourceBarrier{};
+		void RefreshSelfFromInternalResource(winrt::com_ptr<ID3D12Resource> const& resource) override;
 	};
-}
-
-// --------------------------------------------------------
-
-template <typename... TArgs>
-std::shared_ptr<aiva::layer1::GrTexture2D> aiva::layer1::GrTexture2D::Create(TArgs&&... args)
-{
-	return std::shared_ptr<GrTexture2D>{new GrTexture2D{ std::forward<TArgs>(args)... }};
 }

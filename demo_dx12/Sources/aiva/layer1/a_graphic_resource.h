@@ -1,13 +1,7 @@
 #pragma once
 #include <pch.h>
 
-#include <aiva/utils/t_cache_updater.h>
-
-namespace aiva::layer1
-{
-	struct Engine;
-	struct GraphicResourceFactory;
-}
+#include <aiva/layer1/a_graphic_object.h>
 
 namespace aiva::utils
 {
@@ -16,7 +10,7 @@ namespace aiva::utils
 
 namespace aiva::layer1
 {
-	struct AGraphicResource : private boost::noncopyable, public std::enable_shared_from_this<AGraphicResource>
+	struct AGraphicResource : public AGraphicObject
 	{
 	// ----------------------------------------------------
 	// Main
@@ -25,36 +19,7 @@ namespace aiva::layer1
 		AGraphicResource(aiva::layer1::Engine const& engine);
 
 	public:
-		virtual ~AGraphicResource();
-
-	// ----------------------------------------------------
-	// Engine
-
-	public:
-		aiva::layer1::Engine const& Engine() const;
-
-	private:
-		aiva::layer1::Engine const& mEngine;
-
-	// ----------------------------------------------------
-	// Cache Updater
-
-	private:
-		using CacheUpdaterType = aiva::utils::TCacheUpdater<AGraphicResource>;
-
-	public:
-		CacheUpdaterType::ActionType& OnMarkAsChanged();
-
-	protected:
-		void MarkAsChanged();
-
-	private:
-		void InitializeCacheUpdater();
-
-		void TerminateCacheUpdater();
-
-	private:
-		std::unique_ptr<CacheUpdaterType> mCacheUpdater{};
+		~AGraphicResource() override;
 
 	// ----------------------------------------------------
 	// Internal Resource
@@ -75,7 +40,7 @@ namespace aiva::layer1
 		void TerminateInternalResource();
 
 	private:
-		void ExecuteInternalResourceFlush();
+		void ExecuteFlushForInternalResource();
 
 	private:
 		winrt::com_ptr<ID3D12Resource> mInternalResource{};

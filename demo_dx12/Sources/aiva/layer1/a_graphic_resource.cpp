@@ -6,9 +6,8 @@
 #include <aiva/utils/resource_barrier.h>
 #include <aiva/utils/t_cache_updater.h>
 
-aiva::layer1::AGraphicResource::AGraphicResource(aiva::layer1::Engine const& engine) : mEngine{ engine }
+aiva::layer1::AGraphicResource::AGraphicResource(aiva::layer1::Engine const& engine) : AGraphicObject{ engine }
 {
-	InitializeCacheUpdater();
 	InitializeInternalResource();
 	InitializeResourceBarrier();
 }
@@ -17,39 +16,11 @@ aiva::layer1::AGraphicResource::~AGraphicResource()
 {
 	TerminateResourceBarrier();
 	TerminateInternalResource();
-	TerminateCacheUpdater();
-}
-
-aiva::layer1::Engine const& aiva::layer1::AGraphicResource::Engine() const
-{
-	return mEngine;
-}
-
-aiva::layer1::AGraphicResource::CacheUpdaterType::ActionType& aiva::layer1::AGraphicResource::OnMarkAsChanged()
-{
-	return mCacheUpdater->OnMarkAsChanged();
-}
-
-void aiva::layer1::AGraphicResource::MarkAsChanged()
-{
-	mCacheUpdater->MarkAsChanged();
-}
-
-void aiva::layer1::AGraphicResource::InitializeCacheUpdater()
-{
-	mCacheUpdater = std::make_unique<CacheUpdaterType>();
-	aiva::utils::Asserts::CheckBool(mCacheUpdater, "Cache updater is not valid");
-}
-
-void aiva::layer1::AGraphicResource::TerminateCacheUpdater()
-{
-	aiva::utils::Asserts::CheckBool(mCacheUpdater, "Cache updater is not valid");
-	mCacheUpdater = {};
 }
 
 winrt::com_ptr<ID3D12Resource> const& aiva::layer1::AGraphicResource::InternalResource()
 {
-	mCacheUpdater->FlushChanges();
+	FlushChanges();
 	return mInternalResource;
 }
 
@@ -60,20 +31,20 @@ void aiva::layer1::AGraphicResource::InternalResource(winrt::com_ptr<ID3D12Resou
 	mInternalResource = resource;
 	RefreshSelfFromInternalResource(resource);
 
-	mCacheUpdater->ClearChanges();
+	ClearChanges();
 }
 
 void aiva::layer1::AGraphicResource::InitializeInternalResource()
 {
-	mCacheUpdater->FlushExecutors().connect(boost::bind(&AGraphicResource::ExecuteInternalResourceFlush, this));
+	FlushExecutors().connect(boost::bind(&AGraphicResource::ExecuteFlushForInternalResource, this));
 }
 
 void aiva::layer1::AGraphicResource::TerminateInternalResource()
 {
-	mCacheUpdater->FlushExecutors().disconnect(boost::bind(&AGraphicResource::ExecuteInternalResourceFlush, this));
+	FlushExecutors().disconnect(boost::bind(&AGraphicResource::ExecuteFlushForInternalResource, this));
 }
 
-void aiva::layer1::AGraphicResource::ExecuteInternalResourceFlush()
+void aiva::layer1::AGraphicResource::ExecuteFlushForInternalResource()
 {
 	mInternalResource = {};
 

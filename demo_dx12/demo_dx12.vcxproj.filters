@@ -64,6 +64,8 @@
     <ClCompile Include="Sources\aiva\layer2\sc_camera.cpp" />
     <ClCompile Include="Sources\aiva\utils\logger.cpp" />
     <ClCompile Include="Sources\aiva\layer1\a_graphic_resource.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\a_graphic_resource_view.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\a_graphic_object.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -156,6 +158,8 @@
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\graphic_resource_factory.h" />
     <ClInclude Include="Sources\aiva\layer1\i_gpu_resource.h" />
+    <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_view.h" />
+    <ClInclude Include="Sources\aiva\layer1\a_graphic_object.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

@@ -1,7 +1,9 @@
 #pragma once
 #include <pch.h>
 
-#include <aiva/layer1/a_graphic_object.h>
+#include <aiva/layer1/i_object_engineable.h>
+#include <aiva/utils/a_object.h>
+#include <aiva/utils/i_object_cacheable.h>
 
 namespace aiva::utils
 {
@@ -10,13 +12,13 @@ namespace aiva::utils
 
 namespace aiva::layer1
 {
-	struct AGraphicResource : public AGraphicObject
+	struct AGraphicResource : public aiva::utils::AObject, public aiva::utils::IObjectCacheable, public aiva::layer1::IObjectEngineable
 	{
 	// ----------------------------------------------------
 	// Main
 
 	protected:
-		AGraphicResource(aiva::layer1::Engine const& engine);
+		AGraphicResource(EngineType const& engine);
 
 	public:
 		~AGraphicResource() override;

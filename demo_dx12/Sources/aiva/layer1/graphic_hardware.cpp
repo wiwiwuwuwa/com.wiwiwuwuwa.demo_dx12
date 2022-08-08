@@ -8,6 +8,7 @@
 #include <aiva/layer1/grv_rtv_to_texture_2d.h>
 #include <aiva/layer1/resource_view_heap.h>
 #include <aiva/utils/asserts.h>
+#include <aiva/utils/object_factory.h>
 
 aiva::layer1::GraphicHardware::GraphicHardware(aiva::layer1::Engine const& engine) : mEngine{ engine }
 {
@@ -323,7 +324,7 @@ std::shared_ptr<aiva::layer1::GrvRtvToTexture2D> aiva::layer1::GraphicHardware::
 	auto const& viewKey = ScreenViewKey();
 	aiva::utils::Asserts::CheckBool(!viewKey.empty());
 
-	auto const& viewObj = viewHeap->ResourceView<GrvRtvToTexture2D>(viewKey);
+	auto const& viewObj = viewHeap->GetView<GrvRtvToTexture2D>(viewKey);
 	aiva::utils::Asserts::CheckBool(viewObj);
 
 	return viewObj;
@@ -334,13 +335,10 @@ winrt::com_ptr<ID3D12Resource> aiva::layer1::GraphicHardware::ScreenViewRes() co
 	auto const& viewObj = ScreenViewObj();
 	aiva::utils::Asserts::CheckBool(viewObj);
 
-	auto const& viewDesc = viewObj->Desc();
-	aiva::utils::Asserts::CheckBool(viewDesc);
+	auto const& viewBuf = viewObj->InternalResource();
+	aiva::utils::Asserts::CheckBool(viewBuf);
 
-	auto const& viewPtr = viewDesc->Resource;
-	aiva::utils::Asserts::CheckBool(viewPtr);
-
-	auto const& viewRes = viewPtr->InternalResource();
+	auto const& viewRes = viewBuf->InternalResource();
 	winrt::check_bool(viewRes);
 
 	return viewRes;
@@ -378,10 +376,8 @@ glm::vec4 aiva::layer1::GraphicHardware::ScreenViewRect() const
 
 void aiva::layer1::GraphicHardware::InitializeScreenRenderTargets()
 {
-	auto const& screenRenderTargets = ResourceViewHeap::Create(mEngine);
+	auto const& screenRenderTargets = ResourceViewHeap::FactoryType::Create<ResourceViewHeap>(mEngine, EDescriptorHeapType::Rtv);
 	aiva::utils::Asserts::CheckBool(screenRenderTargets);
-
-	screenRenderTargets->ResourceType(EDescriptorHeapType::Rtv);
 
 	auto const& swapChain = SwapChain();
 	winrt::check_bool(swapChain);
@@ -394,13 +390,16 @@ void aiva::layer1::GraphicHardware::InitializeScreenRenderTargets()
 		auto directxResource = winrt::com_ptr<ID3D12Resource>{};
 		winrt::check_hresult(swapChain->GetBuffer(i, IID_PPV_ARGS(&directxResource)));
 
-		auto aivaView = GrvRtvToTexture2D::Create(mEngine, directxResource);
-		aiva::utils::Asserts::CheckBool(aivaView);
+		auto aivaTexture = GrTexture2D::FactoryType::Create<GrTexture2D>(mEngine);
+		aivaTexture->InternalResource(directxResource);
+
+		auto aivaView = GrvRtvToTexture2D::FactoryType::Create<GrvRtvToTexture2D>(mEngine);
+		aivaView->InternalResource(aivaTexture);
 
 		auto const key = std::to_string(i);
+		aiva::utils::Asserts::CheckBool(key.size() == 1, "Screen RT sorting will be incorrect");
 
-		aiva::utils::Asserts::CheckBool(key.size() == 1); // otherwise sorting will be incorrect
-		screenRenderTargets->ResourceView(std::to_string(i), aivaView);
+		screenRenderTargets->SetView(key, aivaView);
 	}
 
 	mScreenRenderTargets = screenRenderTargets;

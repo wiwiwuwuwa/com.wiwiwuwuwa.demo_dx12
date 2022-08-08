@@ -15,7 +15,7 @@ void aiva::layer1::GcaPresent::Execute(Engine const& engine) const
 	auto const& viewObj = engine.GraphicHardware().ScreenViewObj();
 	aiva::utils::Asserts::CheckBool(viewObj);
 
-	auto const& barriers = viewObj->PrepareBarriers(false);
+	auto const& barriers = viewObj->CreateDirectxBarriers(false);
 	if (std::empty(barriers))
 	{
 		return;

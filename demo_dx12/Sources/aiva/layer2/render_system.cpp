@@ -18,7 +18,6 @@
 #include <aiva/layer1/graphic_pipeline.h>
 #include <aiva/layer1/gr_buffer.h>
 #include <aiva/layer1/gr_texture_2d.h>
-#include <aiva/layer1/graphic_resource_factory.h>
 #include <aiva/layer1/grv_dsv_to_texture_2d.h>
 #include <aiva/layer1/grv_rtv_to_texture_2d.h>
 #include <aiva/layer1/grv_srv_to_buffer.h>
@@ -33,6 +32,7 @@
 #include <aiva/layer2/world.h>
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/material_constants.h>
+#include <aiva/utils/object_factory.h>
 
 aiva::layer2::RenderSystem::RenderSystem(World const& world) : mWorld{ world }
 {
@@ -96,25 +96,22 @@ void aiva::layer2::RenderSystem::InitRTs()
 {
 	auto const viewRect = mWorld.Engine().GraphicHardware().ScreenViewRect();
 
-	mRTs = aiva::layer1::ResourceViewHeap::Create(mWorld.Engine(), aiva::layer1::EDescriptorHeapType::Rtv);
-	aiva::utils::Asserts::CheckBool(mRTs, "RT heap is not valid");
+	mRTs = aiva::layer1::ResourceViewHeap::FactoryType::Create<aiva::layer1::ResourceViewHeap>(mWorld.Engine());
+	mRTs->HeapType(aiva::layer1::EDescriptorHeapType::Rtv);
 
 	for (std::size_t i = {}; i < std::size_t{ NUM_DEFFERED_BUFFERS }; i++)
 	{
-		auto texBufferResource = aiva::layer1::GraphicResourceFactory::Create<aiva::layer1::GrTexture2D>(mWorld.Engine());
-		texBufferResource->Format(aiva::layer1::EResourceBufferFormat::R32G32B32A32_FLOAT);
-		texBufferResource->Width(viewRect.z);
-		texBufferResource->Height(viewRect.w);
-		texBufferResource->SupportRenderTarget(true);
-		texBufferResource->SupportUnorderedAccess(true);
+		auto texBuffer = aiva::layer1::GrTexture2D::FactoryType::Create<aiva::layer1::GrTexture2D>(mWorld.Engine());
+		texBuffer->Format(aiva::layer1::EResourceBufferFormat::R32G32B32A32_FLOAT);
+		texBuffer->Width(viewRect.z);
+		texBuffer->Height(viewRect.w);
+		texBuffer->SupportRenderTarget(true);
+		texBuffer->SupportUnorderedAccess(true);
 
-		auto texViewDesc = aiva::layer1::GrvRtvToTexture2DDesc{};
-		texViewDesc.Resource = texBufferResource;
+		auto texView = aiva::layer1::GrvRtvToTexture2D::FactoryType::Create<aiva::layer1::GrvRtvToTexture2D>(mWorld.Engine());
+		texView->InternalResource(texBuffer);
 
-		auto texViewResource = aiva::layer1::GrvRtvToTexture2D::Create(mWorld.Engine(), texViewDesc);
-		aiva::utils::Asserts::CheckBool(texViewResource, "Tex view is not valid");
-
-		mRTs->ResourceView(std::to_string(i), texViewResource);
+		mRTs->SetView(std::to_string(i), texView);
 	}
 }
 
@@ -122,22 +119,19 @@ void aiva::layer2::RenderSystem::InitDSs()
 {
 	auto const viewRect = mWorld.Engine().GraphicHardware().ScreenViewRect();
 
-	mDSs = aiva::layer1::ResourceViewHeap::Create(mWorld.Engine(), aiva::layer1::EDescriptorHeapType::Dsv);
-	aiva::utils::Asserts::CheckBool(mDSs, "DS heap is not valid");
+	mDSs = aiva::layer1::ResourceViewHeap::FactoryType::Create<aiva::layer1::ResourceViewHeap>(mWorld.Engine());
+	mDSs->HeapType(aiva::layer1::EDescriptorHeapType::Dsv);
 
-	auto texBufferResource = aiva::layer1::GraphicResourceFactory::Create<aiva::layer1::GrTexture2D>(mWorld.Engine());
-	texBufferResource->Format(aiva::layer1::EResourceBufferFormat::D32_FLOAT);
-	texBufferResource->Width(viewRect.z);
-	texBufferResource->Height(viewRect.w);
-	texBufferResource->SupportDepthStencil(true);
+	auto texBuffer = aiva::layer1::GrTexture2D::FactoryType::Create<aiva::layer1::GrTexture2D>(mWorld.Engine());
+	texBuffer->Format(aiva::layer1::EResourceBufferFormat::D32_FLOAT);
+	texBuffer->Width(viewRect.z);
+	texBuffer->Height(viewRect.w);
+	texBuffer->SupportDepthStencil(true);
 
-	auto texViewDesc = aiva::layer1::GrvDsvToTexture2DDesc{};
-	texViewDesc.Resource = texBufferResource;
+	auto texView = aiva::layer1::GrvDsvToTexture2D::FactoryType::Create<aiva::layer1::GrvDsvToTexture2D>(mWorld.Engine());
+	texView->InternalResource(texBuffer);
 
-	auto texViewResource = aiva::layer1::GrvDsvToTexture2D::Create(mWorld.Engine(), texViewDesc);
-	aiva::utils::Asserts::CheckBool(texViewResource, "Tex view is not valid");
-
-	mDSs->ResourceView(std::to_string(0), texViewResource);
+	mRTs->SetView(std::to_string(0), texView);
 }
 
 void aiva::layer2::RenderSystem::UseRTsDSs()

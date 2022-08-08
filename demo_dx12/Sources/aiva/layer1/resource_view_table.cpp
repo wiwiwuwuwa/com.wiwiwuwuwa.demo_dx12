@@ -6,6 +6,7 @@
 #include <aiva/layer1/resource_view_heap.h>
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/t_cache_updater.h>
+#include <aiva/utils/object_factory.h>
 
 aiva::layer1::ResourceViewTable::ResourceViewTable(Engine const& engine) : mEngine{ engine }
 {
@@ -54,7 +55,7 @@ std::shared_ptr<aiva::layer1::ResourceViewHeap> aiva::layer1::ResourceViewTable:
 		return heapIter->second;
 	}
 
-	auto const& heapResource = ResourceViewHeap::Create(mEngine, key);
+	auto const& heapResource = ResourceViewHeap::FactoryType::Create<ResourceViewHeap>(mEngine, key);
 	aiva::utils::Asserts::CheckBool(heapResource);
 
 	SetResourceHeap(key, heapResource);
@@ -69,7 +70,7 @@ aiva::layer1::ResourceViewTable& aiva::layer1::ResourceViewTable::SetResourceHea
 		auto const& previousHeapObject = previousHeapIter->second;
 		aiva::utils::Asserts::CheckBool(previousHeapObject);
 
-		previousHeapObject->CacheUpdater().OnMarkAsChanged().disconnect(boost::bind(&ResourceViewTable::OnResourceHeapMarkedAsChanged, this));
+		previousHeapObject->OnMarkAsChanged().disconnect(boost::bind(&ResourceViewTable::OnResourceHeapMarkedAsChanged, this));
 		mResourceHeaps.erase(previousHeapIter);
 	}
 
@@ -85,7 +86,7 @@ aiva::layer1::ResourceViewTable& aiva::layer1::ResourceViewTable::SetResourceHea
 		auto const& currentHeapObject = currentHeapIter->second;
 		aiva::utils::Asserts::CheckBool(currentHeapObject);
 
-		currentHeapObject->CacheUpdater().OnMarkAsChanged().connect(boost::bind(&ResourceViewTable::OnResourceHeapMarkedAsChanged, this));
+		currentHeapObject->OnMarkAsChanged().connect(boost::bind(&ResourceViewTable::OnResourceHeapMarkedAsChanged, this));
 	}
 
 	CacheUpdater().MarkAsChanged();
@@ -151,7 +152,7 @@ void aiva::layer1::ResourceViewTable::CopyPropertiesFrom(ResourceViewTable const
 
 	for (auto const& sourceResourceHeap : source.ResourceHeaps())
 	{
-		auto const copiedResourceHeap = ResourceViewHeap::Create(mEngine);
+		auto const copiedResourceHeap = ResourceViewHeap::FactoryType::Create<ResourceViewHeap>(mEngine);
 		copiedResourceHeap->CopyPropertiesFrom(*sourceResourceHeap.second);
 
 		SetResourceHeap(sourceResourceHeap.first, copiedResourceHeap);

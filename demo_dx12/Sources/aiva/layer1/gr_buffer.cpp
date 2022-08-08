@@ -5,7 +5,12 @@
 #include <aiva/layer1/graphic_hardware.h>
 #include <aiva/utils/resource_barrier.h>
 
-aiva::layer1::GrBuffer::GrBuffer(aiva::layer1::Engine const& engine) : AGraphicResource(engine)
+aiva::layer1::GrBuffer::GrBuffer(EngineType const& engine) : AGraphicResource(engine)
+{
+
+}
+
+aiva::layer1::GrBuffer::~GrBuffer()
 {
 
 }

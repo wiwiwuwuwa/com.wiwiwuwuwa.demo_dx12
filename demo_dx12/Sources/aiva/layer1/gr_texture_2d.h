@@ -6,22 +6,19 @@
 
 namespace aiva::layer1
 {
-	struct Engine;
-	struct GraphicResourceFactory;
-}
-
-namespace aiva::layer1
-{
 	struct GrTexture2D final : public AGraphicResource
 	{
 	// ----------------------------------------------------
 	// Main
 
 	private:
-		friend GraphicResourceFactory;
+		friend FactoryType;
 
-	private:
-		GrTexture2D(aiva::layer1::Engine const& engine);
+	protected:
+		GrTexture2D(EngineType const& engine);
+
+	public:
+		~GrTexture2D() override;
 
 	// ----------------------------------------------------
 	// Metadata

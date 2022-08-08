@@ -1,11 +1,11 @@
 #include <pch.h>
 #include <aiva/layer1/material_resource_descriptor.h>
 
+#include <aiva/layer1/a_graphic_resource_view.h>
 #include <aiva/layer1/e_descriptor_heap_type.h>
 #include <aiva/layer1/e_resource_view_type.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/graphic_hardware.h>
-#include <aiva/layer1/i_gpu_resource_view.h>
 #include <aiva/layer1/resource_view_heap.h>
 #include <aiva/layer1/resource_view_table.h>
 #include <aiva/utils/asserts.h>
@@ -114,7 +114,7 @@ void aiva::layer1::MaterialResourceDescriptor::RefreshRootSignature()
 	{
 		auto registersCounters = std::unordered_map<EResourceViewType, std::size_t>{};
 		
-		for (auto const& resourceView : mainResourceHeap->ResourceViews())
+		for (auto const& resourceView : mainResourceHeap->GetViews())
 		{
 			auto& descriptorRange = mainDescriptorRanges.emplace_back();
 			descriptorRange.RangeType = ToInternalDescriptorRangeType(resourceView.second->ViewType());
@@ -137,7 +137,7 @@ void aiva::layer1::MaterialResourceDescriptor::RefreshRootSignature()
 	{
 		auto registersCounters = std::unordered_map<EResourceViewType, std::size_t>{};
 
-		for (auto const& resourceView : samplerResourceHeap->ResourceViews())
+		for (auto const& resourceView : samplerResourceHeap->GetViews())
 		{
 			auto& descriptorRange = samplerDescriptorRanges.emplace_back();
 			descriptorRange.RangeType = ToInternalDescriptorRangeType(resourceView.second->ViewType());

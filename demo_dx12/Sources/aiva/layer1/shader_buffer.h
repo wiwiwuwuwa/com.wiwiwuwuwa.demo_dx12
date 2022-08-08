@@ -1,56 +1,29 @@
 #pragma once
 #include <pch.h>
 
+#include <aiva/utils/a_object.h>
+#include <aiva/utils/i_object_changeable.h>
+
 namespace aiva::layer1
 {
 	struct ShaderStruct;
 }
 
-namespace aiva::utils
-{
-	template <typename, typename>
-	struct TCacheUpdater;
-}
-
 namespace aiva::layer1
 {
-	struct ShaderBuffer final : private boost::noncopyable, public std::enable_shared_from_this<ShaderBuffer>
+	struct ShaderBuffer final : public aiva::utils::AObject, public aiva::utils::IObjectChangeable
 	{
 	// ----------------------------------------------------
 	// Main
 
-	public:
-		template <typename... TArgs>
-		static std::shared_ptr<ShaderBuffer> Create(TArgs&&... args);
-
 	private:
+		friend FactoryType;
+
+	protected:
 		ShaderBuffer();
 
 	public:
-		~ShaderBuffer();
-
-	// ----------------------------------------------------
-	// Cache Refresh
-
-	public:
-		enum class EDirtyFlags
-		{
-			None = 0,
-			All = 1,
-		};
-
-		using CacheUpdaterType = aiva::utils::TCacheUpdater<ShaderBuffer, EDirtyFlags>;
-
-	public:
-		CacheUpdaterType& CacheUpdater() const;
-
-	private:
-		void InitializeCacheUpdater();
-
-		void TerminateCacheUpdater();
-
-	private:
-		std::unique_ptr<CacheUpdaterType> mCacheUpdater{};
+		~ShaderBuffer() override;
 
 	// ----------------------------------------------------
 	// Reference Struct
@@ -84,12 +57,4 @@ namespace aiva::layer1
 
 		std::vector<std::byte> SerializeToBinary() const;
 	};
-}
-
-// --------------------------------------------------------
-
-template <typename... TArgs>
-std::shared_ptr<aiva::layer1::ShaderBuffer> aiva::layer1::ShaderBuffer::Create(TArgs&&... args)
-{
-	return std::shared_ptr<ShaderBuffer>{new ShaderBuffer{ std::forward<TArgs>(args)... }};
 }

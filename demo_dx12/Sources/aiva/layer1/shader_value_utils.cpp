@@ -2,9 +2,11 @@
 #include <aiva/layer1/shader_value_utils.h>
 
 #include <aiva/layer1/e_value_type.h>
+#include <aiva/layer1/engine.h>
 #include <aiva/layer1/value_type_utils.h>
 #include <aiva/layer1/t_shader_value.h>
 #include <aiva/utils/asserts.h>
+#include <aiva/utils/object_factory.h>
 
 aiva::layer1::ShaderValueUtils::ShaderValueUtils()
 {

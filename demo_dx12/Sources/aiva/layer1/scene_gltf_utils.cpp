@@ -1,11 +1,11 @@
 #include <pch.h>
 #include <aiva/layer1/scene_gltf_utils.h>
 
+#include <aiva/layer1/a_graphic_resource_view.h>
 #include <aiva/layer1/e_descriptor_heap_type.h>
 #include <aiva/layer1/e_resource_memory_type.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gr_buffer.h>
-#include <aiva/layer1/graphic_resource_factory.h>
 #include <aiva/layer1/grv_srv_to_buffer.h>
 #include <aiva/layer1/i_shader_value.h>
 #include <aiva/layer1/material_resource_descriptor.h>
@@ -18,6 +18,7 @@
 #include <aiva/layer1/shader_struct.h>
 #include <aiva/layer1/shader_value_utils.h>
 #include <aiva/utils/material_constants.h>
+#include <aiva/utils/object_factory.h>
 
 aiva::layer1::SceneGltfUtils::SceneGltfUtils()
 {
@@ -73,38 +74,37 @@ aiva::layer1::SceneGltfUtils::MeshArray aiva::layer1::SceneGltfUtils::LoadMeshMa
 		auto const& gltfMesh = gltfMeshes.at(i);
 		auto const& gltfPrimitive = gltfMesh.primitives.at(0);
 
-		auto const aivaMesh = ResourceViewHeap::Create(gltf.Engine(), EDescriptorHeapType::CbvSrvUav);
+		auto const aivaMesh = ResourceViewHeap::FactoryType::Create<ResourceViewHeap>(gltf.Engine(), EDescriptorHeapType::CbvSrvUav);
 		aivaMeshes.emplace_back(aivaMesh);
 
 		{ // indices
 			static auto const INDEX_KEY = "m0_INDEX";
 
-			auto aivaViewDesc = GrvSrvToBufferDesc{};
+			auto const aivaView = GrvSrvToBuffer::FactoryType::Create<GrvSrvToBuffer>(gltf.Engine());
+			aivaMesh->SetView(aiva::utils::MaterialConstants::AIVA_BUFFER_INDICES, aivaView);
+
 			{
-				{
-					auto const aivaBuffer = GraphicResourceFactory::Create<GrBuffer>(gltf.Engine());
-					aivaViewDesc.Resource = aivaBuffer;
-				}
+				auto const aivaBuffer = GrBuffer::FactoryType::Create<GrBuffer>(gltf.Engine());
+				aivaBuffer->MemoryType(EResourceMemoryType::CpuToGpu);
 
-				{
-					auto const& gltfAccessor = gltf.Model().accessors.at(gltfPrimitive.indices);
-
-					auto const aivaRefStruct = ShaderStruct::Create();
-					aivaViewDesc.Struct = aivaRefStruct;
-
-					auto const aivaRefValue = ShaderValueUtils::CreateFromGltf(gltfAccessor.type, gltfAccessor.componentType);
-					aivaRefStruct->SetValue(INDEX_KEY, &aivaRefValue);
-				}
+				aivaView->InternalResource(aivaBuffer);
 			}
 
-			auto const aivaView = GrvSrvToBuffer::Create(gltf.Engine(), aivaViewDesc);
-			aivaMesh->ResourceView(aiva::utils::MaterialConstants::AIVA_BUFFER_INDICES, aivaView);
+			{
+				auto const& gltfAccessor = gltf.Model().accessors.at(gltfPrimitive.indices);
+
+				auto const aivaStruct = ShaderStruct::FactoryType::Create<ShaderStruct>();
+				auto const aivaStructValue = ShaderValueUtils::CreateFromGltf(gltfAccessor.type, gltfAccessor.componentType);
+				aivaStruct->SetValue(INDEX_KEY, &aivaStructValue);
+
+				aivaView->Buffer().Struct(aivaStruct);
+			}
 
 			{
 				auto const aivaValues = LoadBufferByAccessor(gltf, gltfPrimitive.indices);
 				for (auto const& aivaValue : aivaValues)
 				{
-					auto const aivaStruct = ShaderStruct::Create();
+					auto const aivaStruct = ShaderStruct::FactoryType::Create<ShaderStruct>();
 					aivaStruct->SetStruct(INDEX_KEY, &aivaValue);
 
 					aivaView->Buffer().Add(aivaStruct);
@@ -113,28 +113,30 @@ aiva::layer1::SceneGltfUtils::MeshArray aiva::layer1::SceneGltfUtils::LoadMeshMa
 		}
 
 		{ // vertices
-			auto aivaViewDesc = GrvSrvToBufferDesc{};
+			auto const aivaView = GrvSrvToBuffer::FactoryType::Create<GrvSrvToBuffer>(gltf.Engine());
+			aivaMesh->SetView(aiva::utils::MaterialConstants::AIVA_BUFFER_VERTICES, aivaView);
+
 			{
-				auto const aivaBuffer = GraphicResourceFactory::Create<GrBuffer>(gltf.Engine());
-				aivaViewDesc.Resource = aivaBuffer;
+				auto const aivaBuffer = GrBuffer::FactoryType::Create<GrBuffer>(gltf.Engine());
+				aivaBuffer->MemoryType(EResourceMemoryType::CpuToGpu);
+
+				aivaView->InternalResource(aivaBuffer);
 			}
 
 			{
-				auto const aivaRefStruct = ShaderStruct::Create();
-				aivaViewDesc.Struct = aivaRefStruct;
+				auto const aivaStruct = ShaderStruct::FactoryType::Create<ShaderStruct>();
 
 				for (auto const& gltfAttribute : gltfPrimitive.attributes)
 				{
 					auto const& gltfSemantic = gltfAttribute.first;
 					auto const& gltfAccessor = gltf.Model().accessors.at(gltfAttribute.second);
 
-					auto const aivaRefValue = ShaderValueUtils::CreateFromGltf(gltfAccessor.type, gltfAccessor.componentType);
-					aivaRefStruct->SetValue(gltfSemantic, &aivaRefValue);
+					auto const aivaStructValue = ShaderValueUtils::CreateFromGltf(gltfAccessor.type, gltfAccessor.componentType);
+					aivaStruct->SetValue(gltfSemantic, &aivaStructValue);
 				}
-			}
 
-			auto const aivaView = GrvSrvToBuffer::Create(gltf.Engine(), aivaViewDesc);
-			aivaMesh->ResourceView(aiva::utils::MaterialConstants::AIVA_BUFFER_VERTICES, aivaView);
+				aivaView->Buffer().Struct(aivaStruct);
+			}
 
 			{
 				auto aivaStructs = std::vector<std::shared_ptr<ShaderStruct>>{};
@@ -146,7 +148,7 @@ aiva::layer1::SceneGltfUtils::MeshArray aiva::layer1::SceneGltfUtils::LoadMeshMa
 
 					for (std::size_t i = {}; i < gltfVerticesCount; i++)
 					{
-						auto const aivaStruct = ShaderStruct::Create();
+						auto const aivaStruct = ShaderStruct::FactoryType::Create<ShaderStruct>();
 						aivaStructs.emplace_back(aivaStruct);
 					}
 				}
@@ -226,16 +228,16 @@ aiva::layer1::SceneGltfUtils::MaterialPerNodeMap aiva::layer1::SceneGltfUtils::L
 		auto const materialInstance = aivaMaterial->Copy();
 		materialsPerNodes.insert_or_assign(nodeID, materialInstance);
 
-		auto materialHeap = materialInstance->ResourceDescriptor().ResourceTable().GetResourceHeap(aivaMesh->ResourceType());
+		auto materialHeap = materialInstance->ResourceDescriptor().ResourceTable().GetResourceHeap(aivaMesh->HeapType());
 		if (!materialHeap)
 		{
-			materialHeap = ResourceViewHeap::Create(gltf.Engine(), aivaMesh->ResourceType());
-			materialInstance->ResourceDescriptor().ResourceTable().SetResourceHeap(aivaMesh->ResourceType(), materialHeap);
+			materialHeap = ResourceViewHeap::FactoryType::Create<ResourceViewHeap>(gltf.Engine(), aivaMesh->HeapType());
+			materialInstance->ResourceDescriptor().ResourceTable().SetResourceHeap(aivaMesh->HeapType(), materialHeap);
 		}
 
-		for (auto const& resourceView : aivaMesh->ResourceViews())
+		for (auto const& resourceView : aivaMesh->GetViews())
 		{
-			materialHeap->ResourceView(resourceView.first, resourceView.second);
+			materialHeap->SetView(resourceView.first, resourceView.second);
 		}
 	}
 

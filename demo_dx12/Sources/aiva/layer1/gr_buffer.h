@@ -6,22 +6,19 @@
 
 namespace aiva::layer1
 {
-	struct Engine;
-	struct GraphicResourceFactory;
-}
-
-namespace aiva::layer1
-{
 	struct GrBuffer final : public AGraphicResource
 	{
 	// ----------------------------------------------------
 	// Main
 
 	private:
-		friend GraphicResourceFactory;
+		friend FactoryType;
 
-	private:
-		GrBuffer(aiva::layer1::Engine const& engine);
+	protected:
+		GrBuffer(EngineType const& engine);
+
+	public:
+		~GrBuffer() override;
 
 	// ----------------------------------------------------
 	// Metadata

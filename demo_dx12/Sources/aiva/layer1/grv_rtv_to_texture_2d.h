@@ -1,109 +1,49 @@
 #pragma once
 #include <pch.h>
 
-#include <aiva/layer1/grv_rtv_to_texture_2d_desc.h>
-#include <aiva/layer1/i_gpu_resource_view.h>
-#include <aiva/utils/ev_action.h>
+#include <aiva/layer1/a_graphic_resource_view.h>
 
 namespace aiva::layer1
 {
-	enum class EDescriptorHeapType : std::uint8_t;
-	enum class EResourceViewType : std::uint8_t;
-
-	struct Engine;
-}
-
-namespace aiva::utils
-{
-	enum class ECacheFlags : std::uint8_t;
-
-	template <typename, typename = ECacheFlags>
-	struct TCacheUpdater;
-}
-
-namespace aiva::layer1
-{
-	struct GrvRtvToTexture2D final : private boost::noncopyable, public std::enable_shared_from_this<GrvRtvToTexture2D>, public IGpuResourceView
+	struct GrvRtvToTexture2D final : public AGraphicResourceView
 	{
 	// ----------------------------------------------------
 	// Main
 
-	public:
-		template <typename... TArgs>
-		static std::shared_ptr<GrvRtvToTexture2D> Create(TArgs&&... args);
-
 	private:
-		GrvRtvToTexture2D(Engine const& engine);
+		friend FactoryType;
 
-		GrvRtvToTexture2D(Engine const& engine, GrvRtvToTexture2DDesc const& desc);
-
-		GrvRtvToTexture2D(Engine const& engine, std::shared_ptr<GrTexture2D> const& resource);
-
-		GrvRtvToTexture2D(Engine const& engine, winrt::com_ptr<ID3D12Resource> const& resource);
+	protected:
+		GrvRtvToTexture2D(EngineType const& engine);
 
 	public:
-		~GrvRtvToTexture2D();
-
-	private:
-		Engine const& mEngine;
+		~GrvRtvToTexture2D() override;
 
 	// ----------------------------------------------------
-	// Cache Refresh
+	// Metadata
 
 	public:
-		using CacheUpdaterType = aiva::utils::TCacheUpdater<GrvRtvToTexture2D>;
+		std::uint64_t MipLevel() const;
 
-	public:
-		CacheUpdaterType& CacheUpdater() const;
-
-	private:
-		void InitializeCacheUpdater();
-
-		void TerminateCacheUpdater();
+		GrvRtvToTexture2D& MipLevel(std::uint64_t const mipLevel);
 
 	private:
-		std::unique_ptr<CacheUpdaterType> mCacheUpdater{};
+		std::uint64_t mMipLevel{};
 
 	// ----------------------------------------------------
-	// IGpuResourceView
+	// Graphic Resource View: Metadata
 
 	public:
 		EDescriptorHeapType HeapType() const override;
 
 		EResourceViewType ViewType() const override;
 
-		void CreateView(D3D12_CPU_DESCRIPTOR_HANDLE const destination) const override;
-
-		std::vector<D3D12_RESOURCE_BARRIER> PrepareBarriers(bool const active) const override;
-
-		aiva::utils::TEvAction<aiva::utils::ECacheFlags>& OnMarkAsChanged() override;
-
 	// ----------------------------------------------------
-	// Desc Data
+	// Graphic Resource View: Directx
 
 	public:
-		std::optional<GrvRtvToTexture2DDesc> const& Desc() const;
+		void CreateDirectxView(D3D12_CPU_DESCRIPTOR_HANDLE const destination) override;
 
-		GrvRtvToTexture2D& Desc(std::optional<GrvRtvToTexture2DDesc> const& desc);
-
-	private:
-		void OnDescResourceMarkedAsChanged() const;
-
-	private:
-		std::optional<GrvRtvToTexture2DDesc> mDesc{};
-
-	// ----------------------------------------------------
-	// Internal Data
-
-	public:
-		std::optional<D3D12_RENDER_TARGET_VIEW_DESC> InternalResource() const;
+		std::vector<D3D12_RESOURCE_BARRIER> CreateDirectxBarriers(bool const active) override;
 	};
-}
-
-// --------------------------------------------------------
-
-template <typename... TArgs>
-std::shared_ptr<aiva::layer1::GrvRtvToTexture2D> aiva::layer1::GrvRtvToTexture2D::Create(TArgs&&... args)
-{
-	return std::shared_ptr<GrvRtvToTexture2D>{new GrvRtvToTexture2D{ std::forward<TArgs>(args)... }};
 }

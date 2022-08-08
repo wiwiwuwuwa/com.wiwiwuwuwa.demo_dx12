@@ -23,12 +23,8 @@
     <ClCompile Include="Sources\aiva\utils\action_batcher.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_rtv_to_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_dsv_to_texture_2d.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\grv_srv_to_texture_2d.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\grv_uav_to_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\shader_struct.cpp" />
     <ClCompile Include="Sources\aiva\layer1\shader_buffer.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\grv_cbv_to_buffer.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\grv_uav_to_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_srv_to_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_descriptor_heap_type.cpp" />
     <ClCompile Include="Sources\aiva\layer1\material_resource_descriptor.cpp" />
@@ -65,7 +61,10 @@
     <ClCompile Include="Sources\aiva\utils\logger.cpp" />
     <ClCompile Include="Sources\aiva\layer1\a_graphic_resource.cpp" />
     <ClCompile Include="Sources\aiva\layer1\a_graphic_resource_view.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\a_graphic_object.cpp" />
+    <ClCompile Include="Sources\aiva\utils\a_object.cpp" />
+    <ClCompile Include="Sources\aiva\utils\i_object_changeable.cpp" />
+    <ClCompile Include="Sources\aiva\utils\i_object_cacheable.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\i_object_engineable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -95,16 +94,9 @@
     <ClInclude Include="Sources\aiva\layer1\e_resource_memory_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_resource_buffer_format.h" />
     <ClInclude Include="Sources\aiva\layer1\gr_buffer.h" />
-    <ClInclude Include="Sources\aiva\layer1\i_gpu_resource_view.h" />
     <ClInclude Include="Sources\aiva\utils\action_batcher.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_rtv_to_texture_2d.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_rtv_to_texture_2d_desc.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_dsv_to_texture_2d_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_dsv_to_texture_2d.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_srv_to_texture_2d_desc.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_srv_to_texture_2d.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_uav_to_texture_2d_desc.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_uav_to_texture_2d.h" />
     <ClInclude Include="Sources\aiva\layer1\i_shader_value.h" />
     <ClInclude Include="Sources\aiva\layer1\t_shader_value.h" />
     <ClInclude Include="Sources\aiva\layer1\shader_struct.h" />
@@ -112,11 +104,6 @@
     <ClInclude Include="Sources\aiva\layer1\shader_consts.h" />
     <ClInclude Include="Sources\aiva\utils\math_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\shader_buffer.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer_desc.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_uav_to_buffer_desc.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_uav_to_buffer.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_srv_to_buffer_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_srv_to_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\e_descriptor_heap_type.h" />
     <ClInclude Include="Sources\aiva\layer1\material_resource_descriptor.h" />
@@ -156,10 +143,12 @@
     <ClInclude Include="Sources\aiva\utils\material_constants.h" />
     <ClInclude Include="Sources\aiva\utils\logger.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource.h" />
-    <ClInclude Include="Sources\aiva\layer1\graphic_resource_factory.h" />
-    <ClInclude Include="Sources\aiva\layer1\i_gpu_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_view.h" />
-    <ClInclude Include="Sources\aiva\layer1\a_graphic_object.h" />
+    <ClInclude Include="Sources\aiva\utils\object_factory.h" />
+    <ClInclude Include="Sources\aiva\utils\a_object.h" />
+    <ClInclude Include="Sources\aiva\utils\i_object_changeable.h" />
+    <ClInclude Include="Sources\aiva\utils\i_object_cacheable.h" />
+    <ClInclude Include="Sources\aiva\layer1\i_object_engineable.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

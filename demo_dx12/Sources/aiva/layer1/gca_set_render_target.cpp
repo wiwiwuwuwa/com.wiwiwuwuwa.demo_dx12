@@ -20,7 +20,7 @@ void aiva::layer1::GcaSetRenderTarget::ExecuteResourceBarrier(Engine const& engi
 
 	auto allBarriers = std::vector<D3D12_RESOURCE_BARRIER>{};
 
-	auto const& rtBarriers = RtHeap ? RtHeap->PrepareBarriers(true) : engine.GraphicHardware().ScreenViewObj()->PrepareBarriers(true);
+	auto const& rtBarriers = RtHeap ? RtHeap->PrepareBarriers(true) : engine.GraphicHardware().ScreenViewObj()->CreateDirectxBarriers(true);
 	std::copy(std::cbegin(rtBarriers), std::cend(rtBarriers), std::back_inserter(allBarriers));
 
 	auto const& dsBarriers = DsHeap ? DsHeap->PrepareBarriers(true) : decltype(allBarriers){};

@@ -5,6 +5,7 @@
 #include <aiva/utils/math_utils.h>
 
 aiva::layer1::ShaderStruct::ShaderStruct()
+	: aiva::utils::AObject{}, aiva::utils::IObjectChangeable{}
 {
 
 }
@@ -80,13 +81,13 @@ void aiva::layer1::ShaderStruct::SetStruct(std::string const& key, std::shared_p
 		aiva::utils::Asserts::CheckBool(basicValue);
 
 		mValues.insert_or_assign(key, basicValue);
-		return;
 	}
 	else
 	{
 		mValues.erase(key);
-		return;
 	}
+
+	OnChanged()();
 }
 
 std::size_t aiva::layer1::ShaderStruct::Num() const

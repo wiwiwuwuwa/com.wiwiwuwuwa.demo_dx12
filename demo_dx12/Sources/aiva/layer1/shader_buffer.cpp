@@ -4,34 +4,16 @@
 #include <aiva/layer1/shader_consts.h>
 #include <aiva/layer1/shader_struct.h>
 #include <aiva/utils/asserts.h>
-#include <aiva/utils/t_cache_updater.h>
 
 aiva::layer1::ShaderBuffer::ShaderBuffer()
+	: aiva::utils::AObject{}, aiva::utils::IObjectChangeable{}
 {
-	InitializeCacheUpdater();
+
 }
 
 aiva::layer1::ShaderBuffer::~ShaderBuffer()
 {
-	TerminateCacheUpdater();
-}
 
-aiva::layer1::ShaderBuffer::CacheUpdaterType& aiva::layer1::ShaderBuffer::CacheUpdater() const
-{
-	aiva::utils::Asserts::CheckBool(mCacheUpdater);
-	return *mCacheUpdater;
-}
-
-void aiva::layer1::ShaderBuffer::InitializeCacheUpdater()
-{
-	mCacheUpdater = std::make_unique<CacheUpdaterType>();
-	aiva::utils::Asserts::CheckBool(mCacheUpdater);
-}
-
-void aiva::layer1::ShaderBuffer::TerminateCacheUpdater()
-{
-	aiva::utils::Asserts::CheckBool(mCacheUpdater);
-	mCacheUpdater = {};
 }
 
 std::shared_ptr<const aiva::layer1::ShaderStruct> const& aiva::layer1::ShaderBuffer::Struct() const
@@ -43,8 +25,8 @@ aiva::layer1::ShaderBuffer& aiva::layer1::ShaderBuffer::Struct(std::shared_ptr<c
 {
 	mStruct = referenceStruct;
 	mShaderStructs = {};
-	CacheUpdater().MarkAsChanged();
 
+	OnChanged()();
 	return *this;
 }
 
@@ -55,8 +37,8 @@ aiva::layer1::ShaderBuffer& aiva::layer1::ShaderBuffer::Add(std::shared_ptr<cons
 	aiva::utils::Asserts::CheckBool((*mStruct).HasSameFields(*shaderStruct));
 
 	mShaderStructs.push_back(shaderStruct);
-	CacheUpdater().MarkAsChanged();
 
+	OnChanged()();
 	return *this;
 }
 

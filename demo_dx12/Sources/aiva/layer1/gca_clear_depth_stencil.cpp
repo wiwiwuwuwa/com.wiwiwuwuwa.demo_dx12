@@ -1,9 +1,9 @@
 #include <pch.h>
 #include <aiva/layer1/gca_clear_depth_stencil.h>
 
+#include <aiva/layer1/a_graphic_resource_view.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/graphic_hardware.h>
-#include <aiva/layer1/i_gpu_resource_view.h>
 #include <aiva/layer1/resource_view_heap.h>
 #include <aiva/utils/asserts.h>
 
@@ -21,10 +21,10 @@ void aiva::layer1::GcaClearDepthStencil::ExecuteResourceBarrier(Engine const& en
 	auto const& heap = Heap;
 	aiva::utils::Asserts::CheckBool(heap);
 
-	auto const& view = heap->ResourceView(View);
+	auto const& view = heap->GetView(View);
 	aiva::utils::Asserts::CheckBool(view);
 
-	auto const& barriers = view->PrepareBarriers(true);
+	auto const& barriers = view->CreateDirectxBarriers(true);
 	if (std::empty(barriers))
 	{
 		return;

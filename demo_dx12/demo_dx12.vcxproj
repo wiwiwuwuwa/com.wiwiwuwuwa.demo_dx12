@@ -171,7 +171,6 @@
     <ClInclude Include="External Sources\tinyutf8\tinyutf8.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Sources\aiva\layer0\app.h" />
-    <ClInclude Include="Sources\aiva\layer1\a_graphic_object.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_view.h" />
     <ClInclude Include="Sources\aiva\layer1\e_cull_mode.h" />
@@ -183,8 +182,7 @@
     <ClInclude Include="Sources\aiva\layer1\e_resource_memory_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_resource_view_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_value_type.h" />
-    <ClInclude Include="Sources\aiva\layer1\graphic_resource_factory.h" />
-    <ClInclude Include="Sources\aiva\layer1\i_gpu_resource.h" />
+    <ClInclude Include="Sources\aiva\layer1\i_object_engineable.h" />
     <ClInclude Include="Sources\aiva\layer1\shader_value_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\value_type_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_clear_depth_stencil.h" />
@@ -194,27 +192,15 @@
     <ClInclude Include="Sources\aiva\layer1\gca_set_render_target.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_set_scissor_rects.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_set_viewports.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_dsv_to_texture_2d.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_dsv_to_texture_2d_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_rtv_to_texture_2d.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_rtv_to_texture_2d_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_srv_to_buffer.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_srv_to_buffer_desc.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_srv_to_texture_2d.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_srv_to_texture_2d_desc.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_uav_to_buffer.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_uav_to_buffer_desc.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_uav_to_texture_2d.h" />
-    <ClInclude Include="Sources\aiva\layer1\grv_uav_to_texture_2d_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\engine.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_dispatch.h" />
     <ClInclude Include="Sources\aiva\layer1\graphic_executor.h" />
     <ClInclude Include="Sources\aiva\layer1\graphic_hardware.h" />
     <ClInclude Include="Sources\aiva\layer1\graphic_pipeline.h" />
     <ClInclude Include="Sources\aiva\layer1\gr_buffer.h" />
-    <ClInclude Include="Sources\aiva\layer1\i_gpu_resource_view.h" />
     <ClInclude Include="Sources\aiva\layer1\i_graphic_command_async.h" />
     <ClInclude Include="Sources\aiva\layer1\i_cpu_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\i_shader_value.h" />
@@ -232,7 +218,10 @@
     <ClInclude Include="Sources\aiva\layer2\sc_camera.h" />
     <ClInclude Include="Sources\aiva\layer2\sc_mesh_renderer.h" />
     <ClInclude Include="Sources\aiva\layer2\world.h" />
+    <ClInclude Include="Sources\aiva\utils\a_object.h" />
     <ClInclude Include="Sources\aiva\utils\e_cache_flags.h" />
+    <ClInclude Include="Sources\aiva\utils\i_object_cacheable.h" />
+    <ClInclude Include="Sources\aiva\utils\i_object_changeable.h" />
     <ClInclude Include="Sources\aiva\utils\logger.h" />
     <ClInclude Include="Sources\aiva\utils\material_constants.h" />
     <ClInclude Include="Sources\aiva\utils\math_utils.h" />
@@ -253,6 +242,7 @@
     <ClInclude Include="Sources\aiva\utils\enum_utils.h" />
     <ClInclude Include="Sources\aiva\utils\ev_action.h" />
     <ClInclude Include="Sources\aiva\utils\action_batcher.h" />
+    <ClInclude Include="Sources\aiva\utils\object_factory.h" />
     <ClInclude Include="Sources\aiva\utils\resource_barrier.h" />
     <ClInclude Include="Sources\aiva\utils\t_cache_updater.h" />
     <ClInclude Include="Sources\aiva\utils\t_ev_action.h" />
@@ -280,7 +270,6 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Sources\aiva\layer0\app.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\a_graphic_object.cpp" />
     <ClCompile Include="Sources\aiva\layer1\a_graphic_resource.cpp" />
     <ClCompile Include="Sources\aiva\layer1\a_graphic_resource_view.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_cull_mode.cpp" />
@@ -292,6 +281,7 @@
     <ClCompile Include="Sources\aiva\layer1\e_resource_memory_type.cpp" />
     <ClCompile Include="Sources\aiva\layer1\engine.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_resource_view_type.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\i_object_engineable.cpp" />
     <ClCompile Include="Sources\aiva\layer1\shader_value_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer1\value_type_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_clear_depth_stencil.cpp" />
@@ -305,13 +295,9 @@
     <ClCompile Include="Sources\aiva\layer1\graphic_executor.cpp" />
     <ClCompile Include="Sources\aiva\layer1\graphic_hardware.cpp" />
     <ClCompile Include="Sources\aiva\layer1\graphic_pipeline.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\grv_cbv_to_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_dsv_to_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_rtv_to_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_srv_to_buffer.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\grv_srv_to_texture_2d.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\grv_uav_to_buffer.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\grv_uav_to_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gr_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_system.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_view_heap.cpp" />
@@ -336,7 +322,10 @@
     <ClCompile Include="Sources\aiva\layer2\sc_mesh_renderer.cpp" />
     <ClCompile Include="Sources\aiva\layer2\world.cpp" />
     <ClCompile Include="Sources\aiva\utils\action_batcher.cpp" />
+    <ClCompile Include="Sources\aiva\utils\a_object.cpp" />
     <ClCompile Include="Sources\aiva\utils\changes_counter.cpp" />
+    <ClCompile Include="Sources\aiva\utils\i_object_cacheable.cpp" />
+    <ClCompile Include="Sources\aiva\utils\i_object_changeable.cpp" />
     <ClCompile Include="Sources\aiva\utils\logger.cpp" />
     <ClCompile Include="Sources\aiva\utils\resource_barrier.cpp" />
     <ClCompile Include="Sources\main.cpp" />

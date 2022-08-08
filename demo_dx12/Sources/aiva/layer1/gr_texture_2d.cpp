@@ -5,7 +5,12 @@
 #include <aiva/layer1/graphic_hardware.h>
 #include <aiva/utils/resource_barrier.h>
 
-aiva::layer1::GrTexture2D::GrTexture2D(aiva::layer1::Engine const& engine) : AGraphicResource(engine)
+aiva::layer1::GrTexture2D::GrTexture2D(EngineType const& engine) : AGraphicResource(engine)
+{
+
+}
+
+aiva::layer1::GrTexture2D::~GrTexture2D()
 {
 
 }

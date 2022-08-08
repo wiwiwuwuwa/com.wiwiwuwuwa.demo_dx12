@@ -6,7 +6,8 @@
 #include <aiva/utils/resource_barrier.h>
 #include <aiva/utils/t_cache_updater.h>
 
-aiva::layer1::AGraphicResource::AGraphicResource(aiva::layer1::Engine const& engine) : AGraphicObject{ engine }
+aiva::layer1::AGraphicResource::AGraphicResource(EngineType const& engine)
+	: aiva::utils::AObject{}, aiva::utils::IObjectCacheable{ true }, aiva::layer1::IObjectEngineable{ engine }
 {
 	InitializeInternalResource();
 	InitializeResourceBarrier();
@@ -54,7 +55,7 @@ void aiva::layer1::AGraphicResource::ExecuteFlushForInternalResource()
 
 std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::AGraphicResource::PrepareBarriers(D3D12_RESOURCE_STATES const desiredState, std::optional<std::size_t> const subresource /*= {}*/)
 {
-	auto const internalResource = InternalResource();
+	auto const& internalResource = InternalResource();
 	aiva::utils::Asserts::CheckBool(internalResource, "Internal resource is not valid");
 
 	auto resourceBarriers = std::vector<D3D12_RESOURCE_BARRIER>{};

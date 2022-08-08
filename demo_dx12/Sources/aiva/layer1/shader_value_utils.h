@@ -10,6 +10,11 @@ namespace aiva::layer1
 	struct TShaderValue;
 }
 
+namespace aiva::utils
+{
+	struct ObjectFactory;
+}
+
 namespace aiva::layer1
 {
 	struct ShaderValueUtils final
@@ -59,5 +64,5 @@ namespace aiva::layer1
 template <typename T>
 void aiva::layer1::ShaderValueUtils::RegisterValueTypeFactory(EValueType const valueType)
 {
-	mValueTypeFactories.insert_or_assign(valueType, &TShaderValue<T>::Create<>);
+	mValueTypeFactories.insert_or_assign(valueType, &TShaderValue<T>::FactoryType::Create<TShaderValue<T>>);
 }

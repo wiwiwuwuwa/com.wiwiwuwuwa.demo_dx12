@@ -1,101 +1,77 @@
 #pragma once
 #include <pch.h>
 
+#include <aiva/layer1/e_descriptor_heap_type.h>
+#include <aiva/layer1/i_object_engineable.h>
+#include <aiva/utils/a_object.h>
+#include <aiva/utils/i_object_cacheable.h>
+
 namespace aiva::layer1
 {
-	enum class EDescriptorHeapType : std::uint8_t;
-
-	struct Engine;
-	struct IGpuResourceView;
-}
-
-namespace aiva::utils
-{
-	enum class ECacheFlags : std::uint8_t;
-
-	template <typename, typename = ECacheFlags>
-	struct TCacheUpdater;
+	struct AGraphicResourceView;
 }
 
 namespace aiva::layer1
 {
-	struct ResourceViewHeap final : private boost::noncopyable, public std::enable_shared_from_this<ResourceViewHeap>
+	struct ResourceViewHeap final : public aiva::utils::AObject, public aiva::utils::IObjectCacheable, public aiva::layer1::IObjectEngineable
 	{
 	// ----------------------------------------------------
 	// Main
 
-	public:
-		template <typename... TArgs>
-		static std::shared_ptr<ResourceViewHeap> Create(TArgs&&... args);
-
 	private:
-		ResourceViewHeap(Engine const& engine);
+		friend FactoryType;
 
-		ResourceViewHeap(Engine const& engine, EDescriptorHeapType const resourceType);
+	protected:
+		ResourceViewHeap(EngineType const& engine);
 
-	public:
-		~ResourceViewHeap();
-
-	private:
-		Engine const& mEngine;
-
-	// ----------------------------------------------------
-	// Cache Refresh
+		ResourceViewHeap(EngineType const& engine, EDescriptorHeapType const heapType);
 
 	public:
-		using CacheUpdaterType = aiva::utils::TCacheUpdater<ResourceViewHeap>;
-
-	public:
-		CacheUpdaterType& CacheUpdater() const;
-
-	private:
-		void InitializeCacheUpdater();
-
-		void TerminateCacheUpdater();
-
-	private:
-		std::unique_ptr<CacheUpdaterType> mCacheUpdater{};
+		~ResourceViewHeap() override;
 
 	// ----------------------------------------------------
 	// Resource Type
 
 	public:
-		EDescriptorHeapType ResourceType() const;
+		EDescriptorHeapType HeapType() const;
 
-		ResourceViewHeap& ResourceType(EDescriptorHeapType const resourceType);
+		void HeapType(EDescriptorHeapType const heapType);
 
 	private:
-		EDescriptorHeapType mResourceType{};
+		EDescriptorHeapType mHeapType{};
 
 	// ----------------------------------------------------
 	// Resource Views
 
-	private:
-		using ResourceViewsMap = std::map<std::string, std::shared_ptr<IGpuResourceView>>;
+	public:
+		using ViewPtr = std::shared_ptr<AGraphicResourceView>;
+
+		using ViewDict = std::map<std::string, ViewPtr>;
 
 	public:
-		std::shared_ptr<IGpuResourceView> ResourceView(std::string const& key) const;
+		ViewPtr GetView(std::string const& key) const;
 
-		template <typename TGpuResourceView>
-		std::shared_ptr<TGpuResourceView> ResourceView(std::string const& key) const;
+		void SetView(std::string const& key, ViewPtr const& value);
 
-		ResourceViewHeap& ResourceView(std::string const& key, std::shared_ptr<IGpuResourceView> const& value);
+		ViewDict const& GetViews() const;
 
-		ResourceViewsMap const& ResourceViews() const;
-
-	private:
-		void OnResourceViewMarkedAsChanged();
+	public:
+		template <typename T>
+		std::shared_ptr<T> GetView(std::string const& key) const;
 
 	private:
-		ResourceViewsMap mResourceViews{};
+		void ExecuteMarkAsChangedForSelf();
+
+	private:
+		ViewDict mViews{};
 
 	// ----------------------------------------------------
 	// Internal Resources
 
 	public:
-		winrt::com_ptr<ID3D12DescriptorHeap> const& InternalDescriptorHeap() const;
+		winrt::com_ptr<ID3D12DescriptorHeap> const& InternalDescriptorHeap();
 
-		std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> const& InternalDescriptorHandles() const;
+		std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> const& InternalDescriptorHandles();
 
 	private:
 		void InitializeInternalResources();
@@ -104,6 +80,8 @@ namespace aiva::layer1
 
 	private:
 		void RefreshInternalResources();
+
+		void ExecuteFlushForInternalResources();
 
 		void RefreshInternalDescriptorHeap();
 
@@ -118,13 +96,13 @@ namespace aiva::layer1
 	// Descriptor Handles Utils
 
 	public:
-		std::optional<D3D12_CPU_DESCRIPTOR_HANDLE> InternalDescriptorHandle(std::string const& viewKey) const;
+		std::optional<D3D12_CPU_DESCRIPTOR_HANDLE> InternalDescriptorHandle(std::string const& viewKey);
 
 	// ----------------------------------------------------
 	// Resource Barriers
 
 	public:
-		std::vector<D3D12_RESOURCE_BARRIER> PrepareBarriers(bool const active) const;
+		std::vector<D3D12_RESOURCE_BARRIER> PrepareBarriers(bool const active);
 
 	// ----------------------------------------------------
 	// Copying
@@ -136,20 +114,14 @@ namespace aiva::layer1
 
 // --------------------------------------------------------
 
-template <typename... TArgs>
-std::shared_ptr<aiva::layer1::ResourceViewHeap> aiva::layer1::ResourceViewHeap::Create(TArgs&&... args)
+template <typename T>
+std::shared_ptr<T> aiva::layer1::ResourceViewHeap::GetView(std::string const& key) const
 {
-	return std::shared_ptr<ResourceViewHeap>{new ResourceViewHeap{ std::forward<TArgs>(args)... }};
-}
+	auto const basicView = GetView(key);
+	if (!basicView) return {};
 
-template <typename TGpuResourceView>
-std::shared_ptr<TGpuResourceView> aiva::layer1::ResourceViewHeap::ResourceView(std::string const& key) const
-{
-	auto const basicResourceView = ResourceView(key);
-	if (!basicResourceView) return {};
+	auto const specificView = std::dynamic_pointer_cast<T>(basicView);
+	aiva::utils::Asserts::CheckBool(specificView);
 
-	auto const specificResourceView = std::dynamic_pointer_cast<TGpuResourceView>(basicResourceView);
-	aiva::utils::Asserts::CheckBool(specificResourceView);
-
-	return specificResourceView;
+	return specificView;
 }

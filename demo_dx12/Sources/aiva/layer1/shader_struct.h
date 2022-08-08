@@ -4,24 +4,25 @@
 #include <aiva/layer1/i_shader_value.h>
 #include <aiva/layer1/t_shader_array.h>
 #include <aiva/layer1/t_shader_value.h>
+#include <aiva/utils/a_object.h>
 #include <aiva/utils/asserts.h>
+#include <aiva/utils/i_object_changeable.h>
 
 namespace aiva::layer1
 {
-	struct ShaderStruct final : private boost::noncopyable, public std::enable_shared_from_this<ShaderStruct>
+	struct ShaderStruct final : public aiva::utils::AObject, public aiva::utils::IObjectChangeable
 	{
 	// ----------------------------------------------------
 	// Main
 
-	public:
-		template <typename... TArgs>
-		static std::shared_ptr<ShaderStruct> Create(TArgs&&... args);
-
 	private:
+		friend FactoryType;
+
+	protected:
 		ShaderStruct();
 
 	public:
-		~ShaderStruct();
+		~ShaderStruct() override;
 
 	// ----------------------------------------------------
 	// Serialization
@@ -30,7 +31,7 @@ namespace aiva::layer1
 		std::vector<std::byte> SerializeToBinary() const;
 
 	// ----------------------------------------------------
-	// High-Level Data
+	// Data
 
 	public:
 		using MapType = std::unordered_map<std::string, std::shared_ptr<IShaderValue>>;
@@ -70,12 +71,6 @@ namespace aiva::layer1
 
 // --------------------------------------------------------
 
-template <typename... TArgs>
-std::shared_ptr<aiva::layer1::ShaderStruct> aiva::layer1::ShaderStruct::Create(TArgs&&... args)
-{
-	return std::shared_ptr<ShaderStruct>{new ShaderStruct{ std::forward<TArgs>(args)... }};
-}
-
 template <typename TValue>
 bool aiva::layer1::ShaderStruct::GetValue(std::string const& key, TValue *const value) const
 {
@@ -103,17 +98,17 @@ void aiva::layer1::ShaderStruct::SetValue(std::string const& key, TValue const*c
 {
 	if (value)
 	{
-		auto const& specificValue = TShaderValue<TValue>::Create(*value);
+		auto const& specificValue = TShaderValue<TValue>::FactoryType::Create<TShaderValue<TValue>>(*value);
 		aiva::utils::Asserts::CheckBool(specificValue);
 
 		mValues.insert_or_assign(key, specificValue);
-		return;
 	}
 	else
 	{
 		mValues.erase(key);
-		return;
 	}
+
+	OnChanged()();
 }
 
 template <typename TValue>
@@ -147,13 +142,13 @@ void aiva::layer1::ShaderStruct::SetArray(std::string const& key, std::vector<TV
 		aiva::utils::Asserts::CheckBool(specificArray);
 
 		mValues.insert_or_assign(key, specificArray);
-		return;
 	}
 	else
 	{
 		mValues.erase(key);
-		return;
 	}
+
+	OnChanged()();
 }
 
 template <typename TValue>

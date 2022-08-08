@@ -72,6 +72,5 @@ std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::GrvRtvToTexture2D::CreateDirec
 	aiva::utils::Asserts::CheckBool(resource, "Graphic resource is not valid");
 
 	auto const& state = active ? D3D12_RESOURCE_STATE_RENDER_TARGET : D3D12_RESOURCE_STATE_COMMON;
-	if (mDesc)
 	return resource->PrepareBarriers(state, MipLevel());
 }

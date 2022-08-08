@@ -81,7 +81,7 @@ aiva::layer1::SceneGltfUtils::MeshArray aiva::layer1::SceneGltfUtils::LoadMeshMa
 			static auto const INDEX_KEY = "m0_INDEX";
 
 			auto const aivaView = GrvSrvToBuffer::FactoryType::Create<GrvSrvToBuffer>(gltf.Engine());
-			aivaMesh->SetView(aiva::utils::MaterialConstants::AIVA_BUFFER_INDICES, aivaView);
+			aivaMesh->SetView(aiva::utils::MaterialConstants::AIVA_BUFFER_MESH_INDICES, aivaView);
 
 			{
 				auto const aivaBuffer = GrBuffer::FactoryType::Create<GrBuffer>(gltf.Engine());
@@ -114,7 +114,7 @@ aiva::layer1::SceneGltfUtils::MeshArray aiva::layer1::SceneGltfUtils::LoadMeshMa
 
 		{ // vertices
 			auto const aivaView = GrvSrvToBuffer::FactoryType::Create<GrvSrvToBuffer>(gltf.Engine());
-			aivaMesh->SetView(aiva::utils::MaterialConstants::AIVA_BUFFER_VERTICES, aivaView);
+			aivaMesh->SetView(aiva::utils::MaterialConstants::AIVA_BUFFER_MESH_VERTICES, aivaView);
 
 			{
 				auto const aivaBuffer = GrBuffer::FactoryType::Create<GrBuffer>(gltf.Engine());

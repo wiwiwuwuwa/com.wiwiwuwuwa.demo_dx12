@@ -202,7 +202,7 @@ void aiva::layer2::RenderSystem::DrawMeshRenderer(ScCamera const& const camera, 
 	auto drawMesh = aiva::layer1::GcaDrawMesh{};
 	drawMesh.Material = material;
 	drawMesh.MeshTopology = aiva::layer1::EPrimitiveTopology::TriangleList;
-	drawMesh.MeshIndicesKey = aiva::utils::MaterialConstants::AIVA_BUFFER_INDICES;
+	drawMesh.MeshIndicesKey = aiva::utils::MaterialConstants::AIVA_BUFFER_MESH_INDICES;
 
 	mWorld.Engine().GraphicExecutor().ExecuteCommand(drawMesh);
 }

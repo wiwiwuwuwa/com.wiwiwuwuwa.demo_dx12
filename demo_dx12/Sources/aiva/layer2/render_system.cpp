@@ -131,7 +131,7 @@ void aiva::layer2::RenderSystem::InitDSs()
 	auto texView = aiva::layer1::GrvDsvToTexture2D::FactoryType::Create<aiva::layer1::GrvDsvToTexture2D>(mWorld.Engine());
 	texView->InternalResource(texBuffer);
 
-	mRTs->SetView(std::to_string(0), texView);
+	mDSs->SetView(std::to_string(0), texView);
 }
 
 void aiva::layer2::RenderSystem::UseRTsDSs()

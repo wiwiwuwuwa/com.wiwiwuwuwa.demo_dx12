@@ -33,26 +33,28 @@ namespace aiva::layer2
 
 		ScCamera& FovY(float const fovy);
 
+	private:
+		float mFovY = 45.0f;
+
+	// --------------------------------
+
+	public:
 		float ZNear() const;
 
 		ScCamera& ZNear(float const znear);
 
+	private:
+		float mZNear = 0.1f;
+
+	// --------------------------------
+
+	public:
 		float ZFar() const;
 
 		ScCamera& ZFar(float const zfar);
 
 	private:
-		float mFovY = 45.0f;
-
-		float mZNear = 0.1f;
-
 		float mZFar = 256.0f;
-
-	// ----------------------------------------------------
-	// Camera Consts
-
-	public:
-		glm::mat4 MatrixMVP() const;
 
 	// ----------------------------------------------------
 	// Render Events

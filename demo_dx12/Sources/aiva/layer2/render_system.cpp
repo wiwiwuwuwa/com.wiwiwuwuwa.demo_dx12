@@ -18,6 +18,7 @@
 #include <aiva/layer1/graphic_pipeline.h>
 #include <aiva/layer1/gr_buffer.h>
 #include <aiva/layer1/gr_texture_2d.h>
+#include <aiva/layer1/grv_cbv_to_buffer.h>
 #include <aiva/layer1/grv_dsv_to_texture_2d.h>
 #include <aiva/layer1/grv_rtv_to_texture_2d.h>
 #include <aiva/layer1/grv_srv_to_buffer.h>
@@ -29,6 +30,7 @@
 #include <aiva/layer1/shader_struct.h>
 #include <aiva/layer2/sc_camera.h>
 #include <aiva/layer2/sc_mesh_renderer.h>
+#include <aiva/layer2/scene_actor.h>
 #include <aiva/layer2/world.h>
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/material_constants.h>
@@ -109,7 +111,7 @@ void aiva::layer2::RenderSystem::InitRTs()
 		texBuffer->SupportUnorderedAccess(true);
 
 		auto texView = aiva::utils::NewObject<aiva::layer1::GrvRtvToTexture2D>(mWorld.Engine());
-		texView->InternalResource(texBuffer);
+		texView->SetInternalResource(texBuffer);
 
 		mRTs->SetView(std::to_string(i), texView);
 	}
@@ -129,7 +131,7 @@ void aiva::layer2::RenderSystem::InitDSs()
 	texBuffer->SupportDepthStencil(true);
 
 	auto texView = aiva::utils::NewObject<aiva::layer1::GrvDsvToTexture2D>(mWorld.Engine());
-	texView->InternalResource(texBuffer);
+	texView->SetInternalResource(texBuffer);
 
 	mDSs->SetView(std::to_string(0), texView);
 }
@@ -191,60 +193,41 @@ void aiva::layer2::RenderSystem::UseScissorRects()
 
 void aiva::layer2::RenderSystem::DrawMeshRenderer(ScCamera const& const camera, ScMeshRenderer const& const meshRenderer)
 {
-	auto const sharedMaterial = meshRenderer.Material();
-	aiva::utils::Asserts::CheckBool(sharedMaterial, "Shared material is not valid");
-
-	auto const material = sharedMaterial->Copy();
-	aiva::utils::Asserts::CheckBool(material, "Material is not valid");
-
-	SetupCameraProperties(camera, *material);
-
 	auto drawMesh = aiva::layer1::GcaDrawMesh{};
-	drawMesh.Material = material;
+	drawMesh.Material = SetupCameraProperties(camera, meshRenderer);
 	drawMesh.MeshTopology = aiva::layer1::EPrimitiveTopology::TriangleList;
 	drawMesh.MeshIndicesKey = aiva::utils::MaterialConstants::AIVA_BUFFER_MESH_INDICES;
 
 	mWorld.Engine().GraphicExecutor().ExecuteCommand(drawMesh);
 }
 
-void aiva::layer2::RenderSystem::SetupCameraProperties(ScCamera const& const camera, aiva::layer1::RoMaterialGraphic const& const material)
+std::shared_ptr<aiva::layer1::RoMaterialGraphic> aiva::layer2::RenderSystem::SetupCameraProperties(ScCamera const& const camera, ScMeshRenderer const& const meshRenderer)
 {
-	// TODO: Impl
-	//auto const constantStruct = aiva::layer1::ShaderStruct::Create();
+	auto const sharedMaterial = meshRenderer.Material();
+	aiva::utils::Asserts::CheckBool(sharedMaterial, "Shared material is not valid");
 
-	//auto const constantMVP = camera.MatrixMVP();
-	//constantStruct->SetValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_MVP, &constantMVP);
+	auto const instancedMaterial = sharedMaterial->Copy();
+	aiva::utils::Asserts::CheckBool(instancedMaterial, "Instanced material is not valid");
 
-	//auto const constantHeap = material.ResourceDescriptor().ResourceTable().GetOrAddResourceHeap(aiva::layer1::EDescriptorHeapType::CbvSrvUav);
-	//aiva::utils::Asserts::CheckBool(constantHeap);
+	auto const constantHeap = instancedMaterial->ResourceDescriptor().ResourceTable().GetOrAddResourceHeap(aiva::layer1::EDescriptorHeapType::CbvSrvUav);
+	aiva::utils::Asserts::CheckBool(constantHeap, "Constant heap is not valid");
 
-	//auto constantView = constantHeap->ResourceView<aiva::layer1::GrvSrvToBuffer>(aiva::utils::MaterialConstants::AIVA_BUFFER_CONSTANT);
-	//if (!constantView)
-	//{
-	//	constantView = aiva::layer1::GrvSrvToBuffer::Create(mWorld.Engine());
-	//	constantHeap->ResourceView(aiva::utils::MaterialConstants::AIVA_BUFFER_CONSTANT, constantView);
-	//}
+	auto const constantView = constantHeap->GetOrAddView<aiva::layer1::GrvCbvToBuffer>(aiva::utils::MaterialConstants::AIVA_BUFFER_CONSTANTS_PER_OBJECT);
+	aiva::utils::Asserts::CheckBool(constantView, "Constant view is not valid");
 
-	//aiva::utils::Asserts::CheckBool(constantView, "Constant view is not valid");
+	{ // MVP
+		auto const viewRect = mWorld.Engine().GraphicHardware().ScreenViewRect();
+		auto const viewAspect = (viewRect.z - viewRect.x) / (viewRect.w - viewRect.y);
 
-	//auto constantViewDesc = constantView->Desc();
-	//if (!constantViewDesc)
-	//{
-	//	auto constantBufferDesc = aiva::layer1::GrBufferDesc{};
-	//	constantBufferDesc.MemoryType = aiva::layer1::EResourceMemoryType::CpuToGpu;
+		auto const model = meshRenderer.Actor().WorldTransform();
+		auto const view = glm::inverse(camera.Actor().WorldTransform());
+		auto const projection = glm::perspective(camera.FovY(), viewAspect, camera.ZNear(), camera.ZFar());
 
-	//	auto constantBuffer = aiva::layer1::GrBuffer::Create(mWorld.Engine(), constantBufferDesc);
-	//	aiva::utils::Asserts::CheckBool(constantBuffer, "Constant buffer is not valid");
+		auto const mvp = projection * view * model;
+		constantView->Struct().SetValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_MVP, &mvp);
+	}
 
-	//	constantViewDesc = aiva::layer1::GrvSrvToBufferDesc{};
-	//	constantViewDesc->Resource = constantBuffer;
-	//}
-
-	//aiva::utils::Asserts::CheckBool(constantViewDesc, "Constant view desc is not valid");
-
-	//constantViewDesc->Struct = constantStruct;
-	//constantView->Desc(constantViewDesc);
-	//constantView->Buffer().Add(constantStruct);
+	return instancedMaterial;
 }
 
 void aiva::layer2::RenderSystem::PresentST()

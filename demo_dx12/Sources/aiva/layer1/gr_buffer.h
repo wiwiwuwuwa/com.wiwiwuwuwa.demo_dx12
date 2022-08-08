@@ -29,7 +29,7 @@ namespace aiva::layer1
 		GrBuffer& MemoryType(EResourceMemoryType const memoryType);
 
 	private:
-		EResourceMemoryType mMemoryType{};
+		EResourceMemoryType mMemoryType{ EResourceMemoryType::CpuToGpu };
 
 	// --------------------------------
 

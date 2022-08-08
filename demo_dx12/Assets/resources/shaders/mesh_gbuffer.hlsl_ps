@@ -1,16 +1,22 @@
-struct t_input
+struct T_INPUT
 {
-    float4 position : SV_Position;
+    float4 position_cs : SV_Position;
 };
 
-struct t_output
+struct T_OUTPUT
 {
-    float4 color0 : SV_Target;
+    float4 albedo_and_metallness: SV_Target0;
+    float4 normal_and_smoothness: SV_Target1;
+    float4 position_and_nothing: SV_Target2;
+    float4 emission_and_nothing: SV_Target3;
 };
 
-t_output main(t_input IN)
+T_OUTPUT main(T_INPUT IN)
 {
-    t_output OUT;
-    OUT.color0 = 1.0;
+    T_OUTPUT OUT;
+    OUT.albedo_and_metallness = 1.0;
+    OUT.normal_and_smoothness = 1.0;
+    OUT.position_and_nothing = 1.0;
+    OUT.emission_and_nothing = 1.0;
     return OUT;
 }

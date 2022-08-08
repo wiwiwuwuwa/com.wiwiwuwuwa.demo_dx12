@@ -32,11 +32,15 @@ namespace aiva::layer1
 		using ResourceType = AGraphicResource;
 
 	public:
-		std::shared_ptr<ResourceType> const& InternalResource();
+		std::shared_ptr<ResourceType> GetInternalResource();
 
-		void InternalResource(std::shared_ptr<ResourceType> const& resource);
+		std::shared_ptr<ResourceType> GetOrAddInternalResource();
+
+		AGraphicResourceView& SetInternalResource(std::shared_ptr<ResourceType> const resource);
 
 	protected:
+		virtual std::shared_ptr<ResourceType> CreateDefaultInternalResource() const;
+
 		virtual void RefreshInternalResourceFromSelf(std::shared_ptr<ResourceType> const& resource);
 
 	private:

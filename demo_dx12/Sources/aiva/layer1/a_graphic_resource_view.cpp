@@ -16,13 +16,31 @@ aiva::layer1::AGraphicResourceView::~AGraphicResourceView()
 	TerminateInternalResource();
 }
 
-std::shared_ptr<aiva::layer1::AGraphicResourceView::ResourceType> const& aiva::layer1::AGraphicResourceView::InternalResource()
+std::shared_ptr<aiva::layer1::AGraphicResourceView::ResourceType> aiva::layer1::AGraphicResourceView::GetInternalResource()
 {
 	FlushChanges();
 	return mInternalResource;
 }
 
-void aiva::layer1::AGraphicResourceView::InternalResource(std::shared_ptr<ResourceType> const& resource)
+std::shared_ptr<aiva::layer1::AGraphicResourceView::ResourceType> aiva::layer1::AGraphicResourceView::GetOrAddInternalResource()
+{
+	auto const existingInternalResource = GetInternalResource();
+	if (existingInternalResource)
+	{
+		return existingInternalResource;
+	}
+
+	auto const createdInternalResource = SetInternalResource(CreateDefaultInternalResource()).GetInternalResource();
+	if (createdInternalResource)
+	{
+		return createdInternalResource;
+	}
+
+	aiva::utils::Asserts::CheckBool(false, "Failed to get or add internal resource");
+	return {};
+}
+
+aiva::layer1::AGraphicResourceView& aiva::layer1::AGraphicResourceView::SetInternalResource(std::shared_ptr<ResourceType> const resource)
 {
 	if (mInternalResource)
 	{
@@ -37,6 +55,12 @@ void aiva::layer1::AGraphicResourceView::InternalResource(std::shared_ptr<Resour
 	}
 
 	MarkAsChanged();
+	return *this;
+}
+
+std::shared_ptr<aiva::layer1::AGraphicResourceView::ResourceType> aiva::layer1::AGraphicResourceView::CreateDefaultInternalResource() const
+{
+	return {};
 }
 
 void aiva::layer1::AGraphicResourceView::RefreshInternalResourceFromSelf(std::shared_ptr<ResourceType> const& resource)
@@ -56,10 +80,7 @@ void aiva::layer1::AGraphicResourceView::TerminateInternalResource()
 
 void aiva::layer1::AGraphicResourceView::ExecuteFlushForInternalResource()
 {
-	if (mInternalResource)
-	{
-		RefreshInternalResourceFromSelf(mInternalResource);
-	}
+	RefreshInternalResourceFromSelf(GetOrAddInternalResource());
 }
 
 void aiva::layer1::AGraphicResourceView::ExecuteMarkAsChangedForSelf()

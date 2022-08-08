@@ -1,30 +1,47 @@
-struct main_input
+struct T_INPUT
 {
-    uint index_id : SV_VertexID;
+    uint vertex_id : SV_VertexID;
 };
 
-struct main_output
+// ------------------------------------
+
+struct T_OUTPUT
 {
-    float4 position : SV_Position;
+    float4 position_cs : SV_Position;
 };
 
-struct t0_buffer_struct
+// ------------------------------------
+
+struct T_CONSTANTS_PER_OBJECT
 {
-    uint4 vertex_id;
+    uint TODO_IMPL;
 };
 
-StructuredBuffer<t0_buffer_struct> t0_buffer : register(t0);
+ConstantBuffer<T_CONSTANTS_PER_OBJECT> constants_per_object : register(b0);
 
-main_output main(main_input IN)
+// ------------------------------------
+
+struct T_MESH_INDICES
 {
-    float4 positions[3] =
-    {
-        { -0.5, -0.5, 0.5, 1.0 },
-        { 0.0, 0.5, 0.5, 1.0 },
-        { 0.5, -0.5, 0.5, 1.0 },
-    };
+    uint TODO_IMPL;
+};
 
-    main_output OUT;
-    OUT.position = positions[t0_buffer[IN.index_id].vertex_id.x];
+StructuredBuffer<T_MESH_INDICES> mesh_indices : register(t0);
+
+// ------------------------------------
+
+struct T_MESH_VERTICES
+{
+    uint TODO_IMPL;
+};
+
+StructuredBuffer<T_MESH_VERTICES> mesh_vertices : register(t1);
+
+// ------------------------------------
+
+T_OUTPUT main(T_INPUT IN)
+{
+    T_OUTPUT OUT;
+    OUT.position_cs = 0.0;
     return OUT;
 }

@@ -48,7 +48,7 @@ void aiva::layer1::GrvDsvToTexture2D::CreateDirectxView(D3D12_CPU_DESCRIPTOR_HAN
 	auto const& device = Engine().GraphicHardware().Device();
 	winrt::check_bool(device);
 
-	auto const& texture2D = std::dynamic_pointer_cast<GrTexture2D>(InternalResource());
+	auto const& texture2D = std::dynamic_pointer_cast<GrTexture2D>(GetInternalResource());
 	aiva::utils::Asserts::CheckBool(texture2D, "Graphic resource doesn't support texture 2D");
 	aiva::utils::Asserts::CheckBool(texture2D->SupportDepthStencil(), "Graphic resource doesn't support depth stencil");
 
@@ -68,7 +68,7 @@ void aiva::layer1::GrvDsvToTexture2D::CreateDirectxView(D3D12_CPU_DESCRIPTOR_HAN
 
 std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::GrvDsvToTexture2D::CreateDirectxBarriers(bool const active)
 {
-	auto const& resource = InternalResource();
+	auto const& resource = GetInternalResource();
 	aiva::utils::Asserts::CheckBool(resource, "Graphic resource is not valid");
 
 	auto const& state = active ? D3D12_RESOURCE_STATE_DEPTH_WRITE : D3D12_RESOURCE_STATE_COMMON;

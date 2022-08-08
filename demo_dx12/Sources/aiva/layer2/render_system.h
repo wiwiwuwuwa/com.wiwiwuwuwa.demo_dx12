@@ -85,7 +85,7 @@ namespace aiva::layer2
 
 		void DrawMeshRenderer(ScCamera const& const camera, ScMeshRenderer const& const meshRenderer);
 
-		void SetupCameraProperties(ScCamera const& const camera, aiva::layer1::RoMaterialGraphic const& const material);
+		std::shared_ptr<aiva::layer1::RoMaterialGraphic> SetupCameraProperties(ScCamera const& const camera, ScMeshRenderer const& const meshRenderer);
 
 		void PresentST();
 

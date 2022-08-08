@@ -48,6 +48,8 @@ namespace aiva::layer1
 	// Graphic Resource View: Internal Resource
 
 	protected:
+		std::shared_ptr<ResourceType> CreateDefaultInternalResource() const override;
+
 		void RefreshInternalResourceFromSelf(std::shared_ptr<ResourceType> const& aivaResource) override;
 
 	// ----------------------------------------------------

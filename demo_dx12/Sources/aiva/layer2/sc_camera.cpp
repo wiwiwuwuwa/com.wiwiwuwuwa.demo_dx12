@@ -48,12 +48,6 @@ aiva::layer2::ScCamera& aiva::layer2::ScCamera::ZFar(float const zfar)
 	return *this;
 }
 
-glm::mat4 aiva::layer2::ScCamera::MatrixMVP() const
-{
-	// TODO: Implement me
-	return glm::identity<glm::mat4>();
-}
-
 void aiva::layer2::ScCamera::InitializeRenderEvents()
 {
 	Actor().World().RenderSystem().OnPopulateCameras().connect(boost::bind(&ScCamera::OnRenderSystemPopulateCameras, this));

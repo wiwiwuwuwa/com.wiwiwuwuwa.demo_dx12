@@ -5,6 +5,7 @@
 #include <aiva/layer1/i_object_engineable.h>
 #include <aiva/utils/a_object.h>
 #include <aiva/utils/i_object_cacheable.h>
+#include <aiva/utils/object_utils.h>
 
 namespace aiva::layer1
 {
@@ -58,6 +59,9 @@ namespace aiva::layer1
 	public:
 		template <typename T>
 		std::shared_ptr<T> GetView(std::string const& key) const;
+
+		template <typename T>
+		std::shared_ptr<T> GetOrAddView(std::string const& key);
 
 	private:
 		void ExecuteMarkAsChangedForSelf();
@@ -124,4 +128,20 @@ std::shared_ptr<T> aiva::layer1::ResourceViewHeap::GetView(std::string const& ke
 	aiva::utils::Asserts::CheckBool(specificView);
 
 	return specificView;
+}
+
+template <typename T>
+std::shared_ptr<T> aiva::layer1::ResourceViewHeap::GetOrAddView(std::string const& key)
+{
+	auto view = GetView<T>(key);
+
+	if (!view)
+	{
+		view = aiva::utils::NewObject<T>(Engine());
+		aiva::utils::Asserts::CheckBool(view, "View is not valid");
+
+		SetView(key, view);
+	}
+
+	return view;
 }

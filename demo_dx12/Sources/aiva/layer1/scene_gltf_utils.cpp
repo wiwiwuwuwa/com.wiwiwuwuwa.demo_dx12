@@ -87,7 +87,7 @@ aiva::layer1::SceneGltfUtils::MeshArray aiva::layer1::SceneGltfUtils::LoadMeshMa
 				auto const aivaBuffer = GrBuffer::FactoryType::Create<GrBuffer>(gltf.Engine());
 				aivaBuffer->MemoryType(EResourceMemoryType::CpuToGpu);
 
-				aivaView->InternalResource(aivaBuffer);
+				aivaView->SetInternalResource(aivaBuffer);
 			}
 
 			{
@@ -120,7 +120,7 @@ aiva::layer1::SceneGltfUtils::MeshArray aiva::layer1::SceneGltfUtils::LoadMeshMa
 				auto const aivaBuffer = GrBuffer::FactoryType::Create<GrBuffer>(gltf.Engine());
 				aivaBuffer->MemoryType(EResourceMemoryType::CpuToGpu);
 
-				aivaView->InternalResource(aivaBuffer);
+				aivaView->SetInternalResource(aivaBuffer);
 			}
 
 			{

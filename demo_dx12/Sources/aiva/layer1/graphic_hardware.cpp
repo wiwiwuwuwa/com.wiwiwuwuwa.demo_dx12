@@ -335,7 +335,7 @@ winrt::com_ptr<ID3D12Resource> aiva::layer1::GraphicHardware::ScreenViewRes() co
 	auto const& viewObj = ScreenViewObj();
 	aiva::utils::Asserts::CheckBool(viewObj);
 
-	auto const& viewBuf = viewObj->InternalResource();
+	auto const& viewBuf = viewObj->GetInternalResource();
 	aiva::utils::Asserts::CheckBool(viewBuf);
 
 	auto const& viewRes = viewBuf->InternalResource();
@@ -394,7 +394,7 @@ void aiva::layer1::GraphicHardware::InitializeScreenRenderTargets()
 		aivaTexture->InternalResource(directxResource);
 
 		auto aivaView = GrvRtvToTexture2D::FactoryType::Create<GrvRtvToTexture2D>(mEngine);
-		aivaView->InternalResource(aivaTexture);
+		aivaView->SetInternalResource(aivaTexture);
 
 		auto const key = std::to_string(i);
 		aiva::utils::Asserts::CheckBool(key.size() == 1, "Screen RT sorting will be incorrect");

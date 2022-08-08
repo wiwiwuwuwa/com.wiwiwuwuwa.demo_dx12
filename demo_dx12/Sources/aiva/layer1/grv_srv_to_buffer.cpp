@@ -83,7 +83,7 @@ void aiva::layer1::GrvSrvToBuffer::CreateDirectxView(D3D12_CPU_DESCRIPTOR_HANDLE
 	auto const& device = Engine().GraphicHardware().Device();
 	winrt::check_bool(device);
 
-	auto const& buffer = std::dynamic_pointer_cast<GrBuffer>(InternalResource());
+	auto const& buffer = std::dynamic_pointer_cast<GrBuffer>(GetInternalResource());
 	aiva::utils::Asserts::CheckBool(buffer, "Graphic resource doesn't support buffer");
 
 	auto const& resource = buffer->InternalResource();
@@ -105,7 +105,7 @@ void aiva::layer1::GrvSrvToBuffer::CreateDirectxView(D3D12_CPU_DESCRIPTOR_HANDLE
 
 std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::GrvSrvToBuffer::CreateDirectxBarriers(bool const active)
 {
-	auto const& resource = InternalResource();
+	auto const& resource = GetInternalResource();
 	aiva::utils::Asserts::CheckBool(resource, "Graphic resource is not valid");
 
 	auto const& state = active ? D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE : D3D12_RESOURCE_STATE_COMMON;

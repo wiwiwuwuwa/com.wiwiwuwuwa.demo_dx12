@@ -149,6 +149,7 @@
     <ClInclude Include="Sources\aiva\utils\i_object_changeable.h" />
     <ClInclude Include="Sources\aiva\utils\i_object_cacheable.h" />
     <ClInclude Include="Sources\aiva\layer1\i_object_engineable.h" />
+    <ClInclude Include="Sources\aiva\utils\object_utils.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

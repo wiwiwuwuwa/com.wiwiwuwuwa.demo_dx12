@@ -243,6 +243,7 @@
     <ClInclude Include="Sources\aiva\utils\ev_action.h" />
     <ClInclude Include="Sources\aiva\utils\action_batcher.h" />
     <ClInclude Include="Sources\aiva\utils\object_factory.h" />
+    <ClInclude Include="Sources\aiva\utils\object_utils.h" />
     <ClInclude Include="Sources\aiva\utils\resource_barrier.h" />
     <ClInclude Include="Sources\aiva\utils\t_cache_updater.h" />
     <ClInclude Include="Sources\aiva\utils\t_ev_action.h" />

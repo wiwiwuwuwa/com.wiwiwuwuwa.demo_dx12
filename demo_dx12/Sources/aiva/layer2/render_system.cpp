@@ -32,7 +32,7 @@
 #include <aiva/layer2/world.h>
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/material_constants.h>
-#include <aiva/utils/object_factory.h>
+#include <aiva/utils/object_utils.h>
 
 aiva::layer2::RenderSystem::RenderSystem(World const& world) : mWorld{ world }
 {
@@ -84,7 +84,7 @@ void aiva::layer2::RenderSystem::ExecuteRenderer()
 		aiva::utils::Asserts::CheckBool(camera, "Camera is not valid");
 		for (auto const& const meshRenderer : meshRenderers)
 		{
-			aiva::utils::Asserts::CheckBool(meshRenderer);
+			aiva::utils::Asserts::CheckBool(meshRenderer, "Mesh renderer is not valid");
 			DrawMeshRenderer(*camera, *meshRenderer);
 		}
 	}
@@ -96,19 +96,19 @@ void aiva::layer2::RenderSystem::InitRTs()
 {
 	auto const viewRect = mWorld.Engine().GraphicHardware().ScreenViewRect();
 
-	mRTs = aiva::layer1::ResourceViewHeap::FactoryType::Create<aiva::layer1::ResourceViewHeap>(mWorld.Engine());
+	mRTs = aiva::utils::NewObject<aiva::layer1::ResourceViewHeap>(mWorld.Engine());
 	mRTs->HeapType(aiva::layer1::EDescriptorHeapType::Rtv);
 
 	for (std::size_t i = {}; i < std::size_t{ NUM_DEFFERED_BUFFERS }; i++)
 	{
-		auto texBuffer = aiva::layer1::GrTexture2D::FactoryType::Create<aiva::layer1::GrTexture2D>(mWorld.Engine());
+		auto texBuffer = aiva::utils::NewObject<aiva::layer1::GrTexture2D>(mWorld.Engine());
 		texBuffer->Format(aiva::layer1::EResourceBufferFormat::R32G32B32A32_FLOAT);
 		texBuffer->Width(viewRect.z);
 		texBuffer->Height(viewRect.w);
 		texBuffer->SupportRenderTarget(true);
 		texBuffer->SupportUnorderedAccess(true);
 
-		auto texView = aiva::layer1::GrvRtvToTexture2D::FactoryType::Create<aiva::layer1::GrvRtvToTexture2D>(mWorld.Engine());
+		auto texView = aiva::utils::NewObject<aiva::layer1::GrvRtvToTexture2D>(mWorld.Engine());
 		texView->InternalResource(texBuffer);
 
 		mRTs->SetView(std::to_string(i), texView);
@@ -119,16 +119,16 @@ void aiva::layer2::RenderSystem::InitDSs()
 {
 	auto const viewRect = mWorld.Engine().GraphicHardware().ScreenViewRect();
 
-	mDSs = aiva::layer1::ResourceViewHeap::FactoryType::Create<aiva::layer1::ResourceViewHeap>(mWorld.Engine());
+	mDSs = aiva::utils::NewObject<aiva::layer1::ResourceViewHeap>(mWorld.Engine());
 	mDSs->HeapType(aiva::layer1::EDescriptorHeapType::Dsv);
 
-	auto texBuffer = aiva::layer1::GrTexture2D::FactoryType::Create<aiva::layer1::GrTexture2D>(mWorld.Engine());
+	auto texBuffer = aiva::utils::NewObject<aiva::layer1::GrTexture2D>(mWorld.Engine());
 	texBuffer->Format(aiva::layer1::EResourceBufferFormat::D32_FLOAT);
 	texBuffer->Width(viewRect.z);
 	texBuffer->Height(viewRect.w);
 	texBuffer->SupportDepthStencil(true);
 
-	auto texView = aiva::layer1::GrvDsvToTexture2D::FactoryType::Create<aiva::layer1::GrvDsvToTexture2D>(mWorld.Engine());
+	auto texView = aiva::utils::NewObject<aiva::layer1::GrvDsvToTexture2D>(mWorld.Engine());
 	texView->InternalResource(texBuffer);
 
 	mDSs->SetView(std::to_string(0), texView);

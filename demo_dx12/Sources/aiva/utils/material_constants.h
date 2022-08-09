@@ -25,6 +25,12 @@ namespace aiva::utils
 	// Constants To Fields Inside Buffers
 
 	public:
-		static constexpr auto const* const AIVA_CONSTANT_MVP = "AIVA_M00_MVP";
+		static constexpr auto const* const AIVA_CONSTANT_M = "AIVA_M00_M";
+
+		static constexpr auto const* const AIVA_CONSTANT_V = "AIVA_M01_V";
+
+		static constexpr auto const* const AIVA_CONSTANT_P = "AIVA_M02_P";
+
+		static constexpr auto const* const AIVA_CONSTANT_MVP = "AIVA_M03_MVP";
 	};
 }

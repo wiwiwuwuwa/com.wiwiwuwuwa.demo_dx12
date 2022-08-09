@@ -220,8 +220,13 @@ std::shared_ptr<aiva::layer1::RoMaterialGraphic> aiva::layer2::RenderSystem::Set
 		auto const viewAspect = (viewRect.z - viewRect.x) / (viewRect.w - viewRect.y);
 
 		auto const model = meshRenderer.Actor().WorldTransform();
+		constantView->Struct().SetValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_M, &model);
+
 		auto const view = camera.Actor().WorldView();
+		constantView->Struct().SetValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_V, &view);
+
 		auto const projection = glm::perspective(camera.FovY(), viewAspect, camera.ZNear(), camera.ZFar());
+		constantView->Struct().SetValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_P, &projection);
 
 		auto const mvp = projection * view * model;
 		constantView->Struct().SetValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_MVP, &mvp);

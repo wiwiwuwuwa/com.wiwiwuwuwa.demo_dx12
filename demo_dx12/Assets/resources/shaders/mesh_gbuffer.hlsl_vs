@@ -8,13 +8,18 @@ struct T_INPUT
 struct T_OUTPUT
 {
     float4 position_cs : SV_Position;
+    float3 position_ws : TEXCOORD0;
+    float3 normal_ws : TEXCOORD1;
 };
 
 // ------------------------------------
 
 struct T_CONSTANTS_PER_OBJECT
 {
-    float4x4 m00_MVP;
+    float4x4 m00_M;
+    float4x4 m01_V;
+    float4x4 m02_P;
+    float4x4 m03_MVP;
 };
 
 ConstantBuffer<T_CONSTANTS_PER_OBJECT> constants_per_object : register(b0);
@@ -51,6 +56,8 @@ T_OUTPUT main(T_INPUT IN)
     T_MESH_VERTICES mesh_vertex = mesh_vertices[mesh_index.vertex_id];
     
     T_OUTPUT OUT;
-    OUT.position_cs = mul(constants_per_object.m00_MVP, float4(mesh_vertex.position_os, 1.0));
+    OUT.position_cs = mul(constants_per_object.m03_MVP, float4(mesh_vertex.position_os, 1.0));
+    OUT.position_ws = mul(constants_per_object.m00_M, float4(mesh_vertex.position_os, 1.0));
+    OUT.normal_ws = mul(constants_per_object.m00_M, float4(mesh_vertex.normal_os, 0.0));
     return OUT;
 }

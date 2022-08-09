@@ -1,6 +1,8 @@
 struct T_INPUT
 {
     float4 position_cs : SV_Position;
+    float3 position_ws : TEXCOORD0;
+    float3 normal_ws : TEXCOORD1;
 };
 
 struct T_OUTPUT
@@ -15,8 +17,8 @@ T_OUTPUT main(T_INPUT IN)
 {
     T_OUTPUT OUT;
     OUT.albedo_and_metallness = 1.0;
-    OUT.normal_and_smoothness = 1.0;
-    OUT.position_and_nothing = 1.0;
-    OUT.emission_and_nothing = 1.0;
+    OUT.normal_and_smoothness = float4(mad(normalize(IN.normal_ws), 0.5, 0.5), 1.0);
+    OUT.position_and_nothing = float4(IN.position_ws, 1.0);
+    OUT.emission_and_nothing = saturate(dot(normalize(float3(2.0, 1.0, 4.0)), normalize(IN.normal_ws)));
     return OUT;
 }

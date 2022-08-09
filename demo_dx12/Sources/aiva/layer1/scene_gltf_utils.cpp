@@ -4,6 +4,7 @@
 #include <aiva/layer1/a_graphic_resource_view.h>
 #include <aiva/layer1/e_descriptor_heap_type.h>
 #include <aiva/layer1/e_resource_memory_type.h>
+#include <aiva/layer1/e_value_type.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gr_buffer.h>
 #include <aiva/layer1/grv_srv_to_buffer.h>
@@ -91,11 +92,10 @@ aiva::layer1::SceneGltfUtils::MeshArray aiva::layer1::SceneGltfUtils::LoadMeshMa
 			}
 
 			{
-				auto const& gltfAccessor = gltf.Model().accessors.at(gltfPrimitive.indices);
+				auto const aivaValue = ShaderValueUtils::CreateFromValueType(EValueType::UInt32);
 
-				auto const aivaStruct = ShaderStruct::FactoryType::Create<ShaderStruct>();
-				auto const aivaStructValue = ShaderValueUtils::CreateFromGltf(gltfAccessor.type, gltfAccessor.componentType);
-				aivaStruct->SetValue(INDEX_KEY, &aivaStructValue);
+				auto const aivaStruct = aiva::utils::NewObject<ShaderStruct>();
+				aivaStruct->SetStruct(INDEX_KEY, &aivaValue);
 
 				aivaView->Buffer().Struct(aivaStruct);
 			}
@@ -104,8 +104,12 @@ aiva::layer1::SceneGltfUtils::MeshArray aiva::layer1::SceneGltfUtils::LoadMeshMa
 				auto const aivaValues = LoadBufferByAccessor(gltf, gltfPrimitive.indices);
 				for (auto const& aivaValue : aivaValues)
 				{
+					auto const aivaUhortValue = std::dynamic_pointer_cast<TShaderValue<std::uint16_t>>(aivaValue);
+					auto const updatedValue = static_cast<std::uint32_t>(aivaUhortValue->Value());
+					auto const aivaUintValue = aiva::utils::NewObject<TShaderValue<std::uint32_t>>(updatedValue);
+
 					auto const aivaStruct = ShaderStruct::FactoryType::Create<ShaderStruct>();
-					aivaStruct->SetStruct(INDEX_KEY, &aivaValue);
+					aivaStruct->SetStruct(INDEX_KEY, &aivaUintValue);
 
 					aivaView->Buffer().Add(aivaStruct);
 				}

@@ -23,7 +23,8 @@ ConstantBuffer<T_CONSTANTS_PER_OBJECT> constants_per_object : register(b0);
 
 struct T_MESH_INDICES
 {
-    uint TODO_IMPL;
+    uint vertex_id;
+    uint3 _padding0;
 };
 
 StructuredBuffer<T_MESH_INDICES> mesh_indices : register(t0);
@@ -41,7 +42,9 @@ StructuredBuffer<T_MESH_VERTICES> mesh_vertices : register(t1);
 
 T_OUTPUT main(T_INPUT IN)
 {
+    uint vertex_id = mesh_indices[IN.vertex_id].vertex_id;
+    
     T_OUTPUT OUT;
-    OUT.position_cs = 0.0;
+    OUT.position_cs = float4(vertex_id, 0.0, 0.0, 1.0);
     return OUT;
 }

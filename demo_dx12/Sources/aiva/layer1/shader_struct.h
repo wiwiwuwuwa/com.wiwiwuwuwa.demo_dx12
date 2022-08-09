@@ -53,7 +53,7 @@ namespace aiva::layer1
 		bool GetStruct(std::string const& key, std::shared_ptr<TShaderValue<TValue>> *const value) const;
 
 		template <typename TValue>
-		void SetStruct(std::string const& key, std::shared_ptr<TShaderValue<TValue>> const*const value) const;
+		void SetStruct(std::string const& key, std::shared_ptr<TShaderValue<TValue>> const*const value);
 
 	public:
 		bool GetStruct(std::string const& key, std::shared_ptr<IShaderValue> *const value) const;
@@ -171,7 +171,15 @@ bool aiva::layer1::ShaderStruct::GetStruct(std::string const& key, std::shared_p
 }
 
 template <typename TValue>
-void aiva::layer1::ShaderStruct::SetStruct(std::string const& key, std::shared_ptr<TShaderValue<TValue>> const*const value) const
+void aiva::layer1::ShaderStruct::SetStruct(std::string const& key, std::shared_ptr<TShaderValue<TValue>> const*const value)
 {
-	SetStruct(key, value);
+	if (value)
+	{
+		auto const basicValue = std::static_pointer_cast<IShaderValue>(*value);
+		SetStruct(key, &basicValue);
+	}
+	else
+	{
+		SetStruct(key, {});
+	}
 }

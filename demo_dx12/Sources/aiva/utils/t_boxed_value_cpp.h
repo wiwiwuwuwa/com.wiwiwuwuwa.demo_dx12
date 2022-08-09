@@ -7,7 +7,7 @@
 #include <aiva/utils/e_boxed_type.h>
 
 template <typename TValue>
-aiva::utils::TBoxedValue<TValue>::TBoxedValue(ValueType const& value /*= {}*/)
+aiva::utils::TBoxedValue<TValue>::TBoxedValue(ValueType const& value /*= {}*/) : AObject{}, IObjectChangeable{}, IBoxedValue{}
 {
 	Value(value);
 }
@@ -34,11 +34,19 @@ template <typename TValue>
 aiva::utils::TBoxedValue<TValue>& aiva::utils::TBoxedValue<TValue>::Value(ValueType const& value)
 {
 	mValue = value;
+
+	IObjectChangeable::OnChanged()();
 	return *this;
 }
 
 template <typename TValue>
-boost::span<std::byte> aiva::utils::TBoxedValue<TValue>::Binary() const
+boost::span<std::byte> aiva::utils::TBoxedValue<TValue>::Binary()
 {
 	return boost::as_writable_bytes(boost::span{ &mValue, std::size_t{ 1 } });
+}
+
+template <typename TValue>
+aiva::utils::EvAction& aiva::utils::TBoxedValue<TValue>::OnChanged()
+{
+	return IObjectChangeable::OnChanged();
 }

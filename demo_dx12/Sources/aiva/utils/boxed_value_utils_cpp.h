@@ -10,9 +10,25 @@
 #include <aiva/utils/t_boxed_value.h>
 
 template <typename TValue>
+void aiva::utils::BoxedValueUtils::RegisterTypeMapper(EBoxedType const boxedType)
+{
+	RegisterTypeOfElem<TValue>(boxedType);
+	RegisterCreateInstanceElem<TValue>(boxedType);
+}
+
+template <typename TValue>
 aiva::utils::EBoxedType aiva::utils::BoxedValueUtils::TypeOf()
 {
-	Asserts::CheckBool(false, "TODO: Impl - TypeOf");
+	auto const iter = Instance().mTypeOfDict.find(typeid(TValue));
+	Asserts::CheckBool(iter != Instance().mTypeOfDict.end(), "Unknown TypeOf type");
+
+	return iter->second;
+}
+
+template <typename TValue>
+void aiva::utils::BoxedValueUtils::RegisterTypeOfElem(EBoxedType const boxedType)
+{
+	mTypeOfDict.insert_or_assign(typeid(TValue), boxedType);
 }
 
 template <typename TValue>
@@ -25,6 +41,12 @@ std::shared_ptr<aiva::utils::TBoxedValue<TValue>> aiva::utils::BoxedValueUtils::
 	Asserts::CheckBool(specificInstance, "Specific instance is not valid");
 
 	return specificInstance;
+}
+
+template <typename TValue>
+void aiva::utils::BoxedValueUtils::RegisterCreateInstanceElem(EBoxedType const boxedType)
+{
+	mCreateInstanceDict.insert_or_assign(boxedType, &NewObject<TBoxedValue<TValue>>);
 }
 
 template <typename TDstValue>

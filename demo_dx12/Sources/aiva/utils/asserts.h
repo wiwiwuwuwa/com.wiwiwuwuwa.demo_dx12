@@ -24,6 +24,6 @@ void aiva::utils::Asserts::CheckBool(T const& value, std::string const& message 
 {
 	if (!value)
 	{
-		throw std::runtime_error{ message };
+		throw std::runtime_error{ std::string{"aiva: "} + message };
 	}
 }

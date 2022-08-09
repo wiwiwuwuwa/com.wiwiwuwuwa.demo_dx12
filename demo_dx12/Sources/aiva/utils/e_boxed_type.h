@@ -40,6 +40,11 @@ namespace aiva::utils
 		UINT64X3,
 		UINT64X4,
 
+		INT64,
+		INT64X2,
+		INT64X3,
+		INT64X4,
+
 		FLOAT32,
 		FLOAT32X2,
 		FLOAT32X3,

@@ -1,6 +1,8 @@
 #pragma once
 #include <pch.h>
 
+#include <aiva/utils/ev_action.h>
+
 namespace aiva::utils
 {
 	enum class EBoxedType;
@@ -26,6 +28,12 @@ namespace aiva::utils
 	// Binary
 
 	public:
-		virtual boost::span<std::byte> Binary() const = 0;
+		virtual boost::span<std::byte> Binary() = 0;
+
+	// ----------------------------------------------------
+	// Changes
+
+	public:
+		virtual EvAction& OnChanged() = 0;
 	};
 }

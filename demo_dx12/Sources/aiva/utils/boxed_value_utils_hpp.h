@@ -27,6 +27,18 @@ namespace aiva::utils
 		static BoxedValueUtils& Instance();
 
 	// ----------------------------------------------------
+	// Type Mapper
+
+	private:
+		void InitializeTypeMapper();
+
+		void TerminateTypeMapper();
+
+	private:
+		template <typename TValue>
+		void RegisterTypeMapper(EBoxedType const boxedType);
+
+	// ----------------------------------------------------
 	// TypeOf
 
 	public:
@@ -34,6 +46,16 @@ namespace aiva::utils
 
 		template <typename TValue>
 		static EBoxedType TypeOf();
+
+	private:
+		using TypeOfDictType = std::unordered_map<std::type_index, EBoxedType>;
+
+	private:
+		template <typename TValue>
+		void RegisterTypeOfElem(EBoxedType const boxedType);
+
+	private:
+		TypeOfDictType mTypeOfDict{};
 
 	// ----------------------------------------------------
 	// CreateInstance
@@ -43,6 +65,18 @@ namespace aiva::utils
 
 		template <typename TValue>
 		static std::shared_ptr<TBoxedValue<TValue>> CreateInstance();
+
+	private:
+		using CreateInstanceElemType = std::function<std::shared_ptr<IBoxedValue>()>;
+
+		using CreateInstanceDictType = std::unordered_map<EBoxedType, CreateInstanceElemType>;
+
+	private:
+		template <typename TValue>
+		void RegisterCreateInstanceElem(EBoxedType const boxedType);
+
+	private:
+		CreateInstanceDictType mCreateInstanceDict{};
 
 	// ----------------------------------------------------
 	// CastTo

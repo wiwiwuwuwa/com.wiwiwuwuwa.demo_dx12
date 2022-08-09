@@ -35,6 +35,15 @@ T aiva::utils::MathUtils::Align(T const& pointer, T const& alignment)
 template <typename T>
 T aiva::utils::MathUtils::Align(T const& pointer, T const& size, T const& alignment)
 {
-	auto const needAlign = ((pointer / alignment) != ((pointer + size - 1) / alignment));
-	return (needAlign ? ((pointer / alignment + 1) * alignment) : pointer);
+	if (pointer % alignment == 0)
+	{
+		return pointer;
+	}
+
+	if (pointer / alignment == (pointer + size - 1) / alignment)
+	{
+		return pointer;
+	}
+
+	return (pointer / alignment + 1) * alignment;
 }

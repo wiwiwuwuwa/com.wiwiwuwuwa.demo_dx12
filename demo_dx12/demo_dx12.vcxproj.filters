@@ -167,6 +167,7 @@
     <ClInclude Include="Sources\aiva\utils\align_field_info.h" />
     <ClInclude Include="Sources\aiva\utils\align_struct_info.h" />
     <ClInclude Include="Sources\aiva\utils\dict_struct.h" />
+    <ClInclude Include="Sources\aiva\utils\e_align_mode.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

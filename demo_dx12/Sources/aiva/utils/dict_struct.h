@@ -2,10 +2,12 @@
 #include <pch.h>
 
 #include <aiva/utils/a_object.h>
+#include <aiva/utils/e_align_mode.h>
 #include <aiva/utils/i_object_changeable.h>
 
 namespace aiva::utils
 {
+	struct AlignStructInfo;
 	struct IBoxedValue;
 	template <typename> struct TBoxedValue;
 }
@@ -41,6 +43,8 @@ namespace aiva::utils
 
 		DictStruct& FieldBoxed(std::string const& name, FieldElemType const& fieldBoxed);
 
+		FieldDictType const& FieldsBoxed() const;
+
 	private:
 		void FieldBoxed_OnChanged();
 
@@ -68,6 +72,52 @@ namespace aiva::utils
 
 		template <typename TValue>
 		DictStruct& Field(std::string const& name, std::optional<TValue> const& field);
+
+	// ----------------------------------------------------
+	// Alignment
+
+	public:
+		using AlignInfoType = std::shared_ptr<AlignStructInfo>;
+
+		using AlignModeType = EAlignMode;
+
+	// --------------------------------
+
+	public:
+		AlignModeType AlignMode() const;
+
+		DictStruct& AlignMode(AlignModeType const& mode);
+
+	private:
+		AlignModeType mAlignMode{ AlignModeType::MaxSpeed };
+
+	// --------------------------------
+
+	public:
+		AlignInfoType AlignOverride() const;
+
+		DictStruct& AlignOverride(AlignInfoType const& alignOverride);
+
+	private:
+		void AlignOverride_OnChanged();
+
+	private:
+		AlignInfoType mAlignOverride{};
+
+	// --------------------------------
+
+	private:
+		AlignInfoType GetOrCreateAlignInfo() const;
+
+		AlignInfoType CreateAlignInfo_MaxSpeed() const;
+
+	// ----------------------------------------------------
+	// Serialization
+
+	public:
+		std::vector<std::byte> SerializeToBinary() const;
+
+		DictStruct& DeserealizeFromBinary(boost::span<const std::byte> const& binary);
 	};
 }
 

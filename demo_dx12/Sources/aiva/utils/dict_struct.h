@@ -81,20 +81,8 @@ namespace aiva::utils
 
 		using AlignModeType = EAlignMode;
 
-	// --------------------------------
-
-	public:
-		AlignModeType AlignMode() const;
-
-		DictStruct& AlignMode(AlignModeType const& mode);
-
 	private:
-		AlignModeType mAlignMode{ AlignModeType::MaxSpeed };
-
-	// --------------------------------
-
-	private:
-		AlignInfoType CreateAlignInfo() const;
+		AlignInfoType CreateAlignInfo(AlignModeType const mode) const;
 
 		AlignInfoType CreateAlignInfo_MaxSpeed() const;
 
@@ -102,9 +90,9 @@ namespace aiva::utils
 	// Serialization
 
 	public:
-		std::vector<std::byte> SerializeToBinary() const;
+		std::vector<std::byte> SerializeToBinary(AlignModeType const mode) const;
 
-		DictStruct& DeserealizeFromBinary(boost::span<const std::byte> const& binary);
+		DictStruct& DeserealizeFromBinary(boost::span<const std::byte> const& binary, AlignModeType const mode);
 	};
 }
 

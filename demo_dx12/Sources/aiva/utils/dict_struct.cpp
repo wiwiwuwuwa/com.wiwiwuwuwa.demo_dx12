@@ -60,25 +60,9 @@ void aiva::utils::DictStruct::FieldBoxed_OnChanged()
 	OnChanged()();
 }
 
-aiva::utils::DictStruct::AlignModeType aiva::utils::DictStruct::AlignMode() const
+aiva::utils::DictStruct::AlignInfoType aiva::utils::DictStruct::CreateAlignInfo(AlignModeType const mode) const
 {
-	return mAlignMode;
-}
-
-aiva::utils::DictStruct& aiva::utils::DictStruct::AlignMode(AlignModeType const& mode)
-{
-	if (mAlignMode != mode)
-	{
-		mAlignMode = mode;
-		OnChanged()();
-	}
-
-	return *this;
-}
-
-aiva::utils::DictStruct::AlignInfoType aiva::utils::DictStruct::CreateAlignInfo() const
-{
-	switch (AlignMode())
+	switch (mode)
 	{
 	case AlignModeType::MaxSpeed:
 		return CreateAlignInfo_MaxSpeed();
@@ -124,9 +108,9 @@ aiva::utils::DictStruct::AlignInfoType aiva::utils::DictStruct::CreateAlignInfo_
 	return structInfo;
 }
 
-std::vector<std::byte> aiva::utils::DictStruct::SerializeToBinary() const
+std::vector<std::byte> aiva::utils::DictStruct::SerializeToBinary(AlignModeType const mode) const
 {
-	auto const structInfo = CreateAlignInfo();
+	auto const structInfo = CreateAlignInfo(mode);
 	Asserts::CheckBool(structInfo, "Struct info is not valid");
 	Asserts::CheckBool(structInfo->Size() > 0, "Struct info size is not valid");
 
@@ -153,11 +137,11 @@ std::vector<std::byte> aiva::utils::DictStruct::SerializeToBinary() const
 	return structBinary;
 }
 
-aiva::utils::DictStruct& aiva::utils::DictStruct::DeserealizeFromBinary(boost::span<const std::byte> const& binary)
+aiva::utils::DictStruct& aiva::utils::DictStruct::DeserealizeFromBinary(boost::span<const std::byte> const& binary, AlignModeType const mode)
 {
 	Asserts::CheckBool(!std::empty(binary), "Binary data is not valid");
 
-	auto const structInfo = CreateAlignInfo();
+	auto const structInfo = CreateAlignInfo(mode);
 	Asserts::CheckBool(structInfo, "Struct info is not valid");
 	Asserts::CheckBool(structInfo->Size() > 0, "Struct info size is not valid");
 	Asserts::CheckBool(std::size(binary) >= structInfo->Size(), "Binary data size is not valid");

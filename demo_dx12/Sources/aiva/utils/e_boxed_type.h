@@ -1,0 +1,53 @@
+#pragma once
+#include <pch.h>
+
+namespace aiva::utils
+{
+	enum class EBoxedType
+	{
+		UINT8,
+		UINT8X2,
+		UINT8X3,
+		UINT8X4,
+
+		INT8,
+		INT8X2,
+		INT8X3,
+		INT8X4,
+
+		UINT16,
+		UINT16X2,
+		UINT16X3,
+		UINT16X4,
+
+		INT16,
+		INT16X2,
+		INT16X3,
+		INT16X4,
+
+		UINT32,
+		UINT32X2,
+		UINT32X3,
+		UINT32X4,
+
+		INT32,
+		INT32X2,
+		INT32X3,
+		INT32X4,
+
+		UINT64,
+		UINT64X2,
+		UINT64X3,
+		UINT64X4,
+
+		FLOAT32,
+		FLOAT32X2,
+		FLOAT32X3,
+		FLOAT32X4,
+
+		FLOAT64,
+		FLOAT64X2,
+		FLOAT64X3,
+		FLOAT64X4,
+	};
+}

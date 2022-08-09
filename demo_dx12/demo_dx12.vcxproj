@@ -218,7 +218,6 @@
     <ClInclude Include="Sources\aiva\utils\boxed_value_utils.h" />
     <ClInclude Include="Sources\aiva\utils\boxed_value_utils_cpp.h" />
     <ClInclude Include="Sources\aiva\utils\boxed_value_utils_hpp.h" />
-    <ClInclude Include="Sources\aiva\utils\e_align_mode.h" />
     <ClInclude Include="Sources\aiva\utils\e_boxed_type.h" />
     <ClInclude Include="Sources\aiva\layer2\render_system.h" />
     <ClInclude Include="Sources\aiva\layer2\sc_camera.h" />

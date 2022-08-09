@@ -157,7 +157,6 @@
     <ClInclude Include="Sources\aiva\utils\t_boxed_value.h" />
     <ClInclude Include="Sources\aiva\utils\boxed_value_utils.h" />
     <ClInclude Include="Sources\aiva\utils\e_boxed_type.h" />
-    <ClInclude Include="Sources\aiva\utils\e_align_mode.h" />
     <ClInclude Include="Sources\aiva\utils\t_boxed_value_hpp.h" />
     <ClInclude Include="Sources\aiva\utils\t_boxed_value_cpp.h" />
     <ClInclude Include="Sources\aiva\utils\boxed_value_utils_hpp.h" />

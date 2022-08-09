@@ -96,6 +96,8 @@ namespace aiva::layer2
 
 		glm::mat4 WorldTransform() const;
 
+		glm::mat4 WorldView() const;
+
 	// ----------------------------------------------------
 	// Components
 

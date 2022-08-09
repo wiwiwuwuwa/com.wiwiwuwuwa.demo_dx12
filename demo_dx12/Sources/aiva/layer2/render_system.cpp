@@ -220,7 +220,7 @@ std::shared_ptr<aiva::layer1::RoMaterialGraphic> aiva::layer2::RenderSystem::Set
 		auto const viewAspect = (viewRect.z - viewRect.x) / (viewRect.w - viewRect.y);
 
 		auto const model = meshRenderer.Actor().WorldTransform();
-		auto const view = glm::inverse(camera.Actor().WorldTransform());
+		auto const view = camera.Actor().WorldView();
 		auto const projection = glm::perspective(camera.FovY(), viewAspect, camera.ZNear(), camera.ZFar());
 
 		auto const mvp = projection * view * model;

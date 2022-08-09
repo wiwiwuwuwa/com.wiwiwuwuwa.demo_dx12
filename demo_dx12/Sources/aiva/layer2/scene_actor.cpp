@@ -104,12 +104,11 @@ aiva::layer2::SceneActor& aiva::layer2::SceneActor::LocalScale(glm::vec3 const& 
 
 glm::mat4 aiva::layer2::SceneActor::LocalTransform() const
 {
-	auto trs = glm::identity<glm::mat4>();
-	trs = glm::translate(trs, LocalPosition());
-	trs = trs * glm::mat4_cast(LocalRotation());
-	trs = glm::scale(trs, LocalScale());
+	auto const translation = glm::translate(glm::identity<glm::mat4>(), LocalPosition());
+	auto const rotation = glm::mat4_cast(LocalRotation());
+	auto const scale = glm::scale(glm::identity<glm::mat4>(), LocalScale());
 
-	return trs;
+	return translation * rotation * scale;
 }
 
 glm::mat4 aiva::layer2::SceneActor::WorldTransform() const
@@ -122,4 +121,15 @@ glm::mat4 aiva::layer2::SceneActor::WorldTransform() const
 	{
 		return LocalTransform();
 	}
+}
+
+glm::mat4 aiva::layer2::SceneActor::WorldView() const
+{
+	auto const transform = WorldTransform();
+
+	auto const origin = glm::vec3(transform * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	auto const forward = glm::vec3(transform * glm::vec4(0.0f, 0.0f, -1.0f, 0.0f));
+	auto const upwards = glm::vec3(transform * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+
+	return glm::lookAt(origin, origin + forward, upwards);
 }

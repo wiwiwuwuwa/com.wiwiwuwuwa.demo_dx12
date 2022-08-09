@@ -33,7 +33,12 @@ StructuredBuffer<T_MESH_INDICES> mesh_indices : register(t0);
 
 struct T_MESH_VERTICES
 {
-    uint TODO_IMPL;
+    float3 normal_os;
+    float _padding0;
+    float3 position_os;
+    float _padding1;
+    float2 texcoord_0;
+    float2 _padding2;
 };
 
 StructuredBuffer<T_MESH_VERTICES> mesh_vertices : register(t1);
@@ -42,9 +47,10 @@ StructuredBuffer<T_MESH_VERTICES> mesh_vertices : register(t1);
 
 T_OUTPUT main(T_INPUT IN)
 {
-    uint vertex_id = mesh_indices[IN.vertex_id].vertex_id;
+    T_MESH_INDICES mesh_index = mesh_indices[IN.vertex_id];
+    T_MESH_VERTICES mesh_vertex = mesh_vertices[mesh_index.vertex_id];
     
     T_OUTPUT OUT;
-    OUT.position_cs = float4(vertex_id, 0.0, 0.0, 1.0);
+    OUT.position_cs = float4(mesh_vertex.position_os, 1.0);
     return OUT;
 }

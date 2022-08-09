@@ -76,43 +76,8 @@ aiva::utils::DictStruct& aiva::utils::DictStruct::AlignMode(AlignModeType const&
 	return *this;
 }
 
-aiva::utils::DictStruct::AlignInfoType aiva::utils::DictStruct::AlignOverride() const
+aiva::utils::DictStruct::AlignInfoType aiva::utils::DictStruct::CreateAlignInfo() const
 {
-	return mAlignOverride;
-}
-
-aiva::utils::DictStruct& aiva::utils::DictStruct::AlignOverride(AlignInfoType const& alignOverride)
-{
-	auto const previousAlignOverride = AlignOverride();
-	if (previousAlignOverride)
-	{
-		previousAlignOverride->OnChanged().disconnect(boost::bind(&DictStruct::AlignOverride_OnChanged, this));
-		mAlignOverride = {};
-	}
-
-	auto const& desiredAlignOverride = alignOverride;
-	if (desiredAlignOverride)
-	{
-		desiredAlignOverride->OnChanged().connect(boost::bind(&DictStruct::AlignOverride_OnChanged, this));
-		mAlignOverride = desiredAlignOverride;
-	}
-
-	OnChanged()();
-	return *this;
-}
-
-void aiva::utils::DictStruct::AlignOverride_OnChanged()
-{
-	OnChanged()();
-}
-
-aiva::utils::DictStruct::AlignInfoType aiva::utils::DictStruct::GetOrCreateAlignInfo() const
-{
-	if (AlignOverride())
-	{
-		return AlignOverride();
-	}
-
 	switch (AlignMode())
 	{
 	case AlignModeType::MaxSpeed:
@@ -161,7 +126,7 @@ aiva::utils::DictStruct::AlignInfoType aiva::utils::DictStruct::CreateAlignInfo_
 
 std::vector<std::byte> aiva::utils::DictStruct::SerializeToBinary() const
 {
-	auto const structInfo = GetOrCreateAlignInfo();
+	auto const structInfo = CreateAlignInfo();
 	Asserts::CheckBool(structInfo, "Struct info is not valid");
 	Asserts::CheckBool(structInfo->Size() > 0, "Struct info size is not valid");
 
@@ -192,7 +157,7 @@ aiva::utils::DictStruct& aiva::utils::DictStruct::DeserealizeFromBinary(boost::s
 {
 	Asserts::CheckBool(!std::empty(binary), "Binary data is not valid");
 
-	auto const structInfo = GetOrCreateAlignInfo();
+	auto const structInfo = CreateAlignInfo();
 	Asserts::CheckBool(structInfo, "Struct info is not valid");
 	Asserts::CheckBool(structInfo->Size() > 0, "Struct info size is not valid");
 	Asserts::CheckBool(std::size(binary) >= structInfo->Size(), "Binary data size is not valid");

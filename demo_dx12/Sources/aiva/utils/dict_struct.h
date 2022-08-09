@@ -93,21 +93,8 @@ namespace aiva::utils
 
 	// --------------------------------
 
-	public:
-		AlignInfoType AlignOverride() const;
-
-		DictStruct& AlignOverride(AlignInfoType const& alignOverride);
-
 	private:
-		void AlignOverride_OnChanged();
-
-	private:
-		AlignInfoType mAlignOverride{};
-
-	// --------------------------------
-
-	private:
-		AlignInfoType GetOrCreateAlignInfo() const;
+		AlignInfoType CreateAlignInfo() const;
 
 		AlignInfoType CreateAlignInfo_MaxSpeed() const;
 

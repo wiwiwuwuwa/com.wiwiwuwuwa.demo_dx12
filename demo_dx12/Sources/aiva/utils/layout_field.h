@@ -7,7 +7,7 @@
 
 namespace aiva::utils
 {
-	struct AlignFieldInfo final : public AObject, public IObjectChangeable
+	struct LayoutField final : public AObject, public IObjectChangeable
 	{
 	// ----------------------------------------------------
 	// Main
@@ -16,10 +16,10 @@ namespace aiva::utils
 		friend FactoryType;
 
 	protected:
-		AlignFieldInfo();
+		LayoutField();
 
 	public:
-		~AlignFieldInfo() override;
+		~LayoutField() override;
 
 	// ----------------------------------------------------
 	// Metadata
@@ -30,7 +30,7 @@ namespace aiva::utils
 	public:
 		TypeEnum Type() const;
 
-		AlignFieldInfo& Type(TypeEnum const type);
+		LayoutField& Type(TypeEnum const type);
 
 	private:
 		TypeEnum mType{ TypeEnum::UNKNOWN };
@@ -40,7 +40,7 @@ namespace aiva::utils
 	public:
 		std::size_t Offset() const;
 
-		AlignFieldInfo& Offset(std::size_t const offset);
+		LayoutField& Offset(std::size_t const offset);
 
 	private:
 		std::size_t mOffset{};
@@ -50,7 +50,7 @@ namespace aiva::utils
 	public:
 		std::size_t Size() const;
 
-		AlignFieldInfo& Size(std::size_t const size);
+		LayoutField& Size(std::size_t const size);
 
 	private:
 		std::size_t mSize{};

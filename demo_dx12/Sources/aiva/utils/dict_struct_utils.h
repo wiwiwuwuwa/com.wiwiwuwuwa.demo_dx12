@@ -3,7 +3,7 @@
 
 namespace aiva::utils
 {
-	struct AlignStructInfo;
+	struct LayoutStruct;
 	struct DictStruct;
 }
 
@@ -21,7 +21,7 @@ namespace aiva::utils
 	// Aliases
 
 	public:
-		using AlignStructElementType = AlignStructInfo;
+		using AlignStructElementType = LayoutStruct;
 
 		using AlignStructPointerType = std::shared_ptr<AlignStructElementType>;
 

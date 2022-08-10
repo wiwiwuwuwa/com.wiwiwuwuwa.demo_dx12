@@ -6,7 +6,7 @@
 
 namespace aiva::utils
 {
-	struct AlignStructInfo;
+	struct LayoutStruct;
 	struct IBoxedValue;
 	template <typename> struct TBoxedValue;
 }

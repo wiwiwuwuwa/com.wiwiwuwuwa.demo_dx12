@@ -1,9 +1,9 @@
 #include <pch.h>
 #include <aiva/utils/dict_struct_utils.h>
 
-#include <aiva/utils/align_field_info.h>
-#include <aiva/utils/align_struct_info.h>
-#include <aiva/utils/align_struct_utils.h>
+#include <aiva/utils/layout_field.h>
+#include <aiva/utils/layout_struct.h>
+#include <aiva/utils/layout_struct_utils.h>
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/boxed_value_utils.h>
 #include <aiva/utils/dict_struct.h>
@@ -55,7 +55,7 @@ std::vector<std::byte> aiva::utils::DictStructUtils::SerializeToBinary(DictStruc
 {
 	Asserts::CheckBool(dictStruct, "Dict struct is not valid");
 
-	auto const alignStruct = AlignStructUtils::GenerateFrom(dictStruct);
+	auto const alignStruct = LayoutStructUtils::GenerateFrom(dictStruct);
 	Asserts::CheckBool(alignStruct, "Align struct is not valid");
 
 	auto const structBinary = SerializeToBinary(dictStruct, alignStruct);

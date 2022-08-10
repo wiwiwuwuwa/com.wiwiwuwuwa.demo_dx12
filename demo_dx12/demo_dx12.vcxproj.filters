@@ -67,14 +67,15 @@
     <ClCompile Include="Sources\aiva\layer1\i_object_engineable.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_cbv_to_buffer.cpp" />
     <ClCompile Include="Sources\aiva\utils\boxed_value_utils.cpp" />
-    <ClCompile Include="Sources\aiva\utils\align_field_info.cpp" />
-    <ClCompile Include="Sources\aiva\utils\align_struct_info.cpp" />
+    <ClCompile Include="Sources\aiva\utils\layout_field.cpp" />
+    <ClCompile Include="Sources\aiva\utils\layout_struct.cpp" />
     <ClCompile Include="Sources\aiva\utils\dict_struct.cpp" />
     <ClCompile Include="Sources\aiva\utils\dict_struct_utils.cpp" />
-    <ClCompile Include="Sources\aiva\utils\align_struct_utils.cpp" />
+    <ClCompile Include="Sources\aiva\utils\layout_struct_utils.cpp" />
     <ClCompile Include="Sources\aiva\utils\meta_field.cpp" />
     <ClCompile Include="Sources\aiva\utils\meta_struct.cpp" />
     <ClCompile Include="Sources\aiva\utils\meta_struct_utils.cpp" />
+    <ClCompile Include="Sources\aiva\utils\dict_buffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -169,14 +170,15 @@
     <ClInclude Include="Sources\aiva\utils\t_boxed_value_cpp.h" />
     <ClInclude Include="Sources\aiva\utils\boxed_value_utils_hpp.h" />
     <ClInclude Include="Sources\aiva\utils\boxed_value_utils_cpp.h" />
-    <ClInclude Include="Sources\aiva\utils\align_field_info.h" />
-    <ClInclude Include="Sources\aiva\utils\align_struct_info.h" />
+    <ClInclude Include="Sources\aiva\utils\layout_field.h" />
+    <ClInclude Include="Sources\aiva\utils\layout_struct.h" />
     <ClInclude Include="Sources\aiva\utils\dict_struct.h" />
     <ClInclude Include="Sources\aiva\utils\dict_struct_utils.h" />
-    <ClInclude Include="Sources\aiva\utils\align_struct_utils.h" />
+    <ClInclude Include="Sources\aiva\utils\layout_struct_utils.h" />
     <ClInclude Include="Sources\aiva\utils\meta_field.h" />
     <ClInclude Include="Sources\aiva\utils\meta_struct.h" />
     <ClInclude Include="Sources\aiva\utils\meta_struct_utils.h" />
+    <ClInclude Include="Sources\aiva\utils\dict_buffer.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

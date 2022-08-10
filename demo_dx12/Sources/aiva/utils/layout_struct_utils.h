@@ -3,31 +3,31 @@
 
 namespace aiva::utils
 {
-	struct AlignFieldInfo;
-	struct AlignStructInfo;
+	struct LayoutField;
+	struct LayoutStruct;
 	struct DictStruct;
 	struct MetaStruct;
 }
 
 namespace aiva::utils
 {
-	struct AlignStructUtils final
+	struct LayoutStructUtils final
 	{
 	// ----------------------------------------------------
 	// Main
 
 	private:
-		AlignStructUtils() = delete;
+		LayoutStructUtils() = delete;
 
 	// ----------------------------------------------------
 	// Aliases
 
 	public:
-		using AlignFieldElementType = AlignFieldInfo;
+		using AlignFieldElementType = LayoutField;
 
 		using AlignFieldPointerType = std::shared_ptr<AlignFieldElementType>;
 
-		using AlignStructElementType = AlignStructInfo;
+		using AlignStructElementType = LayoutStruct;
 
 		using AlignStructPointerType = std::shared_ptr<AlignStructElementType>;
 

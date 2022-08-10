@@ -1,9 +1,9 @@
 #include <pch.h>
-#include <aiva/utils/align_struct_utils.h>
+#include <aiva/utils/layout_struct_utils.h>
 
 #include <aiva/layer1/shader_consts.h>
-#include <aiva/utils/align_field_info.h>
-#include <aiva/utils/align_struct_info.h>
+#include <aiva/utils/layout_field.h>
+#include <aiva/utils/layout_struct.h>
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/boxed_value_utils.h>
 #include <aiva/utils/dict_struct.h>
@@ -13,7 +13,7 @@
 #include <aiva/utils/meta_struct_utils.h>
 #include <aiva/utils/object_utils.h>
 
-aiva::utils::AlignStructUtils::AlignStructPointerType aiva::utils::AlignStructUtils::GenerateFrom(DictStructPointerType const& dictStruct)
+aiva::utils::LayoutStructUtils::AlignStructPointerType aiva::utils::LayoutStructUtils::GenerateFrom(DictStructPointerType const& dictStruct)
 {
 	Asserts::CheckBool(dictStruct, "Dict struct is not valid");
 
@@ -26,7 +26,7 @@ aiva::utils::AlignStructUtils::AlignStructPointerType aiva::utils::AlignStructUt
 	return alignStruct;
 }
 
-aiva::utils::AlignStructUtils::AlignStructPointerType aiva::utils::AlignStructUtils::GenerateFrom(MetaStructPointerType const& metaStruct)
+aiva::utils::LayoutStructUtils::AlignStructPointerType aiva::utils::LayoutStructUtils::GenerateFrom(MetaStructPointerType const& metaStruct)
 {
 	Asserts::CheckBool(metaStruct, "Meta struct is not valid");
 

@@ -6,12 +6,12 @@
 
 namespace aiva::utils
 {
-	struct AlignFieldInfo;
+	struct LayoutField;
 }
 
 namespace aiva::utils
 {
-	struct AlignStructInfo final : public AObject, public IObjectChangeable
+	struct LayoutStruct final : public AObject, public IObjectChangeable
 	{
 	// ----------------------------------------------------
 	// Main
@@ -20,10 +20,10 @@ namespace aiva::utils
 		friend FactoryType;
 
 	protected:
-		AlignStructInfo();
+		LayoutStruct();
 
 	public:
-		~AlignStructInfo() override;
+		~LayoutStruct() override;
 
 	// ----------------------------------------------------
 	// Metadata
@@ -31,7 +31,7 @@ namespace aiva::utils
 	public:
 		std::size_t Offset() const;
 
-		AlignStructInfo& Offset(std::size_t const offset);
+		LayoutStruct& Offset(std::size_t const offset);
 
 	private:
 		std::size_t mOffset{};
@@ -41,7 +41,7 @@ namespace aiva::utils
 	public:
 		std::size_t Size() const;
 
-		AlignStructInfo& Size(std::size_t const size);
+		LayoutStruct& Size(std::size_t const size);
 
 	private:
 		std::size_t mSize{};
@@ -50,14 +50,14 @@ namespace aiva::utils
 	// Fields
 
 	public:
-		using FieldElemType = std::shared_ptr<AlignFieldInfo>;
+		using FieldElemType = std::shared_ptr<LayoutField>;
 
 		using FieldDictType = std::unordered_map<std::string, FieldElemType>;
 
 	public:
 		FieldElemType Field(std::string const& name) const;
 
-		AlignStructInfo& Field(std::string const& name, FieldElemType const& field);
+		LayoutStruct& Field(std::string const& name, FieldElemType const& field);
 
 		FieldDictType const& Fields() const;
 

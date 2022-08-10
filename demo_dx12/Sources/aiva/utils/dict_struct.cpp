@@ -2,8 +2,8 @@
 #include <aiva/utils/dict_struct.h>
 
 #include <aiva/layer1/shader_consts.h>
-#include <aiva/utils/align_field_info.h>
-#include <aiva/utils/align_struct_info.h>
+#include <aiva/utils/layout_field.h>
+#include <aiva/utils/layout_struct.h>
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/i_boxed_value.h>
 #include <aiva/utils/math_utils.h>

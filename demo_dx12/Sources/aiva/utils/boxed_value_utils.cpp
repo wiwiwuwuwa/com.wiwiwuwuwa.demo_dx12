@@ -5,6 +5,7 @@
 #include <aiva/utils/e_boxed_type.h>
 #include <aiva/utils/i_boxed_value.h>
 #include <aiva/utils/math_utils.h>
+#include <aiva/utils/meta_field.h>
 
 aiva::utils::BoxedValueUtils::BoxedValueUtils()
 {
@@ -120,6 +121,21 @@ std::shared_ptr<aiva::utils::IBoxedValue> aiva::utils::BoxedValueUtils::CastTo(s
 {
 	Asserts::CheckBool(false, "TODO: Impl - BoxedValueUtils::CastTo");
 	return {};
+}
+
+bool aiva::utils::BoxedValueUtils::IsMatchingLayout(std::shared_ptr<IBoxedValue> const& dstField, MetaFieldPointerType const& srcField)
+{
+	if (!dstField || !srcField)
+	{
+		return false;
+	}
+
+	if (dstField->Type() != srcField->Type())
+	{
+		return false;
+	}
+
+	return true;
 }
 
 std::vector<std::byte> aiva::utils::BoxedValueUtils::SerializeToBinary(std::shared_ptr<IBoxedValue> const& boxedValue)

@@ -5,6 +5,7 @@ namespace aiva::utils
 {
 	enum class EBoxedType;
 	struct IBoxedValue;
+	struct MetaField;
 	template <typename> struct TBoxedValue;
 }
 
@@ -104,6 +105,17 @@ namespace aiva::utils
 
 		template <typename TValue>
 		static std::shared_ptr<TBoxedValue<TValue>> CastTo(std::shared_ptr<IBoxedValue> const& boxedValue);
+
+	// ----------------------------------------------------
+	// Comparison
+
+	public:
+		using MetaFieldElementType = MetaField;
+
+		using MetaFieldPointerType = std::shared_ptr<MetaField>;
+
+	public:
+		static bool IsMatchingLayout(std::shared_ptr<IBoxedValue> const& dstField, MetaFieldPointerType const& srcField);
 
 	// ----------------------------------------------------
 	// SerializeToBinary

@@ -4,6 +4,7 @@
 namespace aiva::utils
 {
 	struct DictStruct;
+	struct LayoutStruct;
 	struct MetaField;
 	struct MetaStruct;
 }
@@ -26,6 +27,10 @@ namespace aiva::utils
 
 		using DictStructPointerType = std::shared_ptr<DictStructElementType>;
 
+		using LayoutStructElementType = LayoutStruct;
+
+		using LayoutStructPointerType = std::shared_ptr<LayoutStructElementType>;
+
 		using MetaStructElementType = MetaStruct;
 
 		using MetaStructPointerType = std::shared_ptr<MetaStructElementType>;
@@ -39,5 +44,7 @@ namespace aiva::utils
 
 	public:
 		static MetaStructPointerType GenerateFrom(DictStructPointerType const& dictStruct);
+
+		static MetaStructPointerType GenerateFrom(LayoutStructPointerType const& layoutStruct);
 	};
 }

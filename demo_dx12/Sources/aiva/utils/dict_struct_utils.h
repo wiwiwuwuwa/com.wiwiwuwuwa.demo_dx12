@@ -5,6 +5,7 @@ namespace aiva::utils
 {
 	struct LayoutStruct;
 	struct DictStruct;
+	struct MetaStruct;
 }
 
 namespace aiva::utils
@@ -29,11 +30,25 @@ namespace aiva::utils
 
 		using DictStructPointerType = std::shared_ptr<DictStructElementType>;
 
+		using MetaStructElementType = MetaStruct;
+
+		using MetaStructPointerType = std::shared_ptr<MetaStructElementType>;
+
 	// ----------------------------------------------------
 	// Comparison
 
 	public:
 		static bool HasSameFields(DictStructPointerType const& structA, DictStructPointerType const structB);
+
+		static bool IsMatchingLayout(DictStructPointerType const& dstStruct, MetaStructPointerType const& srcLayout);
+
+	// ----------------------------------------------------
+	// Generators
+
+	public:
+		static DictStructPointerType GenerateFrom(AlignStructPointerType const& layoutStruct);
+
+		static DictStructPointerType GenerateFrom(MetaStructPointerType const& metaStruct);
 
 	// ----------------------------------------------------
 	// Serialization
@@ -41,7 +56,11 @@ namespace aiva::utils
 	public:
 		static std::vector<std::byte> SerializeToBinary(DictStructPointerType const& dictStruct);
 
+		static std::vector<std::byte> SerializeToBinary(DictStructPointerType const& dictStruct, MetaStructPointerType const& metaStruct);
+
 		static std::vector<std::byte> SerializeToBinary(DictStructPointerType const& dictStruct, AlignStructPointerType const& alignStruct);
+
+		static DictStructPointerType DeserealizeFromBinary(MetaStructPointerType const& metaStruct, boost::span<const std::byte> const& structBinary);
 
 		static DictStructPointerType DeserealizeFromBinary(AlignStructPointerType const& alignStruct, boost::span<const std::byte> const& structBinary);
 	};

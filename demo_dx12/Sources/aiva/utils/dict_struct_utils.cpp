@@ -7,6 +7,9 @@
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/boxed_value_utils.h>
 #include <aiva/utils/dict_struct.h>
+#include <aiva/utils/i_boxed_value.h>
+#include <aiva/utils/meta_field.h>
+#include <aiva/utils/meta_struct.h>
 #include <aiva/utils/object_utils.h>
 
 bool aiva::utils::DictStructUtils::HasSameFields(DictStructPointerType const& structA, DictStructPointerType const structB)
@@ -51,6 +54,76 @@ bool aiva::utils::DictStructUtils::HasSameFields(DictStructPointerType const& st
 	return true;
 }
 
+bool aiva::utils::DictStructUtils::IsMatchingLayout(DictStructPointerType const& dstStruct, MetaStructPointerType const& srcLayout)
+{
+	if (!dstStruct || !srcLayout)
+	{
+		return false;
+	}
+
+	for (std::size_t i = {}; i < srcLayout->Num(); i++)
+	{
+		auto const& srcField = srcLayout->Get(i);
+		Asserts::CheckBool(srcField, "Src field is not valid");
+
+		auto const& dstField = dstStruct->FieldBoxed(srcField->Name());
+		if (!dstField)
+		{
+			return false;
+		}
+
+		if (!BoxedValueUtils::IsMatchingLayout(dstField, srcField))
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+aiva::utils::DictStructUtils::DictStructPointerType aiva::utils::DictStructUtils::GenerateFrom(AlignStructPointerType const& layoutStruct)
+{
+	Asserts::CheckBool(layoutStruct, "Layout struct is not valid");
+
+	auto const dictStruct = NewObject<DictStructElementType>();
+	Asserts::CheckBool(dictStruct, "Dict struct is not valid");
+
+	for (auto const& pair : layoutStruct->Fields())
+	{
+		auto const& layoutName = pair.first;
+		auto const& layoutField = pair.second;
+		Asserts::CheckBool(layoutField, "Layout field is not valid");
+
+		auto const dictField = BoxedValueUtils::CreateInstance(layoutField->Type());
+		Asserts::CheckBool(dictField, "Dict field is not valid");
+
+		dictStruct->FieldBoxed(layoutName, dictField);
+	}
+
+	return dictStruct;
+}
+
+aiva::utils::DictStructUtils::DictStructPointerType aiva::utils::DictStructUtils::GenerateFrom(MetaStructPointerType const& metaStruct)
+{
+	Asserts::CheckBool(metaStruct, "Meta struct is not valid");
+
+	auto const dictStruct = NewObject<DictStructElementType>();
+	Asserts::CheckBool(dictStruct, "Dict struct is not valid");
+
+	for (std::size_t i = {}; i < metaStruct->Num(); i++)
+	{
+		auto const& metaField = metaStruct->Get(i);
+		Asserts::CheckBool(metaField, "Meta field is not valid");
+
+		auto const dictField = BoxedValueUtils::CreateInstance(metaField->Type());
+		Asserts::CheckBool(dictField, "Dict field is not valid");
+
+		dictStruct->FieldBoxed(metaField->Name(), dictField);
+	}
+
+	return dictStruct;
+}
+
 std::vector<std::byte> aiva::utils::DictStructUtils::SerializeToBinary(DictStructPointerType const& dictStruct)
 {
 	Asserts::CheckBool(dictStruct, "Dict struct is not valid");
@@ -59,6 +132,20 @@ std::vector<std::byte> aiva::utils::DictStructUtils::SerializeToBinary(DictStruc
 	Asserts::CheckBool(alignStruct, "Align struct is not valid");
 
 	auto const structBinary = SerializeToBinary(dictStruct, alignStruct);
+	Asserts::CheckBool(!std::empty(structBinary), "Struct binary is empty");
+
+	return structBinary;
+}
+
+std::vector<std::byte> aiva::utils::DictStructUtils::SerializeToBinary(DictStructPointerType const& dictStruct, MetaStructPointerType const& metaStruct)
+{
+	Asserts::CheckBool(dictStruct, "Dict struct is not valid");
+	Asserts::CheckBool(metaStruct, "Meta struct is not valid");
+
+	auto const layoutStruct = LayoutStructUtils::GenerateFrom(metaStruct);
+	Asserts::CheckBool(layoutStruct, "Layout struct is not valid");
+
+	auto const structBinary = SerializeToBinary(dictStruct, layoutStruct);
 	Asserts::CheckBool(!std::empty(structBinary), "Struct binary is empty");
 
 	return structBinary;
@@ -97,6 +184,20 @@ std::vector<std::byte> aiva::utils::DictStructUtils::SerializeToBinary(DictStruc
 	}
 
 	return structBinary;
+}
+
+aiva::utils::DictStructUtils::DictStructPointerType aiva::utils::DictStructUtils::DeserealizeFromBinary(MetaStructPointerType const& metaStruct, boost::span<const std::byte> const& structBinary)
+{
+	Asserts::CheckBool(metaStruct, "Meta struct is not valid");
+	Asserts::CheckBool(!std::empty(structBinary), "Struct binary is not valid");
+
+	auto const layoutStruct = LayoutStructUtils::GenerateFrom(metaStruct);
+	Asserts::CheckBool(layoutStruct, "Layout struct is not valid");
+
+	auto const dictStruct = DeserealizeFromBinary(layoutStruct, structBinary);
+	Asserts::CheckBool(dictStruct, "Dict struct is not valid");
+
+	return dictStruct;
 }
 
 aiva::utils::DictStructUtils::DictStructPointerType aiva::utils::DictStructUtils::DeserealizeFromBinary(AlignStructPointerType const& alignStruct, boost::span<const std::byte> const& structBinary)

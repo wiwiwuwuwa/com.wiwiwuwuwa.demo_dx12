@@ -75,6 +75,14 @@ void aiva::utils::BoxedValueUtils::TerminateTypeMapper()
 	mTypeOfDict = {};
 }
 
+std::size_t aiva::utils::BoxedValueUtils::SizeOf(EBoxedType const boxedType)
+{
+	auto const iter = Instance().mSizeOfDict.find(boxedType);
+	Asserts::CheckBool(iter != Instance().mSizeOfDict.end(), "Unknown SizeOf type");
+
+	return iter->second();
+}
+
 aiva::utils::EBoxedType aiva::utils::BoxedValueUtils::TypeOf(std::shared_ptr<IBoxedValue> const& boxedValue)
 {
 	Asserts::CheckBool(boxedValue, "Boxed value is not valid");

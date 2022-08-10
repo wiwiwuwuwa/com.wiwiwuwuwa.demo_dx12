@@ -39,6 +39,24 @@ namespace aiva::utils
 		void RegisterTypeMapper(EBoxedType const boxedType);
 
 	// ----------------------------------------------------
+	// SizeOf
+
+	public:
+		static std::size_t SizeOf(EBoxedType const boxedType);
+
+	private:
+		using SizeOfElemType = std::function<std::size_t()>;
+
+		using SizeOfDictType = std::unordered_map<EBoxedType, SizeOfElemType>;
+
+	private:
+		template <typename TValue>
+		void RegisterSizeOfElem(EBoxedType const boxedType);
+
+	private:
+		SizeOfDictType mSizeOfDict{};
+
+	// ----------------------------------------------------
 	// TypeOf
 
 	public:

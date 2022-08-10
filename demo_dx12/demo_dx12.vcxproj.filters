@@ -70,6 +70,11 @@
     <ClCompile Include="Sources\aiva\utils\align_field_info.cpp" />
     <ClCompile Include="Sources\aiva\utils\align_struct_info.cpp" />
     <ClCompile Include="Sources\aiva\utils\dict_struct.cpp" />
+    <ClCompile Include="Sources\aiva\utils\dict_struct_utils.cpp" />
+    <ClCompile Include="Sources\aiva\utils\align_struct_utils.cpp" />
+    <ClCompile Include="Sources\aiva\utils\meta_field.cpp" />
+    <ClCompile Include="Sources\aiva\utils\meta_struct.cpp" />
+    <ClCompile Include="Sources\aiva\utils\meta_struct_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -167,7 +172,11 @@
     <ClInclude Include="Sources\aiva\utils\align_field_info.h" />
     <ClInclude Include="Sources\aiva\utils\align_struct_info.h" />
     <ClInclude Include="Sources\aiva\utils\dict_struct.h" />
-    <ClInclude Include="Sources\aiva\utils\e_align_mode.h" />
+    <ClInclude Include="Sources\aiva\utils\dict_struct_utils.h" />
+    <ClInclude Include="Sources\aiva\utils\align_struct_utils.h" />
+    <ClInclude Include="Sources\aiva\utils\meta_field.h" />
+    <ClInclude Include="Sources\aiva\utils\meta_struct.h" />
+    <ClInclude Include="Sources\aiva\utils\meta_struct_utils.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

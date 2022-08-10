@@ -2,6 +2,7 @@
 #include <pch.h>
 
 #include <aiva/utils/a_object.h>
+#include <aiva/utils/e_boxed_type.h>
 #include <aiva/utils/i_object_changeable.h>
 
 namespace aiva::utils
@@ -21,7 +22,20 @@ namespace aiva::utils
 		~AlignFieldInfo() override;
 
 	// ----------------------------------------------------
-	// Data
+	// Metadata
+
+	public:
+		using TypeEnum = EBoxedType;
+
+	public:
+		TypeEnum Type() const;
+
+		AlignFieldInfo& Type(TypeEnum const type);
+
+	private:
+		TypeEnum mType{ TypeEnum::UNKNOWN };
+
+	// --------------------------------
 
 	public:
 		std::size_t Offset() const;
@@ -30,5 +44,15 @@ namespace aiva::utils
 
 	private:
 		std::size_t mOffset{};
+
+	// --------------------------------
+
+	public:
+		std::size_t Size() const;
+
+		AlignFieldInfo& Size(std::size_t const size);
+
+	private:
+		std::size_t mSize{};
 	};
 }

@@ -5,6 +5,8 @@ namespace aiva::utils
 {
 	enum class EBoxedType
 	{
+		UNKNOWN,
+
 		UINT8,
 		UINT8X2,
 		UINT8X3,

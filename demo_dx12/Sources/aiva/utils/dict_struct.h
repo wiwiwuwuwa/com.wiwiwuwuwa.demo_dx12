@@ -2,7 +2,6 @@
 #include <pch.h>
 
 #include <aiva/utils/a_object.h>
-#include <aiva/utils/e_align_mode.h>
 #include <aiva/utils/i_object_changeable.h>
 
 namespace aiva::utils
@@ -68,31 +67,19 @@ namespace aiva::utils
 
 	public:
 		template <typename TValue>
-		std::optional<TValue> Field(std::string const& name) const;
+		std::optional<TValue> FieldOptional(std::string const& name) const;
 
 		template <typename TValue>
-		DictStruct& Field(std::string const& name, std::optional<TValue> const& field);
+		DictStruct& FieldOptional(std::string const& name, std::optional<TValue> const& field);
 
-	// ----------------------------------------------------
-	// Alignment
-
-	public:
-		using AlignInfoType = std::shared_ptr<AlignStructInfo>;
-
-		using AlignModeType = EAlignMode;
-
-	private:
-		AlignInfoType CreateAlignInfo(AlignModeType const mode) const;
-
-		AlignInfoType CreateAlignInfo_MaxSpeed() const;
-
-	// ----------------------------------------------------
-	// Serialization
+	// --------------------------------
 
 	public:
-		std::vector<std::byte> SerializeToBinary(AlignModeType const mode) const;
+		template <typename TValue>
+		TValue FieldValue(std::string const& name) const;
 
-		DictStruct& DeserealizeFromBinary(boost::span<const std::byte> const& binary, AlignModeType const mode);
+		template <typename TValue>
+		DictStruct& FieldValue(std::string const& name, TValue const& field);
 	};
 }
 
@@ -123,7 +110,7 @@ aiva::utils::DictStruct& aiva::utils::DictStruct::FieldBoxed(std::string const& 
 }
 
 template <typename TValue>
-std::optional<TValue> aiva::utils::DictStruct::Field(std::string const& name) const
+std::optional<TValue> aiva::utils::DictStruct::FieldOptional(std::string const& name) const
 {
 	auto const fieldBoxed = FieldBoxed<TValue>(name);
 	if (!fieldBoxed) return {};
@@ -132,7 +119,7 @@ std::optional<TValue> aiva::utils::DictStruct::Field(std::string const& name) co
 }
 
 template <typename TValue>
-aiva::utils::DictStruct& aiva::utils::DictStruct::Field(std::string const& name, std::optional<TValue> const& field)
+aiva::utils::DictStruct& aiva::utils::DictStruct::FieldOptional(std::string const& name, std::optional<TValue> const& field)
 {
 	if (field)
 	{
@@ -145,4 +132,20 @@ aiva::utils::DictStruct& aiva::utils::DictStruct::Field(std::string const& name,
 	{
 		return FieldBoxed(name, {});
 	}
+}
+
+template <typename TValue>
+TValue aiva::utils::DictStruct::FieldValue(std::string const& name) const
+{
+	auto const fieldOptional = FieldOptional<TValue>(name);
+	Asserts::CheckBool(fieldOptional, "Field optional is not valid");
+
+	return fieldOptional.value();
+}
+
+template <typename TValue>
+aiva::utils::DictStruct& aiva::utils::DictStruct::FieldValue(std::string const& name, TValue const& field)
+{
+	auto const fieldOptional = std::optional<TValue>{ field };
+	return FieldOptional(name, fieldOptional);
 }

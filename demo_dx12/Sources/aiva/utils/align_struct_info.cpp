@@ -14,6 +14,22 @@ aiva::utils::AlignStructInfo::~AlignStructInfo()
 
 }
 
+std::size_t aiva::utils::AlignStructInfo::Offset() const
+{
+	return mOffset;
+}
+
+aiva::utils::AlignStructInfo& aiva::utils::AlignStructInfo::Offset(std::size_t const offset)
+{
+	if (mOffset != offset)
+	{
+		mOffset = offset;
+		OnChanged()();
+	}
+
+	return *this;
+}
+
 std::size_t aiva::utils::AlignStructInfo::Size() const
 {
 	return mSize;

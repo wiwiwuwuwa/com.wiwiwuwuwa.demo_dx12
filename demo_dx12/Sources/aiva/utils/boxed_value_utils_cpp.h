@@ -12,8 +12,15 @@
 template <typename TValue>
 void aiva::utils::BoxedValueUtils::RegisterTypeMapper(EBoxedType const boxedType)
 {
+	RegisterSizeOfElem<TValue>(boxedType);
 	RegisterTypeOfElem<TValue>(boxedType);
 	RegisterCreateInstanceElem<TValue>(boxedType);
+}
+
+template <typename TValue>
+void aiva::utils::BoxedValueUtils::RegisterSizeOfElem(EBoxedType const boxedType)
+{
+	mSizeOfDict.insert_or_assign(boxedType, []() { return sizeof(TValue); });
 }
 
 template <typename TValue>

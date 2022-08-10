@@ -29,6 +29,16 @@ namespace aiva::utils
 	// Metadata
 
 	public:
+		std::size_t Offset() const;
+
+		AlignStructInfo& Offset(std::size_t const offset);
+
+	private:
+		std::size_t mOffset{};
+
+	// --------------------------------
+
+	public:
 		std::size_t Size() const;
 
 		AlignStructInfo& Size(std::size_t const size);

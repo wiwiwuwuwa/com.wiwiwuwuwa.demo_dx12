@@ -4,9 +4,13 @@
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gr_buffer.h>
 #include <aiva/layer1/graphic_hardware.h>
-#include <aiva/layer1/shader_buffer.h>
-#include <aiva/layer1/shader_struct.h>
 #include <aiva/utils/asserts.h>
+#include <aiva/utils/dict_buffer.h>
+#include <aiva/utils/dict_buffer_utils.h>
+#include <aiva/utils/dict_struct.h>
+#include <aiva/utils/dict_struct_utils.h>
+#include <aiva/utils/meta_struct.h>
+#include <aiva/utils/meta_struct_utils.h>
 #include <aiva/utils/object_utils.h>
 
 aiva::layer1::GrvCbvToBuffer::GrvCbvToBuffer(EngineType const& engine) : AGraphicResourceView{ engine }
@@ -19,7 +23,7 @@ aiva::layer1::GrvCbvToBuffer::~GrvCbvToBuffer()
 	TerminateStruct();
 }
 
-aiva::layer1::GrvCbvToBuffer::StructType& aiva::layer1::GrvCbvToBuffer::Struct() const
+aiva::layer1::GrvCbvToBuffer::StructElementType& aiva::layer1::GrvCbvToBuffer::Struct() const
 {
 	aiva::utils::Asserts::CheckBool(mStruct, "Shader struct is not valid");
 	return *mStruct;
@@ -27,7 +31,7 @@ aiva::layer1::GrvCbvToBuffer::StructType& aiva::layer1::GrvCbvToBuffer::Struct()
 
 void aiva::layer1::GrvCbvToBuffer::InitializeStruct()
 {
-	mStruct = aiva::utils::NewObject<StructType>();
+	mStruct = aiva::utils::NewObject<StructElementType>();
 	aiva::utils::Asserts::CheckBool(mStruct, "Shader struct is not valid");
 
 	mStruct->OnChanged().connect(boost::bind(&GrvCbvToBuffer::Struct_OnChanged, this));
@@ -53,7 +57,13 @@ std::shared_ptr<aiva::layer1::GrvCbvToBuffer::ResourceType> aiva::layer1::GrvCbv
 
 void aiva::layer1::GrvCbvToBuffer::RefreshInternalResourceFromSelf(std::shared_ptr<ResourceType> const& aivaResource)
 {
-	auto const& binary = (*aiva::utils::NewObject<ShaderBuffer>()).Struct(mStruct).Add(mStruct).SerializeToBinary();
+	aiva::utils::Asserts::CheckBool(aivaResource, "Aiva resource is not valid");
+
+	auto const dictBuffer = aiva::utils::NewObject<BufferElementType>();
+	dictBuffer->Layout(mStruct);
+	dictBuffer->Add(mStruct);
+
+	auto const binary = aiva::utils::DictBufferUtils::SerializeToBinary(dictBuffer);
 	aiva::utils::Asserts::CheckBool(!binary.empty(), "Binary data is empty");
 
 	auto const& aivaBuffer = std::dynamic_pointer_cast<GrBuffer>(aivaResource);

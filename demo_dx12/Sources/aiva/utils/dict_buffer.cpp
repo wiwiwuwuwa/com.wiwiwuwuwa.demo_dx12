@@ -4,7 +4,10 @@
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/dict_struct.h>
 #include <aiva/utils/dict_struct_utils.h>
+#include <aiva/utils/layout_struct.h>
+#include <aiva/utils/layout_struct_utils.h>
 #include <aiva/utils/meta_struct.h>
+#include <aiva/utils/meta_struct_utils.h>
 
 aiva::utils::DictBuffer::DictBuffer() : AObject{}, IObjectChangeable{}
 {
@@ -19,6 +22,36 @@ aiva::utils::DictBuffer::~DictBuffer()
 aiva::utils::DictBuffer::MetaStructPointerType const& aiva::utils::DictBuffer::Layout() const
 {
 	return mLayout;
+}
+
+aiva::utils::DictBuffer& aiva::utils::DictBuffer::Layout(DictStructPointerType const& layout)
+{
+	if (layout)
+	{
+		auto const metaLayout = MetaStructUtils::GenerateFrom(layout);
+		Asserts::CheckBool(metaLayout, "Meta layout is not valid");
+
+		return Layout(metaLayout);
+	}
+	else
+	{
+		return Layout(MetaStructPointerType{});
+	}
+}
+
+aiva::utils::DictBuffer& aiva::utils::DictBuffer::Layout(LayoutStructPointerType const& layout)
+{
+	if (layout)
+	{
+		auto const metaLayout = MetaStructUtils::GenerateFrom(layout);
+		Asserts::CheckBool(metaLayout, "Meta layout is not valid");
+
+		return Layout(metaLayout);
+	}
+	else
+	{
+		return Layout(MetaStructPointerType{});
+	}
 }
 
 aiva::utils::DictBuffer& aiva::utils::DictBuffer::Layout(MetaStructPointerType const& layout)

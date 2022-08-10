@@ -40,6 +40,12 @@ namespace aiva::utils
 		using MetaStructPointerType = std::shared_ptr<MetaStructElementType>;
 
 	// ----------------------------------------------------
+	// Comparison
+
+	public:
+		static bool IsMatchingLayout(AlignStructPointerType const& dstStruct, MetaStructPointerType const& srcLayout);
+
+	// ----------------------------------------------------
 	// Generators
 
 	public:

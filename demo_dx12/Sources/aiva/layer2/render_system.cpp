@@ -33,6 +33,7 @@
 #include <aiva/layer2/scene_actor.h>
 #include <aiva/layer2/world.h>
 #include <aiva/utils/asserts.h>
+#include <aiva/utils/dict_struct.h>
 #include <aiva/utils/material_constants.h>
 #include <aiva/utils/object_utils.h>
 
@@ -220,16 +221,16 @@ std::shared_ptr<aiva::layer1::RoMaterialGraphic> aiva::layer2::RenderSystem::Set
 		auto const viewAspect = (viewRect.z - viewRect.x) / (viewRect.w - viewRect.y);
 
 		auto const model = meshRenderer.Actor().WorldTransform();
-		constantView->Struct().SetValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_M, &model);
+		constantView->Struct().FieldValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_M, model);
 
 		auto const view = camera.Actor().WorldView();
-		constantView->Struct().SetValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_V, &view);
+		constantView->Struct().FieldValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_V, view);
 
 		auto const projection = glm::perspective(camera.FovY(), viewAspect, camera.ZNear(), camera.ZFar());
-		constantView->Struct().SetValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_P, &projection);
+		constantView->Struct().FieldValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_P, projection);
 
 		auto const mvp = projection * view * model;
-		constantView->Struct().SetValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_MVP, &mvp);
+		constantView->Struct().FieldValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_MVP, mvp);
 	}
 
 	return instancedMaterial;

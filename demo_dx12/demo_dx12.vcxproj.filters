@@ -81,6 +81,8 @@
     <ClCompile Include="Sources\aiva\utils\dict_buffer_utils.cpp" />
     <ClCompile Include="Sources\aiva\utils\layout_buffer_utils.cpp" />
     <ClCompile Include="Sources\aiva\utils\meta_buffer_utils.cpp" />
+    <ClCompile Include="Sources\aiva\utils\layout_field_utils.cpp" />
+    <ClCompile Include="Sources\aiva\utils\meta_field_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -189,6 +191,8 @@
     <ClInclude Include="Sources\aiva\utils\dict_buffer_utils.h" />
     <ClInclude Include="Sources\aiva\utils\layout_buffer_utils.h" />
     <ClInclude Include="Sources\aiva\utils\meta_buffer_utils.h" />
+    <ClInclude Include="Sources\aiva\utils\layout_field_utils.h" />
+    <ClInclude Include="Sources\aiva\utils\meta_field_utils.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

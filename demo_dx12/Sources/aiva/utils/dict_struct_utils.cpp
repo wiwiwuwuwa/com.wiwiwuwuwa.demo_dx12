@@ -10,6 +10,7 @@
 #include <aiva/utils/i_boxed_value.h>
 #include <aiva/utils/meta_field.h>
 #include <aiva/utils/meta_struct.h>
+#include <aiva/utils/meta_struct_utils.h>
 #include <aiva/utils/object_utils.h>
 
 bool aiva::utils::DictStructUtils::HasSameFields(DictStructPointerType const& structA, DictStructPointerType const structB)
@@ -158,7 +159,7 @@ std::vector<std::byte> aiva::utils::DictStructUtils::SerializeToBinary(DictStruc
 
 	Asserts::CheckBool(alignStruct->Offset() >= 0, "Align struct offset is not valid");
 	Asserts::CheckBool(alignStruct->Size() > 0, "Align struct size is not valid");
-	auto structBinary = std::vector<std::byte>{ alignStruct->Offset() + alignStruct->Size() };
+	auto structBinary = std::vector<std::byte>{ alignStruct->Size() };
 
 	for (auto const& pair : alignStruct->Fields())
 	{
@@ -179,7 +180,8 @@ std::vector<std::byte> aiva::utils::DictStructUtils::SerializeToBinary(DictStruc
 		Asserts::CheckBool(fieldInfo->Size() == std::size(fieldBinary), "Field binary has the different size than the field info");
 
 		auto const srcSpan = fieldBinary;
-		auto const dstSpan = boost::span{ structBinary }.subspan(alignStruct->Offset(), alignStruct->Size()).subspan(fieldInfo->Offset(), fieldInfo->Size());
+		auto const dstSpan = boost::span{ structBinary }.subspan(fieldInfo->Offset(), fieldInfo->Size());
+
 		Asserts::CheckBool(memcpy_s(std::data(dstSpan), std::size(dstSpan), std::data(srcSpan), std::size(srcSpan)) == 0, "Failed to memcpy_s");
 	}
 
@@ -207,7 +209,7 @@ aiva::utils::DictStructUtils::DictStructPointerType aiva::utils::DictStructUtils
 	Asserts::CheckBool(alignStruct->Size() > 0, "Align struct size is not valid");
 
 	Asserts::CheckBool(!std::empty(structBinary), "Struct binary is empty");
-	Asserts::CheckBool(alignStruct->Offset() + alignStruct->Size() == std::size(structBinary), "Struct binary has the different size than the struct info");
+	Asserts::CheckBool(alignStruct->Size() == std::size(structBinary), "Struct binary has the different size than the struct info");
 
 	auto const dictStruct = NewObject<DictStructElementType>();
 	Asserts::CheckBool(dictStruct, "Dict struct is not valid");
@@ -231,10 +233,10 @@ aiva::utils::DictStructUtils::DictStructPointerType aiva::utils::DictStructUtils
 		Asserts::CheckBool(!std::empty(fieldBinary), "Field binary is empty");
 		Asserts::CheckBool(fieldInfo->Size() == std::size(fieldBinary), "Field binary has the different size than the field info");
 
-		auto const srcSpan = boost::span{ structBinary }.subspan(alignStruct->Offset(), alignStruct->Size()).subspan(fieldInfo->Offset(), fieldInfo->Size());
+		auto const srcSpan = boost::span{ structBinary }.subspan(fieldInfo->Offset(), fieldInfo->Size());
 		auto const dstSpan = fieldBinary;
-		Asserts::CheckBool(memcpy_s(std::data(dstSpan), std::size(dstSpan), std::data(srcSpan), std::size(srcSpan)) == 0, "Failed to memcpy_s");
 
+		Asserts::CheckBool(memcpy_s(std::data(dstSpan), std::size(dstSpan), std::data(srcSpan), std::size(srcSpan)) == 0, "Failed to memcpy_s");
 		dictStruct->FieldBoxed(fieldName, dictField);
 	}
 

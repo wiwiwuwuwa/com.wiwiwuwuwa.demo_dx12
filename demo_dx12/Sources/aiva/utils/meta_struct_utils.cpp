@@ -6,6 +6,7 @@
 #include <aiva/utils/layout_field.h>
 #include <aiva/utils/layout_struct.h>
 #include <aiva/utils/meta_field.h>
+#include <aiva/utils/meta_field_utils.h>
 #include <aiva/utils/meta_struct.h>
 #include <aiva/utils/object_utils.h>
 
@@ -71,4 +72,25 @@ aiva::utils::MetaStructUtils::MetaStructPointerType aiva::utils::MetaStructUtils
 	}
 
 	return metaStruct;
+}
+
+aiva::utils::MetaStructUtils::MetaStructPointerType aiva::utils::MetaStructUtils::Copy(MetaStructPointerType const& metaStruct)
+{
+	Asserts::CheckBool(metaStruct, "Meta struct is not valid");
+
+	auto const metaStructCopy = NewObject<MetaStructElementType>();
+	Asserts::CheckBool(metaStructCopy, "Meta struct copy is not valid");
+
+	for (std::size_t i = {}; i < metaStruct->Num(); i++)
+	{
+		auto const& metaField = metaStruct->Get(i);
+		Asserts::CheckBool(metaField, "Meta field is not valid");
+
+		auto const metaFieldCopy = MetaFieldUtils::Copy(metaField);
+		Asserts::CheckBool(metaFieldCopy, "Meta field copy is not valid");
+
+		metaStructCopy->Add(metaFieldCopy);
+	}
+
+	return metaStructCopy;
 }

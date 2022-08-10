@@ -3,6 +3,7 @@
 
 #include <aiva/layer1/shader_consts.h>
 #include <aiva/utils/layout_field.h>
+#include <aiva/utils/layout_field_utils.h>
 #include <aiva/utils/layout_struct.h>
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/boxed_value_utils.h>
@@ -12,6 +13,33 @@
 #include <aiva/utils/meta_struct.h>
 #include <aiva/utils/meta_struct_utils.h>
 #include <aiva/utils/object_utils.h>
+
+bool aiva::utils::LayoutStructUtils::IsMatchingLayout(AlignStructPointerType const& dstStruct, MetaStructPointerType const& srcLayout)
+{
+	if (!dstStruct || !srcLayout)
+	{
+		return false;
+	}
+
+	for (std::size_t i = {}; i < srcLayout->Num(); i++)
+	{
+		auto const& srcField = srcLayout->Get(i);
+		Asserts::CheckBool(srcField, "Src field is not valid");
+
+		auto const dstField = dstStruct->Field(srcField->Name());
+		if (!dstField)
+		{
+			return false;
+		}
+
+		if (!LayoutFieldUtils::IsMatchingLayout(dstField, srcField))
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
 
 aiva::utils::LayoutStructUtils::AlignStructPointerType aiva::utils::LayoutStructUtils::GenerateFrom(DictStructPointerType const& dictStruct)
 {

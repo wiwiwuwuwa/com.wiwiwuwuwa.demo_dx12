@@ -215,6 +215,7 @@
     <ClInclude Include="Sources\aiva\layer1\shader_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\material_pipeline_descriptor.h" />
     <ClInclude Include="Sources\aiva\layer1\material_resource_descriptor.h" />
+    <ClInclude Include="Sources\aiva\utils\layout_field_utils.h" />
     <ClInclude Include="Sources\aiva\utils\layout_buffer_utils.h" />
     <ClInclude Include="Sources\aiva\utils\dict_buffer_utils.h" />
     <ClInclude Include="Sources\aiva\utils\layout_buffer.h" />
@@ -259,6 +260,7 @@
     <ClInclude Include="Sources\aiva\utils\meta_buffer.h" />
     <ClInclude Include="Sources\aiva\utils\meta_buffer_utils.h" />
     <ClInclude Include="Sources\aiva\utils\meta_field.h" />
+    <ClInclude Include="Sources\aiva\utils\meta_field_utils.h" />
     <ClInclude Include="Sources\aiva\utils\meta_struct.h" />
     <ClInclude Include="Sources\aiva\utils\meta_struct_utils.h" />
     <ClInclude Include="Sources\aiva\utils\object_factory.h" />
@@ -351,6 +353,7 @@
     <ClCompile Include="Sources\aiva\utils\layout_buffer.cpp" />
     <ClCompile Include="Sources\aiva\utils\layout_buffer_utils.cpp" />
     <ClCompile Include="Sources\aiva\utils\layout_field.cpp" />
+    <ClCompile Include="Sources\aiva\utils\layout_field_utils.cpp" />
     <ClCompile Include="Sources\aiva\utils\layout_struct.cpp" />
     <ClCompile Include="Sources\aiva\utils\layout_struct_utils.cpp" />
     <ClCompile Include="Sources\aiva\utils\a_object.cpp" />
@@ -364,6 +367,7 @@
     <ClCompile Include="Sources\aiva\utils\meta_buffer.cpp" />
     <ClCompile Include="Sources\aiva\utils\meta_buffer_utils.cpp" />
     <ClCompile Include="Sources\aiva\utils\meta_field.cpp" />
+    <ClCompile Include="Sources\aiva\utils\meta_field_utils.cpp" />
     <ClCompile Include="Sources\aiva\utils\meta_struct.cpp" />
     <ClCompile Include="Sources\aiva\utils\meta_struct_utils.cpp" />
     <ClCompile Include="Sources\aiva\utils\resource_barrier.cpp" />

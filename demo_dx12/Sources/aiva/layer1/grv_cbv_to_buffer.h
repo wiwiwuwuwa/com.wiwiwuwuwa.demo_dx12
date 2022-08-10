@@ -3,9 +3,10 @@
 
 #include <aiva/layer1/a_graphic_resource_view.h>
 
-namespace aiva::layer1
+namespace aiva::utils
 {
-	struct ShaderStruct;
+	struct DictBuffer;
+	struct DictStruct;
 }
 
 namespace aiva::layer1
@@ -28,10 +29,16 @@ namespace aiva::layer1
 	// Buffer
 
 	public:
-		using StructType = ShaderStruct;
+		using BufferElementType = aiva::utils::DictBuffer;
+
+		using BufferPointerType = std::shared_ptr<BufferElementType>;
+
+		using StructElementType = aiva::utils::DictStruct;
+
+		using StructPointerType = std::shared_ptr<StructElementType>;
 
 	public:
-		StructType& Struct() const;
+		StructElementType& Struct() const;
 
 	private:
 		void InitializeStruct();
@@ -42,7 +49,7 @@ namespace aiva::layer1
 		void Struct_OnChanged();
 
 	private:
-		std::shared_ptr<StructType> mStruct{};
+		StructPointerType mStruct{};
 
 	// ----------------------------------------------------
 	// Graphic Resource View: Internal Resource

@@ -46,5 +46,11 @@ namespace aiva::utils
 		static MetaStructPointerType GenerateFrom(DictStructPointerType const& dictStruct);
 
 		static MetaStructPointerType GenerateFrom(LayoutStructPointerType const& layoutStruct);
+
+	// ----------------------------------------------------
+	// Copying
+
+	public:
+		static MetaStructPointerType Copy(MetaStructPointerType const& metaStruct);
 	};
 }

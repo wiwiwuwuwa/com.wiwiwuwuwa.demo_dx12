@@ -2,25 +2,26 @@
 #include <pch.h>
 
 #include <aiva/layer2/scene_actor_fwd.h>
+#include <aiva/layer2/scene_system_fwd.h>
+#include <aiva/utils/a_object.h>
 
 namespace aiva::layer2
 {
 	struct SceneComponent;
-	struct SceneSystem;
 	struct World;
 }
 
 namespace aiva::layer2
 {
-	struct SceneActor final : private boost::noncopyable, public std::enable_shared_from_this<SceneActor>
+	struct SceneActor final : public aiva::utils::AObject
 	{
-	private:
-		friend SceneSystem;
-
 	// ----------------------------------------------------
 	// Main
 
 	private:
+		friend SceneSystemType;
+
+	protected:
 		SceneActor(World const& world);
 
 	public:
@@ -31,6 +32,14 @@ namespace aiva::layer2
 
 	private:
 		aiva::layer2::World const& mWorld;
+
+	// ----------------------------------------------------
+	// Pointers
+
+	public:
+		SceneActorTypeShared SharedFromThis();
+
+		SceneActorTypeWeak WeakFromThis();
 
 	// ----------------------------------------------------
 	// Name
@@ -47,18 +56,18 @@ namespace aiva::layer2
 	// Hierarchy
 
 	public:
-		std::shared_ptr<SceneActor> Parent() const;
+		SceneActorTypeShared Parent() const;
 
-		SceneActor& Parent(std::shared_ptr<SceneActor> const& desiredParent);
+		SceneActor& Parent(SceneActorTypeShared const& desiredParent);
 
-		std::shared_ptr<SceneActor> GetChild(std::size_t const index) const;
+		SceneActorTypeShared GetChild(std::size_t const index) const;
 
 		std::size_t NumChild() const;
 
 	private:
-		std::weak_ptr<SceneActor> mParent{};
+		SceneActorTypeWeak mParent{};
 
-		std::vector<std::weak_ptr<SceneActor>> mChildren{};
+		std::vector<SceneActorTypeWeak> mChildren{};
 
 	// ----------------------------------------------------
 	// Transformations

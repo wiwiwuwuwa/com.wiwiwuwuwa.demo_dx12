@@ -34,7 +34,7 @@ namespace aiva::layer2
 
 	SceneActorTypeShared SceneSystem::CreateActor()
 	{
-		return mActors.emplace_back(new SceneActor{ mWorld });
+		return mActors.emplace_back(new SceneActorType{ mWorld });
 	}
 
 	SceneActorTypeShared SceneSystem::LoadScene(RoSceneGltfTypeShared const& scene)

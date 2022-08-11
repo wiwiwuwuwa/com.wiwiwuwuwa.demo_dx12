@@ -1,37 +1,33 @@
 #pragma once
 #include <pch.h>
 
+#include <aiva/layer1/resource_view_heap_fwd.h>
+#include <aiva/layer1/ro_material_graphic_fwd.h>
+#include <aiva/layer2/sc_camera_fwd.h>
+#include <aiva/layer2/sc_mesh_renderer_fwd.h>
+#include <aiva/utils/a_object.h>
 #include <aiva/utils/t_signal_aggregator.h>
-
-namespace aiva::layer1
-{
-	struct ResourceViewHeap;
-	struct RoMaterialGraphic;
-}
 
 namespace aiva::layer2
 {
-	struct ScCamera;
-	struct ScMeshRenderer;
 	struct World;
 }
 
 namespace aiva::layer2
 {
-	struct RenderSystem final : private boost::noncopyable, public std::enable_shared_from_this<RenderSystem>
+	struct RenderSystem final : public aiva::utils::AObject
 	{
 	// ----------------------------------------------------
 	// Main
 
-	public:
-		template <typename... Args>
-		static std::shared_ptr<RenderSystem> Create(Args&&... args);
-
 	private:
+		friend FactoryType;
+
+	protected:
 		RenderSystem(World const& world);
 
 	public:
-		~RenderSystem();
+		~RenderSystem() override;
 
 	private:
 		World const& mWorld;
@@ -40,9 +36,9 @@ namespace aiva::layer2
 	// Events
 
 	public:
-		using EvPopulateCameras = boost::signals2::signal<std::shared_ptr<ScCamera>(), aiva::utils::TSignalAggregator<std::vector<std::shared_ptr<ScCamera>>>>;
+		using EvPopulateCameras = boost::signals2::signal<std::shared_ptr<ScCamera>(), aiva::utils::TSignalAggregator<std::vector<ScCameraTypeShared>>>;
 
-		using EvPopulateMeshRenderers = boost::signals2::signal<std::shared_ptr<ScMeshRenderer>(), aiva::utils::TSignalAggregator<std::vector<std::shared_ptr<ScMeshRenderer>>>>;
+		using EvPopulateMeshRenderers = boost::signals2::signal<std::shared_ptr<ScMeshRenderer>(), aiva::utils::TSignalAggregator<std::vector<ScMeshRendererTypeShared>>>;
 
 	public:
 		EvPopulateCameras& OnPopulateCameras();
@@ -85,7 +81,7 @@ namespace aiva::layer2
 
 		void DrawMeshRenderer(ScCamera const& const camera, ScMeshRenderer const& const meshRenderer);
 
-		std::shared_ptr<aiva::layer1::RoMaterialGraphic> SetupCameraProperties(ScCamera const& const camera, ScMeshRenderer const& const meshRenderer);
+		aiva::layer1::RoMaterialGraphicTypeShared SetupCameraProperties(ScCamera const& const camera, ScMeshRenderer const& const meshRenderer);
 
 		void PresentST();
 
@@ -94,16 +90,8 @@ namespace aiva::layer2
 		void ShutRTs();
 
 	private:
-		std::shared_ptr<aiva::layer1::ResourceViewHeap> mRTs{};
+		aiva::layer1::ResourceViewHeapTypeShared mRTs{};
 
-		std::shared_ptr<aiva::layer1::ResourceViewHeap> mDSs{};
+		aiva::layer1::ResourceViewHeapTypeShared mDSs{};
 	};
-}
-
-// --------------------------------------------------------
-
-template <typename... Args>
-std::shared_ptr<aiva::layer2::RenderSystem> aiva::layer2::RenderSystem::Create(Args&&... args)
-{
-	return std::shared_ptr<aiva::layer2::RenderSystem>(new aiva::layer2::RenderSystem{ std::forward<Args>(args)... });
 }

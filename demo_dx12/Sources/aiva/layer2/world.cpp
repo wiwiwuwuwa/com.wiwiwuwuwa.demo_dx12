@@ -15,6 +15,7 @@
 #include <aiva/layer2/render_system.h>
 #include <aiva/layer2/scene_system.h>
 #include <aiva/utils/asserts.h>
+#include <aiva/utils/object_utils.h>
 
 aiva::layer2::World::World()
 {
@@ -82,7 +83,7 @@ aiva::layer2::RenderSystem& aiva::layer2::World::RenderSystem() const
 void aiva::layer2::World::InitializeSystems()
 {
 	{
-		mRenderSystem = RenderSystem::Create(*this);
+		mRenderSystem = aiva::utils::NewObject<aiva::layer2::RenderSystem>(*this);
 		aiva::utils::Asserts::CheckBool(mRenderSystem);
 	}
 

@@ -35,219 +35,226 @@
 #include <aiva/utils/material_constants.h>
 #include <aiva/utils/object_utils.h>
 
-aiva::layer2::RenderSystem::RenderSystem(World const& world) : mWorld{ world }
+namespace aiva::layer2
 {
-	InitializeRenderer();
-}
+	using namespace aiva::layer1;
+	using namespace aiva::utils;
 
-aiva::layer2::RenderSystem::~RenderSystem()
-{
-	TerminateRenderer();
-}
-
-aiva::layer2::RenderSystem::EvPopulateCameras& aiva::layer2::RenderSystem::OnPopulateCameras()
-{
-	return mOnPopulateCameras;
-}
-
-aiva::layer2::RenderSystem::EvPopulateMeshRenderers& aiva::layer2::RenderSystem::OnPopulateMeshRenderers()
-{
-	return mOnPopulateMeshRenderers;
-}
-
-void aiva::layer2::RenderSystem::InitializeRenderer()
-{
-	mWorld.Engine().GraphicPipeline().OnPopulateCommands().connect(boost::bind(&RenderSystem::ExecuteRenderer, this));
-	InitRTs();
-	InitDSs();
-}
-
-void aiva::layer2::RenderSystem::TerminateRenderer()
-{
-	ShutDSs();
-	ShutRTs();
-	mWorld.Engine().GraphicPipeline().OnPopulateCommands().disconnect(boost::bind(&RenderSystem::ExecuteRenderer, this));
-}
-
-void aiva::layer2::RenderSystem::ExecuteRenderer()
-{
-	UseRTsDSs();
-	ClearRTs();
-	ClearDSs();
-	UseViewports();
-	UseScissorRects();
-
-	auto const cameras = OnPopulateCameras()();
-	auto const meshRenderers = OnPopulateMeshRenderers()();
-
-	for (auto const& const camera : cameras)
+	RenderSystem::RenderSystem(World const& world) : AObject{}, mWorld{ world }
 	{
-		aiva::utils::Asserts::CheckBool(camera, "Camera is not valid");
-		for (auto const& const meshRenderer : meshRenderers)
+		InitializeRenderer();
+	}
+
+	RenderSystem::~RenderSystem()
+	{
+		TerminateRenderer();
+	}
+
+	RenderSystem::EvPopulateCameras& RenderSystem::OnPopulateCameras()
+	{
+		return mOnPopulateCameras;
+	}
+
+	RenderSystem::EvPopulateMeshRenderers& RenderSystem::OnPopulateMeshRenderers()
+	{
+		return mOnPopulateMeshRenderers;
+	}
+
+	void RenderSystem::InitializeRenderer()
+	{
+		mWorld.Engine().GraphicPipeline().OnPopulateCommands().connect(boost::bind(&RenderSystem::ExecuteRenderer, this));
+		InitRTs();
+		InitDSs();
+	}
+
+	void RenderSystem::TerminateRenderer()
+	{
+		ShutDSs();
+		ShutRTs();
+		mWorld.Engine().GraphicPipeline().OnPopulateCommands().disconnect(boost::bind(&RenderSystem::ExecuteRenderer, this));
+	}
+
+	void RenderSystem::ExecuteRenderer()
+	{
+		UseRTsDSs();
+		ClearRTs();
+		ClearDSs();
+		UseViewports();
+		UseScissorRects();
+
+		auto const cameras = OnPopulateCameras()();
+		auto const meshRenderers = OnPopulateMeshRenderers()();
+
+		for (auto const& const camera : cameras)
 		{
-			aiva::utils::Asserts::CheckBool(meshRenderer, "Mesh renderer is not valid");
-			DrawMeshRenderer(*camera, *meshRenderer);
+			Asserts::CheckBool(camera, "Camera is not valid");
+			for (auto const& const meshRenderer : meshRenderers)
+			{
+				Asserts::CheckBool(meshRenderer, "Mesh renderer is not valid");
+				DrawMeshRenderer(*camera, *meshRenderer);
+			}
+		}
+
+		PresentST();
+	}
+
+	void RenderSystem::InitRTs()
+	{
+		auto const viewRect = mWorld.Engine().GraphicHardware().ScreenViewRect();
+
+		mRTs = NewObject<ResourceViewHeapType>(mWorld.Engine());
+		mRTs->HeapType(EDescriptorHeapType::Rtv);
+
+		for (std::size_t i = {}; i < std::size_t{ NUM_DEFFERED_BUFFERS }; i++)
+		{
+			auto texBuffer = NewObject<GrTexture2D>(mWorld.Engine());
+			texBuffer->Format(EResourceBufferFormat::R32G32B32A32_FLOAT);
+			texBuffer->Width(viewRect.z);
+			texBuffer->Height(viewRect.w);
+			texBuffer->SupportRenderTarget(true);
+			texBuffer->SupportUnorderedAccess(true);
+
+			auto texView = NewObject<GrvRtvToTexture2D>(mWorld.Engine());
+			texView->SetInternalResource(texBuffer);
+
+			mRTs->SetView(std::to_string(i), texView);
 		}
 	}
 
-	PresentST();
-}
-
-void aiva::layer2::RenderSystem::InitRTs()
-{
-	auto const viewRect = mWorld.Engine().GraphicHardware().ScreenViewRect();
-
-	mRTs = aiva::utils::NewObject<aiva::layer1::ResourceViewHeap>(mWorld.Engine());
-	mRTs->HeapType(aiva::layer1::EDescriptorHeapType::Rtv);
-
-	for (std::size_t i = {}; i < std::size_t{ NUM_DEFFERED_BUFFERS }; i++)
+	void RenderSystem::InitDSs()
 	{
-		auto texBuffer = aiva::utils::NewObject<aiva::layer1::GrTexture2D>(mWorld.Engine());
-		texBuffer->Format(aiva::layer1::EResourceBufferFormat::R32G32B32A32_FLOAT);
+		auto const viewRect = mWorld.Engine().GraphicHardware().ScreenViewRect();
+
+		mDSs = NewObject<ResourceViewHeapType>(mWorld.Engine());
+		mDSs->HeapType(EDescriptorHeapType::Dsv);
+
+		auto texBuffer = NewObject<GrTexture2D>(mWorld.Engine());
+		texBuffer->Format(EResourceBufferFormat::D32_FLOAT);
 		texBuffer->Width(viewRect.z);
 		texBuffer->Height(viewRect.w);
-		texBuffer->SupportRenderTarget(true);
-		texBuffer->SupportUnorderedAccess(true);
+		texBuffer->SupportDepthStencil(true);
 
-		auto texView = aiva::utils::NewObject<aiva::layer1::GrvRtvToTexture2D>(mWorld.Engine());
+		auto texView = NewObject<GrvDsvToTexture2D>(mWorld.Engine());
 		texView->SetInternalResource(texBuffer);
 
-		mRTs->SetView(std::to_string(i), texView);
+		mDSs->SetView(std::to_string(0), texView);
 	}
-}
 
-void aiva::layer2::RenderSystem::InitDSs()
-{
-	auto const viewRect = mWorld.Engine().GraphicHardware().ScreenViewRect();
-
-	mDSs = aiva::utils::NewObject<aiva::layer1::ResourceViewHeap>(mWorld.Engine());
-	mDSs->HeapType(aiva::layer1::EDescriptorHeapType::Dsv);
-
-	auto texBuffer = aiva::utils::NewObject<aiva::layer1::GrTexture2D>(mWorld.Engine());
-	texBuffer->Format(aiva::layer1::EResourceBufferFormat::D32_FLOAT);
-	texBuffer->Width(viewRect.z);
-	texBuffer->Height(viewRect.w);
-	texBuffer->SupportDepthStencil(true);
-
-	auto texView = aiva::utils::NewObject<aiva::layer1::GrvDsvToTexture2D>(mWorld.Engine());
-	texView->SetInternalResource(texBuffer);
-
-	mDSs->SetView(std::to_string(0), texView);
-}
-
-void aiva::layer2::RenderSystem::UseRTsDSs()
-{
-	aiva::utils::Asserts::CheckBool(mRTs, "RT heap is not valid");
-	aiva::utils::Asserts::CheckBool(mDSs, "DS heap is not valid");
-
-	auto setRenderTarget = aiva::layer1::GcaSetRenderTarget{};
-	setRenderTarget.RtHeap = mRTs;
-	setRenderTarget.DsHeap = mDSs;
-
-	mWorld.Engine().GraphicExecutor().ExecuteCommand(setRenderTarget);
-}
-
-void aiva::layer2::RenderSystem::ClearRTs()
-{
-	aiva::utils::Asserts::CheckBool(mRTs, "RT heap is not valid");
-
-	for (std::size_t i = {}; i < std::size_t{ NUM_DEFFERED_BUFFERS }; i++)
+	void aiva::layer2::RenderSystem::UseRTsDSs()
 	{
-		auto clearRenderTarget = aiva::layer1::GcaClearRenderTarget();
-		clearRenderTarget.Heap = mRTs;
-		clearRenderTarget.View = std::to_string(i);
-		clearRenderTarget.Color = glm::vec4{ 0.0f };
+		Asserts::CheckBool(mRTs, "RT heap is not valid");
+		Asserts::CheckBool(mDSs, "DS heap is not valid");
 
-		mWorld.Engine().GraphicExecutor().ExecuteCommand(clearRenderTarget);
-	}
-}
+		auto setRenderTarget = GcaSetRenderTarget{};
+		setRenderTarget.RtHeap = mRTs;
+		setRenderTarget.DsHeap = mDSs;
 
-void aiva::layer2::RenderSystem::ClearDSs()
-{
-	aiva::utils::Asserts::CheckBool(mDSs, "DS heap is not valid");
-
-	auto clearDepthStencil = aiva::layer1::GcaClearDepthStencil{};
-	clearDepthStencil.Heap = mDSs;
-	clearDepthStencil.View = std::to_string(0);
-	clearDepthStencil.Depth = 1.0f;
-
-	mWorld.Engine().GraphicExecutor().ExecuteCommand(clearDepthStencil);
-}
-
-void aiva::layer2::RenderSystem::UseViewports()
-{
-	auto setViewports = aiva::layer1::GcaSetViewports{};
-	setViewports.Rect = mWorld.Engine().GraphicHardware().ScreenViewRect();
-
-	mWorld.Engine().GraphicExecutor().ExecuteCommand(setViewports);
-}
-
-void aiva::layer2::RenderSystem::UseScissorRects()
-{
-	auto setScissorRects = aiva::layer1::GcaSetScissorRects{};
-	setScissorRects.Rect = mWorld.Engine().GraphicHardware().ScreenViewRect();
-
-	mWorld.Engine().GraphicExecutor().ExecuteCommand(setScissorRects);
-}
-
-void aiva::layer2::RenderSystem::DrawMeshRenderer(ScCamera const& const camera, ScMeshRenderer const& const meshRenderer)
-{
-	auto drawMesh = aiva::layer1::GcaDrawMesh{};
-	drawMesh.Material = SetupCameraProperties(camera, meshRenderer);
-	drawMesh.MeshTopology = aiva::layer1::EPrimitiveTopology::TriangleList;
-	drawMesh.MeshIndicesKey = aiva::utils::MaterialConstants::AIVA_BUFFER_MESH_INDICES;
-
-	mWorld.Engine().GraphicExecutor().ExecuteCommand(drawMesh);
-}
-
-std::shared_ptr<aiva::layer1::RoMaterialGraphic> aiva::layer2::RenderSystem::SetupCameraProperties(ScCamera const& const camera, ScMeshRenderer const& const meshRenderer)
-{
-	auto const sharedMaterial = meshRenderer.Material();
-	aiva::utils::Asserts::CheckBool(sharedMaterial, "Shared material is not valid");
-
-	auto const instancedMaterial = sharedMaterial->Copy();
-	aiva::utils::Asserts::CheckBool(instancedMaterial, "Instanced material is not valid");
-
-	auto const constantHeap = instancedMaterial->ResourceDescriptor().ResourceTable().GetOrAddResourceHeap(aiva::layer1::EDescriptorHeapType::CbvSrvUav);
-	aiva::utils::Asserts::CheckBool(constantHeap, "Constant heap is not valid");
-
-	auto const constantView = constantHeap->GetOrAddView<aiva::layer1::GrvCbvToBuffer>(aiva::utils::MaterialConstants::AIVA_BUFFER_CONSTANTS_PER_OBJECT);
-	aiva::utils::Asserts::CheckBool(constantView, "Constant view is not valid");
-
-	{ // MVP
-		auto const viewRect = mWorld.Engine().GraphicHardware().ScreenViewRect();
-		auto const viewAspect = (viewRect.z - viewRect.x) / (viewRect.w - viewRect.y);
-
-		auto const model = meshRenderer.Actor().WorldTransform();
-		constantView->Struct().FieldValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_M, model);
-
-		auto const view = camera.Actor().WorldView();
-		constantView->Struct().FieldValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_V, view);
-
-		auto const projection = glm::perspective(camera.FovY(), viewAspect, camera.ZNear(), camera.ZFar());
-		constantView->Struct().FieldValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_P, projection);
-
-		auto const mvp = projection * view * model;
-		constantView->Struct().FieldValue(aiva::utils::MaterialConstants::AIVA_CONSTANT_MVP, mvp);
+		mWorld.Engine().GraphicExecutor().ExecuteCommand(setRenderTarget);
 	}
 
-	return instancedMaterial;
-}
+	void aiva::layer2::RenderSystem::ClearRTs()
+	{
+		Asserts::CheckBool(mRTs, "RT heap is not valid");
 
-void aiva::layer2::RenderSystem::PresentST()
-{
-	auto present = aiva::layer1::GcaPresent{};
-	mWorld.Engine().GraphicExecutor().ExecuteCommand(present);
-}
+		for (std::size_t i = {}; i < std::size_t{ NUM_DEFFERED_BUFFERS }; i++)
+		{
+			auto clearRenderTarget = GcaClearRenderTarget();
+			clearRenderTarget.Heap = mRTs;
+			clearRenderTarget.View = std::to_string(i);
+			clearRenderTarget.Color = glm::vec4{ 0.0f };
 
-void aiva::layer2::RenderSystem::ShutDSs()
-{
-	aiva::utils::Asserts::CheckBool(mRTs, "DS heap is not valid");
-	mDSs = {};
-}
+			mWorld.Engine().GraphicExecutor().ExecuteCommand(clearRenderTarget);
+		}
+	}
 
-void aiva::layer2::RenderSystem::ShutRTs()
-{
-	aiva::utils::Asserts::CheckBool(mRTs, "RT heap is not valid");
-	mRTs = {};
+	void aiva::layer2::RenderSystem::ClearDSs()
+	{
+		Asserts::CheckBool(mDSs, "DS heap is not valid");
+
+		auto clearDepthStencil = GcaClearDepthStencil{};
+		clearDepthStencil.Heap = mDSs;
+		clearDepthStencil.View = std::to_string(0);
+		clearDepthStencil.Depth = 1.0f;
+
+		mWorld.Engine().GraphicExecutor().ExecuteCommand(clearDepthStencil);
+	}
+
+	void aiva::layer2::RenderSystem::UseViewports()
+	{
+		auto setViewports = GcaSetViewports{};
+		setViewports.Rect = mWorld.Engine().GraphicHardware().ScreenViewRect();
+
+		mWorld.Engine().GraphicExecutor().ExecuteCommand(setViewports);
+	}
+
+	void aiva::layer2::RenderSystem::UseScissorRects()
+	{
+		auto setScissorRects = GcaSetScissorRects{};
+		setScissorRects.Rect = mWorld.Engine().GraphicHardware().ScreenViewRect();
+
+		mWorld.Engine().GraphicExecutor().ExecuteCommand(setScissorRects);
+	}
+
+	void aiva::layer2::RenderSystem::DrawMeshRenderer(ScCamera const& const camera, ScMeshRenderer const& const meshRenderer)
+	{
+		auto drawMesh = GcaDrawMesh{};
+		drawMesh.Material = SetupCameraProperties(camera, meshRenderer);
+		drawMesh.MeshTopology = EPrimitiveTopology::TriangleList;
+		drawMesh.MeshIndicesKey = MaterialConstants::AIVA_BUFFER_MESH_INDICES;
+
+		mWorld.Engine().GraphicExecutor().ExecuteCommand(drawMesh);
+	}
+
+	RoMaterialGraphicTypeShared aiva::layer2::RenderSystem::SetupCameraProperties(ScCamera const& const camera, ScMeshRenderer const& const meshRenderer)
+	{
+		auto const sharedMaterial = meshRenderer.Material();
+		Asserts::CheckBool(sharedMaterial, "Shared material is not valid");
+
+		auto const instancedMaterial = sharedMaterial->Copy();
+		Asserts::CheckBool(instancedMaterial, "Instanced material is not valid");
+
+		auto const constantHeap = instancedMaterial->ResourceDescriptor().ResourceTable().GetOrAddResourceHeap(EDescriptorHeapType::CbvSrvUav);
+		Asserts::CheckBool(constantHeap, "Constant heap is not valid");
+
+		auto const constantView = constantHeap->GetOrAddView<GrvCbvToBuffer>(MaterialConstants::AIVA_BUFFER_CONSTANTS_PER_OBJECT);
+		Asserts::CheckBool(constantView, "Constant view is not valid");
+
+		{ // MVP
+			auto const viewRect = mWorld.Engine().GraphicHardware().ScreenViewRect();
+			auto const viewAspect = (viewRect.z - viewRect.x) / (viewRect.w - viewRect.y);
+
+			auto const model = meshRenderer.Actor().WorldTransform();
+			constantView->Struct().FieldValue(MaterialConstants::AIVA_CONSTANT_M, model);
+
+			auto const view = camera.Actor().WorldView();
+			constantView->Struct().FieldValue(MaterialConstants::AIVA_CONSTANT_V, view);
+
+			auto const projection = glm::perspective(camera.FovY(), viewAspect, camera.ZNear(), camera.ZFar());
+			constantView->Struct().FieldValue(MaterialConstants::AIVA_CONSTANT_P, projection);
+
+			auto const mvp = projection * view * model;
+			constantView->Struct().FieldValue(MaterialConstants::AIVA_CONSTANT_MVP, mvp);
+		}
+
+		return instancedMaterial;
+	}
+
+	void aiva::layer2::RenderSystem::PresentST()
+	{
+		auto present = GcaPresent{};
+		mWorld.Engine().GraphicExecutor().ExecuteCommand(present);
+	}
+
+	void aiva::layer2::RenderSystem::ShutDSs()
+	{
+		Asserts::CheckBool(mRTs, "DS heap is not valid");
+		mDSs = {};
+	}
+
+	void aiva::layer2::RenderSystem::ShutRTs()
+	{
+		Asserts::CheckBool(mRTs, "RT heap is not valid");
+		mRTs = {};
+	}
+
 }

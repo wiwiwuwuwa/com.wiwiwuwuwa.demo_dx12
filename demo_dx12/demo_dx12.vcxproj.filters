@@ -189,6 +189,10 @@
     <ClInclude Include="Sources\aiva\layer1\ro_scene_gltf_aliases.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_srv_to_texture_2d.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_srv_to_texture_2d_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\ro_material_graphic_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\resource_view_heap_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer2\sc_camera_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer2\sc_mesh_renderer_fwd.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

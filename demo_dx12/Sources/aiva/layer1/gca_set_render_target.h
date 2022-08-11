@@ -2,11 +2,11 @@
 #include <pch.h>
 
 #include <aiva/layer1/i_graphic_command_async.h>
+#include <aiva/layer1/res_view_desc.h>
 
 namespace aiva::layer1
 {
 	struct Engine;
-	struct ResourceViewHeap;
 }
 
 namespace aiva::layer1
@@ -28,8 +28,8 @@ namespace aiva::layer1
 	// Resources
 
 	public:
-		std::shared_ptr<ResourceViewHeap> RtHeap{};
+		std::vector<ResViewDescType> RTs{};
 
-		std::shared_ptr<ResourceViewHeap> DsHeap{};
+		std::vector<ResViewDescType> DSs{};
 	};
 }

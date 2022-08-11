@@ -1,6 +1,8 @@
 #pragma once
 #include <pch.h>
 
+#include <aiva/layer2/world_fwd.h>
+
 namespace aiva::layer1
 {
 	struct Engine;

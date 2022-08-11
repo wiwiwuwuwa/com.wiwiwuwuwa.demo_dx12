@@ -1,17 +1,13 @@
 #pragma once
 #include <pch.h>
 
-#include <aiva/layer1/resource_view_heap_fwd.h>
-#include <aiva/layer1/ro_material_graphic_fwd.h>
+#include <aiva/layer1/e_resource_buffer_format.h>
+#include <aiva/layer1/res_view_desc.h>
 #include <aiva/layer2/sc_camera_fwd.h>
 #include <aiva/layer2/sc_mesh_renderer_fwd.h>
+#include <aiva/layer2/world_fwd.h>
 #include <aiva/utils/a_object.h>
 #include <aiva/utils/t_signal_aggregator.h>
-
-namespace aiva::layer2
-{
-	struct World;
-}
 
 namespace aiva::layer2
 {
@@ -24,7 +20,7 @@ namespace aiva::layer2
 		friend FactoryType;
 
 	protected:
-		RenderSystem(World const& world);
+		RenderSystem(WorldType const& world);
 
 	public:
 		~RenderSystem() override;
@@ -36,7 +32,7 @@ namespace aiva::layer2
 	// Events
 
 	public:
-		using EvPopulateCameras = boost::signals2::signal<std::shared_ptr<ScCamera>(), aiva::utils::TSignalAggregator<std::vector<ScCameraTypeShared>>>;
+		using EvPopulateCameras = boost::signals2::signal<ScCameraTypeShared(), aiva::utils::TSignalAggregator<std::vector<ScCameraTypeShared>>>;
 
 		using EvPopulateMeshRenderers = boost::signals2::signal<std::shared_ptr<ScMeshRenderer>(), aiva::utils::TSignalAggregator<std::vector<ScMeshRendererTypeShared>>>;
 
@@ -54,9 +50,6 @@ namespace aiva::layer2
 	// Renderer
 
 	private:
-		static constexpr std::size_t NUM_DEFFERED_BUFFERS = 4;
-
-	private:
 		void InitializeRenderer();
 
 		void TerminateRenderer();
@@ -64,34 +57,20 @@ namespace aiva::layer2
 	private:
 		void ExecuteRenderer();
 
-	private:
-		void InitRTs();
-
-		void InitDSs();
-
-		void UseRTsDSs();
-
-		void ClearRTs();
-
-		void ClearDSs();
-
-		void UseViewports();
-
-		void UseScissorRects();
-
-		void DrawMeshRenderer(ScCamera const& const camera, ScMeshRenderer const& const meshRenderer);
-
-		aiva::layer1::RoMaterialGraphicTypeShared SetupCameraProperties(ScCamera const& const camera, ScMeshRenderer const& const meshRenderer);
-
-		void PresentST();
-
-		void ShutDSs();
-
-		void ShutRTs();
+	// ----------------------------------------------------
+	// Render Commands
 
 	private:
-		aiva::layer1::ResourceViewHeapTypeShared mRTs{};
+		void PresentFrame();
 
-		aiva::layer1::ResourceViewHeapTypeShared mDSs{};
+	// ----------------------------------------------------
+	// Render Targets
+
+	private:
+		aiva::layer1::ResViewDescType CreateRenderTarget(aiva::layer1::EResourceBufferFormat const format, glm::u64vec2 const size) const;
+
+		void SetRenderTarget(std::vector<aiva::layer1::ResViewDescType> const& RTs, std::vector<aiva::layer1::ResViewDescType> const& DSs = {}) const;
+
+		void ClearRenderTarget(aiva::layer1::ResViewDescType const& rtDesc) const;
 	};
 }

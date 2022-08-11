@@ -82,6 +82,8 @@
     <ClCompile Include="Sources\aiva\utils\gltf_type_desc.cpp" />
     <ClCompile Include="Sources\aiva\utils\boxed_type_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_srv_to_texture_2d.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\res_view_desc.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\res_view_desc_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -193,6 +195,14 @@
     <ClInclude Include="Sources\aiva\layer1\resource_view_heap_fwd.h" />
     <ClInclude Include="Sources\aiva\layer2\sc_camera_fwd.h" />
     <ClInclude Include="Sources\aiva\layer2\sc_mesh_renderer_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\res_view_desc.h" />
+    <ClInclude Include="Sources\aiva\layer1\res_view_desc_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\res_view_desc_utils.h" />
+    <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_view_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer2\world_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\grv_rtv_to_texture_2d_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\gr_texture_2d_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\grv_dsv_to_texture_2d_fwd.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

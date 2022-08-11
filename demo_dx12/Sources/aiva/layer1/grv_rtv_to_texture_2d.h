@@ -2,6 +2,7 @@
 #include <pch.h>
 
 #include <aiva/layer1/a_graphic_resource_view.h>
+#include <aiva/layer1/grv_rtv_to_texture_2d_fwd.h>
 
 namespace aiva::layer1
 {

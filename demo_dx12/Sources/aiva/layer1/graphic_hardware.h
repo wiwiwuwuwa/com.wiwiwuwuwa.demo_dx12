@@ -5,6 +5,8 @@
 #include <boost/core/noncopyable.hpp>
 #include <winrt/base.h>
 
+#include <aiva/layer1/res_view_desc.h>
+
 namespace aiva::layer1
 {
 	struct Engine;
@@ -118,19 +120,9 @@ namespace aiva::layer1
 	// Screen Render Targets
 
 	public:
-		std::shared_ptr<ResourceViewHeap> ScreenViewHeap() const;
+		ResViewDescType ScreenRenderTarget() const;
 
-		std::string ScreenViewKey() const;
-
-	public:
-		std::shared_ptr<GrvRtvToTexture2D> ScreenViewObj() const;
-
-		winrt::com_ptr<ID3D12Resource> ScreenViewRes() const;
-
-		D3D12_CPU_DESCRIPTOR_HANDLE ScreenViewHandle() const;
-
-	public:
-		glm::vec4 ScreenViewRect() const;
+		glm::u64vec2 ScreenSize() const;
 
 	private:
 		void InitializeScreenRenderTargets();

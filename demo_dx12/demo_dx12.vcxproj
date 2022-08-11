@@ -173,6 +173,7 @@
     <ClInclude Include="Sources\aiva\layer0\app.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_view.h" />
+    <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_view_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\e_cull_mode.h" />
     <ClInclude Include="Sources\aiva\layer1\e_comparison_func.h" />
     <ClInclude Include="Sources\aiva\layer1\e_descriptor_heap_type.h" />
@@ -182,10 +183,16 @@
     <ClInclude Include="Sources\aiva\layer1\e_resource_memory_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_resource_view_type.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer.h" />
+    <ClInclude Include="Sources\aiva\layer1\grv_dsv_to_texture_2d_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\grv_rtv_to_texture_2d_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_srv_to_texture_2d.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_srv_to_texture_2d_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\gr_texture_2d_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\i_object_engineable.h" />
     <ClInclude Include="Sources\aiva\layer1\resource_view_heap_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\res_view_desc.h" />
+    <ClInclude Include="Sources\aiva\layer1\res_view_desc_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\res_view_desc_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_material_graphic_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_scene_gltf_aliases.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_clear_depth_stencil.h" />
@@ -217,6 +224,7 @@
     <ClInclude Include="Sources\aiva\layer1\material_resource_descriptor.h" />
     <ClInclude Include="Sources\aiva\layer2\sc_camera_fwd.h" />
     <ClInclude Include="Sources\aiva\layer2\sc_mesh_renderer_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer2\world_fwd.h" />
     <ClInclude Include="Sources\aiva\utils\boxed_type_utils.h" />
     <ClInclude Include="Sources\aiva\utils\gltf_type_desc.h" />
     <ClInclude Include="Sources\aiva\utils\layout_field_utils.h" />
@@ -329,6 +337,8 @@
     <ClCompile Include="Sources\aiva\layer1\resource_system.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_view_heap.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_view_table.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\res_view_desc.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\res_view_desc_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_material_compute.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_material_graphic.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_scene_gltf.cpp" />

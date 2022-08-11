@@ -3,6 +3,7 @@
 
 #include <aiva/layer1/a_graphic_resource.h>
 #include <aiva/layer1/e_resource_buffer_format.h>
+#include <aiva/layer1/gr_texture_2d_fwd.h>
 
 namespace aiva::layer1
 {

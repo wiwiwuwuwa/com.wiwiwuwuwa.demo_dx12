@@ -6,6 +6,7 @@
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gr_texture_2d.h>
 #include <aiva/layer1/grv_rtv_to_texture_2d.h>
+#include <aiva/layer1/res_view_desc_utils.h>
 #include <aiva/layer1/resource_view_heap.h>
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/object_factory.h>
@@ -302,76 +303,35 @@ winrt::com_ptr<ID3D12Fence1> const& aiva::layer1::GraphicHardware::Fence() const
 	return mFence;
 }
 
-std::shared_ptr<aiva::layer1::ResourceViewHeap>  aiva::layer1::GraphicHardware::ScreenViewHeap() const
+aiva::layer1::ResViewDescType aiva::layer1::GraphicHardware::ScreenRenderTarget() const
 {
-	aiva::utils::Asserts::CheckBool(mScreenRenderTargets);
-	return mScreenRenderTargets;
-}
+	auto const& rtHeap = mScreenRenderTargets;
+	aiva::utils::Asserts::CheckBool(rtHeap, "RT heap is not valid");
 
-std::string aiva::layer1::GraphicHardware::ScreenViewKey() const
-{
 	auto const& swapChain = SwapChain();
 	winrt::check_bool(swapChain);
 
-	return std::to_string(swapChain->GetCurrentBackBufferIndex());
+	auto rtDesc = ResViewDescType{};
+	rtDesc.Heap = rtHeap;
+	rtDesc.Name = std::to_string(swapChain->GetCurrentBackBufferIndex());
+
+	return rtDesc;
 }
 
-std::shared_ptr<aiva::layer1::GrvRtvToTexture2D> aiva::layer1::GraphicHardware::ScreenViewObj() const
+glm::u64vec2 aiva::layer1::GraphicHardware::ScreenSize() const
 {
-	auto const& viewHeap = ScreenViewHeap();
-	aiva::utils::Asserts::CheckBool(viewHeap);
+	auto const rtDesc = ScreenRenderTarget();
+	aiva::utils::Asserts::CheckBool(ResViewDescUtils::IsValid(rtDesc), "RT desc is not valid");
 
-	auto const& viewKey = ScreenViewKey();
-	aiva::utils::Asserts::CheckBool(!viewKey.empty());
+	auto const rtView = ResViewDescUtils::GetView(rtDesc);
+	aiva::utils::Asserts::CheckBool(rtView, "RT view is not valid");
 
-	auto const& viewObj = viewHeap->GetView<GrvRtvToTexture2D>(viewKey);
-	aiva::utils::Asserts::CheckBool(viewObj);
+	auto const rtTexture = std::dynamic_pointer_cast<GrTexture2DType>(rtView->GetInternalResource());
+	aiva::utils::Asserts::CheckBool(rtTexture, "RT texture is not valid");
+	aiva::utils::Asserts::CheckBool(rtTexture->Width() > 0, "RT texture width is not valid");
+	aiva::utils::Asserts::CheckBool(rtTexture->Height() > 0, "RT texture height is not valid");
 
-	return viewObj;
-}
-
-winrt::com_ptr<ID3D12Resource> aiva::layer1::GraphicHardware::ScreenViewRes() const
-{
-	auto const& viewObj = ScreenViewObj();
-	aiva::utils::Asserts::CheckBool(viewObj);
-
-	auto const& viewBuf = viewObj->GetInternalResource();
-	aiva::utils::Asserts::CheckBool(viewBuf);
-
-	auto const& viewRes = viewBuf->InternalResource();
-	winrt::check_bool(viewRes);
-
-	return viewRes;
-}
-
-D3D12_CPU_DESCRIPTOR_HANDLE aiva::layer1::GraphicHardware::ScreenViewHandle() const
-{
-	auto const& viewHeap = ScreenViewHeap();
-	aiva::utils::Asserts::CheckBool(viewHeap);
-
-	auto const& viewKey = ScreenViewKey();
-	aiva::utils::Asserts::CheckBool(!viewKey.empty());
-
-	auto const& viewHandle = viewHeap->InternalDescriptorHandle(viewKey);
-	aiva::utils::Asserts::CheckBool(viewHandle);
-
-	return *viewHandle;
-}
-
-glm::vec4 aiva::layer1::GraphicHardware::ScreenViewRect() const
-{
-	auto const viewRes = ScreenViewRes();
-	winrt::check_bool(viewRes);
-
-	auto const viewDesc = viewRes->GetDesc();
-
-	auto viewRect = glm::vec4{};
-	viewRect.x = 0.0f;
-	viewRect.y = 0.0f;
-	viewRect.z = viewDesc.Width;
-	viewRect.w = viewDesc.Height;
-
-	return viewRect;
+	return { rtTexture->Width(), rtTexture->Height() };
 }
 
 void aiva::layer1::GraphicHardware::InitializeScreenRenderTargets()

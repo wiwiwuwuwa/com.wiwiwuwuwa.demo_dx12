@@ -1,6 +1,7 @@
 #pragma once
 #include <pch.h>
 
+#include <aiva/layer1/a_graphic_resource_view_fwd.h>
 #include <aiva/layer1/e_descriptor_heap_type.h>
 #include <aiva/layer1/e_resource_view_type.h>
 #include <aiva/layer1/i_object_engineable.h>

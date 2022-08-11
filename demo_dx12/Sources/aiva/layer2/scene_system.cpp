@@ -11,7 +11,6 @@
 #include <aiva/layer1/ro_material_graphic.h>
 #include <aiva/layer1/ro_scene_gltf.h>
 #include <aiva/layer1/scene_gltf_utils.h>
-#include <aiva/layer1/shader_struct.h>
 #include <aiva/layer2/sc_camera.h>
 #include <aiva/layer2/sc_mesh_renderer.h>
 #include <aiva/layer2/scene_actor.h>
@@ -33,9 +32,9 @@ aiva::layer2::SceneActor& aiva::layer2::SceneSystem::CreateActor()
 	return *mActors.emplace_back(new SceneActor{ mWorld });
 }
 
-void aiva::layer2::SceneSystem::LoadScene(aiva::layer1::RoSceneGltf const& scene)
+void aiva::layer2::SceneSystem::LoadScene(aiva::layer1::RoSceneGltfPtr const& scene)
 {
-	auto const& gltfModel = scene.Model();
+	auto const& gltfModel = scene->Model();
 
 	// ----------------------------------------------------
 	// Actors
@@ -82,11 +81,11 @@ void aiva::layer2::SceneSystem::LoadScene(aiva::layer1::RoSceneGltf const& scene
 	}
 
 	// ----------------------------------------------------
-	// Materials
+	// Models
 
-	auto const& aivaMaterials = aiva::layer1::SceneGltfUtils::LoadMaterials(scene);
+	auto const& aivaModels = aiva::layer1::SceneGltfUtils::LoadModels(scene);
 
-	for (auto const& pair : aivaMaterials)
+	for (auto const& pair : aivaModels)
 	{
 		auto& aivaNode = *aivaNodes.at(pair.first);
 		auto& meshRenderer = aivaNode.CreateComponent<ScMeshRenderer>();

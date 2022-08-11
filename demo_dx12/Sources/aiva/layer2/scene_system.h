@@ -1,10 +1,7 @@
 #pragma once
 #include <pch.h>
 
-namespace aiva::layer1
-{
-	struct RoSceneGltf;
-}
+#include <aiva/layer1/ro_scene_gltf_aliases.h>
 
 namespace aiva::layer2
 {
@@ -45,7 +42,7 @@ namespace aiva::layer2
 	// Scenes
 
 	public:
-		void LoadScene(aiva::layer1::RoSceneGltf const& scene);
+		void LoadScene(aiva::layer1::RoSceneGltfPtr const& scene);
 	};
 }
 

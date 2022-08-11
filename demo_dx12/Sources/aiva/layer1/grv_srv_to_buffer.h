@@ -3,9 +3,9 @@
 
 #include <aiva/layer1/a_graphic_resource_view.h>
 
-namespace aiva::layer1
+namespace aiva::utils
 {
-	struct ShaderBuffer;
+	struct DictBuffer;
 }
 
 namespace aiva::layer1
@@ -28,10 +28,12 @@ namespace aiva::layer1
 	// Buffer
 
 	public:
-		using BufferType = ShaderBuffer;
+		using BufferElementType = aiva::utils::DictBuffer;
+
+		using BufferPointerType = std::shared_ptr<BufferElementType>;
 
 	public:
-		BufferType& Buffer() const;
+		BufferElementType& Buffer() const;
 
 	private:
 		void InitializeBuffer();
@@ -42,12 +44,14 @@ namespace aiva::layer1
 		void Buffer_OnChanged();
 
 	private:
-		std::shared_ptr<BufferType> mBuffer{};
+		BufferPointerType mBuffer{};
 
 	// ----------------------------------------------------
 	// Graphic Resource View: Internal Resource
 
 	protected:
+		std::shared_ptr<ResourceType> CreateDefaultInternalResource() const override;
+
 		void RefreshInternalResourceFromSelf(std::shared_ptr<ResourceType> const& aivaResource) override;
 
 	// ----------------------------------------------------

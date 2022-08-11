@@ -4,9 +4,12 @@
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gr_buffer.h>
 #include <aiva/layer1/graphic_hardware.h>
-#include <aiva/layer1/shader_buffer.h>
 #include <aiva/utils/asserts.h>
-#include <aiva/utils/object_factory.h>
+#include <aiva/utils/dict_buffer.h>
+#include <aiva/utils/dict_buffer_utils.h>
+#include <aiva/utils/layout_buffer.h>
+#include <aiva/utils/layout_buffer_utils.h>
+#include <aiva/utils/object_utils.h>
 
 aiva::layer1::GrvSrvToBuffer::GrvSrvToBuffer(EngineType const& engine) : AGraphicResourceView{ engine }
 {
@@ -18,7 +21,7 @@ aiva::layer1::GrvSrvToBuffer::~GrvSrvToBuffer()
 	TerminateBuffer();
 }
 
-aiva::layer1::GrvSrvToBuffer::BufferType& aiva::layer1::GrvSrvToBuffer::Buffer() const
+aiva::layer1::GrvSrvToBuffer::BufferElementType& aiva::layer1::GrvSrvToBuffer::Buffer() const
 {
 	aiva::utils::Asserts::CheckBool(mBuffer, "Shader buffer is not valid");
 	return *mBuffer;
@@ -26,7 +29,7 @@ aiva::layer1::GrvSrvToBuffer::BufferType& aiva::layer1::GrvSrvToBuffer::Buffer()
 
 void aiva::layer1::GrvSrvToBuffer::InitializeBuffer()
 {
-	mBuffer = BufferType::FactoryType::Create<BufferType>();
+	mBuffer = aiva::utils::NewObject<BufferElementType>();
 	aiva::utils::Asserts::CheckBool(mBuffer, "Shader buffer is not valid");
 
 	mBuffer->OnChanged().connect(boost::bind(&GrvSrvToBuffer::Buffer_OnChanged, this));
@@ -45,9 +48,19 @@ void aiva::layer1::GrvSrvToBuffer::Buffer_OnChanged()
 	MarkAsChanged();
 }
 
+std::shared_ptr<aiva::layer1::GrvSrvToBuffer::ResourceType> aiva::layer1::GrvSrvToBuffer::CreateDefaultInternalResource() const
+{
+	return aiva::utils::NewObject<GrBuffer>(Engine());
+}
+
 void aiva::layer1::GrvSrvToBuffer::RefreshInternalResourceFromSelf(std::shared_ptr<ResourceType> const& aivaResource)
 {
-	auto const& binary = Buffer().SerializeToBinary();
+	aiva::utils::Asserts::CheckBool(aivaResource, "Aiva resource is not valid");
+
+	auto const& dictBuffer = mBuffer;
+	aiva::utils::Asserts::CheckBool(dictBuffer, "Dict buffer is not valid");
+
+	auto const& binary = aiva::utils::DictBufferUtils::SerializeToBinary(dictBuffer);
 	aiva::utils::Asserts::CheckBool(!binary.empty());
 
 	auto const& aivaBuffer = std::dynamic_pointer_cast<GrBuffer>(aivaResource);
@@ -83,24 +96,30 @@ void aiva::layer1::GrvSrvToBuffer::CreateDirectxView(D3D12_CPU_DESCRIPTOR_HANDLE
 	auto const& device = Engine().GraphicHardware().Device();
 	winrt::check_bool(device);
 
-	auto const& buffer = std::dynamic_pointer_cast<GrBuffer>(GetInternalResource());
-	aiva::utils::Asserts::CheckBool(buffer, "Graphic resource doesn't support buffer");
+	auto const& dictBuffer = mBuffer;
+	aiva::utils::Asserts::CheckBool(dictBuffer, "Dict buffer is not valid");
 
-	auto const& resource = buffer->InternalResource();
-	winrt::check_bool(resource);
+	auto const& layoutBuffer = aiva::utils::LayoutBufferUtils::GenerateFrom(mBuffer);
+	aiva::utils::Asserts::CheckBool(layoutBuffer, "Layout buffer is not valid");
 
-	auto const& resourceDesc = resource->GetDesc();
+	auto const& resourceBuffer = std::dynamic_pointer_cast<GrBuffer>(GetInternalResource());
+	aiva::utils::Asserts::CheckBool(resourceBuffer, "Graphic resource doesn't support buffer");
+
+	auto const& resourceObject = resourceBuffer->InternalResource();
+	winrt::check_bool(resourceObject);
+
+	auto const& resourceObjectDesc = resourceObject->GetDesc();
 
 	auto viewDesc = D3D12_SHADER_RESOURCE_VIEW_DESC{};
-	viewDesc.Format = resourceDesc.Format;
+	viewDesc.Format = resourceObjectDesc.Format;
 	viewDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
 	viewDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	viewDesc.Buffer.FirstElement = 0;
 	viewDesc.Buffer.NumElements = Buffer().Num();
-	viewDesc.Buffer.StructureByteStride = Buffer().ByteStride();
+	viewDesc.Buffer.StructureByteStride = layoutBuffer->Stride();
 	viewDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
 
-	device->CreateShaderResourceView(resource.get(), &viewDesc, destination);
+	device->CreateShaderResourceView(resourceObject.get(), &viewDesc, destination);
 }
 
 std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::GrvSrvToBuffer::CreateDirectxBarriers(bool const active)

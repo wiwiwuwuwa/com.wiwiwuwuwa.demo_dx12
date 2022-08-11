@@ -56,6 +56,8 @@
 
 #include <boost/function.hpp>
 
+#include <boost/container_hash/hash.hpp>
+
 #include <boost/core/noncopyable.hpp>
 
 #include <boost/core/span.hpp>

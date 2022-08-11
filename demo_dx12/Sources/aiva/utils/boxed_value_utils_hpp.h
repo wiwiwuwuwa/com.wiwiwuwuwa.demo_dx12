@@ -5,6 +5,7 @@ namespace aiva::utils
 {
 	enum class EBoxedType;
 	struct IBoxedValue;
+	struct GltfTypeDesc;
 	struct MetaField;
 	template <typename> struct TBoxedValue;
 }
@@ -80,6 +81,8 @@ namespace aiva::utils
 	// CreateInstance
 
 	public:
+		static std::shared_ptr<IBoxedValue> CreateInstance(GltfTypeDesc const& desc);
+
 		static std::shared_ptr<IBoxedValue> CreateInstance(EBoxedType const boxedType);
 
 		template <typename TValue>

@@ -93,7 +93,7 @@ void aiva::layer2::World::InitializeSystems()
 		auto const& sceneResource = mEngine->ResourceSystem().GetResource<aiva::layer1::RoSceneGltf>("resources\\scenes\\main.scene_gltf");
 		aiva::utils::Asserts::CheckBool(sceneResource);
 
-		mSceneSystem->LoadScene(*sceneResource);
+		mSceneSystem->LoadScene(sceneResource);
 	}
 }
 

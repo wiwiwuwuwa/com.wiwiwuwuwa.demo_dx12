@@ -1,249 +1,287 @@
 #include <pch.h>
 #include <aiva/layer1/scene_gltf_utils.h>
 
-#include <aiva/layer1/a_graphic_resource_view.h>
 #include <aiva/layer1/e_descriptor_heap_type.h>
-#include <aiva/layer1/e_resource_memory_type.h>
-#include <aiva/layer1/e_value_type.h>
 #include <aiva/layer1/engine.h>
-#include <aiva/layer1/gr_buffer.h>
 #include <aiva/layer1/grv_srv_to_buffer.h>
-#include <aiva/layer1/i_shader_value.h>
 #include <aiva/layer1/material_resource_descriptor.h>
 #include <aiva/layer1/resource_system.h>
 #include <aiva/layer1/resource_view_heap.h>
 #include <aiva/layer1/resource_view_table.h>
 #include <aiva/layer1/ro_material_graphic.h>
 #include <aiva/layer1/ro_scene_gltf.h>
-#include <aiva/layer1/shader_buffer.h>
-#include <aiva/layer1/shader_struct.h>
-#include <aiva/layer1/shader_value_utils.h>
+#include <aiva/utils/asserts.h>
+#include <aiva/utils/boxed_type_utils.h>
+#include <aiva/utils/boxed_value_utils.h>
+#include <aiva/utils/dict_buffer.h>
+#include <aiva/utils/dict_struct.h>
+#include <aiva/utils/e_boxed_type.h>
+#include <aiva/utils/gltf_type_desc.h>
+#include <aiva/utils/i_boxed_value.h>
 #include <aiva/utils/material_constants.h>
-#include <aiva/utils/object_factory.h>
+#include <aiva/utils/meta_field.h>
+#include <aiva/utils/meta_struct.h>
+#include <aiva/utils/object_utils.h>
 
-aiva::layer1::SceneGltfUtils::SceneGltfUtils()
+namespace aiva::layer1
 {
+	using namespace aiva::utils;
 
-}
-
-aiva::layer1::SceneGltfUtils::~SceneGltfUtils()
-{
-
-}
-
-aiva::layer1::SceneGltfUtils& aiva::layer1::SceneGltfUtils::Instance()
-{
-	static SceneGltfUtils instance{};
-	return instance;
-}
-
-aiva::layer1::SceneGltfUtils::MaterialPerNodeMap aiva::layer1::SceneGltfUtils::LoadMaterials(RoSceneGltf const& gltf)
-{
-	auto const graphicMaterials = LoadGraphicMaterials(gltf);
-	auto const meshesMaterials = LoadMeshMaterials(gltf);
-	auto const nodesMaterials = LoadNodeMaterials(gltf, graphicMaterials, meshesMaterials);
-
-	return nodesMaterials;
-}
-
-aiva::layer1::SceneGltfUtils::MaterialArray aiva::layer1::SceneGltfUtils::LoadGraphicMaterials(RoSceneGltf const& gltf)
-{
-	auto const& gltfMaterials = gltf.Model().materials;
-	auto aivaMaterials = std::vector<std::shared_ptr<aiva::layer1::RoMaterialGraphic>>{};
-
-	for (std::size_t i = {}; i < gltfMaterials.size(); i++)
+	SceneGltfUtils::ModelDict SceneGltfUtils::LoadModels(ScenePointerType const& scene)
 	{
-		auto const& gltfMaterial = gltfMaterials.at(i);
-		auto const& gltfMaterialPath = gltfMaterial.extras.Get("path");
+		auto const materials = LoadMaterials(scene);
+		auto const meshes = LoadMeshes(scene);
 
-		auto const& aivaMaterialPath = gltfMaterialPath.Get<std::string>();
-		auto const& aivaMaterial = gltf.Engine().ResourceSystem().GetResource<RoMaterialGraphic>(aivaMaterialPath);
+		auto models = ModelDict{};
 
-		aivaMaterials.emplace_back(aivaMaterial);
+		for (std::size_t i = {}; i < std::size(scene->Model().nodes); i++)
+		{
+			auto const& glNode = scene->Model().nodes.at(i);
+			if (glNode.mesh == -1)
+			{
+				continue;
+			}
+
+			auto const& glMesh = scene->Model().meshes.at(glNode.mesh);
+			auto const& glPrimitive = glMesh.primitives.at(0);
+
+			auto const& material = materials.at(glPrimitive.material);
+			auto const& mesh = meshes.at(glNode.mesh);
+
+			auto const model = material->Copy();
+			Asserts::CheckBool(model, "Model is not valid");
+
+			auto const resourceHeap = model->ResourceDescriptor().ResourceTable().GetOrAddResourceHeap(mesh->HeapType());
+			Asserts::CheckBool(resourceHeap, "Resource heap is not valid");
+
+			for (auto const& resourceView : mesh->GetViews())
+			{
+				resourceHeap->SetView(resourceView.first, resourceView.second);
+			}
+
+			models.insert_or_assign(i, model);
+		}
+
+		return models;
 	}
 
-	return aivaMaterials;
-}
-
-aiva::layer1::SceneGltfUtils::MeshArray aiva::layer1::SceneGltfUtils::LoadMeshMaterials(RoSceneGltf const& gltf)
-{
-	auto const& gltfMeshes = gltf.Model().meshes;
-	auto aivaMeshes = std::vector<std::shared_ptr<aiva::layer1::ResourceViewHeap>>();
-
-	for (std::size_t i = {}; i < gltfMeshes.size(); i++)
+	SceneGltfUtils::MaterialGraphicPointerArrayType SceneGltfUtils::LoadMaterials(ScenePointerType const& scene)
 	{
-		auto const& gltfMesh = gltfMeshes.at(i);
-		auto const& gltfPrimitive = gltfMesh.primitives.at(0);
+		Asserts::CheckBool(scene, "Scene is not valid");
 
-		auto const aivaMesh = ResourceViewHeap::FactoryType::Create<ResourceViewHeap>(gltf.Engine(), EDescriptorHeapType::CbvSrvUav);
-		aivaMeshes.emplace_back(aivaMesh);
+		auto materials = MaterialGraphicPointerArrayType{};
 
-		{ // indices
-			static auto const INDEX_KEY = "m0_INDEX";
+		for (std::size_t i = {}; i < std::size(scene->Model().materials); i++)
+		{
+			auto const material = LoadMaterial(scene, i);
+			Asserts::CheckBool(material, "Material is not valid");
 
-			auto const aivaView = GrvSrvToBuffer::FactoryType::Create<GrvSrvToBuffer>(gltf.Engine());
-			aivaMesh->SetView(aiva::utils::MaterialConstants::AIVA_BUFFER_MESH_INDICES, aivaView);
+			materials.emplace_back(material);
+		}
 
+		return materials;
+	}
+
+	SceneGltfUtils::MaterialGraphicPointerType SceneGltfUtils::LoadMaterial(ScenePointerType const& scene, std::size_t const materialIndex)
+	{
+		Asserts::CheckBool(scene, "Scene is not valid");
+
+		auto const& glMaterial = scene->Model().materials.at(materialIndex);
+		auto const& glMaterialPath = glMaterial.extras.Get("path");
+
+		auto const& materialPath = glMaterialPath.Get<std::string>();
+		auto const material = scene->Engine().ResourceSystem().GetResource<RoMaterialGraphic>(materialPath);
+
+		Asserts::CheckBool(material, "Material is not valid");
+		return material;
+	}
+
+	SceneGltfUtils::ResourceViewHeapPointerArrayType SceneGltfUtils::LoadMeshes(ScenePointerType const& scene)
+	{
+		Asserts::CheckBool(scene, "Scene is not valid");
+
+		auto meshes = ResourceViewHeapPointerArrayType{};
+
+		for (std::size_t i = {}; i < std::size(scene->Model().meshes); i++)
+		{
+			auto const mesh = LoadMesh(scene, i);
+			Asserts::CheckBool(mesh, "Mesh is not valid");
+
+			meshes.emplace_back(mesh);
+		}
+
+		return meshes;
+	}
+
+	SceneGltfUtils::ResourceViewHeapPointerType SceneGltfUtils::LoadMesh(ScenePointerType const& scene, std::size_t const meshIndex)
+	{
+		Asserts::CheckBool(scene, "Scene is not valid");
+
+		auto const meshHeap = NewObject<ResourceViewHeapElementType>(scene->Engine(), EDescriptorHeapType::CbvSrvUav);
+		Asserts::CheckBool(meshHeap, "Mesh is not valid");
+
+		auto const indicesBuffer = LoadMeshIndices(scene, meshIndex);
+		Asserts::CheckBool(indicesBuffer, "Indices buffer is not valid");
+
+		meshHeap->SetView(MaterialConstants::AIVA_BUFFER_MESH_INDICES, indicesBuffer);
+
+		auto const verticesBuffer = LoadMeshVertices(scene, meshIndex);
+		Asserts::CheckBool(verticesBuffer, "Vertices buffer is not valid");
+
+		meshHeap->SetView(MaterialConstants::AIVA_BUFFER_MESH_VERTICES, verticesBuffer);
+
+		return meshHeap;
+	}
+
+	SceneGltfUtils::SrvToBufferPointerType SceneGltfUtils::LoadMeshIndices(ScenePointerType const& scene, std::size_t const meshIndex)
+	{
+		static constexpr char const* const FIELD_VERTEX_ID_NAME = "VERTEX_ID";
+
+		Asserts::CheckBool(scene, "Scene is not valid");
+
+		auto const& glMesh = scene->Model().meshes.at(meshIndex);
+		auto const& glPrimitive = glMesh.primitives.at(0);
+
+		auto const meshIndices = NewObject<SrvToBufferElementType>(scene->Engine());
+		Asserts::CheckBool(meshIndices, "Mesh indices is not valid");
+
+		{ // Generate Meta Struct
+			auto const metaStruct = NewObject<MetaStructElementType>();
+			Asserts::CheckBool(metaStruct, "Meta struct is not valid");
+
+			auto const metaField = NewObject<MetaFieldElementType>();
+			Asserts::CheckBool(metaField, "Meta field is not valid");
+
+			metaField->Name(FIELD_VERTEX_ID_NAME);
+			metaField->Type(EBoxedType::UINT32);
+			metaStruct->Add(metaField);
+
+			meshIndices->Buffer().Layout(metaStruct);
+		}
+
+		{ // Generate Data Structs
+			auto const indicesBuffer = LoadBuffer(scene, glPrimitive.indices);
+
+			for (auto const& indexValue : indicesBuffer)
 			{
-				auto const aivaBuffer = GrBuffer::FactoryType::Create<GrBuffer>(gltf.Engine());
-				aivaBuffer->MemoryType(EResourceMemoryType::CpuToGpu);
+				auto const dictStruct = NewObject<DictStructElementType>();
+				Asserts::CheckBool(dictStruct, "Dict struct is not valid");
 
-				aivaView->SetInternalResource(aivaBuffer);
+				auto const dictField = BoxedValueUtils::CastTo(indexValue, EBoxedType::UINT32);
+				Asserts::CheckBool(dictField, "Dict field is not valid");
+
+				dictStruct->FieldBoxed(FIELD_VERTEX_ID_NAME, dictField);
+				meshIndices->Buffer().Add(dictStruct);
+			}
+		}
+
+		meshIndices->GetOrAddInternalResource();
+		return meshIndices;
+	}
+
+	SceneGltfUtils::SrvToBufferPointerType SceneGltfUtils::LoadMeshVertices(ScenePointerType const& scene, std::size_t const meshIndex)
+	{
+		Asserts::CheckBool(scene, "Scene is not valid");
+
+		auto const& glMesh = scene->Model().meshes.at(meshIndex);
+		auto const& glPrimitive = glMesh.primitives.at(0);
+
+		auto const meshVertices = NewObject<SrvToBufferElementType>(scene->Engine());
+		Asserts::CheckBool(meshVertices, "Mesh indices is not valid");
+
+		{ // Generate Meta Struct
+			auto const metaStruct = NewObject<MetaStructElementType>();
+			Asserts::CheckBool(metaStruct, "Meta struct is not valid");
+
+			for (auto const& glAttribute : glPrimitive.attributes)
+			{
+				auto const& glSemantic = glAttribute.first;
+				auto const& glAccessor = scene->Model().accessors.at(glAttribute.second);
+
+				auto glType = GltfTypeDesc{};
+				glType.TypeOfComponent = glAccessor.type;
+				glType.TypeInComponent = glAccessor.componentType;
+				auto const fieldType = BoxedTypeUtils::Parse(glType);
+
+				auto const metaField = NewObject<MetaFieldElementType>();
+				Asserts::CheckBool(metaField, "Meta field is not valid");
+
+				metaField->Name(glSemantic);
+				metaField->Type(fieldType);
+				metaStruct->Add(metaField);
 			}
 
+			meshVertices->Buffer().Layout(metaStruct);
+		}
+
+		{ // Generate Data Structs
+			auto dictStructs = std::map<std::size_t, DictStructPointerType>{};
+
+			for (auto const& glAttribute : glPrimitive.attributes)
 			{
-				auto const aivaValue = ShaderValueUtils::CreateFromValueType(EValueType::UInt32);
+				auto const& glSemantic = glAttribute.first;
+				auto const& valuesBuffer = LoadBuffer(scene, glAttribute.second);
 
-				auto const aivaStruct = aiva::utils::NewObject<ShaderStruct>();
-				aivaStruct->SetStruct(INDEX_KEY, &aivaValue);
-
-				aivaView->Buffer().Struct(aivaStruct);
-			}
-
-			{
-				auto const aivaValues = LoadBufferByAccessor(gltf, gltfPrimitive.indices);
-				for (auto const& aivaValue : aivaValues)
+				for (std::size_t i = {}; i < std::size(valuesBuffer); i++)
 				{
-					auto const aivaUhortValue = std::dynamic_pointer_cast<TShaderValue<std::uint16_t>>(aivaValue);
-					auto const updatedValue = static_cast<std::uint32_t>(aivaUhortValue->Value());
-					auto const aivaUintValue = aiva::utils::NewObject<TShaderValue<std::uint32_t>>(updatedValue);
+					auto dictIter = dictStructs.find(i);
+					if (dictIter == std::end(dictStructs))
+					{
+						dictIter = dictStructs.insert_or_assign(i, NewObject<DictStructElementType>()).first;
+					}
 
-					auto const aivaStruct = ShaderStruct::FactoryType::Create<ShaderStruct>();
-					aivaStruct->SetStruct(INDEX_KEY, &aivaUintValue);
+					auto const& dictStruct = dictIter->second;
+					Asserts::CheckBool(dictStruct, "Dict struct is not valid");
 
-					aivaView->Buffer().Add(aivaStruct);
+					auto const& dictField = valuesBuffer.at(i);
+					Asserts::CheckBool(dictField, "Dict field is not valid");
+
+					dictStruct->FieldBoxed(glSemantic, dictField);
 				}
+			}
+
+			for (auto const& dictStruct : dictStructs)
+			{
+				meshVertices->Buffer().Add(dictStruct.second);
 			}
 		}
 
-		{ // vertices
-			auto const aivaView = GrvSrvToBuffer::FactoryType::Create<GrvSrvToBuffer>(gltf.Engine());
-			aivaMesh->SetView(aiva::utils::MaterialConstants::AIVA_BUFFER_MESH_VERTICES, aivaView);
-
-			{
-				auto const aivaBuffer = GrBuffer::FactoryType::Create<GrBuffer>(gltf.Engine());
-				aivaBuffer->MemoryType(EResourceMemoryType::CpuToGpu);
-
-				aivaView->SetInternalResource(aivaBuffer);
-			}
-
-			{
-				auto const aivaStruct = ShaderStruct::FactoryType::Create<ShaderStruct>();
-
-				for (auto const& gltfAttribute : gltfPrimitive.attributes)
-				{
-					auto const& gltfSemantic = gltfAttribute.first;
-					auto const& gltfAccessor = gltf.Model().accessors.at(gltfAttribute.second);
-
-					auto const aivaStructValue = ShaderValueUtils::CreateFromGltf(gltfAccessor.type, gltfAccessor.componentType);
-					aivaStruct->SetValue(gltfSemantic, &aivaStructValue);
-				}
-
-				aivaView->Buffer().Struct(aivaStruct);
-			}
-
-			{
-				auto aivaStructs = std::vector<std::shared_ptr<ShaderStruct>>{};
-
-				{ // first pass: create empty structures
-					auto const& gltfAttribute = *std::cbegin(gltfPrimitive.attributes);
-					auto const& gltfAccessor = gltf.Model().accessors.at(gltfAttribute.second);
-					auto const& gltfVerticesCount = gltfAccessor.count;
-
-					for (std::size_t i = {}; i < gltfVerticesCount; i++)
-					{
-						auto const aivaStruct = ShaderStruct::FactoryType::Create<ShaderStruct>();
-						aivaStructs.emplace_back(aivaStruct);
-					}
-				}
-
-				{ // second pass: merge structs
-					for (std::size_t attributeID = {}; attributeID < std::size(gltfPrimitive.attributes); attributeID++)
-					{
-						auto const& gltfAttribute = *std::next(std::cbegin(gltfPrimitive.attributes), attributeID);
-						auto const& gltfSemantic = gltfAttribute.first;
-
-						auto const aivaValues = LoadBufferByAccessor(gltf, gltfAttribute.second);
-						for (std::size_t structureID = {}; structureID < std::size(aivaStructs); structureID++)
-						{
-							auto const& aivaStruct = aivaStructs.at(structureID);
-							auto const& aivaValue = aivaValues.at(structureID);
-							aivaStruct->SetStruct(gltfSemantic, &aivaValue);
-						}
-					}
-				}
-
-				{ // third pass: fill srv buffer
-					for (auto const& aivaStruct : aivaStructs)
-					{
-						aivaView->Buffer().Add(aivaStruct);
-					}
-				}
-			}
-		}
+		meshVertices->GetOrAddInternalResource();
+		return meshVertices;
 	}
 
-	return aivaMeshes;
-}
-
-aiva::layer1::SceneGltfUtils::VertexArray aiva::layer1::SceneGltfUtils::LoadBufferByAccessor(RoSceneGltf const& gltf, std::size_t const accessorID)
-{
-	auto const&const gltfAccessor = gltf.Model().accessors.at(accessorID);
-	auto const&const gltfBufferView = gltf.Model().bufferViews.at(gltfAccessor.bufferView);
-	auto const&const gltfBuffer = gltf.Model().buffers.at(gltfBufferView.buffer);
-
-	auto bufferBinary = boost::as_bytes(boost::span{ gltfBuffer.data });
-	bufferBinary = bufferBinary.subspan(gltfBufferView.byteOffset, gltfBufferView.byteLength);
-	bufferBinary = bufferBinary.last(std::size(bufferBinary) - gltfAccessor.byteOffset);
-
-	auto shaderValues = std::vector<std::shared_ptr<IShaderValue>>{};
-	for (std::size_t vectorID = {}; vectorID < std::size_t{ gltfAccessor.count }; vectorID++)
+	SceneGltfUtils::BoxedValuePointerArrayType SceneGltfUtils::LoadBuffer(ScenePointerType const& scene, std::size_t const bufferIndex)
 	{
-		auto const shaderValue = ShaderValueUtils::CreateFromGltf(gltfAccessor.type, gltfAccessor.componentType);
-		shaderValues.emplace_back(shaderValue);
+		Asserts::CheckBool(scene, "Scene is not valid");
 
-		auto const bytesInStride = std::max(gltfBufferView.byteStride, shaderValue->MinBinarySize());
-		auto const strideBinary = bufferBinary.subspan(vectorID * bytesInStride, bytesInStride);
+		auto const& glAccessor = scene->Model().accessors.at(bufferIndex);
+		auto const& glBufferView = scene->Model().bufferViews.at(glAccessor.bufferView);
+		auto const& glBuffer = scene->Model().buffers.at(glBufferView.buffer);
 
-		shaderValue->DeserealizeFromBinary(strideBinary);
+		auto glType = GltfTypeDesc{};
+		glType.TypeOfComponent = glAccessor.type;
+		glType.TypeInComponent = glAccessor.componentType;
+
+		auto const valueType = BoxedTypeUtils::Parse(glType);
+		auto const valueSize = BoxedValueUtils::SizeOf(valueType);
+		auto const valueStride = std::max(glBufferView.byteStride, valueSize);
+
+		auto bufferBinary = boost::as_bytes(boost::span{ glBuffer.data });
+		bufferBinary = bufferBinary.subspan(glBufferView.byteOffset, glBufferView.byteLength);
+		bufferBinary = bufferBinary.last(std::size(bufferBinary) - glAccessor.byteOffset);
+
+		auto bufferValues = BoxedValuePointerArrayType{};
+		for (std::size_t i = {}; i < std::size_t{ glAccessor.count }; i++)
+		{
+			auto const valueBinary = bufferBinary.subspan(valueStride * i, valueSize);
+			Asserts::CheckBool(!std::empty(valueBinary), "Value binary is empty");
+
+			auto const valueObject = BoxedValueUtils::DeserealizeFromBinary(valueBinary, valueType);
+			Asserts::CheckBool(valueObject, "Value object is not valid");
+
+			bufferValues.emplace_back(valueObject);
+		}
+
+		return bufferValues;
 	}
-
-	return shaderValues;
-}
-
-aiva::layer1::SceneGltfUtils::MaterialPerNodeMap aiva::layer1::SceneGltfUtils::LoadNodeMaterials(RoSceneGltf const& gltf, MaterialArray const& materials, MeshArray const& meshes)
-{
-	auto materialsPerNodes = MaterialPerNodeMap{};
-
-	for (std::size_t nodeID{}; nodeID < std::size(gltf.Model().nodes); nodeID++)
-	{
-		auto const& gltfNode = gltf.Model().nodes.at(nodeID);
-		if (gltfNode.mesh == -1)
-		{
-			continue;
-		}
-
-		auto const& gltfMesh = gltf.Model().meshes.at(gltfNode.mesh);
-		auto const& gltfPrimitive = gltfMesh.primitives.at(0);
-
-		auto const& aivaMaterial = materials.at(gltfPrimitive.material);
-		auto const& aivaMesh = meshes.at(gltfNode.mesh);
-
-		auto const materialInstance = aivaMaterial->Copy();
-		materialsPerNodes.insert_or_assign(nodeID, materialInstance);
-
-		auto materialHeap = materialInstance->ResourceDescriptor().ResourceTable().GetResourceHeap(aivaMesh->HeapType());
-		if (!materialHeap)
-		{
-			materialHeap = ResourceViewHeap::FactoryType::Create<ResourceViewHeap>(gltf.Engine(), aivaMesh->HeapType());
-			materialInstance->ResourceDescriptor().ResourceTable().SetResourceHeap(aivaMesh->HeapType(), materialHeap);
-		}
-
-		for (auto const& resourceView : aivaMesh->GetViews())
-		{
-			materialHeap->SetView(resourceView.first, resourceView.second);
-		}
-	}
-
-	return materialsPerNodes;
 }

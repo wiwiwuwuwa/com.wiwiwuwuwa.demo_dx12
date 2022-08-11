@@ -2,6 +2,7 @@
 #include <aiva/utils/boxed_value_utils.h>
 
 #include <aiva/layer1/shader_consts.h>
+#include <aiva/utils/boxed_type_utils.h>
 #include <aiva/utils/e_boxed_type.h>
 #include <aiva/utils/i_boxed_value.h>
 #include <aiva/utils/math_utils.h>
@@ -109,6 +110,16 @@ aiva::utils::EBoxedType aiva::utils::BoxedValueUtils::TypeOf(std::shared_ptr<IBo
 	return boxedValue->Type();
 }
 
+std::shared_ptr<aiva::utils::IBoxedValue> aiva::utils::BoxedValueUtils::CreateInstance(GltfTypeDesc const& desc)
+{
+	auto const boxedType = BoxedTypeUtils::Parse(desc);
+	
+	auto const boxedValue = CreateInstance(boxedType);
+	Asserts::CheckBool(boxedValue, "Boxed value is not valid");
+
+	return boxedValue;
+}
+
 std::shared_ptr<aiva::utils::IBoxedValue> aiva::utils::BoxedValueUtils::CreateInstance(EBoxedType const boxedType)
 {
 	auto const iter = Instance().mCreateInstanceDict.find(boxedType);
@@ -119,6 +130,17 @@ std::shared_ptr<aiva::utils::IBoxedValue> aiva::utils::BoxedValueUtils::CreateIn
 
 std::shared_ptr<aiva::utils::IBoxedValue> aiva::utils::BoxedValueUtils::CastTo(std::shared_ptr<IBoxedValue> const& boxedValue, EBoxedType const boxedType)
 {
+	{
+		auto const boxedValue_uint16 = std::dynamic_pointer_cast<TBoxedValue<std::uint16_t>>(boxedValue);
+		if (boxedValue_uint16)
+		{
+			auto const boxedValue_uint32 = NewObject<TBoxedValue<std::uint32_t>>();
+			boxedValue_uint32->Value(static_cast<std::uint32_t>(boxedValue_uint16->Value()));
+
+			return boxedValue_uint32;
+		}
+	}
+
 	Asserts::CheckBool(false, "TODO: Impl - BoxedValueUtils::CastTo");
 	return {};
 }

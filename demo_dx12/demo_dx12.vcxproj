@@ -181,11 +181,9 @@
     <ClInclude Include="Sources\aiva\layer1\e_resource_buffer_format.h" />
     <ClInclude Include="Sources\aiva\layer1\e_resource_memory_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_resource_view_type.h" />
-    <ClInclude Include="Sources\aiva\layer1\e_value_type.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\i_object_engineable.h" />
-    <ClInclude Include="Sources\aiva\layer1\shader_value_utils.h" />
-    <ClInclude Include="Sources\aiva\layer1\value_type_utils.h" />
+    <ClInclude Include="Sources\aiva\layer1\ro_scene_gltf_aliases.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_clear_depth_stencil.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_clear_render_target.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_draw_mesh.h" />
@@ -204,7 +202,6 @@
     <ClInclude Include="Sources\aiva\layer1\gr_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\i_graphic_command_async.h" />
     <ClInclude Include="Sources\aiva\layer1\i_cpu_resource.h" />
-    <ClInclude Include="Sources\aiva\layer1\i_shader_value.h" />
     <ClInclude Include="Sources\aiva\layer1\resource_view_heap.h" />
     <ClInclude Include="Sources\aiva\layer1\resource_view_table.h" />
     <ClInclude Include="Sources\aiva\layer1\scene_gltf_utils.h" />
@@ -212,9 +209,10 @@
     <ClInclude Include="Sources\aiva\layer1\ro_scene_gltf.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_shader_fragment.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_shader_vertex.h" />
-    <ClInclude Include="Sources\aiva\layer1\shader_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\material_pipeline_descriptor.h" />
     <ClInclude Include="Sources\aiva\layer1\material_resource_descriptor.h" />
+    <ClInclude Include="Sources\aiva\utils\boxed_type_utils.h" />
+    <ClInclude Include="Sources\aiva\utils\gltf_type_desc.h" />
     <ClInclude Include="Sources\aiva\utils\layout_field_utils.h" />
     <ClInclude Include="Sources\aiva\utils\layout_buffer_utils.h" />
     <ClInclude Include="Sources\aiva\utils\dict_buffer_utils.h" />
@@ -245,9 +243,6 @@
     <ClInclude Include="Sources\aiva\layer1\ro_shader_compute.h" />
     <ClInclude Include="Sources\aiva\layer1\gr_texture_2d.h" />
     <ClInclude Include="Sources\aiva\layer1\shader_consts.h" />
-    <ClInclude Include="Sources\aiva\layer1\shader_struct.h" />
-    <ClInclude Include="Sources\aiva\layer1\t_shader_array.h" />
-    <ClInclude Include="Sources\aiva\layer1\t_shader_value.h" />
     <ClInclude Include="Sources\aiva\layer2\scene_component.h" />
     <ClInclude Include="Sources\aiva\layer2\scene_actor.h" />
     <ClInclude Include="Sources\aiva\layer2\scene_system.h" />
@@ -309,8 +304,6 @@
     <ClCompile Include="Sources\aiva\layer1\e_resource_view_type.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_cbv_to_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\i_object_engineable.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\shader_value_utils.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\value_type_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_clear_depth_stencil.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_clear_render_target.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_dispatch.cpp" />
@@ -337,10 +330,8 @@
     <ClCompile Include="Sources\aiva\layer1\gr_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_shader_fragment.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_shader_vertex.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\shader_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\material_pipeline_descriptor.cpp" />
     <ClCompile Include="Sources\aiva\layer1\material_resource_descriptor.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\shader_struct.cpp" />
     <ClCompile Include="Sources\aiva\layer2\render_system.cpp" />
     <ClCompile Include="Sources\aiva\layer2\scene_actor.cpp" />
     <ClCompile Include="Sources\aiva\layer2\scene_component.cpp" />
@@ -349,7 +340,9 @@
     <ClCompile Include="Sources\aiva\layer2\sc_mesh_renderer.cpp" />
     <ClCompile Include="Sources\aiva\layer2\world.cpp" />
     <ClCompile Include="Sources\aiva\utils\action_batcher.cpp" />
+    <ClCompile Include="Sources\aiva\utils\boxed_type_utils.cpp" />
     <ClCompile Include="Sources\aiva\utils\dict_buffer_utils.cpp" />
+    <ClCompile Include="Sources\aiva\utils\gltf_type_desc.cpp" />
     <ClCompile Include="Sources\aiva\utils\layout_buffer.cpp" />
     <ClCompile Include="Sources\aiva\utils\layout_buffer_utils.cpp" />
     <ClCompile Include="Sources\aiva\utils\layout_field.cpp" />

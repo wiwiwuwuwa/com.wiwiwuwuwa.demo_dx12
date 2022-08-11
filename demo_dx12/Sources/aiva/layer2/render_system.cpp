@@ -26,8 +26,6 @@
 #include <aiva/layer1/resource_view_heap.h>
 #include <aiva/layer1/resource_view_table.h>
 #include <aiva/layer1/ro_material_graphic.h>
-#include <aiva/layer1/shader_buffer.h>
-#include <aiva/layer1/shader_struct.h>
 #include <aiva/layer2/sc_camera.h>
 #include <aiva/layer2/sc_mesh_renderer.h>
 #include <aiva/layer2/scene_actor.h>

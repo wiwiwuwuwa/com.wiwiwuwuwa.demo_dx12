@@ -1,31 +1,30 @@
 #pragma once
 #include <pch.h>
 
-namespace aiva::layer2
-{
-	struct SceneActor;
-}
+#include <aiva/layer2/scene_actor_fwd.h>
+#include <aiva/layer2/scene_component_fwd.h>
+#include <aiva/utils/a_object.h>
 
 namespace aiva::layer2
 {
-	struct SceneComponent : private boost::noncopyable, public std::enable_shared_from_this<SceneComponent>
+	struct SceneComponent : public aiva::utils::AObject
 	{
-	private:
-		friend SceneActor;
-
 	// ----------------------------------------------------
 	// Main
 
+	private:
+		friend SceneActorType;
+
 	protected:
-		SceneComponent(SceneActor& actor);
+		SceneComponent(SceneActorType& actor);
 
 	public:
 		virtual ~SceneComponent();
 
 	public:
-		SceneActor& Actor() const;
+		SceneActorType& Actor() const;
 
 	private:
-		SceneActor& mActor;
+		SceneActorType& mActor;
 	};
 }

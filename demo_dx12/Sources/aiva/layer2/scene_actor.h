@@ -2,12 +2,12 @@
 #include <pch.h>
 
 #include <aiva/layer2/scene_actor_fwd.h>
+#include <aiva/layer2/scene_component_fwd.h>
 #include <aiva/layer2/scene_system_fwd.h>
 #include <aiva/utils/a_object.h>
 
 namespace aiva::layer2
 {
-	struct SceneComponent;
 	struct World;
 }
 
@@ -114,7 +114,7 @@ namespace aiva::layer2
 
 	public:
 		template <typename T>
-		T& CreateComponent();
+		std::shared_ptr<T> CreateComponent();
 
 	private:
 		std::vector<std::shared_ptr<SceneComponent>> mComponents{};
@@ -124,10 +124,10 @@ namespace aiva::layer2
 // --------------------------------------------------------
 
 template <typename T>
-T& aiva::layer2::SceneActor::CreateComponent()
+std::shared_ptr<T> aiva::layer2::SceneActor::CreateComponent()
 {
-	auto const componentPtr = std::shared_ptr<T>(new T{ *this });
-	mComponents.emplace_back(componentPtr);
+	auto const component = std::shared_ptr<T>(new T{ *this });
+	mComponents.emplace_back(component);
 
-	return *componentPtr;
+	return component;
 }

@@ -115,8 +115,8 @@ namespace aiva::layer2
 		for (auto const& pair : models)
 		{
 			auto const& actor = actors.at(pair.first);
-			auto& meshRenderer = actor->CreateComponent<ScMeshRenderer>();
-			meshRenderer.Material(pair.second);
+			auto const& meshRenderer = actor->CreateComponent<ScMeshRenderer>();
+			meshRenderer->Material(pair.second);
 		}
 	}
 
@@ -137,10 +137,10 @@ namespace aiva::layer2
 			}
 
 			auto const& actor = actors.at(i);
-			auto& camera = actor->CreateComponent<ScCamera>();
-			camera.FovY(glCamera.perspective.yfov);
-			camera.ZNear(glCamera.perspective.znear);
-			camera.ZFar(glCamera.perspective.zfar);
+			auto const& camera = actor->CreateComponent<ScCamera>();
+			camera->FovY(glCamera.perspective.yfov);
+			camera->ZNear(glCamera.perspective.znear);
+			camera->ZFar(glCamera.perspective.zfar);
 		}
 	}
 

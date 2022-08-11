@@ -3,17 +3,22 @@
 
 #include <aiva/layer2/scene_actor.h>
 
-aiva::layer2::SceneComponent::SceneComponent(SceneActor& actor) : mActor{ actor }
+namespace aiva::layer2
 {
+	using namespace aiva::utils;
 
-}
+	SceneComponent::SceneComponent(SceneActorType& actor) : AObject{}, mActor { actor }
+	{
 
-aiva::layer2::SceneComponent::~SceneComponent()
-{
+	}
 
-}
+	SceneComponent::~SceneComponent()
+	{
 
-aiva::layer2::SceneActor& aiva::layer2::SceneComponent::Actor() const
-{
-	return mActor;
+	}
+
+	SceneActorType& SceneComponent::Actor() const
+	{
+		return mActor;
+	}
 }

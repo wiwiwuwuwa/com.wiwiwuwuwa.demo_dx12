@@ -17,102 +17,146 @@
 #include <aiva/layer2/world.h>
 #include <aiva/utils/asserts.h>
 
-aiva::layer2::SceneSystem::SceneSystem(World const& world) : mWorld{ world }
+namespace aiva::layer2
 {
+	using namespace aiva::layer1;
+	using namespace aiva::utils;
 
-}
-
-aiva::layer2::SceneSystem::~SceneSystem()
-{
-
-}
-
-aiva::layer2::SceneActor& aiva::layer2::SceneSystem::CreateActor()
-{
-	return *mActors.emplace_back(new SceneActor{ mWorld });
-}
-
-void aiva::layer2::SceneSystem::LoadScene(aiva::layer1::RoSceneGltfPtr const& scene)
-{
-	auto const& gltfModel = scene->Model();
-
-	// ----------------------------------------------------
-	// Actors
-
-	auto aivaNodes = std::vector<std::shared_ptr<SceneActor>>();
-
-	for (std::size_t i = {}; i < gltfModel.nodes.size(); i++)
+	SceneSystem::SceneSystem(World const& world) : AObject{}, mWorld{ world }
 	{
-		auto const& gltfNode = gltfModel.nodes.at(i);
-		auto const& aivaNode = aivaNodes.emplace_back(CreateActor().shared_from_this());
 
-		aivaNode->Name(gltfNode.name);
-
-		if (gltfNode.translation.size() == glm::vec3::length())
-		{
-			auto const localPosition = glm::dvec3{ gltfNode.translation.at(0), gltfNode.translation.at(1), gltfNode.translation.at(2) };
-			aivaNode->LocalPosition(localPosition);
-		}
-
-		if (gltfNode.rotation.size() == glm::quat::length())
-		{
-			auto const localRotation = glm::dquat{ gltfNode.rotation.at(3), gltfNode.rotation.at(0), gltfNode.rotation.at(1), gltfNode.rotation.at(2) };
-			aivaNode->LocalRotation(localRotation);
-		}
-
-		if (gltfNode.scale.size() == glm::vec3::length())
-		{
-			auto const localScale = glm::dvec3{ gltfNode.scale.at(0), gltfNode.scale.at(1), gltfNode.scale.at(2) };
-			aivaNode->LocalScale(localScale);
-		}
-	}
-	for (std::size_t i = {}; i < gltfModel.nodes.size(); i++)
-	{
-		auto const& gltfParentNode = gltfModel.nodes.at(i);
-		auto const& aivaParentNode = aivaNodes.at(i);
-
-		for (std::size_t j = {}; j < gltfParentNode.children.size(); j++)
-		{
-			auto const& gltfChildIndex = gltfParentNode.children[j];
-			auto const& aivaChildNode = aivaNodes.at(gltfChildIndex);
-
-			aivaChildNode->Parent(aivaParentNode);
-		}
 	}
 
-	// ----------------------------------------------------
-	// Models
-
-	auto const& aivaModels = aiva::layer1::SceneGltfUtils::LoadModels(scene);
-
-	for (auto const& pair : aivaModels)
+	SceneSystem::~SceneSystem()
 	{
-		auto& aivaNode = *aivaNodes.at(pair.first);
-		auto& meshRenderer = aivaNode.CreateComponent<ScMeshRenderer>();
-		meshRenderer.Material(pair.second);
+
 	}
 
-	// ----------------------------------------------------
-	// Cameras
-
-	for (std::size_t i = {}; i < std::size(gltfModel.nodes); i++)
+	SceneActorTypeShared SceneSystem::CreateActor()
 	{
-		auto const& gltfNode = gltfModel.nodes.at(i);
-		if (gltfNode.camera == -1)
+		return mActors.emplace_back(new SceneActor{ mWorld });
+	}
+
+	SceneActorTypeShared SceneSystem::LoadScene(RoSceneGltfTypeShared const& scene)
+	{
+		Asserts::CheckBool(scene, "Scene is not valid");
+
+		auto const actors = LoadActors(scene);
+		LoadActorsRelations(scene, actors);
+		LoadActorsPositions(scene, actors);
+		LoadActorsMeshRenderers(scene, actors);
+		LoadActorsCameras(scene, actors);
+		return LoadActorsRoot(scene, actors);
+	}
+
+	std::vector<SceneActorTypeShared> SceneSystem::LoadActors(aiva::layer1::RoSceneGltfTypeShared const& scene)
+	{
+		auto actors = std::vector<SceneActorTypeShared>();
+
+		for (std::size_t i = {}; i < std::size(scene->Model().nodes); i++)
 		{
-			continue;
+			auto const actor = CreateActor();
+			actors.emplace_back(actor);
 		}
 
-		auto const& gltfCamera = gltfModel.cameras.at(gltfNode.camera);
-		if (gltfCamera.type != "perspective")
+		return actors;
+	}
+
+	void SceneSystem::LoadActorsRelations(aiva::layer1::RoSceneGltfTypeShared const& scene, std::vector<SceneActorTypeShared> const& actors)
+	{
+		for (std::size_t i = {}; i < std::size(scene->Model().nodes); i++)
 		{
-			continue;
+			auto const& glParentNode = scene->Model().nodes.at(i);
+			auto const& parentActor = actors.at(i);
+
+			for (std::size_t j = {}; j < std::size(glParentNode.children); j++)
+			{
+				auto const& glChildNode = glParentNode.children[j];
+				auto const& childActor = actors.at(glChildNode);
+
+				childActor->Parent(parentActor);
+			}
+		}
+	}
+
+	void SceneSystem::LoadActorsPositions(aiva::layer1::RoSceneGltfTypeShared const& scene, std::vector<SceneActorTypeShared> const& actors)
+	{
+		for (std::size_t i = {}; i < std::size(scene->Model().nodes); i++)
+		{
+			auto const& glNode = scene->Model().nodes.at(i);
+			auto const& actor = actors.at(i);
+
+			actor->Name(glNode.name);
+
+			if (glNode.translation.size() == glm::vec3::length())
+			{
+				auto const localPosition = glm::dvec3{ glNode.translation.at(0), glNode.translation.at(1), glNode.translation.at(2) };
+				actor->LocalPosition(localPosition);
+			}
+
+			if (glNode.rotation.size() == glm::quat::length())
+			{
+				auto const localRotation = glm::dquat{ glNode.rotation.at(3), glNode.rotation.at(0), glNode.rotation.at(1), glNode.rotation.at(2) };
+				actor->LocalRotation(localRotation);
+			}
+
+			if (glNode.scale.size() == glm::vec3::length())
+			{
+				auto const localScale = glm::dvec3{ glNode.scale.at(0), glNode.scale.at(1), glNode.scale.at(2) };
+				actor->LocalScale(localScale);
+			}
+		}
+	}
+
+	void SceneSystem::LoadActorsMeshRenderers(aiva::layer1::RoSceneGltfTypeShared const& scene, std::vector<SceneActorTypeShared> const& actors)
+	{
+		auto const& models = SceneGltfUtils::LoadModels(scene);
+
+		for (auto const& pair : models)
+		{
+			auto const& actor = actors.at(pair.first);
+			auto& meshRenderer = actor->CreateComponent<ScMeshRenderer>();
+			meshRenderer.Material(pair.second);
+		}
+	}
+
+	void SceneSystem::LoadActorsCameras(aiva::layer1::RoSceneGltfTypeShared const& scene, std::vector<SceneActorTypeShared> const& actors)
+	{
+		for (std::size_t i = {}; i < std::size(scene->Model().nodes); i++)
+		{
+			auto const& glNode = scene->Model().nodes.at(i);
+			if (glNode.camera == -1)
+			{
+				continue;
+			}
+
+			auto const& glCamera = scene->Model().cameras.at(glNode.camera);
+			if (glCamera.type != "perspective")
+			{
+				continue;
+			}
+
+			auto const& actor = actors.at(i);
+			auto& camera = actor->CreateComponent<ScCamera>();
+			camera.FovY(glCamera.perspective.yfov);
+			camera.ZNear(glCamera.perspective.znear);
+			camera.ZFar(glCamera.perspective.zfar);
+		}
+	}
+
+	SceneActorTypeShared SceneSystem::LoadActorsRoot(aiva::layer1::RoSceneGltfTypeShared const& scene, std::vector<SceneActorTypeShared> const& actors)
+	{
+		auto const root = CreateActor();
+		root->Name("Root");
+
+		for (auto const& actor : actors)
+		{
+			if (!actor->Parent())
+			{
+				actor->Parent(root);
+			}
 		}
 
-		auto& aivaNode = *aivaNodes.at(i);
-		auto& aivaCamera = aivaNode.CreateComponent<ScCamera>();
-		aivaCamera.FovY(gltfCamera.perspective.yfov);
-		aivaCamera.ZNear(gltfCamera.perspective.znear);
-		aivaCamera.ZFar(gltfCamera.perspective.zfar);
+		return root;
 	}
 }

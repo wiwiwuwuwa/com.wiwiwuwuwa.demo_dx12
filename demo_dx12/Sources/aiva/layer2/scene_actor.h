@@ -1,6 +1,8 @@
 #pragma once
 #include <pch.h>
 
+#include <aiva/layer2/scene_actor_fwd.h>
+
 namespace aiva::layer2
 {
 	struct SceneComponent;

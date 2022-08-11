@@ -1,26 +1,27 @@
 #pragma once
 #include <pch.h>
 
-#include <aiva/layer1/ro_scene_gltf_aliases.h>
+#include <aiva/layer1/ro_scene_gltf_fwd.h>
+#include <aiva/layer2/scene_actor_fwd.h>
+#include <aiva/layer2/scene_system_fwd.h>
+#include <aiva/utils/a_object.h>
 
 namespace aiva::layer2
 {
-	struct SceneActor;
 	struct World;
 }
 
 namespace aiva::layer2
 {
-	struct SceneSystem final : private boost::noncopyable, public std::enable_shared_from_this<SceneSystem>
+	struct SceneSystem final : public aiva::utils::AObject
 	{
 	// ----------------------------------------------------
 	// Main
 
-	public:
-		template <typename... Args>
-		static std::shared_ptr<SceneSystem> Create(Args&&... args);
-
 	private:
+		friend FactoryType;
+
+	protected:
 		SceneSystem(World const& world);
 
 	public:
@@ -33,23 +34,28 @@ namespace aiva::layer2
 	// Hierarchy
 
 	public:
-		SceneActor& CreateActor();
+		SceneActorTypeShared CreateActor();
 
 	private:
-		std::vector<std::shared_ptr<SceneActor>> mActors{};
+		std::vector<SceneActorTypeShared> mActors{};
 
 	// ----------------------------------------------------
 	// Scenes
 
 	public:
-		void LoadScene(aiva::layer1::RoSceneGltfPtr const& scene);
+		SceneActorTypeShared LoadScene(aiva::layer1::RoSceneGltfTypeShared const& scene);
+
+	private:
+		std::vector<SceneActorTypeShared> LoadActors(aiva::layer1::RoSceneGltfTypeShared const& scene);
+
+		void LoadActorsRelations(aiva::layer1::RoSceneGltfTypeShared const& scene, std::vector<SceneActorTypeShared> const& actors);
+
+		void LoadActorsPositions(aiva::layer1::RoSceneGltfTypeShared const& scene, std::vector<SceneActorTypeShared> const& actors);
+
+		void LoadActorsMeshRenderers(aiva::layer1::RoSceneGltfTypeShared const& scene, std::vector<SceneActorTypeShared> const& actors);
+
+		void LoadActorsCameras(aiva::layer1::RoSceneGltfTypeShared const& scene, std::vector<SceneActorTypeShared> const& actors);
+
+		SceneActorTypeShared LoadActorsRoot(aiva::layer1::RoSceneGltfTypeShared const& scene, std::vector<SceneActorTypeShared> const& actors);
 	};
-}
-
-// --------------------------------------------------------
-
-template <typename... Args>
-std::shared_ptr<aiva::layer2::SceneSystem> aiva::layer2::SceneSystem::Create(Args&&... args)
-{
-	return std::shared_ptr<aiva::layer2::SceneSystem>(new aiva::layer2::SceneSystem{ std::forward<Args>(args)... });
 }

@@ -88,7 +88,7 @@ void aiva::layer2::World::InitializeSystems()
 	}
 
 	{
-		mSceneSystem = aiva::layer2::SceneSystem::Create(*this);
+		mSceneSystem = aiva::utils::NewObject<aiva::layer2::SceneSystem>(*this);
 		aiva::utils::Asserts::CheckBool(mSceneSystem);
 
 		auto const& sceneResource = mEngine->ResourceSystem().GetResource<aiva::layer1::RoSceneGltf>("resources\\scenes\\main.scene_gltf");

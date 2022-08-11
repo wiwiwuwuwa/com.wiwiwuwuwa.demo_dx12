@@ -188,7 +188,7 @@
     <ClInclude Include="Sources\aiva\utils\meta_field_utils.h" />
     <ClInclude Include="Sources\aiva\utils\gltf_type_desc.h" />
     <ClInclude Include="Sources\aiva\utils\boxed_type_utils.h" />
-    <ClInclude Include="Sources\aiva\layer1\ro_scene_gltf_aliases.h" />
+    <ClInclude Include="Sources\aiva\layer1\ro_scene_gltf_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_srv_to_texture_2d.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_srv_to_texture_2d_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_material_graphic_fwd.h" />
@@ -203,6 +203,8 @@
     <ClInclude Include="Sources\aiva\layer1\grv_rtv_to_texture_2d_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\gr_texture_2d_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_dsv_to_texture_2d_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer2\scene_system_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer2\scene_actor_fwd.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

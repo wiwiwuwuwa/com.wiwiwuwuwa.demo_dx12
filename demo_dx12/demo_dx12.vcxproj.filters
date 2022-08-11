@@ -81,6 +81,7 @@
     <ClCompile Include="Sources\aiva\utils\meta_field_utils.cpp" />
     <ClCompile Include="Sources\aiva\utils\gltf_type_desc.cpp" />
     <ClCompile Include="Sources\aiva\utils\boxed_type_utils.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\grv_srv_to_texture_2d.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -186,6 +187,8 @@
     <ClInclude Include="Sources\aiva\utils\gltf_type_desc.h" />
     <ClInclude Include="Sources\aiva\utils\boxed_type_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_scene_gltf_aliases.h" />
+    <ClInclude Include="Sources\aiva\layer1\grv_srv_to_texture_2d.h" />
+    <ClInclude Include="Sources\aiva\layer1\grv_srv_to_texture_2d_fwd.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

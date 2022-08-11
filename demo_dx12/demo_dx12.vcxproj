@@ -182,6 +182,8 @@
     <ClInclude Include="Sources\aiva\layer1\e_resource_memory_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_resource_view_type.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer.h" />
+    <ClInclude Include="Sources\aiva\layer1\grv_srv_to_texture_2d.h" />
+    <ClInclude Include="Sources\aiva\layer1\grv_srv_to_texture_2d_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\i_object_engineable.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_scene_gltf_aliases.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_clear_depth_stencil.h" />
@@ -303,6 +305,7 @@
     <ClCompile Include="Sources\aiva\layer1\engine.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_resource_view_type.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_cbv_to_buffer.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\grv_srv_to_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\i_object_engineable.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_clear_depth_stencil.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_clear_render_target.cpp" />

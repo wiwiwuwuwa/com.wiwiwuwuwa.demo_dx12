@@ -229,6 +229,11 @@
     <None Include="Assets\resources\shaders\mesh_gbuffer.hlsl_ps" />
     <None Include="Assets\resources\shaders\mesh_gbuffer.hlsl_vs" />
     <None Include="Assets\resources\materials\mesh_gbuffer.mat_gs" />
+    <None Include="Sources\resources\scenes\quad_blit.blend" />
+    <None Include="Assets\resources\scenes\quad_blit.scene_gltf" />
+    <None Include="Assets\resources\materials\quad_blit.mat_gs" />
+    <None Include="Assets\resources\shaders\quad_blit.hlsl_ps" />
+    <None Include="Assets\resources\shaders\quad_blit.hlsl_vs" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme.txt" />

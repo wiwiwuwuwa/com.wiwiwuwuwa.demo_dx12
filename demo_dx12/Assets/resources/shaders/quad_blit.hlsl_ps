@@ -1,0 +1,17 @@
+struct Input
+{
+    float4 PositionCS : SV_Position;
+    float2 TexcoordOS : TEXCOORD0;
+};
+
+struct Output
+{
+    float4 Color : SV_Target;
+};
+
+Output main(Input IN)
+{
+    Output OUT;
+    OUT.Color = float4(IN.TexcoordOS, 0.0, 1.0);
+    return OUT;
+}

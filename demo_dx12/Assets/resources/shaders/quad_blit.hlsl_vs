@@ -1,0 +1,49 @@
+struct Input
+{
+    uint VertexID : SV_VertexID;
+};
+
+// ------------------------------------
+
+struct Output
+{
+    float4 PositionCS : SV_Position;
+    float2 TexcoordOS : TEXCOORD0;
+};
+
+// ------------------------------------
+
+struct MeshIndex
+{
+    uint VertexID;
+    uint3 _Padding0;
+};
+
+StructuredBuffer<MeshIndex> meshIndices : register(t0);
+
+// ------------------------------------
+
+struct MeshVertex
+{
+    float3 NormalOS;
+    float _Padding0;
+    float3 PositionOS;
+    float _Padding1;
+    float2 Texcoord0;
+    float2 _Padding2;
+};
+
+StructuredBuffer<MeshVertex> meshVertices : register(t1);
+
+// ------------------------------------
+
+Output main(Input IN)
+{
+    MeshIndex meshIndex = meshIndices[IN.VertexID];
+    MeshVertex meshVertex = meshVertices[meshIndex.VertexID];
+    
+    Output OUT;
+    OUT.PositionCS = float4(meshVertex.PositionOS, 1.0);
+    OUT.TexcoordOS = meshVertex.Texcoord0;
+    return OUT;
+}

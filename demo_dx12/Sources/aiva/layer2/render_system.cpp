@@ -20,6 +20,7 @@
 #include <aiva/layer1/grv_cbv_to_buffer.h>
 #include <aiva/layer1/grv_dsv_to_texture_2d.h>
 #include <aiva/layer1/grv_rtv_to_texture_2d.h>
+#include <aiva/layer1/grv_srv_to_texture_2d.h>
 #include <aiva/layer1/material_resource_descriptor.h>
 #include <aiva/layer1/res_view_desc.h>
 #include <aiva/layer1/res_view_desc_utils.h>
@@ -47,12 +48,14 @@ namespace aiva::layer2
 	RenderSystem::RenderSystem(WorldType const& world) : AObject{}, mWorld{ world }
 	{
 		InitializeRenderer();
+		InitializeBlitMaterial();
 		InitializeQuadModel();
 	}
 
 	RenderSystem::~RenderSystem()
 	{
 		TerminateQuadModel();
+		TerminateBlitMaterial();
 		TerminateRenderer();
 	}
 
@@ -78,20 +81,104 @@ namespace aiva::layer2
 
 	void RenderSystem::ExecuteRenderer()
 	{
+		auto defferedBuffer = DefferedBufferType{};
+
+		InitDefferedBuffer(defferedBuffer);
+		DrawModelsToDefferedBuffer(defferedBuffer);
+		InitScreenBuffer();
+		DrawDefferedBufferToScreen(defferedBuffer);
+		ShutScreenBuffer();
+	}
+
+	void RenderSystem::InitDefferedBuffer(DefferedBufferType& defferedBuffer)
+	{
 		auto const screenSize = mWorld.Engine().GraphicHardware().ScreenSize();
-		auto const screenRect = glm::vec4{ 0.0f, 0.0f, screenSize.x, screenSize.y };
-		SetDrawArea(screenRect);
+		auto const bufferSize = glm::vec2{ screenSize } * 0.5f;
+		auto const bufferRect = glm::vec4{ 0.0f, 0.0f, bufferSize };
 
-		auto const defferedBuffer = CreateDefferedBuffer(screenSize);
-		ClearRenderTarget(defferedBuffer);
+		defferedBuffer = CreateDefferedBuffer(bufferSize);
+
 		SetRenderTarget(defferedBuffer);
+		SetDrawArea(bufferRect);
+		ClearRenderTarget(defferedBuffer);
+	}
+
+	void RenderSystem::DrawModelsToDefferedBuffer(DefferedBufferType const& defferedBuffer)
+	{
 		DrawModels();
+	}
 
-		SetRenderTarget(mWorld.Engine().GraphicHardware().ScreenRenderTarget());
-		auto const quadMat = mWorld.Engine().ResourceSystem().GetResource<RoMaterialGraphicType>("resources\\materials\\quad_blit.mat_gs");
-		DrawQuad(quadMat);
+	void RenderSystem::InitScreenBuffer()
+	{
+		auto const screenSize = mWorld.Engine().GraphicHardware().ScreenSize();
+		auto const bufferSize = glm::vec2{ screenSize };
+		auto const bufferRect = glm::vec4{ 0.0f, 0.0f, bufferSize };
 
+		auto const screenBuffer = mWorld.Engine().GraphicHardware().ScreenRenderTarget();
+
+		SetRenderTarget(screenBuffer);
+		SetDrawArea(bufferRect);
+		ClearRenderTarget(screenBuffer);
+	}
+
+	void RenderSystem::DrawDefferedBufferToScreen(DefferedBufferType const& defferedBuffer)
+	{
+		static constexpr const std::size_t EMISSION_BUFFER_INDEX = 3;
+		BlitQuad(defferedBuffer.RTs.at(EMISSION_BUFFER_INDEX));
+	}
+
+	void RenderSystem::ShutScreenBuffer()
+	{
 		PresentFrame();
+	}
+
+	void RenderSystem::BlitQuad(aiva::layer1::ResViewDescType const& mainTexture) const
+	{
+		Asserts::CheckBool(ResViewDescUtils::IsValid(mainTexture), "Main texture is not valid");
+
+		// ----------------------------
+
+		auto const srcResourceView = ResViewDescUtils::GetView(mainTexture);
+		Asserts::CheckBool(srcResourceView, "Src resource view is not valid");
+		
+		auto const midResourceBuffer = srcResourceView->GetInternalResource();
+		Asserts::CheckBool(midResourceBuffer, "Mid resource buffer is not valid");
+
+		auto const dstResourceView = NewObject<GrvSrvToTexture2D>(mWorld.Engine());
+		Asserts::CheckBool(dstResourceView, "Dst resource view is not valid");
+
+		dstResourceView->SetInternalResource(midResourceBuffer);
+
+		// ----------------------------
+
+		auto const& blitMaterial = mBlitMaterial;
+		Asserts::CheckBool(blitMaterial, "Blit material is not valid");
+
+		auto const instancedMaterial = blitMaterial->Copy();
+		Asserts::CheckBool(instancedMaterial, "Instanced material is not valid");
+
+		auto const& resourceHeap = instancedMaterial->ResourceDescriptor().ResourceTable().GetOrAddResourceHeap(EDescriptorHeapType::CbvSrvUav);
+		Asserts::CheckBool(resourceHeap, "Resource heap is not valid");
+
+		resourceHeap->SetView(MaterialConstants::AIVA_BUFFER_TEXTURE_MAIN, dstResourceView);
+
+		// ----------------------------
+
+		DrawQuad(instancedMaterial);
+	}
+
+	void RenderSystem::InitializeBlitMaterial()
+	{
+		auto const blitMaterial = mWorld.Engine().ResourceSystem().GetResource<RoMaterialGraphicType>("resources\\materials\\quad_blit.mat_gs");
+		Asserts::CheckBool(blitMaterial, "Blit material is not valid");
+
+		mBlitMaterial = blitMaterial;
+	}
+
+	void RenderSystem::TerminateBlitMaterial()
+	{
+		Asserts::CheckBool(mBlitMaterial, "Blit material is not valid");
+		mBlitMaterial = {};
 	}
 
 	void RenderSystem::DrawQuad(aiva::layer1::RoMaterialGraphicTypeShared const& sharedMaterial) const

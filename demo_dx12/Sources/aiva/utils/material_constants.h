@@ -17,9 +17,11 @@ namespace aiva::utils
 	public:
 		static constexpr auto const* const AIVA_BUFFER_CONSTANTS_PER_OBJECT = "AIVA_B00_CONSTANTS_PER_OBJECT";
 
-		static constexpr auto const* const AIVA_BUFFER_MESH_INDICES = "AIVA_T00_INDICES";
+		static constexpr auto const* const AIVA_BUFFER_MESH_INDICES = "AIVA_T00_MESH_INDICES";
 
-		static constexpr auto const* const AIVA_BUFFER_MESH_VERTICES = "AIVA_T01_VERTICES";
+		static constexpr auto const* const AIVA_BUFFER_MESH_VERTICES = "AIVA_T01_MESH_VERTICES";
+
+		static constexpr auto const* const AIVA_BUFFER_TEXTURE_MAIN = "AIVA_T02_TEXTURE_MAIN";
 
 	// ----------------------------------------------------
 	// Constants To Fields Inside Buffers

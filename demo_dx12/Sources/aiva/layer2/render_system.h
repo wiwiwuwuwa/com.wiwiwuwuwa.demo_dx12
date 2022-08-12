@@ -60,7 +60,34 @@ namespace aiva::layer2
 		void ExecuteRenderer();
 
 	// ----------------------------------------------------
+	// High-Level Drawing Commands
+
+	private:
+		void InitDefferedBuffer(DefferedBufferType& defferedBuffer);
+
+		void DrawModelsToDefferedBuffer(DefferedBufferType const& defferedBuffer);
+
+		void InitScreenBuffer();
+
+		void DrawDefferedBufferToScreen(DefferedBufferType const& defferedBuffer);
+
+		void ShutScreenBuffer();
+
+	// ----------------------------------------------------
 	// Mid-Level Drawing Commands
+
+	private:
+		void BlitQuad(aiva::layer1::ResViewDescType const& mainTexture) const;
+
+	private:
+		void InitializeBlitMaterial();
+
+		void TerminateBlitMaterial();
+
+	private:
+		aiva::layer1::RoMaterialGraphicTypeShared mBlitMaterial{};
+
+	// --------------------------------
 
 	private:
 		void DrawQuad(aiva::layer1::RoMaterialGraphicTypeShared const& sharedMaterial) const;

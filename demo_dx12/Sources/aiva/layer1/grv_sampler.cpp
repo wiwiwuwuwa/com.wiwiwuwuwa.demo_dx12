@@ -38,9 +38,6 @@ namespace aiva::layer1
 		viewDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
 		viewDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
 		viewDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-		//viewDesc.MipLODBias = {};
-		//viewDesc.MaxAnisotropy = 1;
-		//viewDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
 		viewDesc.MinLOD = {};
 		viewDesc.MaxLOD = std::numeric_limits<std::float_t>::infinity();
 

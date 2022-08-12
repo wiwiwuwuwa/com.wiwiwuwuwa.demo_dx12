@@ -228,6 +228,8 @@
     <ClInclude Include="Sources\aiva\layer1\material_resource_descriptor.h" />
     <ClInclude Include="Sources\aiva\layer2\deffered_buffer.h" />
     <ClInclude Include="Sources\aiva\layer2\deffered_buffer_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer2\e_scene_component_type.h" />
+    <ClInclude Include="Sources\aiva\layer2\e_scene_component_type_fwd.h" />
     <ClInclude Include="Sources\aiva\layer2\scene_actor_fwd.h" />
     <ClInclude Include="Sources\aiva\layer2\scene_component_fwd.h" />
     <ClInclude Include="Sources\aiva\layer2\scene_system_fwd.h" />
@@ -360,6 +362,7 @@
     <ClCompile Include="Sources\aiva\layer1\ro_shader_vertex.cpp" />
     <ClCompile Include="Sources\aiva\layer1\material_pipeline_descriptor.cpp" />
     <ClCompile Include="Sources\aiva\layer1\material_resource_descriptor.cpp" />
+    <ClCompile Include="Sources\aiva\layer2\e_scene_component_type.cpp" />
     <ClCompile Include="Sources\aiva\layer2\render_system.cpp" />
     <ClCompile Include="Sources\aiva\layer2\scene_actor.cpp" />
     <ClCompile Include="Sources\aiva\layer2\scene_component.cpp" />

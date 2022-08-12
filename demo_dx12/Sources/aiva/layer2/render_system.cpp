@@ -23,9 +23,13 @@
 #include <aiva/layer1/material_resource_descriptor.h>
 #include <aiva/layer1/res_view_desc.h>
 #include <aiva/layer1/res_view_desc_utils.h>
+#include <aiva/layer1/resource_system.h>
 #include <aiva/layer1/resource_view_heap.h>
 #include <aiva/layer1/resource_view_table.h>
 #include <aiva/layer1/ro_material_graphic.h>
+#include <aiva/layer1/ro_material_graphic_utils.h>
+#include <aiva/layer1/ro_scene_gltf.h>
+#include <aiva/layer1/scene_gltf_utils.h>
 #include <aiva/layer2/sc_camera.h>
 #include <aiva/layer2/sc_mesh_renderer.h>
 #include <aiva/layer2/scene_actor.h>
@@ -43,10 +47,12 @@ namespace aiva::layer2
 	RenderSystem::RenderSystem(WorldType const& world) : AObject{}, mWorld{ world }
 	{
 		InitializeRenderer();
+		InitializeQuadModel();
 	}
 
 	RenderSystem::~RenderSystem()
 	{
+		TerminateQuadModel();
 		TerminateRenderer();
 	}
 
@@ -74,14 +80,54 @@ namespace aiva::layer2
 	{
 		auto const screenSize = mWorld.Engine().GraphicHardware().ScreenSize();
 		auto const screenRect = glm::vec4{ 0.0f, 0.0f, screenSize.x, screenSize.y };
-		auto const defferedBuffer = CreateDefferedBuffer(screenSize);
+		SetDrawArea(screenRect);
 
+		auto const defferedBuffer = CreateDefferedBuffer(screenSize);
 		ClearRenderTarget(defferedBuffer);
 		SetRenderTarget(defferedBuffer);
-		SetDrawArea(screenRect);
 		DrawModels();
 
+		SetRenderTarget(mWorld.Engine().GraphicHardware().ScreenRenderTarget());
+		auto const quadMat = mWorld.Engine().ResourceSystem().GetResource<RoMaterialGraphicType>("resources\\materials\\quad_blit.mat_gs");
+		DrawQuad(quadMat);
+
 		PresentFrame();
+	}
+
+	void RenderSystem::DrawQuad(aiva::layer1::RoMaterialGraphicTypeShared const& sharedMaterial) const
+	{
+		Asserts::CheckBool(sharedMaterial, "Shared material is not valid");
+
+		auto const& quadModel = mQuadModel;
+		Asserts::CheckBool(quadModel, "Quad model is not valid");
+
+		auto const instancedMaterial = RoMaterialGraphicUtils::Combine(sharedMaterial, quadModel);
+		Asserts::CheckBool(instancedMaterial, "Instanced material is not valid");
+
+		DrawModel(instancedMaterial);
+	}
+
+	void RenderSystem::InitializeQuadModel()
+	{
+		auto const quadScene = mWorld.Engine().ResourceSystem().GetResource<RoSceneGltfType>("resources\\scenes\\quad_blit.scene_gltf");
+		Asserts::CheckBool(quadScene, "Quad scene is not valid");
+
+		auto const quadModels = SceneGltfUtils::LoadModels(quadScene);
+		Asserts::CheckBool(!std::empty(quadModels), "Quad models is empty");
+
+		auto const quadIter = quadModels.find(0);
+		Asserts::CheckBool(quadIter != std::end(quadModels), "Quad iter is not valid");
+
+		auto const quadModel = quadIter->second;
+		Asserts::CheckBool(quadModel, "Quad model is not valid");
+
+		mQuadModel = quadModel;
+	}
+
+	void RenderSystem::TerminateQuadModel()
+	{
+		Asserts::CheckBool(mQuadModel, "Quad model is not valid");
+		mQuadModel = {};
 	}
 
 	void RenderSystem::SetDrawArea(glm::vec4 const rect) const
@@ -271,6 +317,23 @@ namespace aiva::layer2
 
 			return ResViewDescType{ dsHeap, name };
 		}
+	}
+
+	void RenderSystem::SetRenderTarget(ResViewDescType const& rt /*= {}*/, ResViewDescType const& ds /*= {}*/) const
+	{
+		auto rts = std::vector<ResViewDescType>{};
+		if (ResViewDescUtils::IsValid(rt))
+		{
+			rts.emplace_back(rt);
+		}
+
+		auto dss = std::vector<ResViewDescType>{};
+		if (ResViewDescUtils::IsValid(ds))
+		{
+			dss.emplace_back(ds);
+		}
+
+		SetRenderTarget(rts, dss);
 	}
 
 	void RenderSystem::SetRenderTarget(std::vector<ResViewDescType> const& RTs, std::vector<ResViewDescType> const& DSs /*= {}*/) const

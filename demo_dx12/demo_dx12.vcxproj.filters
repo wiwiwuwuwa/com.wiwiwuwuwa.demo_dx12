@@ -84,6 +84,7 @@
     <ClCompile Include="Sources\aiva\layer1\grv_srv_to_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\res_view_desc.cpp" />
     <ClCompile Include="Sources\aiva\layer1\res_view_desc_utils.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\ro_material_graphic_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -208,6 +209,7 @@
     <ClInclude Include="Sources\aiva\layer2\scene_component_fwd.h" />
     <ClInclude Include="Sources\aiva\layer2\deffered_buffer.h" />
     <ClInclude Include="Sources\aiva\layer2\deffered_buffer_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\ro_material_graphic_utils.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

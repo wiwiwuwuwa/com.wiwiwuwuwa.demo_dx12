@@ -194,6 +194,7 @@
     <ClInclude Include="Sources\aiva\layer1\res_view_desc_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\res_view_desc_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_material_graphic_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\ro_material_graphic_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_scene_gltf_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_clear_depth_stencil.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_clear_render_target.h" />
@@ -346,6 +347,7 @@
     <ClCompile Include="Sources\aiva\layer1\res_view_desc_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_material_compute.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_material_graphic.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\ro_material_graphic_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_scene_gltf.cpp" />
     <ClCompile Include="Sources\aiva\layer1\scene_gltf_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_shader_compute.cpp" />

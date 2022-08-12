@@ -60,7 +60,21 @@ namespace aiva::layer2
 		void ExecuteRenderer();
 
 	// ----------------------------------------------------
-	// Drawing Commands
+	// Mid-Level Drawing Commands
+
+	private:
+		void DrawQuad(aiva::layer1::RoMaterialGraphicTypeShared const& sharedMaterial) const;
+
+	private:
+		void InitializeQuadModel();
+
+		void TerminateQuadModel();
+
+	private:
+		aiva::layer1::RoMaterialGraphicTypeShared mQuadModel{};
+
+	// ----------------------------------------------------
+	// Low-Level Drawing Commands
 
 	private:
 		void SetDrawArea(glm::vec4 const rect) const;
@@ -92,6 +106,8 @@ namespace aiva::layer2
 
 	private:
 		aiva::layer1::ResViewDescType CreateRenderTarget(aiva::layer1::EResourceBufferFormat const format, glm::u64vec2 const size) const;
+
+		void SetRenderTarget(aiva::layer1::ResViewDescType const& rt = {}, aiva::layer1::ResViewDescType const& ds = {}) const;
 
 		void SetRenderTarget(std::vector<aiva::layer1::ResViewDescType> const& RTs, std::vector<aiva::layer1::ResViewDescType> const& DSs = {}) const;
 

@@ -6,6 +6,7 @@
 #include <aiva/layer1/gr_texture_2d.h>
 #include <aiva/layer1/graphic_hardware.h>
 #include <aiva/utils/asserts.h>
+#include <aiva/utils/object_utils.h>
 
 aiva::layer1::GrvRtvToTexture2D::GrvRtvToTexture2D(EngineType const& engine) : AGraphicResourceView{ engine }
 {
@@ -31,6 +32,11 @@ aiva::layer1::GrvRtvToTexture2D& aiva::layer1::GrvRtvToTexture2D::MipLevel(std::
 	}
 
 	return *this;
+}
+
+std::shared_ptr<aiva::layer1::GrvRtvToTexture2D::ResourceType> aiva::layer1::GrvRtvToTexture2D::CreateDefaultInternalResource() const
+{
+	return aiva::utils::NewObject<GrTexture2D>(Engine());
 }
 
 aiva::layer1::EDescriptorHeapType aiva::layer1::GrvRtvToTexture2D::HeapType() const

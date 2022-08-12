@@ -3,6 +3,8 @@
 
 #include <aiva/layer1/e_resource_buffer_format.h>
 #include <aiva/layer1/res_view_desc.h>
+#include <aiva/layer1/ro_material_graphic_fwd.h>
+#include <aiva/layer2/deffered_buffer.h>
 #include <aiva/layer2/sc_camera_fwd.h>
 #include <aiva/layer2/sc_mesh_renderer_fwd.h>
 #include <aiva/layer2/world_fwd.h>
@@ -58,10 +60,32 @@ namespace aiva::layer2
 		void ExecuteRenderer();
 
 	// ----------------------------------------------------
-	// Render Commands
+	// Drawing Commands
 
 	private:
+		void SetDrawArea(glm::vec4 const rect) const;
+
+		void DrawModels();
+
+		void DrawModels(std::vector<ScCameraTypeShared> const& cameras, std::vector<ScMeshRendererTypeShared> const& meshRenderers) const;
+
+		void DrawModels(ScCameraTypeShared const& camera, std::vector<ScMeshRendererTypeShared> const& meshRenderers) const;
+
+		void DrawModel(ScCameraTypeShared const& camera, ScMeshRendererTypeShared const& meshRenderer) const;
+
+		void DrawModel(aiva::layer1::RoMaterialGraphicTypeShared const& sharedMaterial) const;
+
 		void PresentFrame();
+
+	// ----------------------------------------------------
+	// Deffered Buffer
+
+	private:
+		DefferedBufferType CreateDefferedBuffer(glm::u64vec2 const size) const;
+
+		void SetRenderTarget(DefferedBufferType const& defferedBuffer) const;
+
+		void ClearRenderTarget(DefferedBufferType const& defferedBuffer) const;
 
 	// ----------------------------------------------------
 	// Render Targets

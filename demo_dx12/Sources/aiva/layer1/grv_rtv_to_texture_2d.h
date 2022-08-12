@@ -32,6 +32,12 @@ namespace aiva::layer1
 		std::uint64_t mMipLevel{};
 
 	// ----------------------------------------------------
+	// Graphic Resource View: Internal Resource
+
+	protected:
+		std::shared_ptr<ResourceType> CreateDefaultInternalResource() const override;
+
+	// ----------------------------------------------------
 	// Graphic Resource View: Metadata
 
 	public:

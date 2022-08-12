@@ -4,14 +4,26 @@ struct Input
     float2 TexcoordOS : TEXCOORD0;
 };
 
+// ------------------------------------
+
 struct Output
 {
     float4 Color : SV_Target;
 };
 
+// ------------------------------------
+
+SamplerState mainSampler : register(s0);
+
+// ------------------------------------
+
+Texture2D<float4> mainTexture : register(t2);
+
+// ------------------------------------
+
 Output main(Input IN)
 {
     Output OUT;
-    OUT.Color = float4(IN.TexcoordOS, 0.0, 1.0);
+    OUT.Color = mainTexture.Sample(mainSampler, IN.TexcoordOS);
     return OUT;
 }

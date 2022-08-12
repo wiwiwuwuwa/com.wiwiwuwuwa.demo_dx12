@@ -10,6 +10,7 @@
 #include <aiva/layer1/resource_view_table.h>
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/logger.h>
+#include <aiva/utils/object_utils.h>
 #include <aiva/utils/t_cache_updater.h>
 
 aiva::layer1::MaterialResourceDescriptor::MaterialResourceDescriptor(Engine const& engine) : mEngine{ engine }
@@ -52,17 +53,17 @@ aiva::layer1::ResourceViewTable& aiva::layer1::MaterialResourceDescriptor::Resou
 
 void aiva::layer1::MaterialResourceDescriptor::InitializeResourceTable()
 {
-	mResourceTable = ResourceViewTable::Create(mEngine);
+	mResourceTable = aiva::utils::NewObject<ResourceViewTableType>(mEngine);
 	aiva::utils::Asserts::CheckBool(mResourceTable);
 
-	mResourceTable->CacheUpdater().OnMarkAsChanged().connect(boost::bind(&MaterialResourceDescriptor::OnResourceTableMarkedAsChanged, this));
+	mResourceTable->OnChanged().connect(boost::bind(&MaterialResourceDescriptor::OnResourceTableMarkedAsChanged, this));
 }
 
 void aiva::layer1::MaterialResourceDescriptor::TerminateResourceTable()
 {
 	aiva::utils::Asserts::CheckBool(mResourceTable);
 
-	mResourceTable->CacheUpdater().OnMarkAsChanged().disconnect(boost::bind(&MaterialResourceDescriptor::OnResourceTableMarkedAsChanged, this));
+	mResourceTable->OnChanged().disconnect(boost::bind(&MaterialResourceDescriptor::OnResourceTableMarkedAsChanged, this));
 	mResourceTable = {};
 }
 

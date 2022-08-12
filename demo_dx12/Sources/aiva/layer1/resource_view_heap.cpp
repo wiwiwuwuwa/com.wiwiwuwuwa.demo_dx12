@@ -111,18 +111,8 @@ void aiva::layer1::ResourceViewHeap::TerminateInternalResources()
 
 void aiva::layer1::ResourceViewHeap::RefreshInternalResources()
 {
-	ExecuteFlushForInternalResources();
 	RefreshInternalDescriptorHeap();
 	RefreshInternalDescriptorHandles();
-}
-
-void aiva::layer1::ResourceViewHeap::ExecuteFlushForInternalResources()
-{
-	for (auto const& view : mViews)
-	{
-		aiva::utils::Asserts::CheckBool(view.second);
-		view.second->FlushChanges();
-	}
 }
 
 void aiva::layer1::ResourceViewHeap::RefreshInternalDescriptorHeap()
@@ -139,7 +129,7 @@ void aiva::layer1::ResourceViewHeap::RefreshInternalDescriptorHeap()
 	auto heapDesc = D3D12_DESCRIPTOR_HEAP_DESC{};
 	heapDesc.Type = ToInternalEnum(HeapType());
 	heapDesc.NumDescriptors = std::size(mViews);
-	heapDesc.Flags = (HeapType() == EDescriptorHeapType::CbvSrvUav ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE);
+	heapDesc.Flags = SupportShaderAccess(HeapType()) ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	heapDesc.NodeMask = 0;
 
 	auto heapResource = winrt::com_ptr<ID3D12DescriptorHeap>();
@@ -183,8 +173,6 @@ void aiva::layer1::ResourceViewHeap::RefreshInternalDescriptorHandles()
 
 std::optional<D3D12_CPU_DESCRIPTOR_HANDLE> aiva::layer1::ResourceViewHeap::InternalDescriptorHandle(std::string const& viewKey)
 {
-	FlushChanges();
-
 	auto const& iter = mViews.find(viewKey);
 	if (iter == mViews.end())
 	{
@@ -199,8 +187,6 @@ std::optional<D3D12_CPU_DESCRIPTOR_HANDLE> aiva::layer1::ResourceViewHeap::Inter
 
 std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::ResourceViewHeap::PrepareBarriers(bool const active)
 {
-	FlushChanges();
-
 	auto barriers = std::vector<D3D12_RESOURCE_BARRIER>{};
 
 	auto const& resourceViews = mViews;

@@ -14,12 +14,30 @@
 
 void aiva::layer1::GcaDrawMesh::Execute(Engine const& engine) const
 {
+	ExecuteResourceBarrier(engine);
 	ExecuteSetPipelineState(engine);
 	ExecuteSetGraphicRootSignature(engine);
 	ExecuteSetDescriptorHeaps(engine);
 	ExecuteSetGraphicsRootDescriptorTable(engine);
 	ExecuteIASetPrimitiveTopology(engine);
 	ExecuteDrawIndexedInstanced(engine);
+}
+
+void aiva::layer1::GcaDrawMesh::ExecuteResourceBarrier(Engine const& engine) const
+{
+	auto const& commandList = engine.GraphicHardware().CommandList();
+	winrt::check_bool(commandList);
+
+	auto const& material = Material;
+	aiva::utils::Asserts::CheckBool(material);
+
+	auto const& barriers = material->PrepareBarriers(true);
+	if (std::empty(barriers))
+	{
+		return;
+	}
+
+	commandList->ResourceBarrier(std::size(barriers), std::data(barriers));
 }
 
 void aiva::layer1::GcaDrawMesh::ExecuteSetPipelineState(Engine const& engine) const
@@ -59,14 +77,30 @@ void aiva::layer1::GcaDrawMesh::ExecuteSetDescriptorHeaps(Engine const& engine) 
 	aiva::utils::Asserts::CheckBool(material);
 
 	auto const& packedHeaps = material->ResourceDescriptor().InternalDescriptorHeaps();
-	if (packedHeaps.empty()) return;
+	if (std::empty(packedHeaps))
+	{
+		return;
+	}
 
-	for (auto const& packedHeap : packedHeaps) winrt::check_bool(packedHeap);
+	auto unpackedHeaps = std::vector<ID3D12DescriptorHeap*>{};
+	for (auto const& packedHeap : packedHeaps)
+	{
+		winrt::check_bool(packedHeap);
 
-	auto& unpackedHeaps = std::vector<ID3D12DescriptorHeap*>{};
-	std::transform(packedHeaps.cbegin(), packedHeaps.cend(), std::back_inserter(unpackedHeaps), [](auto const& heap) { return heap.get(); });
+		auto const heapDesc = packedHeap->GetDesc();
+		aiva::utils::Asserts::CheckBool(heapDesc.Flags & D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE, "Heap is not shader visible");
 
-	commandList->SetDescriptorHeaps(unpackedHeaps.size(), unpackedHeaps.data());
+		auto const unpackedHeap = packedHeap.get();
+		aiva::utils::Asserts::CheckBool(unpackedHeap, "Unpacked heap is not valid");
+
+		unpackedHeaps.emplace_back(unpackedHeap);
+	}
+	if (std::empty(unpackedHeaps))
+	{
+		return;
+	}
+
+	commandList->SetDescriptorHeaps(std::size(unpackedHeaps), std::data(unpackedHeaps));
 }
 
 void aiva::layer1::GcaDrawMesh::ExecuteSetGraphicsRootDescriptorTable(Engine const& engine) const
@@ -78,11 +112,29 @@ void aiva::layer1::GcaDrawMesh::ExecuteSetGraphicsRootDescriptorTable(Engine con
 	aiva::utils::Asserts::CheckBool(material);
 
 	auto const& packedHeaps = material->ResourceDescriptor().InternalDescriptorHeaps();
-	for (auto const& packedHeap : packedHeaps) winrt::check_bool(packedHeap);
-
-	for (std::size_t i = {}; i < packedHeaps.size(); i++)
+	if (std::empty(packedHeaps))
 	{
-		commandList->SetGraphicsRootDescriptorTable(i, packedHeaps[i]->GetGPUDescriptorHandleForHeapStart());
+		return;
+	}
+
+	auto unpackedHeaps = std::vector<winrt::com_ptr<ID3D12DescriptorHeap>>{};
+	for (auto const& packedHeap : packedHeaps)
+	{
+		winrt::check_bool(packedHeap);
+
+		auto const heapDesc = packedHeap->GetDesc();
+		aiva::utils::Asserts::CheckBool(heapDesc.Flags & D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE, "Heap is not shader visible");
+
+		unpackedHeaps.emplace_back(packedHeap);
+	}
+	if (std::empty(unpackedHeaps))
+	{
+		return;
+	}
+
+	for (std::size_t i = {}; i < std::size(unpackedHeaps); i++)
+	{
+		commandList->SetGraphicsRootDescriptorTable(i, unpackedHeaps.at(i)->GetGPUDescriptorHandleForHeapStart());
 	}
 }
 
@@ -92,23 +144,6 @@ void aiva::layer1::GcaDrawMesh::ExecuteIASetPrimitiveTopology(Engine const& engi
 	winrt::check_bool(commandList);
 
 	commandList->IASetPrimitiveTopology(ToInternalEnum(MeshTopology));
-}
-
-void aiva::layer1::GcaDrawMesh::ExecuteResourceBarrier(Engine const& engine) const
-{
-	auto const& commandList = engine.GraphicHardware().CommandList();
-	winrt::check_bool(commandList);
-
-	auto const& material = Material;
-	aiva::utils::Asserts::CheckBool(material);
-
-	auto const& barriers = material->PrepareBarriers(true);
-	if (std::empty(barriers))
-	{
-		return;
-	}
-
-	commandList->ResourceBarrier(std::size(barriers), std::data(barriers));
 }
 
 void aiva::layer1::GcaDrawMesh::ExecuteDrawIndexedInstanced(Engine const& engine) const

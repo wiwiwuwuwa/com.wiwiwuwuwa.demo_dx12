@@ -17,4 +17,9 @@ namespace aiva::layer1
 	EDescriptorHeapType FromInternalEnum(D3D12_DESCRIPTOR_HEAP_TYPE const heapType);
 
 	D3D12_DESCRIPTOR_HEAP_TYPE ToInternalEnum(EDescriptorHeapType const heapType);
+
+	// ----------------------------------------------------
+	// Utils
+
+	bool SupportShaderAccess(EDescriptorHeapType const heapType);
 }

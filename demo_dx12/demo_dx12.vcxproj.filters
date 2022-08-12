@@ -85,6 +85,7 @@
     <ClCompile Include="Sources\aiva\layer1\res_view_desc.cpp" />
     <ClCompile Include="Sources\aiva\layer1\res_view_desc_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_material_graphic_utils.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\grv_sampler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -210,6 +211,9 @@
     <ClInclude Include="Sources\aiva\layer2\deffered_buffer.h" />
     <ClInclude Include="Sources\aiva\layer2\deffered_buffer_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_material_graphic_utils.h" />
+    <ClInclude Include="Sources\aiva\layer1\grv_sampler.h" />
+    <ClInclude Include="Sources\aiva\layer1\grv_sampler_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\resource_view_table_fwd.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

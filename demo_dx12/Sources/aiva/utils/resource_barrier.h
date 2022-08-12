@@ -13,7 +13,5 @@ namespace aiva::utils
 
 	private:
 		D3D12_RESOURCE_STATES mMainState{};
-
-		std::unordered_map<std::size_t, D3D12_RESOURCE_STATES> mSubStates{};
 	};
 }

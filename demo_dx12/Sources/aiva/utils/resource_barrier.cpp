@@ -1,6 +1,8 @@
 #include <pch.h>
 #include <aiva/utils/resource_barrier.h>
 
+#include <aiva/utils/asserts.h>
+
 aiva::utils::ResourceBarrier::ResourceBarrier(D3D12_RESOURCE_STATES const state /*= D3D12_RESOURCE_STATE_COMMON*/)
 {
 	mMainState = state;
@@ -8,6 +10,8 @@ aiva::utils::ResourceBarrier::ResourceBarrier(D3D12_RESOURCE_STATES const state 
 
 bool aiva::utils::ResourceBarrier::Transite(D3D12_RESOURCE_STATES const desiredState, std::optional<std::size_t> const subresource, D3D12_RESOURCE_STATES& previousState)
 {
+	Asserts::CheckBool(!subresource || subresource.value() == 0, "Resource barrier is not implemented for use in subresources");
+
 	if (mMainState == D3D12_RESOURCE_STATE_GENERIC_READ)
 	{
 		previousState = {};
@@ -20,44 +24,13 @@ bool aiva::utils::ResourceBarrier::Transite(D3D12_RESOURCE_STATES const desiredS
 		return false;
 	}
 
-	if (!subresource)
+	if (mMainState == desiredState)
 	{
-		if (mMainState == desiredState)
-		{
-			previousState = {};
-			return false;
-		}
-
-		previousState = mMainState;
-		mMainState = desiredState;
-		return true;
+		previousState = {};
+		return false;
 	}
-	else
-	{
-		auto const& subStateIter = mSubStates.find(*subresource);
-		if (subStateIter == mSubStates.end())
-		{
-			if (mMainState == desiredState)
-			{
-				previousState = {};
-				return false;
-			}
-			else
-			{
-				previousState = mMainState;
-				mSubStates.insert_or_assign(*subresource, desiredState);
-				return true;
-			}
-		}
 
-		if (subStateIter->second == desiredState)
-		{
-			previousState = {};
-			return false;
-		}
-
-		previousState = subStateIter->second;
-		mSubStates.insert_or_assign(*subresource, desiredState);
-		return true;
-	}
+	previousState = mMainState;
+	mMainState = desiredState;
+	return true;
 }

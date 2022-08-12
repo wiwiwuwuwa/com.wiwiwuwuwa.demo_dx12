@@ -1,80 +1,49 @@
 #pragma once
 #include <pch.h>
 
-namespace aiva::layer1
-{
-	enum class EDescriptorHeapType : std::uint8_t;
-
-	struct Engine;
-	struct IGpuResourceView;
-	struct ResourceViewHeap;
-}
-
-namespace aiva::utils
-{
-	enum class ECacheFlags : std::uint8_t;
-
-	template <typename, typename = ECacheFlags>
-	struct TCacheUpdater;
-}
+#include <aiva/layer1/e_descriptor_heap_type.h>
+#include <aiva/layer1/i_object_engineable.h>
+#include <aiva/layer1/resource_view_heap_fwd.h>
+#include <aiva/layer1/resource_view_table_fwd.h>
+#include <aiva/utils/a_object.h>
+#include <aiva/utils/i_object_changeable.h>
 
 namespace aiva::layer1
 {
-	struct ResourceViewTable final : private boost::noncopyable, public std::enable_shared_from_this<ResourceViewTable>
+	struct ResourceViewTable final : public aiva::utils::AObject, public aiva::utils::IObjectChangeable, public aiva::layer1::IObjectEngineable
 	{
 	// ----------------------------------------------------
 	// Main
 
-	public:
-		template <typename... TArgs>
-		static std::shared_ptr<ResourceViewTable> Create(TArgs&&... args);
-
 	private:
-		ResourceViewTable(Engine const& engine);
+		friend FactoryType;
 
-	public:
-		~ResourceViewTable();
-
-	private:
-		Engine const& mEngine;
-
-	// ----------------------------------------------------
-	// Cache Refresh
+	protected:
+		ResourceViewTable(EngineType const& engine);
 
 	public:
-		using CacheUpdaterType = aiva::utils::TCacheUpdater<ResourceViewTable>;
-
-	public:
-		CacheUpdaterType& CacheUpdater() const;
-
-	private:
-		void InitializeCacheUpdater();
-
-		void TerminateCacheUpdater();
-
-	private:
-		std::unique_ptr<CacheUpdaterType> mCacheUpdater{};
+		~ResourceViewTable() override;
 
 	// -------------------------------------------------------
 	// Resource Heaps
 
 	private:
-		using ResourceHeapMap = std::unordered_map<EDescriptorHeapType, std::shared_ptr<ResourceViewHeap>>;
+		using HeapDict = std::unordered_map<EDescriptorHeapType, ResourceViewHeapTypeShared>;
 
 	public:
-		std::shared_ptr<ResourceViewHeap> GetResourceHeap(EDescriptorHeapType const key) const;
+		ResourceViewHeapTypeShared GetResourceHeap(EDescriptorHeapType const key) const;
 
-		std::shared_ptr<ResourceViewHeap> GetOrAddResourceHeap(EDescriptorHeapType const key);
+		ResourceViewHeapTypeShared GetOrAddResourceHeap(EDescriptorHeapType const key);
 
-		ResourceViewTable& SetResourceHeap(EDescriptorHeapType const key, std::shared_ptr<ResourceViewHeap> const& value);
+		ResourceViewTable& SetResourceHeap(EDescriptorHeapType const key, ResourceViewHeapTypeShared const& value);
 
-		ResourceHeapMap const& ResourceHeaps() const;
-
-	private:
-		void OnResourceHeapMarkedAsChanged();
+		HeapDict const& ResourceHeaps() const;
 
 	private:
-		ResourceHeapMap mResourceHeaps{};
+		void ResourceHeap_OnMarkedAsChanged();
+
+	private:
+		HeapDict mResourceHeaps{};
 
 	// ----------------------------------------------------
 	// Internal Resources
@@ -94,12 +63,4 @@ namespace aiva::layer1
 	public:
 		void CopyPropertiesFrom(ResourceViewTable const& source);
 	};
-}
-
-// --------------------------------------------------------
-
-template <typename... TArgs>
-std::shared_ptr<aiva::layer1::ResourceViewTable> aiva::layer1::ResourceViewTable::Create(TArgs&&... args)
-{
-	return std::shared_ptr<ResourceViewTable>{new ResourceViewTable{ std::forward<TArgs>(args)... }};
 }

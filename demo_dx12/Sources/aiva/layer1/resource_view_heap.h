@@ -85,8 +85,6 @@ namespace aiva::layer1
 	private:
 		void RefreshInternalResources();
 
-		void ExecuteFlushForInternalResources();
-
 		void RefreshInternalDescriptorHeap();
 
 		void RefreshInternalDescriptorHandles();

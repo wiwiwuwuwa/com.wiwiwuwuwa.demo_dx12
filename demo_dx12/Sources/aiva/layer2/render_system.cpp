@@ -20,6 +20,7 @@
 #include <aiva/layer1/grv_cbv_to_buffer.h>
 #include <aiva/layer1/grv_dsv_to_texture_2d.h>
 #include <aiva/layer1/grv_rtv_to_texture_2d.h>
+#include <aiva/layer1/grv_sampler.h>
 #include <aiva/layer1/grv_srv_to_texture_2d.h>
 #include <aiva/layer1/material_resource_descriptor.h>
 #include <aiva/layer1/res_view_desc.h>
@@ -161,6 +162,16 @@ namespace aiva::layer2
 		Asserts::CheckBool(resourceHeap, "Resource heap is not valid");
 
 		resourceHeap->SetView(MaterialConstants::AIVA_BUFFER_TEXTURE_MAIN, dstResourceView);
+
+		// ----------------------------
+
+		auto const& samplerHeap = instancedMaterial->ResourceDescriptor().ResourceTable().GetOrAddResourceHeap(EDescriptorHeapType::Sampler);
+		Asserts::CheckBool(samplerHeap, "Sampler heap is not valid");
+
+		auto const samplerView = NewObject<GrvSamplerType>(mWorld.Engine());
+		Asserts::CheckBool(samplerView, "Sampler view is not valid");
+
+		samplerHeap->SetView(MaterialConstants::AIVA_SAMPLER_TEXTURE_MAIN, samplerView);
 
 		// ----------------------------
 

@@ -185,11 +185,14 @@
     <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_dsv_to_texture_2d_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_rtv_to_texture_2d_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\grv_sampler.h" />
+    <ClInclude Include="Sources\aiva\layer1\grv_sampler_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_srv_to_texture_2d.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_srv_to_texture_2d_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\gr_texture_2d_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\i_object_engineable.h" />
     <ClInclude Include="Sources\aiva\layer1\resource_view_heap_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\resource_view_table_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\res_view_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\res_view_desc_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\res_view_desc_utils.h" />
@@ -323,6 +326,7 @@
     <ClCompile Include="Sources\aiva\layer1\engine.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_resource_view_type.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_cbv_to_buffer.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\grv_sampler.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_srv_to_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\i_object_engineable.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_clear_depth_stencil.cpp" />

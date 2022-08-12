@@ -23,6 +23,8 @@ namespace aiva::utils
 
 		static constexpr auto const* const AIVA_BUFFER_TEXTURE_MAIN = "AIVA_T02_TEXTURE_MAIN";
 
+		static constexpr auto const* const AIVA_SAMPLER_TEXTURE_MAIN = "AIVA_S00_TEXTURE_MAIN";
+
 	// ----------------------------------------------------
 	// Constants To Fields Inside Buffers
 

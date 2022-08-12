@@ -46,3 +46,25 @@ D3D12_DESCRIPTOR_HEAP_TYPE aiva::layer1::ToInternalEnum(EDescriptorHeapType cons
 		return {};
 	}
 }
+
+bool aiva::layer1::SupportShaderAccess(EDescriptorHeapType const heapType)
+{
+	switch (heapType)
+	{
+	case EDescriptorHeapType::CbvSrvUav:
+		return true;
+
+	case EDescriptorHeapType::Sampler:
+		return true;
+
+	case EDescriptorHeapType::Rtv:
+		return false;
+
+	case EDescriptorHeapType::Dsv:
+		return false;
+
+	default:
+		aiva::utils::Asserts::CheckBool(false);
+		return {};
+	}
+}

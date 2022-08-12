@@ -2,6 +2,7 @@
 #include <aiva/layer1/resource_system.h>
 
 #include <aiva/layer1/engine.h>
+#include <aiva/layer1/ro_json.h>
 #include <aiva/layer1/ro_material_compute.h>
 #include <aiva/layer1/ro_material_graphic.h>
 #include <aiva/layer1/ro_scene_gltf.h>
@@ -106,6 +107,7 @@ void aiva::layer1::ResourceSystem::DeserealizeResourceFromBinary(std::shared_ptr
 void aiva::layer1::ResourceSystem::InitializeFactories()
 {
 	mFactories = {};
+	RegisterFactory<aiva::layer1::RoJsonType>(".json");
 	RegisterFactory<aiva::layer1::RoMaterialCompute>(".mat_cs");
 	RegisterFactory<aiva::layer1::RoMaterialGraphic>(".mat_gs");
 	RegisterFactory<aiva::layer1::RoSceneGltf>(".scene_gltf");

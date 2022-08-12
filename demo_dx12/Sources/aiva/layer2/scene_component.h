@@ -26,5 +26,11 @@ namespace aiva::layer2
 
 	private:
 		SceneActorType& mActor;
+
+	// ----------------------------------------------------
+	// Json
+
+	public:
+		virtual void ParseFromJson(nlohmann::json const& json);
 	};
 }

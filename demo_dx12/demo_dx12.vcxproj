@@ -196,6 +196,8 @@
     <ClInclude Include="Sources\aiva\layer1\res_view_desc.h" />
     <ClInclude Include="Sources\aiva\layer1\res_view_desc_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\res_view_desc_utils.h" />
+    <ClInclude Include="Sources\aiva\layer1\ro_json.h" />
+    <ClInclude Include="Sources\aiva\layer1\ro_json_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_material_graphic_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_material_graphic_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_scene_gltf_fwd.h" />
@@ -231,6 +233,7 @@
     <ClInclude Include="Sources\aiva\layer2\e_scene_component_type.h" />
     <ClInclude Include="Sources\aiva\layer2\e_scene_component_type_fwd.h" />
     <ClInclude Include="Sources\aiva\layer2\scene_actor_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer2\scene_actor_utils.h" />
     <ClInclude Include="Sources\aiva\layer2\scene_component_fwd.h" />
     <ClInclude Include="Sources\aiva\layer2\scene_system_fwd.h" />
     <ClInclude Include="Sources\aiva\layer2\sc_camera_fwd.h" />
@@ -351,6 +354,7 @@
     <ClCompile Include="Sources\aiva\layer1\resource_view_table.cpp" />
     <ClCompile Include="Sources\aiva\layer1\res_view_desc.cpp" />
     <ClCompile Include="Sources\aiva\layer1\res_view_desc_utils.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\ro_json.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_material_compute.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_material_graphic.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_material_graphic_utils.cpp" />
@@ -365,6 +369,7 @@
     <ClCompile Include="Sources\aiva\layer2\e_scene_component_type.cpp" />
     <ClCompile Include="Sources\aiva\layer2\render_system.cpp" />
     <ClCompile Include="Sources\aiva\layer2\scene_actor.cpp" />
+    <ClCompile Include="Sources\aiva\layer2\scene_actor_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer2\scene_component.cpp" />
     <ClCompile Include="Sources\aiva\layer2\scene_system.cpp" />
     <ClCompile Include="Sources\aiva\layer2\sc_camera.cpp" />

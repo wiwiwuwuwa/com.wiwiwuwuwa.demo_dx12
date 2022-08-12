@@ -87,6 +87,8 @@
     <ClCompile Include="Sources\aiva\layer1\ro_material_graphic_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_sampler.cpp" />
     <ClCompile Include="Sources\aiva\layer2\e_scene_component_type.cpp" />
+    <ClCompile Include="Sources\aiva\layer2\scene_actor_utils.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\ro_json.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -217,6 +219,9 @@
     <ClInclude Include="Sources\aiva\layer1\resource_view_table_fwd.h" />
     <ClInclude Include="Sources\aiva\layer2\e_scene_component_type.h" />
     <ClInclude Include="Sources\aiva\layer2\e_scene_component_type_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer2\scene_actor_utils.h" />
+    <ClInclude Include="Sources\aiva\layer1\ro_json.h" />
+    <ClInclude Include="Sources\aiva\layer1\ro_json_fwd.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

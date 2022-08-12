@@ -2,6 +2,7 @@
 #include <aiva/layer2/scene_component.h>
 
 #include <aiva/layer2/scene_actor.h>
+#include <aiva/utils/asserts.h>
 
 namespace aiva::layer2
 {
@@ -20,5 +21,10 @@ namespace aiva::layer2
 	SceneActorType& SceneComponent::Actor() const
 	{
 		return mActor;
+	}
+
+	void SceneComponent::ParseFromJson(nlohmann::json const&)
+	{
+		Asserts::CheckBool(false, "SceneComponent::ParseFromJson is not implemented");
 	}
 }

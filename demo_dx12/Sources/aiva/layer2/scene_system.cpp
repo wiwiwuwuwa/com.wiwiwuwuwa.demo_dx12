@@ -14,6 +14,7 @@
 #include <aiva/layer2/sc_camera.h>
 #include <aiva/layer2/sc_mesh_renderer.h>
 #include <aiva/layer2/scene_actor.h>
+#include <aiva/layer2/scene_actor_utils.h>
 #include <aiva/layer2/world.h>
 #include <aiva/utils/asserts.h>
 
@@ -37,6 +38,19 @@ namespace aiva::layer2
 		return mActors.emplace_back(new SceneActorType{ mWorld });
 	}
 
+	SceneActorTypeShared SceneSystem::LoadScene(std::string const& path)
+	{
+		Asserts::CheckBool(!std::empty(path), "Path is not valid");
+
+		auto const resource = mWorld.Engine().ResourceSystem().GetResource<RoSceneGltfType>(path);
+		Asserts::CheckBool(resource, "Resource is not valid");
+
+		auto const scene = LoadScene(resource);
+		Asserts::CheckBool(scene, "Scene is not valid");
+
+		return scene;
+	}
+
 	SceneActorTypeShared SceneSystem::LoadScene(RoSceneGltfTypeShared const& scene)
 	{
 		Asserts::CheckBool(scene, "Scene is not valid");
@@ -55,7 +69,25 @@ namespace aiva::layer2
 
 		for (std::size_t i = {}; i < std::size(scene->Model().nodes); i++)
 		{
-			auto const actor = CreateActor();
+			auto const& glNode = scene->Model().nodes.at(i);
+			auto const& glExtras = glNode.extras;
+
+			auto actor = SceneActorTypeShared{};
+
+			static constexpr char const* const PATH_KEY = "path";
+			if (glExtras.Has(PATH_KEY))
+			{
+				auto const& glPath = glExtras.Get(PATH_KEY);
+				auto const& path = glPath.Get<std::string>();
+
+				actor = LoadScene(path);
+			}
+			else
+			{
+				actor = CreateActor();
+			}
+
+			Asserts::CheckBool(actor, "Actor is not valid");
 			actors.emplace_back(actor);
 		}
 
@@ -141,6 +173,30 @@ namespace aiva::layer2
 			camera->FovY(glCamera.perspective.yfov);
 			camera->ZNear(glCamera.perspective.znear);
 			camera->ZFar(glCamera.perspective.zfar);
+		}
+	}
+
+	void SceneSystem::LoadActosComponents(aiva::layer1::RoSceneGltfTypeShared const& scene, std::vector<SceneActorTypeShared> const& actors)
+	{
+		for (std::size_t i = {}; i < std::size(scene->Model().nodes); i++)
+		{
+			auto const& glNode = scene->Model().nodes.at(i);
+			auto const& glExtras = glNode.extras;
+
+			static constexpr char const* const COMPONENTS_PATH_KEY = "componentsPath";
+			if (!glExtras.Has(COMPONENTS_PATH_KEY))
+			{
+				continue;
+			}
+
+			auto const& glComponentsPath = glExtras.Get(COMPONENTS_PATH_KEY);
+			auto const& componentsPath = glComponentsPath.Get<std::string>();
+			Asserts::CheckBool(!std::empty(componentsPath), "Components path is not valid");
+
+			auto const& actor = actors.at(i);
+			Asserts::CheckBool(actor, "Actor is not valid");
+
+			SceneActorUtils::CreateComponents(actor, componentsPath);
 		}
 	}
 

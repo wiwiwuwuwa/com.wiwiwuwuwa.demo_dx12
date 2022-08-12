@@ -43,6 +43,8 @@ namespace aiva::layer2
 	// Scenes
 
 	public:
+		SceneActorTypeShared LoadScene(std::string const& path);
+
 		SceneActorTypeShared LoadScene(aiva::layer1::RoSceneGltfTypeShared const& scene);
 
 	private:
@@ -55,6 +57,8 @@ namespace aiva::layer2
 		void LoadActorsMeshRenderers(aiva::layer1::RoSceneGltfTypeShared const& scene, std::vector<SceneActorTypeShared> const& actors);
 
 		void LoadActorsCameras(aiva::layer1::RoSceneGltfTypeShared const& scene, std::vector<SceneActorTypeShared> const& actors);
+
+		void LoadActosComponents(aiva::layer1::RoSceneGltfTypeShared const& scene, std::vector<SceneActorTypeShared> const& actors);
 
 		SceneActorTypeShared LoadActorsRoot(aiva::layer1::RoSceneGltfTypeShared const& scene, std::vector<SceneActorTypeShared> const& actors);
 	};

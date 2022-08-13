@@ -58,8 +58,6 @@
     <ClCompile Include="Sources\aiva\layer1\a_graphic_resource.cpp" />
     <ClCompile Include="Sources\aiva\layer1\a_graphic_resource_view.cpp" />
     <ClCompile Include="Sources\aiva\utils\a_object.cpp" />
-    <ClCompile Include="Sources\aiva\utils\i_object_changeable.cpp" />
-    <ClCompile Include="Sources\aiva\utils\i_object_cacheable.cpp" />
     <ClCompile Include="Sources\aiva\layer1\i_object_engineable.cpp" />
     <ClCompile Include="Sources\aiva\layer1\grv_cbv_to_buffer.cpp" />
     <ClCompile Include="Sources\aiva\utils\boxed_value_utils.cpp" />
@@ -224,6 +222,9 @@
     <ClInclude Include="Sources\aiva\layer1\ro_json.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_json_fwd.h" />
     <ClInclude Include="Sources\aiva\utils\t_object_cacheable.h" />
+    <ClInclude Include="Sources\aiva\utils\t_object_changeable.h" />
+    <ClInclude Include="Sources\aiva\layer1\e_grv_cache_flags.h" />
+    <ClInclude Include="Sources\aiva\layer1\e_rvh_cache_flags.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

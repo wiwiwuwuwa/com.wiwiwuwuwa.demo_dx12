@@ -3,6 +3,11 @@
 
 #include <aiva/layer1/a_graphic_resource_view.h>
 
+namespace aiva::layer1
+{
+	struct GrBuffer;
+}
+
 namespace aiva::utils
 {
 	struct DictBuffer;
@@ -52,7 +57,12 @@ namespace aiva::layer1
 	protected:
 		std::shared_ptr<ResourceType> CreateDefaultInternalResource() const override;
 
-		void RefreshInternalResourceFromSelf(std::shared_ptr<ResourceType> const& aivaResource) override;
+		void RefreshInternalResourceFromSelf(std::shared_ptr<ResourceType> const& aivaResource, EGrvCacheFlags const dirtyFlags) override;
+
+	private:
+		void RefreshInternalResourcePtr(std::shared_ptr<GrBuffer> const& aivaResource, std::vector<std::byte> const& binaryData) const;
+
+		void RefreshInternalResourceBin(std::shared_ptr<GrBuffer> const& aivaResource, std::vector<std::byte> const& binaryData) const;
 
 	// ----------------------------------------------------
 	// Graphic Resource View: Metadata

@@ -22,23 +22,23 @@ aiva::utils::LayoutBuffer& aiva::utils::LayoutBuffer::Layout(LayoutStructPointer
 {
 	if (mLayout)
 	{
-		mLayout->OnChanged().disconnect(boost::bind(&LayoutBuffer::Layout_OnChanged, this));
+		mLayout->OnCacheDataChanged().disconnect(boost::bind(&LayoutBuffer::Layout_OnChanged, this));
 	}
 
 	mLayout = layout;
 
 	if (mLayout)
 	{
-		mLayout->OnChanged().connect(boost::bind(&LayoutBuffer::Layout_OnChanged, this));
+		mLayout->OnCacheDataChanged().connect(boost::bind(&LayoutBuffer::Layout_OnChanged, this));
 	}
 
-	OnChanged()();
+	BroadcastCacheDataChanged();
 	return *this;
 }
 
 void aiva::utils::LayoutBuffer::Layout_OnChanged()
 {
-	OnChanged()();
+	BroadcastCacheDataChanged();
 }
 
 std::size_t aiva::utils::LayoutBuffer::Stride() const
@@ -51,7 +51,7 @@ aiva::utils::LayoutBuffer& aiva::utils::LayoutBuffer::Stride(std::size_t const s
 	if (mStride != stride)
 	{
 		mStride = stride;
-		OnChanged()();
+		BroadcastCacheDataChanged();
 	}
 
 	return *this;
@@ -67,7 +67,7 @@ aiva::utils::LayoutBuffer& aiva::utils::LayoutBuffer::Offset(std::size_t const o
 	if (mOffset != offset)
 	{
 		mOffset = offset;
-		OnChanged()();
+		BroadcastCacheDataChanged();
 	}
 
 	return *this;
@@ -83,7 +83,7 @@ aiva::utils::LayoutBuffer& aiva::utils::LayoutBuffer::Size(std::size_t const siz
 	if (mSize != size)
 	{
 		mSize = size;
-		OnChanged()();
+		BroadcastCacheDataChanged();
 	}
 
 	return *this;

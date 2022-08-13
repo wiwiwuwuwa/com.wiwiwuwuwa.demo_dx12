@@ -1,7 +1,8 @@
 #pragma once
 #include <pch.h>
 
-#include <aiva/utils/ev_action.h>
+#include <aiva/utils/e_cache_flags.h>
+#include <aiva/utils/t_ev_action.h>
 
 namespace aiva::utils
 {
@@ -34,6 +35,9 @@ namespace aiva::utils
 	// Changes
 
 	public:
-		virtual EvAction& OnChanged() = 0;
+		using ChangeActionType = TEvAction<ECacheFlags>;
+
+	public:
+		virtual ChangeActionType& OnCacheDataChanged() = 0;
 	};
 }

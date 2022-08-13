@@ -28,7 +28,7 @@ aiva::layer1::GrvDsvToTexture2D& aiva::layer1::GrvDsvToTexture2D::MipLevel(std::
 	if (mMipLevel != mipLevel)
 	{
 		mMipLevel = mipLevel;
-		MarkAsChanged();
+		MarkCacheDataAsChanged(EGrvCacheFlags::BufferBin);
 	}
 
 	return *this;

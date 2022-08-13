@@ -58,17 +58,17 @@ aiva::utils::DictBuffer& aiva::utils::DictBuffer::Layout(MetaStructPointerType c
 {
 	if (mLayout)
 	{
-		mLayout->OnChanged().disconnect(boost::bind(&DictBuffer::Layout_OnChanged, this));
+		mLayout->OnCacheDataChanged().disconnect(boost::bind(&DictBuffer::Layout_OnChanged, this));
 	}
 
 	mLayout = layout;
 
 	if (mLayout)
 	{
-		mLayout->OnChanged().connect(boost::bind(&DictBuffer::Layout_OnChanged, this));
+		mLayout->OnCacheDataChanged().connect(boost::bind(&DictBuffer::Layout_OnChanged, this));
 	}
 
-	OnChanged()();
+	BroadcastCacheDataChanged();
 	return *this;
 }
 
@@ -83,10 +83,10 @@ aiva::utils::DictBuffer& aiva::utils::DictBuffer::Add(DictStructPointerType cons
 	Asserts::CheckBool(dictStruct, "Dict struct is not valid");
 	Asserts::CheckBool(DictStructUtils::IsMatchingLayout(dictStruct, mLayout), "Dict struct doesn't match the layout");
 
-	dictStruct->OnChanged().connect(boost::bind(&DictBuffer::Struct_OnChanged, this));
+	dictStruct->OnCacheDataChanged().connect(boost::bind(&DictBuffer::Struct_OnChanged, this));
 	mStructs.emplace_back(dictStruct);
 
-	OnChanged()();
+	BroadcastCacheDataChanged();
 	return *this;
 }
 

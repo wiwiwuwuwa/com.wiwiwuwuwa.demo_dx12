@@ -32,20 +32,20 @@ void aiva::layer1::GrvSrvToBuffer::InitializeBuffer()
 	mBuffer = aiva::utils::NewObject<BufferElementType>();
 	aiva::utils::Asserts::CheckBool(mBuffer, "Shader buffer is not valid");
 
-	mBuffer->OnChanged().connect(boost::bind(&GrvSrvToBuffer::Buffer_OnChanged, this));
+	mBuffer->OnCacheDataChanged().connect(boost::bind(&GrvSrvToBuffer::Buffer_OnChanged, this));
 }
 
 void aiva::layer1::GrvSrvToBuffer::TerminateBuffer()
 {
 	aiva::utils::Asserts::CheckBool(mBuffer, "Shader buffer is not valid");
 
-	mBuffer->OnChanged().disconnect(boost::bind(&GrvSrvToBuffer::Buffer_OnChanged, this));
+	mBuffer->OnCacheDataChanged().disconnect(boost::bind(&GrvSrvToBuffer::Buffer_OnChanged, this));
 	mBuffer = {};
 }
 
 void aiva::layer1::GrvSrvToBuffer::Buffer_OnChanged()
 {
-	MarkAsChanged();
+	MarkCacheDataAsChanged(EGrvCacheFlags::BufferBin);
 }
 
 std::shared_ptr<aiva::layer1::GrvSrvToBuffer::ResourceType> aiva::layer1::GrvSrvToBuffer::CreateDefaultInternalResource() const
@@ -53,31 +53,62 @@ std::shared_ptr<aiva::layer1::GrvSrvToBuffer::ResourceType> aiva::layer1::GrvSrv
 	return aiva::utils::NewObject<GrBuffer>(Engine());
 }
 
-void aiva::layer1::GrvSrvToBuffer::RefreshInternalResourceFromSelf(std::shared_ptr<ResourceType> const& aivaResource)
+void aiva::layer1::GrvSrvToBuffer::RefreshInternalResourceFromSelf(std::shared_ptr<ResourceType> const& aivaResource, EGrvCacheFlags const dirtyFlags)
 {
-	aiva::utils::Asserts::CheckBool(aivaResource, "Aiva resource is not valid");
+	using namespace aiva::utils;
+
+	Asserts::CheckBool(aivaResource, "Aiva resource is not valid");
 
 	auto const& dictBuffer = mBuffer;
-	aiva::utils::Asserts::CheckBool(dictBuffer, "Dict buffer is not valid");
+	Asserts::CheckBool(dictBuffer, "Dict buffer is not valid");
 
-	auto const& binary = aiva::utils::DictBufferUtils::SerializeToBinary(dictBuffer);
-	aiva::utils::Asserts::CheckBool(!binary.empty());
+	auto const binaryData = aiva::utils::DictBufferUtils::SerializeToBinary(dictBuffer);
+	Asserts::CheckBool(!std::empty(binaryData), "Binary data is empty");
 
 	auto const& aivaBuffer = std::dynamic_pointer_cast<GrBuffer>(aivaResource);
-	aiva::utils::Asserts::CheckBool(aivaBuffer, "Graphic resource doesn't support buffer");
+	Asserts::CheckBool(aivaBuffer, "Graphic resource doesn't support buffer");
 
-	aivaBuffer->MemoryType(EResourceMemoryType::CpuToGpu);
-	aivaBuffer->Size(binary.size());
-	aivaBuffer->SupportShaderAtomics(false);
-	aivaBuffer->SupportUnorderedAccess(false);
+	auto needRefreshPtr = false;
+	needRefreshPtr |= (EnumUtils::Has(dirtyFlags, EGrvCacheFlags::BufferPtr));
+	needRefreshPtr |= (EnumUtils::Has(dirtyFlags, EGrvCacheFlags::BufferBin) && aivaBuffer->Size() != std::size(binaryData));
+	needRefreshPtr |= (aivaBuffer->MemoryType() != EResourceMemoryType::CpuToGpu);
+	needRefreshPtr |= (aivaBuffer->SupportShaderAtomics() != false);
+	needRefreshPtr |= (aivaBuffer->SupportUnorderedAccess() != false);
+	needRefreshPtr ? RefreshInternalResourcePtr(aivaBuffer, binaryData) : [] {};
 
-	auto const& directxBuffer = aivaBuffer->InternalResource();
+	auto needRefreshBin = false;
+	needRefreshBin |= (needRefreshPtr);
+	needRefreshBin |= (EnumUtils::Has(dirtyFlags, EGrvCacheFlags::BufferBin));
+	needRefreshBin ? RefreshInternalResourceBin(aivaBuffer, binaryData) : [] {};
+}
+
+void aiva::layer1::GrvSrvToBuffer::RefreshInternalResourcePtr(std::shared_ptr<GrBuffer> const& aivaResource, std::vector<std::byte> const& binaryData) const
+{
+	using namespace aiva::utils;
+
+	Asserts::CheckBool(aivaResource, "Aiva resource is not valid");
+	Asserts::CheckBool(!std::empty(binaryData), "Binary data is empty");
+
+	aivaResource->MemoryType(EResourceMemoryType::CpuToGpu);
+	aivaResource->Size(std::size(binaryData));
+	aivaResource->SupportShaderAtomics(false);
+	aivaResource->SupportUnorderedAccess(false);
+}
+
+void aiva::layer1::GrvSrvToBuffer::RefreshInternalResourceBin(std::shared_ptr<GrBuffer> const& aivaResource, std::vector<std::byte> const& binaryData) const
+{
+	using namespace aiva::utils;
+
+	Asserts::CheckBool(aivaResource, "Aiva resource is not valid");
+	Asserts::CheckBool(!std::empty(binaryData), "Binary data is empty");
+
+	auto const& directxBuffer = aivaResource->InternalResource();
 	winrt::check_bool(directxBuffer);
 
 	void* destinationMemory{};
 	winrt::check_hresult(directxBuffer->Map(0, nullptr, &destinationMemory));
-	aiva::utils::Asserts::CheckBool(destinationMemory);
-	aiva::utils::Asserts::CheckBool(memcpy_s(destinationMemory, binary.size(), binary.data(), binary.size()) == 0);
+	Asserts::CheckBool(destinationMemory);
+	Asserts::CheckBool(memcpy_s(destinationMemory, std::size(binaryData), std::data(binaryData), std::size(binaryData)) == 0);
 	directxBuffer->Unmap(0, nullptr);
 }
 

@@ -22,23 +22,23 @@ aiva::utils::MetaBuffer& aiva::utils::MetaBuffer::Layout(MetaStructPointerType c
 {
 	if (mLayout)
 	{
-		mLayout->OnChanged().disconnect(boost::bind(&MetaBuffer::Layout_OnChanged, this));
+		mLayout->OnCacheDataChanged().disconnect(boost::bind(&MetaBuffer::Layout_OnChanged, this));
 	}
 
 	mLayout = layout;
 
 	if (mLayout)
 	{
-		mLayout->OnChanged().connect(boost::bind(&MetaBuffer::Layout_OnChanged, this));
+		mLayout->OnCacheDataChanged().connect(boost::bind(&MetaBuffer::Layout_OnChanged, this));
 	}
 
-	OnChanged()();
+	BroadcastCacheDataChanged();
 	return *this;
 }
 
 void aiva::utils::MetaBuffer::Layout_OnChanged()
 {
-	OnChanged()();
+	BroadcastCacheDataChanged();
 }
 
 std::size_t aiva::utils::MetaBuffer::Count() const
@@ -51,7 +51,7 @@ aiva::utils::MetaBuffer& aiva::utils::MetaBuffer::Count(std::size_t const count)
 	if (mCount != count)
 	{
 		mCount = count;
-		OnChanged()();
+		BroadcastCacheDataChanged();
 	}
 
 	return *this;

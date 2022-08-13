@@ -2,10 +2,12 @@
 #include <pch.h>
 
 #include <aiva/layer1/e_descriptor_heap_type.h>
+#include <aiva/layer1/e_grv_cache_flags.h>
+#include <aiva/layer1/e_rvh_cache_flags.h>
 #include <aiva/layer1/i_object_engineable.h>
 #include <aiva/utils/a_object.h>
-#include <aiva/utils/i_object_cacheable.h>
 #include <aiva/utils/object_utils.h>
+#include <aiva/utils/t_object_cacheable.h>
 
 namespace aiva::layer1
 {
@@ -14,7 +16,7 @@ namespace aiva::layer1
 
 namespace aiva::layer1
 {
-	struct ResourceViewHeap final : public aiva::utils::AObject, public aiva::utils::IObjectCacheable, public aiva::layer1::IObjectEngineable
+	struct ResourceViewHeap final : public aiva::utils::AObject, public aiva::utils::TObjectCacheable<ERvhCacheFlags>, public aiva::layer1::IObjectEngineable
 	{
 	// ----------------------------------------------------
 	// Main
@@ -64,7 +66,7 @@ namespace aiva::layer1
 		std::shared_ptr<T> GetOrAddView(std::string const& key);
 
 	private:
-		void ExecuteMarkAsChangedForSelf();
+		void View_OnMarkCacheDataAsChanged(EGrvCacheFlags const dirtyFlags);
 
 	private:
 		ViewDict mViews{};
@@ -83,7 +85,7 @@ namespace aiva::layer1
 		void TerminateInternalResources();
 
 	private:
-		void RefreshInternalResources();
+		void RefreshInternalResources(ERvhCacheFlags const dirtyFlags);
 
 		void RefreshInternalDescriptorHeap();
 

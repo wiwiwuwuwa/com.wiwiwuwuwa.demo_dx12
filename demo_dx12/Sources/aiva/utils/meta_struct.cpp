@@ -18,10 +18,10 @@ aiva::utils::MetaStruct& aiva::utils::MetaStruct::Add(FieldPointerType const& fi
 {
 	Asserts::CheckBool(field, "Field is not valid");
 
-	field->OnChanged().connect(boost::bind(&MetaStruct::Field_OnChanged, this));
+	field->OnCacheDataChanged().connect(boost::bind(&MetaStruct::Field_OnChanged, this));
 	mFields.emplace_back(field);
 
-	OnChanged()();
+	BroadcastCacheDataChanged();
 	return *this;
 }
 
@@ -37,5 +37,5 @@ std::size_t aiva::utils::MetaStruct::Num() const
 
 void aiva::utils::MetaStruct::Field_OnChanged()
 {
-	OnChanged()();
+	BroadcastCacheDataChanged();
 }

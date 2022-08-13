@@ -21,7 +21,7 @@ aiva::utils::MetaField& aiva::utils::MetaField::Name(std::string const& name)
 	if (mName != name)
 	{
 		mName = name;
-		OnChanged()();
+		BroadcastCacheDataChanged();
 	}
 
 	return *this;
@@ -37,7 +37,7 @@ aiva::utils::MetaField& aiva::utils::MetaField::Type(TypeEnum const type)
 	if (mType != type)
 	{
 		mType = type;
-		OnChanged()();
+		BroadcastCacheDataChanged();
 	}
 
 	return *this;

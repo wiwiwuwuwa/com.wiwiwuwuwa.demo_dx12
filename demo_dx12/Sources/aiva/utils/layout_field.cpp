@@ -21,7 +21,7 @@ aiva::utils::LayoutField& aiva::utils::LayoutField::Type(TypeEnum const type)
 	if (mType != type)
 	{
 		mType = type;
-		OnChanged()();
+		BroadcastCacheDataChanged();
 	}
 
 	return *this;
@@ -37,7 +37,7 @@ aiva::utils::LayoutField& aiva::utils::LayoutField::Offset(std::size_t const off
 	if (mOffset != offset)
 	{
 		mOffset = offset;
-		OnChanged()();
+		BroadcastCacheDataChanged();
 	}
 
 	return *this;
@@ -53,7 +53,7 @@ aiva::utils::LayoutField& aiva::utils::LayoutField::Size(std::size_t const size)
 	if (mSize != size)
 	{
 		mSize = size;
-		OnChanged()();
+		BroadcastCacheDataChanged();
 	}
 
 	return *this;

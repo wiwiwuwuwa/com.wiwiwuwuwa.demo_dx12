@@ -178,10 +178,12 @@
     <ClInclude Include="Sources\aiva\layer1\e_comparison_func.h" />
     <ClInclude Include="Sources\aiva\layer1\e_descriptor_heap_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_fill_mode.h" />
+    <ClInclude Include="Sources\aiva\layer1\e_grv_cache_flags.h" />
     <ClInclude Include="Sources\aiva\layer1\e_primitive_topology.h" />
     <ClInclude Include="Sources\aiva\layer1\e_resource_buffer_format.h" />
     <ClInclude Include="Sources\aiva\layer1\e_resource_memory_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_resource_view_type.h" />
+    <ClInclude Include="Sources\aiva\layer1\e_rvh_cache_flags.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_dsv_to_texture_2d_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_rtv_to_texture_2d_fwd.h" />
@@ -296,6 +298,7 @@
     <ClInclude Include="Sources\aiva\utils\t_cache_updater.h" />
     <ClInclude Include="Sources\aiva\utils\t_ev_action.h" />
     <ClInclude Include="Sources\aiva\utils\t_object_cacheable.h" />
+    <ClInclude Include="Sources\aiva\utils\t_object_changeable.h" />
     <ClInclude Include="Sources\aiva\utils\t_signal_aggregator.h" />
   </ItemGroup>
   <ItemGroup>
@@ -395,8 +398,6 @@
     <ClCompile Include="Sources\aiva\utils\changes_counter.cpp" />
     <ClCompile Include="Sources\aiva\utils\dict_buffer.cpp" />
     <ClCompile Include="Sources\aiva\utils\dict_struct.cpp" />
-    <ClCompile Include="Sources\aiva\utils\i_object_cacheable.cpp" />
-    <ClCompile Include="Sources\aiva\utils\i_object_changeable.cpp" />
     <ClCompile Include="Sources\aiva\utils\logger.cpp" />
     <ClCompile Include="Sources\aiva\utils\math_utils.cpp" />
     <ClCompile Include="Sources\aiva\utils\meta_buffer.cpp" />

@@ -4,6 +4,7 @@
 #include <aiva/layer1/i_object_engineable.h>
 #include <aiva/utils/a_object.h>
 #include <aiva/utils/i_object_cacheable.h>
+#include <aiva/utils/i_object_changeable.h>
 
 namespace aiva::utils
 {

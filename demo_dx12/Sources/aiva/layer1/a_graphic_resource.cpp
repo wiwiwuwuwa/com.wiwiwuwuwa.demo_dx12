@@ -21,7 +21,7 @@ aiva::layer1::AGraphicResource::~AGraphicResource()
 
 winrt::com_ptr<ID3D12Resource> const& aiva::layer1::AGraphicResource::InternalResource()
 {
-	FlushChanges();
+	FlushCacheDataChanges();
 	return mInternalResource;
 }
 
@@ -32,17 +32,18 @@ void aiva::layer1::AGraphicResource::InternalResource(winrt::com_ptr<ID3D12Resou
 	mInternalResource = resource;
 	RefreshSelfFromInternalResource(resource);
 
-	ClearChanges();
+	MarkCacheDataAsChanged();
+	SkipCacheDataChanges();
 }
 
 void aiva::layer1::AGraphicResource::InitializeInternalResource()
 {
-	FlushExecutors().connect(boost::bind(&AGraphicResource::ExecuteFlushForInternalResource, this));
+	FlushCacheDataExecutors().connect(boost::bind(&AGraphicResource::ExecuteFlushForInternalResource, this));
 }
 
 void aiva::layer1::AGraphicResource::TerminateInternalResource()
 {
-	FlushExecutors().disconnect(boost::bind(&AGraphicResource::ExecuteFlushForInternalResource, this));
+	FlushCacheDataExecutors().disconnect(boost::bind(&AGraphicResource::ExecuteFlushForInternalResource, this));
 }
 
 void aiva::layer1::AGraphicResource::ExecuteFlushForInternalResource()

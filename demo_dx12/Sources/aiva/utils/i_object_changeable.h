@@ -1,28 +1,9 @@
 #pragma once
 #include <pch.h>
 
-#include <aiva/utils/ev_action.h>
+#include <aiva/utils/t_object_changeable.h>
 
 namespace aiva::utils
 {
-	struct IObjectChangeable
-	{
-	// ----------------------------------------------------
-	// Main
-
-	protected:
-		IObjectChangeable();
-
-	public:
-		virtual ~IObjectChangeable();
-
-	// ----------------------------------------------------
-	// Change Event
-
-	public:
-		EvAction& OnChanged();
-
-	private:
-		EvAction mOnChanged{};
-	};
+	using IObjectChangeable = TObjectChangeable<>;
 }

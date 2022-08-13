@@ -62,9 +62,9 @@ namespace aiva::layer1
 			auto const& previousHeapValue = previousHeapIter->second;
 			Asserts::CheckBool(previousHeapValue, "Previous heap value is not valid");
 
-			previousHeapValue->OnMarkAsChanged().disconnect(boost::bind(&ResourceViewTable::ResourceHeap_OnMarkedAsChanged, this));
+			previousHeapValue->OnMarkCacheDataAsChanged().disconnect(boost::bind(&ResourceViewTable::ResourceHeap_OnMarkedAsChanged, this));
 			mResourceHeaps.erase(previousHeapIter);
-			OnChanged()();
+			BroadcastCacheDataChanged();
 		}
 
 		if (!value)
@@ -78,8 +78,8 @@ namespace aiva::layer1
 			auto const& currentHeapValue = currentHeapIter->second;
 			Asserts::CheckBool(currentHeapValue, "Current heap value is not valid");
 
-			currentHeapValue->OnMarkAsChanged().connect(boost::bind(&ResourceViewTable::ResourceHeap_OnMarkedAsChanged, this));
-			OnChanged()();
+			currentHeapValue->OnMarkCacheDataAsChanged().connect(boost::bind(&ResourceViewTable::ResourceHeap_OnMarkedAsChanged, this));
+			BroadcastCacheDataChanged();
 		}
 
 		return *this;
@@ -92,7 +92,7 @@ namespace aiva::layer1
 
 	void ResourceViewTable::ResourceHeap_OnMarkedAsChanged()
 	{
-		OnChanged()();
+		BroadcastCacheDataChanged();
 	}
 
 	std::vector<winrt::com_ptr<ID3D12DescriptorHeap>> ResourceViewTable::InternalResource() const
@@ -146,7 +146,6 @@ namespace aiva::layer1
 			SetResourceHeap(sourceResourceHeap.first, copiedResourceHeap);
 		}
 
-		OnChanged()();
+		BroadcastCacheDataChanged();
 	}
-
 }

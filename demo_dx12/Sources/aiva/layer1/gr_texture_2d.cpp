@@ -25,7 +25,7 @@ aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::Format(EResourceBufferForm
 	if (mFormat != format)
 	{
 		mFormat = format;
-		MarkAsChanged();
+		MarkCacheDataAsChanged();
 	}
 
 	return *this;
@@ -41,7 +41,7 @@ aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::Width(std::size_t const wi
 	if (mWidth != width)
 	{
 		mWidth = width;
-		MarkAsChanged();
+		MarkCacheDataAsChanged();
 	}
 
 	return *this;
@@ -57,7 +57,7 @@ aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::Height(std::size_t const h
 	if (mHeight != height)
 	{
 		mHeight = height;
-		MarkAsChanged();
+		MarkCacheDataAsChanged();
 	}
 
 	return *this;
@@ -73,7 +73,7 @@ aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::SupportDepthStencil(bool c
 	if (mSupportDepthStencil != support)
 	{
 		mSupportDepthStencil = support;
-		MarkAsChanged();
+		MarkCacheDataAsChanged();
 	}
 
 	return *this;
@@ -89,7 +89,7 @@ aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::SupportMipMapping(bool con
 	if (mSupportMipMapping != support)
 	{
 		mSupportMipMapping = support;
-		MarkAsChanged();
+		MarkCacheDataAsChanged();
 	}
 
 	return *this;
@@ -105,7 +105,7 @@ aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::SupportRenderTarget(bool c
 	if (mSupportRenderTarget != support)
 	{
 		mSupportRenderTarget = support;
-		MarkAsChanged();
+		MarkCacheDataAsChanged();
 	}
 
 	return *this;
@@ -121,7 +121,7 @@ aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::SupportShaderAtomics(bool 
 	if (mSupportShaderAtomics != support)
 	{
 		mSupportShaderAtomics = support;
-		MarkAsChanged();
+		MarkCacheDataAsChanged();
 	}
 
 	return *this;
@@ -137,7 +137,7 @@ aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::SupportUnorderedAccess(boo
 	if (mSupportUnorderedAccess != support)
 	{
 		mSupportUnorderedAccess = support;
-		MarkAsChanged();
+		MarkCacheDataAsChanged();
 	}
 
 	return *this;

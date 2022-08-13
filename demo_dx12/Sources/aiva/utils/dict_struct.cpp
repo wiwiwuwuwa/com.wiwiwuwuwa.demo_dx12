@@ -35,18 +35,18 @@ aiva::utils::DictStruct& aiva::utils::DictStruct::FieldBoxed(std::string const& 
 	auto const previousField = FieldBoxed(name);
 	if (previousField)
 	{
-		previousField->OnChanged().disconnect(boost::bind(&DictStruct::FieldBoxed_OnChanged, this));
+		previousField->OnCacheDataChanged().disconnect(boost::bind(&DictStruct::FieldBoxed_OnChanged, this));
 		mFieldsBoxed.erase(name);
 	}
 
 	auto const& desiredField = fieldBoxed;
 	if (desiredField)
 	{
-		desiredField->OnChanged().connect(boost::bind(&DictStruct::FieldBoxed_OnChanged, this));
+		desiredField->OnCacheDataChanged().connect(boost::bind(&DictStruct::FieldBoxed_OnChanged, this));
 		mFieldsBoxed.insert_or_assign(name, desiredField);
 	}
 
-	OnChanged()();
+	BroadcastCacheDataChanged();
 	return *this;
 }
 
@@ -57,5 +57,5 @@ aiva::utils::DictStruct::FieldDictType const& aiva::utils::DictStruct::FieldsBox
 
 void aiva::utils::DictStruct::FieldBoxed_OnChanged()
 {
-	OnChanged()();
+	BroadcastCacheDataChanged();
 }

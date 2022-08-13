@@ -58,6 +58,6 @@ namespace aiva::utils
 	// Changes
 
 	public:
-		EvAction& OnChanged() override;
+		typename ChangeActionType& OnCacheDataChanged() override;
 	};
 }

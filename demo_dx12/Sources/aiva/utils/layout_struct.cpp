@@ -24,7 +24,7 @@ aiva::utils::LayoutStruct& aiva::utils::LayoutStruct::Offset(std::size_t const o
 	if (mOffset != offset)
 	{
 		mOffset = offset;
-		OnChanged()();
+		BroadcastCacheDataChanged();
 	}
 
 	return *this;
@@ -40,7 +40,7 @@ aiva::utils::LayoutStruct& aiva::utils::LayoutStruct::Size(std::size_t const siz
 	if (mSize != size)
 	{
 		mSize = size;
-		OnChanged()();
+		BroadcastCacheDataChanged();
 	}
 
 	return *this;
@@ -62,18 +62,18 @@ aiva::utils::LayoutStruct& aiva::utils::LayoutStruct::Field(std::string const& n
 	auto const previousField = Field(name);
 	if (previousField)
 	{
-		previousField->OnChanged().disconnect(boost::bind(&LayoutStruct::Field_OnChanged, this));
+		previousField->OnCacheDataChanged().disconnect(boost::bind(&LayoutStruct::Field_OnChanged, this));
 		mFields.erase(name);
 	}
 
 	auto const& desiredField = field;
 	if (desiredField)
 	{
-		desiredField->OnChanged().connect(boost::bind(&LayoutStruct::Field_OnChanged, this));
+		desiredField->OnCacheDataChanged().connect(boost::bind(&LayoutStruct::Field_OnChanged, this));
 		mFields.insert_or_assign(name, desiredField);
 	}
 
-	OnChanged()();
+	BroadcastCacheDataChanged();
 	return *this;
 }
 
@@ -84,5 +84,5 @@ aiva::utils::LayoutStruct::FieldDictType const& aiva::utils::LayoutStruct::Field
 
 void aiva::utils::LayoutStruct::Field_OnChanged()
 {
-	OnChanged()();
+	BroadcastCacheDataChanged();
 }

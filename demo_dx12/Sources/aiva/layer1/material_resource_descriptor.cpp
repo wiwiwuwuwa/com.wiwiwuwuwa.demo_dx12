@@ -56,14 +56,14 @@ void aiva::layer1::MaterialResourceDescriptor::InitializeResourceTable()
 	mResourceTable = aiva::utils::NewObject<ResourceViewTableType>(mEngine);
 	aiva::utils::Asserts::CheckBool(mResourceTable);
 
-	mResourceTable->OnChanged().connect(boost::bind(&MaterialResourceDescriptor::OnResourceTableMarkedAsChanged, this));
+	mResourceTable->OnCacheDataChanged().connect(boost::bind(&MaterialResourceDescriptor::OnResourceTableMarkedAsChanged, this));
 }
 
 void aiva::layer1::MaterialResourceDescriptor::TerminateResourceTable()
 {
 	aiva::utils::Asserts::CheckBool(mResourceTable);
 
-	mResourceTable->OnChanged().disconnect(boost::bind(&MaterialResourceDescriptor::OnResourceTableMarkedAsChanged, this));
+	mResourceTable->OnCacheDataChanged().disconnect(boost::bind(&MaterialResourceDescriptor::OnResourceTableMarkedAsChanged, this));
 	mResourceTable = {};
 }
 

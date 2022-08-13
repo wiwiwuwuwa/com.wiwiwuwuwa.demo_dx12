@@ -43,7 +43,7 @@ namespace aiva::utils
 	protected:
 		void MarkAsChanged(FlagType const dirtyFlags = FlagType::All);
 
-		void ClearChanges(FlagType const dirtyFlags = FlagType::All);
+		void SkipChanges(FlagType const dirtyFlags = FlagType::All);
 
 		ActionType& FlushExecutors();
 
@@ -52,8 +52,6 @@ namespace aiva::utils
 
 	private:
 		FlagType mDirtyFlags{};
-
-		bool mIsFlushingCache{};
 
 		ActionType mOnMarkAsChanged{};
 
@@ -103,19 +101,18 @@ aiva::utils::TCacheUpdaterBase<TDirtyFlags>::~TCacheUpdaterBase()
 template <typename TDirtyFlags>
 void aiva::utils::TCacheUpdaterBase<TDirtyFlags>::FlushChanges(FlagType const dirtyFlags /*= FlagType::All*/)
 {
-	auto const deltaFlags = EnumUtils::And(mDirtyFlags, dirtyFlags);
-	if (deltaFlags == FlagType{})
+	while (true)
 	{
-		return;
+		auto const deltaFlags = EnumUtils::And(mDirtyFlags, dirtyFlags);
+		if (deltaFlags == FlagType{})
+		{
+			break;
+		}
+
+		mDirtyFlags = EnumUtils::Clear(mDirtyFlags, deltaFlags);
+		FlushExecutors()(deltaFlags);
+		OnFlushExecuted()(deltaFlags);
 	}
-
-	mDirtyFlags = EnumUtils::Clear(mDirtyFlags, deltaFlags);
-
-	mIsFlushingCache = true;
-	FlushExecutors()(deltaFlags);
-	mIsFlushingCache = false;
-
-	OnFlushExecuted()(deltaFlags);
 }
 
 template <typename TDirtyFlags>
@@ -133,11 +130,6 @@ typename aiva::utils::TCacheUpdaterBase<TDirtyFlags>::ActionType& aiva::utils::T
 template <typename TDirtyFlags>
 void aiva::utils::TCacheUpdaterBase<TDirtyFlags>::MarkAsChanged(FlagType const dirtyFlags /*= FlagType::All*/)
 {
-	if (mIsFlushingCache)
-	{
-		return;
-	}
-
 	auto const deltaFlags = EnumUtils::New(mDirtyFlags, dirtyFlags);
 	if (deltaFlags == TDirtyFlags{})
 	{
@@ -149,9 +141,19 @@ void aiva::utils::TCacheUpdaterBase<TDirtyFlags>::MarkAsChanged(FlagType const d
 }
 
 template <typename TDirtyFlags>
-void aiva::utils::TCacheUpdaterBase<TDirtyFlags>::ClearChanges(FlagType const dirtyFlags /*= FlagType::All*/)
+void aiva::utils::TCacheUpdaterBase<TDirtyFlags>::SkipChanges(FlagType const dirtyFlags /*= FlagType::All*/)
 {
-	mDirtyFlags = EnumUtils::Clear(mDirtyFlags, dirtyFlags);
+	while (true)
+	{
+		auto const deltaFlags = EnumUtils::And(mDirtyFlags, dirtyFlags);
+		if (deltaFlags == FlagType{})
+		{
+			break;
+		}
+
+		mDirtyFlags = EnumUtils::Clear(mDirtyFlags, deltaFlags);
+		OnFlushExecuted()(deltaFlags);
+	}
 }
 
 template <typename TDirtyFlags>

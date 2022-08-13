@@ -5,9 +5,10 @@
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/graphic_hardware.h>
 #include <aiva/utils/asserts.h>
+#include <aiva/utils/enum_utils.h>
 
 aiva::layer1::ResourceViewHeap::ResourceViewHeap(EngineType const& engine)
-	: aiva::utils::AObject{}, aiva::utils::IObjectCacheable{ true }, aiva::layer1::IObjectEngineable{ engine }
+	: aiva::utils::AObject{}, aiva::utils::TObjectCacheable<ERvhCacheFlags>{ true }, aiva::layer1::IObjectEngineable{ engine }
 {
 	InitializeInternalResources();
 }
@@ -32,7 +33,7 @@ void aiva::layer1::ResourceViewHeap::HeapType(EDescriptorHeapType const heapType
 	mHeapType = heapType;
 	mViews = {};
 
-	MarkAsChanged();
+	MarkCacheDataAsChanged();
 }
 
 aiva::layer1::ResourceViewHeap::ViewPtr aiva::layer1::ResourceViewHeap::GetView(std::string const& key) const
@@ -56,13 +57,13 @@ void aiva::layer1::ResourceViewHeap::SetView(std::string const& key, ViewPtr con
 		auto const& previousView = previousIter->second;
 		aiva::utils::Asserts::CheckBool(previousView);
 
-		previousView->OnMarkAsChanged().disconnect(boost::bind(&ResourceViewHeap::ExecuteMarkAsChangedForSelf, this));
+		previousView->OnMarkCacheDataAsChanged().disconnect(boost::bind(&ResourceViewHeap::View_OnMarkCacheDataAsChanged, this, boost::placeholders::_1));
 		mViews.erase(previousIter);
-		MarkAsChanged();
 	}
 
 	if (!value)
 	{
+		MarkCacheDataAsChanged(ERvhCacheFlags::HeapBin);
 		return;
 	}
 
@@ -72,9 +73,10 @@ void aiva::layer1::ResourceViewHeap::SetView(std::string const& key, ViewPtr con
 		auto const& currentView = currentIter->second;
 		aiva::utils::Asserts::CheckBool(currentView);
 
-		currentView->OnMarkAsChanged().connect(boost::bind(&ResourceViewHeap::ExecuteMarkAsChangedForSelf, this));
-		MarkAsChanged();
+		currentView->OnMarkCacheDataAsChanged().connect(boost::bind(&ResourceViewHeap::View_OnMarkCacheDataAsChanged, this, boost::placeholders::_1));
 	}
+
+	MarkCacheDataAsChanged(ERvhCacheFlags::HeapBin);
 }
 
 aiva::layer1::ResourceViewHeap::ViewDict const& aiva::layer1::ResourceViewHeap::GetViews() const
@@ -82,44 +84,58 @@ aiva::layer1::ResourceViewHeap::ViewDict const& aiva::layer1::ResourceViewHeap::
 	return mViews;
 }
 
-void aiva::layer1::ResourceViewHeap::ExecuteMarkAsChangedForSelf()
+void aiva::layer1::ResourceViewHeap::View_OnMarkCacheDataAsChanged(EGrvCacheFlags const dirtyFlags)
 {
-	MarkAsChanged();
+	if (aiva::utils::EnumUtils::Has(dirtyFlags, EGrvCacheFlags::BufferPtr))
+	{
+		MarkCacheDataAsChanged(ERvhCacheFlags::HeapBin);
+	}
 }
 
 winrt::com_ptr<ID3D12DescriptorHeap> const& aiva::layer1::ResourceViewHeap::InternalDescriptorHeap()
 {
-	FlushChanges();
+	FlushCacheDataChanges();
 	return mInternalDescriptorHeap;
 }
 
 std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> const& aiva::layer1::ResourceViewHeap::InternalDescriptorHandles()
 {
-	FlushChanges();
+	FlushCacheDataChanges();
 	return mInternalDescriptorHandles;
 }
 
 void aiva::layer1::ResourceViewHeap::InitializeInternalResources()
 {
-	FlushExecutors().connect(boost::bind(&ResourceViewHeap::RefreshInternalResources, this));
+	FlushCacheDataExecutors().connect(boost::bind(&ResourceViewHeap::RefreshInternalResources, this, boost::placeholders::_1));
 }
 
 void aiva::layer1::ResourceViewHeap::TerminateInternalResources()
 {
-	FlushExecutors().disconnect(boost::bind(&ResourceViewHeap::RefreshInternalResources, this));
+	FlushCacheDataExecutors().disconnect(boost::bind(&ResourceViewHeap::RefreshInternalResources, this, boost::placeholders::_1));
 }
 
-void aiva::layer1::ResourceViewHeap::RefreshInternalResources()
+void aiva::layer1::ResourceViewHeap::RefreshInternalResources(ERvhCacheFlags const dirtyFlags)
 {
-	RefreshInternalDescriptorHeap();
-	RefreshInternalDescriptorHandles();
+	using namespace aiva::utils;
+
+	auto needRefreshPtr = false;
+	needRefreshPtr |= (EnumUtils::Has(dirtyFlags, ERvhCacheFlags::HeapPtr));
+	needRefreshPtr |= (EnumUtils::Has(dirtyFlags, ERvhCacheFlags::HeapBin) && !mInternalDescriptorHeap);
+	needRefreshPtr |= (EnumUtils::Has(dirtyFlags, ERvhCacheFlags::HeapBin) && mInternalDescriptorHeap && std::size(mViews) != mInternalDescriptorHeap->GetDesc().NumDescriptors);
+	needRefreshPtr ? RefreshInternalDescriptorHeap() : [] {};
+
+	auto needRefreshBin = false;
+	needRefreshBin |= (needRefreshPtr);
+	needRefreshBin |= (EnumUtils::Has(dirtyFlags, ERvhCacheFlags::HeapBin));
+	needRefreshBin ? RefreshInternalDescriptorHandles() : [] {};
 }
 
 void aiva::layer1::ResourceViewHeap::RefreshInternalDescriptorHeap()
 {
+	mInternalDescriptorHeap = {};
+
 	if (std::empty(mViews))
 	{
-		mInternalDescriptorHeap = {};
 		return;
 	}
 
@@ -219,6 +235,4 @@ void aiva::layer1::ResourceViewHeap::CopyPropertiesFrom(ResourceViewHeap const& 
 	{
 		SetView(view.first, view.second);
 	}
-
-	MarkAsChanged();
 }

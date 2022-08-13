@@ -25,7 +25,7 @@ aiva::layer1::GrBuffer& aiva::layer1::GrBuffer::MemoryType(EResourceMemoryType c
 	if (mMemoryType != memoryType)
 	{
 		mMemoryType = memoryType;
-		MarkAsChanged();
+		MarkCacheDataAsChanged();
 	}
 	
 	return *this;
@@ -41,7 +41,7 @@ aiva::layer1::GrBuffer& aiva::layer1::GrBuffer::Size(std::size_t const size)
 	if (mSize != size)
 	{
 		mSize = size;
-		MarkAsChanged();
+		MarkCacheDataAsChanged();
 	}
 
 	return *this;
@@ -57,7 +57,7 @@ aiva::layer1::GrBuffer& aiva::layer1::GrBuffer::SupportShaderAtomics(bool const 
 	if (mSupportShaderAtomics != support)
 	{
 		mSupportShaderAtomics = support;
-		MarkAsChanged();
+		MarkCacheDataAsChanged();
 	}
 
 	return *this;
@@ -73,7 +73,7 @@ aiva::layer1::GrBuffer& aiva::layer1::GrBuffer::SupportUnorderedAccess(bool cons
 	if (mSupportUnorderedAccess != support)
 	{
 		mSupportUnorderedAccess = support;
-		MarkAsChanged();
+		MarkCacheDataAsChanged();
 	}
 
 	return *this;

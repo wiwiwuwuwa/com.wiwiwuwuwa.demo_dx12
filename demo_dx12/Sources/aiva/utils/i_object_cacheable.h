@@ -5,15 +5,5 @@
 
 namespace aiva::utils
 {
-	struct IObjectCacheable : public TObjectCacheable<>
-	{
-	// ----------------------------------------------------
-	// Main
-
-	protected:
-		IObjectCacheable(bool const initAsChanged);
-
-	public:
-		~IObjectCacheable() override;
-	};
+	using IObjectCacheable = TObjectCacheable<>;
 }

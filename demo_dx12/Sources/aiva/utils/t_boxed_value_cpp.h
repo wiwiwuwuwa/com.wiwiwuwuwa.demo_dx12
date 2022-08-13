@@ -35,7 +35,7 @@ aiva::utils::TBoxedValue<TValue>& aiva::utils::TBoxedValue<TValue>::Value(ValueT
 {
 	mValue = value;
 
-	IObjectChangeable::OnChanged()();
+	BroadcastCacheDataChanged();
 	return *this;
 }
 
@@ -46,7 +46,7 @@ boost::span<std::byte> aiva::utils::TBoxedValue<TValue>::Binary()
 }
 
 template <typename TValue>
-aiva::utils::EvAction& aiva::utils::TBoxedValue<TValue>::OnChanged()
+typename aiva::utils::TBoxedValue<TValue>::ChangeActionType& aiva::utils::TBoxedValue<TValue>::OnCacheDataChanged()
 {
-	return IObjectChangeable::OnChanged();
+	return IObjectChangeable::OnCacheDataChanged();
 }

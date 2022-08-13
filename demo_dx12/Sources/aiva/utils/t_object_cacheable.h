@@ -3,11 +3,12 @@
 
 #include <aiva/utils/e_cache_flags.h>
 #include <aiva/utils/t_cache_updater.h>
+#include <aiva/utils/t_object_changeable.h>
 
 namespace aiva::utils
 {
 	template <typename TDirtyFlags = ECacheFlags>
-	struct TObjectCacheable
+	struct TObjectCacheable : public TObjectChangeable<TDirtyFlags>
 	{
 	// ----------------------------------------------------
 	// Main
@@ -22,31 +23,35 @@ namespace aiva::utils
 	// Aliases
 
 	public:
-		using ThisType = typename TObjectCacheable<typename TDirtyFlags>;
+		using FlagType = TDirtyFlags;
+
+		using ThisType = typename TObjectCacheable<typename FlagType>;
 
 	// ----------------------------------------------------
 	// Cache Updater
 
 	public:
-		using CacheUpdaterType = TCacheUpdater<ThisType>;
+		using CacheUpdaterType = TCacheUpdater<ThisType, FlagType>;
 
 		using CacheFlagType = typename CacheUpdaterType::FlagType;
 
 		using CacheActionType = typename CacheUpdaterType::ActionType;
 
+	// --------------------------------
+
 	public:
-		void FlushChanges(typename CacheFlagType const dirtyFlags = CacheFlagType::All);
+		void FlushCacheDataChanges(typename CacheFlagType const dirtyFlags = CacheFlagType::All);
 
-		typename CacheActionType& OnMarkAsChanged();
+		typename CacheActionType& OnMarkCacheDataAsChanged();
 
-		typename CacheActionType& OnFlushExecuted();
+		typename CacheActionType& OnFlushCacheDataExecuted();
 
 	protected:
-		void MarkAsChanged(typename CacheFlagType const dirtyFlags = CacheFlagType::All);
+		void MarkCacheDataAsChanged(typename CacheFlagType const dirtyFlags = CacheFlagType::All);
 
-		void ClearChanges(typename CacheFlagType const dirtyFlags = CacheFlagType::All);
+		void SkipCacheDataChanges(typename CacheFlagType const dirtyFlags = CacheFlagType::All);
 
-		typename CacheActionType& FlushExecutors();
+		typename CacheActionType& FlushCacheDataExecutors();
 
 	private:
 		std::unique_ptr<typename CacheUpdaterType> mCacheUpdater{};
@@ -60,7 +65,7 @@ namespace aiva::utils
 namespace aiva::utils
 {
 	template <typename TDirtyFlags>
-	TObjectCacheable<TDirtyFlags>::TObjectCacheable(bool const initAsChanged)
+	TObjectCacheable<TDirtyFlags>::TObjectCacheable(bool const initAsChanged) : TObjectChangeable<TDirtyFlags>{}
 	{
 		auto const dirtyFlags = initAsChanged ? CacheFlagType::All : CacheFlagType::None;
 
@@ -76,42 +81,42 @@ namespace aiva::utils
 	}
 
 	template <typename TDirtyFlags>
-	void TObjectCacheable<TDirtyFlags>::FlushChanges(typename CacheFlagType const dirtyFlags)
+	void TObjectCacheable<TDirtyFlags>::FlushCacheDataChanges(typename CacheFlagType const dirtyFlags)
 	{
 		Asserts::CheckBool(mCacheUpdater, "Cache updater is not valid");
 		mCacheUpdater->FlushChanges(dirtyFlags);
 	}
 
 	template <typename TDirtyFlags>
-	typename TObjectCacheable<TDirtyFlags>::CacheActionType& TObjectCacheable<TDirtyFlags>::OnMarkAsChanged()
+	typename TObjectCacheable<TDirtyFlags>::CacheActionType& TObjectCacheable<TDirtyFlags>::OnMarkCacheDataAsChanged()
 	{
 		Asserts::CheckBool(mCacheUpdater, "Cache updater is not valid");
 		return mCacheUpdater->OnMarkAsChanged();
 	}
 
 	template <typename TDirtyFlags>
-	typename TObjectCacheable<TDirtyFlags>::CacheActionType& TObjectCacheable<TDirtyFlags>::OnFlushExecuted()
+	typename TObjectCacheable<TDirtyFlags>::CacheActionType& TObjectCacheable<TDirtyFlags>::OnFlushCacheDataExecuted()
 	{
 		Asserts::CheckBool(mCacheUpdater, "Cache updater is not valid");
 		return mCacheUpdater->OnFlushExecuted();
 	}
 
 	template <typename TDirtyFlags>
-	void TObjectCacheable<TDirtyFlags>::MarkAsChanged(typename CacheFlagType const dirtyFlags)
+	void TObjectCacheable<TDirtyFlags>::MarkCacheDataAsChanged(typename CacheFlagType const dirtyFlags)
 	{
 		Asserts::CheckBool(mCacheUpdater, "Cache updater is not valid");
 		mCacheUpdater->MarkAsChanged(dirtyFlags);
 	}
 
 	template <typename TDirtyFlags>
-	void TObjectCacheable<TDirtyFlags>::ClearChanges(typename CacheFlagType const dirtyFlags)
+	void TObjectCacheable<TDirtyFlags>::SkipCacheDataChanges(typename CacheFlagType const dirtyFlags)
 	{
 		Asserts::CheckBool(mCacheUpdater, "Cache updater is not valid");
-		mCacheUpdater->ClearChanges(dirtyFlags);
+		mCacheUpdater->SkipChanges(dirtyFlags);
 	}
 
 	template <typename TDirtyFlags>
-	typename TObjectCacheable<TDirtyFlags>::CacheActionType& TObjectCacheable<TDirtyFlags>::FlushExecutors()
+	typename TObjectCacheable<TDirtyFlags>::CacheActionType& TObjectCacheable<TDirtyFlags>::FlushCacheDataExecutors()
 	{
 		Asserts::CheckBool(mCacheUpdater, "Cache updater is not valid");
 		return mCacheUpdater->FlushExecutors();

@@ -95,7 +95,7 @@ namespace aiva::layer2
 	void RenderSystem::InitDefferedBuffer(DefferedBufferType& defferedBuffer)
 	{
 		auto const screenSize = mWorld.Engine().GraphicHardware().ScreenSize();
-		auto const bufferSize = glm::vec2{ screenSize } * 0.5f;
+		auto const bufferSize = glm::vec2{ screenSize } * 0.1f;
 		auto const bufferRect = glm::vec4{ 0.0f, 0.0f, bufferSize };
 
 		defferedBuffer = CreateDefferedBuffer(bufferSize);

@@ -243,6 +243,7 @@ void aiva::layer1::RoMaterialGraphic::RefreshInternalPipelineState()
 
 		pipelineDesc.RasterizerState.FillMode = ToInternalEnum(descriptor.FillMode());
 		pipelineDesc.RasterizerState.CullMode = ToInternalEnum(descriptor.CullMode());
+		pipelineDesc.RasterizerState.FrontCounterClockwise = true;
 		pipelineDesc.RasterizerState.DepthClipEnable = true;
 	}
 

@@ -89,6 +89,7 @@
     <ClCompile Include="Sources\aiva\layer2\e_scene_component_type.cpp" />
     <ClCompile Include="Sources\aiva\layer2\scene_actor_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_json.cpp" />
+    <ClCompile Include="Sources\aiva\utils\math_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -245,6 +246,10 @@
     <Image Include="Assets\LockScreenLogo.scale-200.png">
       <Filter>Assets</Filter>
     </Image>
+    <Image Include="Assets\resources\textures\de_dust2_albedo.png" />
+    <Image Include="Assets\resources\textures\de_dust2_occlusion.png" />
+    <Image Include="Sources\resources\textures\uv.png" />
+    <Image Include="Assets\resources\textures\avenger.png" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />
@@ -267,6 +272,11 @@
     <None Include="Assets\resources\materials\quad_blit.mat_gs" />
     <None Include="Assets\resources\shaders\quad_blit.hlsl_ps" />
     <None Include="Assets\resources\shaders\quad_blit.hlsl_vs" />
+    <None Include="Assets\resources\scenes\de_dust2.scene_gltf" />
+    <None Include="Sources\resources\scenes\de_dust2.blend" />
+    <None Include="Assets\resources\materials\de_dust2.mat_gs" />
+    <None Include="Assets\resources\materials\avenger.mat_gs" />
+    <None Include="Assets\resources\scenes\avenger.scene_gltf" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme.txt" />

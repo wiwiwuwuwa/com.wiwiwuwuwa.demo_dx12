@@ -20,6 +20,12 @@ namespace aiva::utils
 
 		template <typename T>
 		static T Align(T const& pointer, T const& count, T const& alignment);
+
+	// ----------------------------------------------------
+	// Matrices
+
+	public:
+		static glm::mat4 const& BlenderToDirectxMatrix();
 	};
 }
 

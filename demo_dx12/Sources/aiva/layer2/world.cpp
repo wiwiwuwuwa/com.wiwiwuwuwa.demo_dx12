@@ -91,7 +91,7 @@ void aiva::layer2::World::InitializeSystems()
 		mSceneSystem = aiva::utils::NewObject<aiva::layer2::SceneSystem>(*this);
 		aiva::utils::Asserts::CheckBool(mSceneSystem);
 
-		auto const& sceneResource = mEngine->ResourceSystem().GetResource<aiva::layer1::RoSceneGltf>("resources\\scenes\\main.scene_gltf");
+		auto const& sceneResource = mEngine->ResourceSystem().GetResource<aiva::layer1::RoSceneGltf>("resources\\scenes\\de_dust2.scene_gltf");
 		aiva::utils::Asserts::CheckBool(sceneResource);
 
 		mSceneSystem->LoadScene(sceneResource);

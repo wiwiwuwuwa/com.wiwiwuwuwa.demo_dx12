@@ -39,6 +39,7 @@
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/dict_struct.h>
 #include <aiva/utils/material_constants.h>
+#include <aiva/utils/math_utils.h>
 #include <aiva/utils/object_utils.h>
 
 namespace aiva::layer2
@@ -291,11 +292,14 @@ namespace aiva::layer2
 			auto const view = camera->Actor().WorldView();
 			constantView->Struct().FieldValue(MaterialConstants::AIVA_CONSTANT_V, view);
 
+			auto const& handness = MathUtils::BlenderToDirectxMatrix();
+			constantView->Struct().FieldValue(MaterialConstants::AIVA_CONSTANT_H, handness);
+
 			auto const projection = glm::perspective(camera->FovY(), screenAspect, camera->ZNear(), camera->ZFar());
 			constantView->Struct().FieldValue(MaterialConstants::AIVA_CONSTANT_P, projection);
 
-			auto const mvp = projection * view * model;
-			constantView->Struct().FieldValue(MaterialConstants::AIVA_CONSTANT_MVP, mvp);
+			auto const mvhp = projection * handness * view * model;
+			constantView->Struct().FieldValue(MaterialConstants::AIVA_CONSTANT_MVHP, mvhp);
 		}
 
 		constantView->GetOrAddInternalResource();
@@ -480,43 +484,3 @@ namespace aiva::layer2
 		}
 	}
 }
-
-//	void RenderSystem::ExecuteRenderer()
-//	{
-//		UseRTsDSs();
-//		ClearRTs();
-//		ClearDSs();
-//		UseViewports();
-//		UseScissorRects();
-//
-//		auto const cameras = OnPopulateCameras()();
-//		auto const meshRenderers = OnPopulateMeshRenderers()();
-//
-//		for (auto const& const camera : cameras)
-//		{
-//			Asserts::CheckBool(camera, "Camera is not valid");
-//			for (auto const& const meshRenderer : meshRenderers)
-//			{
-//				Asserts::CheckBool(meshRenderer, "Mesh renderer is not valid");
-//				DrawMeshRenderer(*camera, *meshRenderer);
-//			}
-//		}
-//
-//		PresentST();
-//	}
-//
-//	void RenderSystem::UseViewports()
-//	{
-//		auto setViewports = GcaSetViewports{};
-//		setViewports.Rect = mWorld.Engine().GraphicHardware().ScreenViewRect();
-//
-//		mWorld.Engine().GraphicExecutor().ExecuteCommand(setViewports);
-//	}
-//
-//	void RenderSystem::UseScissorRects()
-//	{
-//		auto setScissorRects = GcaSetScissorRects{};
-//		setScissorRects.Rect = mWorld.Engine().GraphicHardware().ScreenViewRect();
-//
-//		mWorld.Engine().GraphicExecutor().ExecuteCommand(setScissorRects);
-//	}

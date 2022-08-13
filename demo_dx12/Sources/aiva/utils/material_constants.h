@@ -33,8 +33,10 @@ namespace aiva::utils
 
 		static constexpr auto const* const AIVA_CONSTANT_V = "AIVA_M01_V";
 
-		static constexpr auto const* const AIVA_CONSTANT_P = "AIVA_M02_P";
+		static constexpr auto const* const AIVA_CONSTANT_H = "AIVA_M02_H";
 
-		static constexpr auto const* const AIVA_CONSTANT_MVP = "AIVA_M03_MVP";
+		static constexpr auto const* const AIVA_CONSTANT_P = "AIVA_M03_P";
+
+		static constexpr auto const* const AIVA_CONSTANT_MVHP = "AIVA_M04_MVHP";
 	};
 }

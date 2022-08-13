@@ -136,7 +136,7 @@ namespace aiva::layer2
 	{
 		if (Parent())
 		{
-			return Parent()->LocalTransform() * LocalTransform();
+			return Parent()->WorldTransform() * LocalTransform();
 		}
 		else
 		{
@@ -149,8 +149,8 @@ namespace aiva::layer2
 		auto const transform = WorldTransform();
 
 		auto const origin = glm::vec3(transform * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-		auto const forward = glm::vec3(transform * glm::vec4(0.0f, 0.0f, -1.0f, 0.0f));
-		auto const upwards = glm::vec3(transform * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+		auto const forward = glm::vec3(transform * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+		auto const upwards = glm::vec3(transform * glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
 
 		return glm::lookAt(origin, origin + forward, upwards);
 	}

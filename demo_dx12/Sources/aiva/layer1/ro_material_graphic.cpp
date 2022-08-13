@@ -8,6 +8,7 @@
 #include <aiva/layer1/ro_shader_fragment.h>
 #include <aiva/layer1/ro_shader_vertex.h>
 #include <aiva/layer1/material_resource_descriptor.h>
+#include <aiva/utils/object_utils.h>
 #include <aiva/utils/t_cache_updater.h>
 
 aiva::layer1::RoMaterialGraphic::RoMaterialGraphic(Engine const& engine) : mEngine{ engine }
@@ -151,17 +152,17 @@ aiva::layer1::MaterialResourceDescriptor& aiva::layer1::RoMaterialGraphic::Resou
 
 void aiva::layer1::RoMaterialGraphic::InitializeResourceDescriptor()
 {
-	mResourceDescriptor = decltype(mResourceDescriptor)::element_type::Create(mEngine);
+	mResourceDescriptor = aiva::utils::NewObject<decltype(mResourceDescriptor)::element_type>(mEngine);
 	aiva::utils::Asserts::CheckBool(mResourceDescriptor);
 
-	mResourceDescriptor->CacheUpdater().OnMarkAsChanged().connect(boost::bind(&RoMaterialGraphic::OnResourceDescriptorMarkedAsChanged, this));
+	mResourceDescriptor->OnMarkCacheDataAsChanged().connect(boost::bind(&RoMaterialGraphic::OnResourceDescriptorMarkedAsChanged, this));
 }
 
 void aiva::layer1::RoMaterialGraphic::TerminateResourceDescriptor()
 {
 	aiva::utils::Asserts::CheckBool(mResourceDescriptor);
 
-	mResourceDescriptor->CacheUpdater().OnMarkAsChanged().disconnect(boost::bind(&RoMaterialGraphic::OnResourceDescriptorMarkedAsChanged, this));
+	mResourceDescriptor->OnMarkCacheDataAsChanged().disconnect(boost::bind(&RoMaterialGraphic::OnResourceDescriptorMarkedAsChanged, this));
 	mResourceDescriptor = {};
 }
 

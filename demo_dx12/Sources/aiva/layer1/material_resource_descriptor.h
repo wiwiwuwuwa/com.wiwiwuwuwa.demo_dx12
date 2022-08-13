@@ -1,56 +1,27 @@
 #pragma once
 #include <pch.h>
 
-namespace aiva::layer1
-{
-	struct Engine;
-	struct ResourceViewTable;
-}
-
-namespace aiva::utils
-{
-	enum class ECacheFlags : std::uint8_t;
-
-	template <typename, typename = ECacheFlags>
-	struct TCacheUpdater;
-}
+#include <aiva/layer1/e_rvt_cache_flags.h>
+#include <aiva/layer1/i_object_engineable.h>
+#include <aiva/layer1/resource_view_table_fwd.h>
+#include <aiva/utils/a_object.h>
+#include <aiva/utils/i_object_cacheable.h>
 
 namespace aiva::layer1
 {
-	struct MaterialResourceDescriptor final : private boost::noncopyable, public std::enable_shared_from_this<MaterialResourceDescriptor>
+	struct MaterialResourceDescriptor final : public aiva::utils::AObject, public aiva::utils::IObjectCacheable, public IObjectEngineable
 	{
 	// ----------------------------------------------------
 	// Main
 
-	public:
-		template <typename... TArgs>
-		static std::shared_ptr<MaterialResourceDescriptor> Create(TArgs&&... args);
-
 	private:
-		MaterialResourceDescriptor(Engine const& engine);
-
-	public:
-		~MaterialResourceDescriptor();
-
-	private:
-		Engine const& mEngine;
-
-	// ----------------------------------------------------
-	// Cache Refresh
+		friend FactoryType;
+		
+	protected:
+		MaterialResourceDescriptor(EngineType const& engine);
 
 	public:
-		using CacheUpdaterType = aiva::utils::TCacheUpdater<MaterialResourceDescriptor>;
-
-	public:
-		CacheUpdaterType& CacheUpdater() const;
-
-	private:
-		void InitializeCacheUpdater();
-
-		void TerminateCacheUpdater();
-
-	private:
-		std::unique_ptr<CacheUpdaterType> mCacheUpdater{};
+		~MaterialResourceDescriptor() override;
 
 	// ----------------------------------------------------
 	// Resource Table
@@ -64,7 +35,7 @@ namespace aiva::layer1
 		void TerminateResourceTable();
 
 	private:
-		void OnResourceTableMarkedAsChanged();
+		void OnResourceTableMarkedAsChanged(ERvtCacheFlags const dirtyFlags);
 
 	private:
 		std::shared_ptr<ResourceViewTable> mResourceTable{};
@@ -73,9 +44,9 @@ namespace aiva::layer1
 	// Internal Resources Data
 
 	public:
-		std::vector<winrt::com_ptr<ID3D12DescriptorHeap>> InternalDescriptorHeaps() const;
+		std::vector<winrt::com_ptr<ID3D12DescriptorHeap>> InternalDescriptorHeaps();
 
-		winrt::com_ptr<ID3D12RootSignature> InternalRootSignature() const;
+		winrt::com_ptr<ID3D12RootSignature> InternalRootSignature();
 
 	private:
 		void InitializeInternalResources();
@@ -102,12 +73,4 @@ namespace aiva::layer1
 	public:
 		void CopyPropertiesFrom(MaterialResourceDescriptor const& source);
 	};
-}
-
-// --------------------------------------------------------
-
-template <typename... TArgs>
-std::shared_ptr<aiva::layer1::MaterialResourceDescriptor> aiva::layer1::MaterialResourceDescriptor::Create(TArgs&&... args)
-{
-	return std::shared_ptr<MaterialResourceDescriptor>{new MaterialResourceDescriptor{ std::forward<TArgs>(args)... }};
 }

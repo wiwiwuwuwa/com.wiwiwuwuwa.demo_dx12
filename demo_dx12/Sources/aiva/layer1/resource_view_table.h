@@ -2,15 +2,17 @@
 #include <pch.h>
 
 #include <aiva/layer1/e_descriptor_heap_type.h>
+#include <aiva/layer1/e_rvh_cache_flags.h>
+#include <aiva/layer1/e_rvt_cache_flags.h>
 #include <aiva/layer1/i_object_engineable.h>
 #include <aiva/layer1/resource_view_heap_fwd.h>
 #include <aiva/layer1/resource_view_table_fwd.h>
 #include <aiva/utils/a_object.h>
-#include <aiva/utils/i_object_changeable.h>
+#include <aiva/utils/t_object_changeable.h>
 
 namespace aiva::layer1
 {
-	struct ResourceViewTable final : public aiva::utils::AObject, public aiva::utils::IObjectChangeable, public aiva::layer1::IObjectEngineable
+	struct ResourceViewTable final : public aiva::utils::AObject, public aiva::utils::TObjectChangeable<ERvtCacheFlags>, public aiva::layer1::IObjectEngineable
 	{
 	// ----------------------------------------------------
 	// Main
@@ -40,7 +42,7 @@ namespace aiva::layer1
 		HeapDict const& ResourceHeaps() const;
 
 	private:
-		void ResourceHeap_OnMarkedAsChanged();
+		void ResourceHeap_OnMarkedAsChanged(ERvhCacheFlags const dirtyFlags);
 
 	private:
 		HeapDict mResourceHeaps{};

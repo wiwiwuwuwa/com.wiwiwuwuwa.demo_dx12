@@ -184,6 +184,7 @@
     <ClInclude Include="Sources\aiva\layer1\e_resource_memory_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_resource_view_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_rvh_cache_flags.h" />
+    <ClInclude Include="Sources\aiva\layer1\e_rvt_cache_flags.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_dsv_to_texture_2d_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_rtv_to_texture_2d_fwd.h" />

@@ -225,6 +225,7 @@
     <ClInclude Include="Sources\aiva\utils\t_object_changeable.h" />
     <ClInclude Include="Sources\aiva\layer1\e_grv_cache_flags.h" />
     <ClInclude Include="Sources\aiva\layer1\e_rvh_cache_flags.h" />
+    <ClInclude Include="Sources\aiva\layer1\e_rvt_cache_flags.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

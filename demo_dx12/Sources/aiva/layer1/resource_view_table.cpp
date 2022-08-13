@@ -10,7 +10,7 @@ namespace aiva::layer1
 {
 	using namespace aiva::utils;
 
-	ResourceViewTable::ResourceViewTable(EngineType const& engine) : AObject{}, IObjectChangeable{}, IObjectEngineable{ engine }
+	ResourceViewTable::ResourceViewTable(EngineType const& engine) : AObject{}, TObjectChangeable<ERvtCacheFlags>{}, IObjectEngineable{ engine }
 	{
 
 	}
@@ -62,13 +62,13 @@ namespace aiva::layer1
 			auto const& previousHeapValue = previousHeapIter->second;
 			Asserts::CheckBool(previousHeapValue, "Previous heap value is not valid");
 
-			previousHeapValue->OnMarkCacheDataAsChanged().disconnect(boost::bind(&ResourceViewTable::ResourceHeap_OnMarkedAsChanged, this));
+			previousHeapValue->OnMarkCacheDataAsChanged().disconnect(boost::bind(&ResourceViewTable::ResourceHeap_OnMarkedAsChanged, this, boost::placeholders::_1));
 			mResourceHeaps.erase(previousHeapIter);
-			BroadcastCacheDataChanged();
 		}
 
 		if (!value)
 		{
+			BroadcastCacheDataChanged(ERvtCacheFlags::TablePtr);
 			return *this;
 		}
 
@@ -78,10 +78,10 @@ namespace aiva::layer1
 			auto const& currentHeapValue = currentHeapIter->second;
 			Asserts::CheckBool(currentHeapValue, "Current heap value is not valid");
 
-			currentHeapValue->OnMarkCacheDataAsChanged().connect(boost::bind(&ResourceViewTable::ResourceHeap_OnMarkedAsChanged, this));
-			BroadcastCacheDataChanged();
+			currentHeapValue->OnMarkCacheDataAsChanged().connect(boost::bind(&ResourceViewTable::ResourceHeap_OnMarkedAsChanged, this, boost::placeholders::_1));
 		}
 
+		BroadcastCacheDataChanged(ERvtCacheFlags::TablePtr);
 		return *this;
 	}
 
@@ -90,9 +90,9 @@ namespace aiva::layer1
 		return mResourceHeaps;
 	}
 
-	void ResourceViewTable::ResourceHeap_OnMarkedAsChanged()
+	void ResourceViewTable::ResourceHeap_OnMarkedAsChanged(ERvhCacheFlags const dirtyFlags)
 	{
-		BroadcastCacheDataChanged();
+		BroadcastCacheDataChanged(ERvtCacheFlags::TableBin);
 	}
 
 	std::vector<winrt::com_ptr<ID3D12DescriptorHeap>> ResourceViewTable::InternalResource() const
@@ -145,7 +145,5 @@ namespace aiva::layer1
 
 			SetResourceHeap(sourceResourceHeap.first, copiedResourceHeap);
 		}
-
-		BroadcastCacheDataChanged();
 	}
 }

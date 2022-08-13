@@ -223,6 +223,7 @@
     <ClInclude Include="Sources\aiva\layer2\scene_actor_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_json.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_json_fwd.h" />
+    <ClInclude Include="Sources\aiva\utils\t_object_cacheable.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

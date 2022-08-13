@@ -295,6 +295,7 @@
     <ClInclude Include="Sources\aiva\utils\t_boxed_value_hpp.h" />
     <ClInclude Include="Sources\aiva\utils\t_cache_updater.h" />
     <ClInclude Include="Sources\aiva\utils\t_ev_action.h" />
+    <ClInclude Include="Sources\aiva\utils\t_object_cacheable.h" />
     <ClInclude Include="Sources\aiva\utils\t_signal_aggregator.h" />
   </ItemGroup>
   <ItemGroup>

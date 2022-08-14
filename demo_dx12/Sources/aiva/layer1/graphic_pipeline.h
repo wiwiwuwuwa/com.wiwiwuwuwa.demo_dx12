@@ -45,7 +45,7 @@ namespace aiva::layer1
 	// DirectX
 
 	private:
-		static constexpr bool SWAP_CHAIN_VSYNC_ENABLED = true;
+		static constexpr bool SWAP_CHAIN_VSYNC_ENABLED = false;
 
 	private:
 		void InitializeDirectX();

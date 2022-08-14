@@ -365,7 +365,6 @@ namespace aiva::layer2
 			rtTexture->Width(size.x);
 			rtTexture->Height(size.y);
 			rtTexture->SupportRenderTarget(true);
-			rtTexture->SupportUnorderedAccess(true);
 
 			return ResViewDescType{ rtHeap, name };
 		}

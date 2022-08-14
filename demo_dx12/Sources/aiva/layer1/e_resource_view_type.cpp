@@ -1,7 +1,36 @@
 #include <pch.h>
 #include <aiva/layer1/e_resource_view_type.h>
 
+#include <aiva/layer1/e_descriptor_heap_type.h>
 #include <aiva/utils/asserts.h>
+
+aiva::layer1::EDescriptorHeapType aiva::layer1::ToDescriptorHeapType(EResourceViewType const viewType)
+{
+	switch (viewType)
+	{
+	case EResourceViewType::Cbv:
+		return EDescriptorHeapType::CbvSrvUav;
+
+	case EResourceViewType::Srv:
+		return EDescriptorHeapType::CbvSrvUav;
+
+	case EResourceViewType::Uav:
+		return EDescriptorHeapType::CbvSrvUav;
+
+	case EResourceViewType::Sampler:
+		return EDescriptorHeapType::Sampler;
+
+	case EResourceViewType::Rtv:
+		return EDescriptorHeapType::Rtv;
+
+	case EResourceViewType::Dsv:
+		return EDescriptorHeapType::Dsv;
+
+	default:
+		aiva::utils::Asserts::CheckBool(false, "Unsupported EResourceViewType value");
+		return {};
+	}
+}
 
 aiva::layer1::EResourceViewType aiva::layer1::FromInternalDescriptorRangeType(D3D12_DESCRIPTOR_RANGE_TYPE const rangeType)
 {

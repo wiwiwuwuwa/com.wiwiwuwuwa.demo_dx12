@@ -6,8 +6,10 @@
 #include <aiva/layer1/graphic_executor.h>
 #include <aiva/layer1/graphic_hardware.h>
 #include <aiva/layer1/graphic_pipeline.h>
+#include <aiva/layer1/material_caching_system.h>
 #include <aiva/layer1/resource_system.h>
 #include <aiva/utils/asserts.h>
+#include <aiva/utils/object_utils.h>
 
 aiva::layer1::Engine::Engine()
 {
@@ -121,16 +123,24 @@ aiva::layer1::GraphicExecutor& aiva::layer1::Engine::GraphicExecutor() const
 	return *mGraphicExecutor;
 }
 
+aiva::layer1::MaterialCachingSystemType& aiva::layer1::Engine::MaterialCachingSystem() const
+{
+	aiva::utils::Asserts::CheckBool(mMaterialCachingSystem, "Material caching system is not valid");
+	return *mMaterialCachingSystem;
+}
+
 void aiva::layer1::Engine::InitializeSystems()
 {
 	mResourceSystem = std::make_unique<aiva::layer1::ResourceSystem>(*this);
 	mGraphicHardware = std::make_unique<aiva::layer1::GraphicHardware>(*this);
 	mGraphicPipeline = std::make_unique<aiva::layer1::GraphicPipeline>(*this);
 	mGraphicExecutor = std::make_unique<aiva::layer1::GraphicExecutor>(*this);
+	mMaterialCachingSystem = aiva::utils::NewObject<MaterialCachingSystemType>(*this);
 }
 
 void aiva::layer1::Engine::TerminateSystems()
 {
+	mMaterialCachingSystem = {};
 	mGraphicExecutor = {};
 	mGraphicPipeline = {};
 	mGraphicHardware = {};

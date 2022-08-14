@@ -62,6 +62,11 @@ namespace aiva::layer1
 			auto const& previousHeapValue = previousHeapIter->second;
 			Asserts::CheckBool(previousHeapValue, "Previous heap value is not valid");
 
+			if (previousHeapValue == value)
+			{
+				return *this;
+			}
+
 			previousHeapValue->OnMarkCacheDataAsChanged().disconnect(boost::bind(&ResourceViewTable::ResourceHeap_OnMarkedAsChanged, this, boost::placeholders::_1));
 			mResourceHeaps.erase(previousHeapIter);
 		}

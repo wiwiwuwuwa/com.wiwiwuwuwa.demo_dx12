@@ -88,6 +88,8 @@
     <ClCompile Include="Sources\aiva\layer2\scene_actor_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_json.cpp" />
     <ClCompile Include="Sources\aiva\utils\math_utils.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\material_caching_system.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\material_caching_entry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -226,6 +228,12 @@
     <ClInclude Include="Sources\aiva\layer1\e_grv_cache_flags.h" />
     <ClInclude Include="Sources\aiva\layer1\e_rvh_cache_flags.h" />
     <ClInclude Include="Sources\aiva\layer1\e_rvt_cache_flags.h" />
+    <ClInclude Include="Sources\aiva\layer1\material_caching_system.h" />
+    <ClInclude Include="Sources\aiva\layer1\material_caching_entry.h" />
+    <ClInclude Include="Sources\aiva\layer1\material_caching_system_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\e_material_append_mode.h" />
+    <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_view_utils.h" />
+    <ClInclude Include="Sources\aiva\utils\hash_utils.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">
@@ -280,6 +288,7 @@
     <None Include="Assets\resources\materials\de_dust2.mat_gs" />
     <None Include="Assets\resources\materials\avenger.mat_gs" />
     <None Include="Assets\resources\scenes\avenger.scene_gltf" />
+    <None Include="Sources\resources\scenes\avenger.blend" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme.txt" />

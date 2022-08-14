@@ -57,6 +57,11 @@ void aiva::layer1::ResourceViewHeap::SetView(std::string const& key, ViewPtr con
 		auto const& previousView = previousIter->second;
 		aiva::utils::Asserts::CheckBool(previousView);
 
+		if (previousView == value)
+		{
+			return;
+		}
+
 		previousView->OnMarkCacheDataAsChanged().disconnect(boost::bind(&ResourceViewHeap::View_OnMarkCacheDataAsChanged, this, boost::placeholders::_1));
 		mViews.erase(previousIter);
 	}

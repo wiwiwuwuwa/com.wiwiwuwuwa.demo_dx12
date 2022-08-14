@@ -4,6 +4,7 @@
 #include <memory>
 #include <boost/core/noncopyable.hpp>
 #include <winrt/base.h>
+#include <aiva/layer1/material_caching_system_fwd.h>
 #include <aiva/utils/ev_action.h>
 
 namespace aiva::layer0
@@ -91,6 +92,8 @@ namespace aiva::layer1
 
 		aiva::layer1::GraphicExecutor& GraphicExecutor() const;
 
+		MaterialCachingSystemType& MaterialCachingSystem() const;
+
 	private:
 		void InitializeSystems();
 
@@ -104,6 +107,8 @@ namespace aiva::layer1
 		std::unique_ptr<aiva::layer1::GraphicPipeline> mGraphicPipeline{};
 
 		std::unique_ptr<aiva::layer1::GraphicExecutor> mGraphicExecutor{};
+
+		MaterialCachingSystemTypeShared mMaterialCachingSystem{};
 
 	// ----------------------------------------------------
 	// Tick

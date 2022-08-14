@@ -6,6 +6,12 @@
 
 namespace aiva::layer1
 {
+	struct AGraphicResource;
+	using AGraphicResourceTypeShared = std::shared_ptr<AGraphicResource>;
+}
+
+namespace aiva::layer1
+{
 	struct ResViewDescUtils final
 	{
 	// ----------------------------------------------------
@@ -21,6 +27,8 @@ namespace aiva::layer1
 		static std::optional<D3D12_CPU_DESCRIPTOR_HANDLE> GetHandle(ResViewDescType const& resViewDesc);
 
 		static AGraphicResourceViewTypeShared GetView(ResViewDescType const& resViewDesc);
+
+		static AGraphicResourceTypeShared GetBuffer(ResViewDescType const& resViewDesc);
 
 		static bool IsValid(ResViewDescType const& value);
 	};

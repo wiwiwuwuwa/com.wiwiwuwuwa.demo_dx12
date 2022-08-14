@@ -3,6 +3,11 @@
 
 namespace aiva::layer1
 {
+	enum class EDescriptorHeapType : std::uint8_t;
+}
+
+namespace aiva::layer1
+{
 	enum class EResourceViewType : std::uint8_t
 	{
 		Cbv,
@@ -12,6 +17,11 @@ namespace aiva::layer1
 		Rtv,
 		Dsv,
 	};
+
+	// ----------------------------------------------------
+	// Utils
+
+	EDescriptorHeapType ToDescriptorHeapType(EResourceViewType const viewType);
 
 	// ----------------------------------------------------
 	// DirectX

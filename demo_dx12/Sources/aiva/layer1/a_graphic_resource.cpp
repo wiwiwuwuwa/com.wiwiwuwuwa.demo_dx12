@@ -29,6 +29,11 @@ void aiva::layer1::AGraphicResource::InternalResource(winrt::com_ptr<ID3D12Resou
 {
 	winrt::check_bool(resource);
 
+	if (mInternalResource == resource)
+	{
+		return;
+	}
+
 	mInternalResource = resource;
 	RefreshSelfFromInternalResource(resource);
 

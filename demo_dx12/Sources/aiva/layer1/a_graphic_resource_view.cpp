@@ -42,6 +42,11 @@ std::shared_ptr<aiva::layer1::AGraphicResourceView::ResourceType> aiva::layer1::
 
 aiva::layer1::AGraphicResourceView& aiva::layer1::AGraphicResourceView::SetInternalResource(std::shared_ptr<ResourceType> const resource)
 {
+	if (mInternalResource == resource)
+	{
+		return *this;
+	}
+
 	if (mInternalResource)
 	{
 		mInternalResource->OnMarkCacheDataAsChanged().disconnect(boost::bind(&AGraphicResourceView::InternalResource_OnMarkCacheDataAsChanged, this));

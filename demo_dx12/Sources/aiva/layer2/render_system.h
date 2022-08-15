@@ -64,7 +64,7 @@ namespace aiva::layer2
 	// High-Level Drawing Commands
 
 	private:
-		static constexpr const auto DEFFERED_BUFFER_SCALE = 0.2f;
+		static constexpr const auto DEFFERED_BUFFER_SCALE = 1.0f;
 
 		static constexpr const auto DEFFERED_BUFFER_EMISSION_INDEX = 3;
 

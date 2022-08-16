@@ -3,213 +3,220 @@
 
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/graphic_hardware.h>
+#include <aiva/utils/asserts.h>
 #include <aiva/utils/resource_barrier.h>
 
-aiva::layer1::GrTexture2D::GrTexture2D(EngineType const& engine) : AGraphicResource(engine)
+namespace aiva::layer1
 {
+	using namespace aiva::utils;
 
-}
-
-aiva::layer1::GrTexture2D::~GrTexture2D()
-{
-
-}
-
-aiva::layer1::EResourceBufferFormat aiva::layer1::GrTexture2D::Format() const
-{
-	return mFormat;
-}
-
-aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::Format(EResourceBufferFormat const format)
-{
-	if (mFormat != format)
+	GrTexture2D::GrTexture2D(EngineType const& engine) : AGraphicResource(engine)
 	{
-		mFormat = format;
-		MarkCacheDataAsChanged();
+
 	}
 
-	return *this;
-}
-
-std::size_t aiva::layer1::GrTexture2D::Width() const
-{
-	return mWidth;
-}
-
-aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::Width(std::size_t const width)
-{
-	if (mWidth != width)
+	GrTexture2D::~GrTexture2D()
 	{
-		mWidth = width;
-		MarkCacheDataAsChanged();
+
 	}
 
-	return *this;
-}
-
-std::size_t aiva::layer1::GrTexture2D::Height() const
-{
-	return mHeight;
-}
-
-aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::Height(std::size_t const height)
-{
-	if (mHeight != height)
+	EResourceBufferFormat GrTexture2D::Format() const
 	{
-		mHeight = height;
-		MarkCacheDataAsChanged();
+		return mFormat;
 	}
 
-	return *this;
-}
-
-bool aiva::layer1::GrTexture2D::SupportDepthStencil() const
-{
-	return mSupportDepthStencil;
-}
-
-aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::SupportDepthStencil(bool const support)
-{
-	if (mSupportDepthStencil != support)
+	GrTexture2D& GrTexture2D::Format(EResourceBufferFormat const format)
 	{
-		mSupportDepthStencil = support;
-		MarkCacheDataAsChanged();
+		if (mFormat != format)
+		{
+			mFormat = format;
+			MarkCacheDataAsChanged();
+		}
+
+		return *this;
 	}
 
-	return *this;
-}
-
-bool aiva::layer1::GrTexture2D::SupportMipMapping() const
-{
-	return mSupportMipMapping;
-}
-
-aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::SupportMipMapping(bool const support)
-{
-	if (mSupportMipMapping != support)
+	std::size_t GrTexture2D::Width() const
 	{
-		mSupportMipMapping = support;
-		MarkCacheDataAsChanged();
+		return mWidth;
 	}
 
-	return *this;
-}
-
-bool aiva::layer1::GrTexture2D::SupportRenderTarget() const
-{
-	return mSupportRenderTarget;
-}
-
-aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::SupportRenderTarget(bool const support)
-{
-	if (mSupportRenderTarget != support)
+	GrTexture2D& GrTexture2D::Width(std::size_t const width)
 	{
-		mSupportRenderTarget = support;
-		MarkCacheDataAsChanged();
+		if (mWidth != width)
+		{
+			mWidth = width;
+			MarkCacheDataAsChanged();
+		}
+
+		return *this;
 	}
 
-	return *this;
-}
-
-bool aiva::layer1::GrTexture2D::SupportShaderAtomics() const
-{
-	return mSupportShaderAtomics;
-}
-
-aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::SupportShaderAtomics(bool const support)
-{
-	if (mSupportShaderAtomics != support)
+	std::size_t GrTexture2D::Height() const
 	{
-		mSupportShaderAtomics = support;
-		MarkCacheDataAsChanged();
+		return mHeight;
 	}
 
-	return *this;
-}
-
-bool aiva::layer1::GrTexture2D::SupportUnorderedAccess() const
-{
-	return mSupportUnorderedAccess;
-}
-
-aiva::layer1::GrTexture2D& aiva::layer1::GrTexture2D::SupportUnorderedAccess(bool const support)
-{
-	if (mSupportUnorderedAccess != support)
+	GrTexture2D& GrTexture2D::Height(std::size_t const height)
 	{
-		mSupportUnorderedAccess = support;
-		MarkCacheDataAsChanged();
+		if (mHeight != height)
+		{
+			mHeight = height;
+			MarkCacheDataAsChanged();
+		}
+
+		return *this;
 	}
 
-	return *this;
-}
+	bool GrTexture2D::SupportDepthStencil() const
+	{
+		return mSupportDepthStencil;
+	}
 
-void aiva::layer1::GrTexture2D::RefreshInternalResourceFromSelf(winrt::com_ptr<ID3D12Resource>& resource, aiva::utils::ResourceBarrier& barrier)
-{
-	aiva::utils::Asserts::CheckBool(Width() > 0);
-	aiva::utils::Asserts::CheckBool(Height() > 0);
-	aiva::utils::Asserts::CheckBool(SupportDepthStencil() == SupportsDepthStencil(Format()));
-	aiva::utils::Asserts::CheckBool(!(SupportMipMapping() && Width() != Height()));
-	aiva::utils::Asserts::CheckBool(SupportRenderTarget() != SupportsDepthStencil(Format()));
-	aiva::utils::Asserts::CheckBool(!(SupportRenderTarget() && SupportDepthStencil()));
-	aiva::utils::Asserts::CheckBool(!(SupportDepthStencil() && SupportUnorderedAccess()));
+	GrTexture2D& GrTexture2D::SupportDepthStencil(bool const support)
+	{
+		if (mSupportDepthStencil != support)
+		{
+			mSupportDepthStencil = support;
+			MarkCacheDataAsChanged();
+		}
 
-	auto const& device = Engine().GraphicHardware().Device();
-	winrt::check_bool(device);
+		return *this;
+	}
 
-	auto heapProperties = D3D12_HEAP_PROPERTIES{};
-	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
-	heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-	heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
-	heapProperties.CreationNodeMask = 0;
-	heapProperties.VisibleNodeMask = 0;
+	bool GrTexture2D::SupportMipMapping() const
+	{
+		return mSupportMipMapping;
+	}
 
-	auto heapFlags = D3D12_HEAP_FLAG_CREATE_NOT_ZEROED;
-	heapFlags |= SupportShaderAtomics() ? D3D12_HEAP_FLAG_ALLOW_SHADER_ATOMICS : heapFlags;
+	GrTexture2D& GrTexture2D::SupportMipMapping(bool const support)
+	{
+		if (mSupportMipMapping != support)
+		{
+			mSupportMipMapping = support;
+			MarkCacheDataAsChanged();
+		}
 
-	auto resourceDesc = D3D12_RESOURCE_DESC{};
-	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-	resourceDesc.Alignment = 0;
-	resourceDesc.Width = Width();
-	resourceDesc.Height = Height();
-	resourceDesc.DepthOrArraySize = 1;
-	resourceDesc.MipLevels = SupportMipMapping() ? 0 : 1;
-	resourceDesc.Format = ToInternalEnum(Format());
-	resourceDesc.SampleDesc = { 1, 0 };
-	resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+		return *this;
+	}
 
-	resourceDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
-	resourceDesc.Flags |= SupportRenderTarget() ? D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET : resourceDesc.Flags;
-	resourceDesc.Flags |= SupportDepthStencil() ? D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL : resourceDesc.Flags;
-	resourceDesc.Flags |= SupportUnorderedAccess() ? D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS : resourceDesc.Flags;
+	bool GrTexture2D::SupportRenderTarget() const
+	{
+		return mSupportRenderTarget;
+	}
 
-	auto resourceStates = D3D12_RESOURCE_STATE_COMMON;
-	barrier = resourceStates;
+	GrTexture2D& GrTexture2D::SupportRenderTarget(bool const support)
+	{
+		if (mSupportRenderTarget != support)
+		{
+			mSupportRenderTarget = support;
+			MarkCacheDataAsChanged();
+		}
 
-	auto commitedResource = winrt::com_ptr<ID3D12Resource>{};
-	winrt::check_hresult(device->CreateCommittedResource(&heapProperties, heapFlags, &resourceDesc, resourceStates, nullptr, IID_PPV_ARGS(&commitedResource)));
+		return *this;
+	}
 
-	winrt::check_bool(commitedResource);
-	resource = commitedResource;
-}
+	bool GrTexture2D::SupportShaderAtomics() const
+	{
+		return mSupportShaderAtomics;
+	}
 
-void aiva::layer1::GrTexture2D::RefreshSelfFromInternalResource(winrt::com_ptr<ID3D12Resource> const& resource)
-{
-	winrt::check_bool(resource);
+	GrTexture2D& GrTexture2D::SupportShaderAtomics(bool const support)
+	{
+		if (mSupportShaderAtomics != support)
+		{
+			mSupportShaderAtomics = support;
+			MarkCacheDataAsChanged();
+		}
 
-	auto heapProperties = D3D12_HEAP_PROPERTIES{};
-	auto heapFlags = D3D12_HEAP_FLAGS{};
-	winrt::check_hresult(resource->GetHeapProperties(&heapProperties, &heapFlags));
+		return *this;
+	}
 
-	SupportShaderAtomics(heapFlags & D3D12_HEAP_FLAG_ALLOW_SHADER_ATOMICS);
+	bool GrTexture2D::SupportUnorderedAccess() const
+	{
+		return mSupportUnorderedAccess;
+	}
 
-	auto const& resourceDesc = resource->GetDesc();
-	aiva::utils::Asserts::CheckBool(resourceDesc.Dimension == D3D12_RESOURCE_DIMENSION_TEXTURE2D, "Resource is not a texture 2D");
+	GrTexture2D& GrTexture2D::SupportUnorderedAccess(bool const support)
+	{
+		if (mSupportUnorderedAccess != support)
+		{
+			mSupportUnorderedAccess = support;
+			MarkCacheDataAsChanged();
+		}
 
-	Format(FromInternalEnum(resourceDesc.Format));
-	Width(resourceDesc.Width);
-	Height(resourceDesc.Height);
-	SupportDepthStencil(resourceDesc.Flags & D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
-	SupportMipMapping(resourceDesc.MipLevels != 1);
-	SupportRenderTarget(resourceDesc.Flags & D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
-	SupportUnorderedAccess(resourceDesc.Flags & D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+		return *this;
+	}
+
+	void GrTexture2D::RefreshInternalResourceFromSelf(ResourceType& resource, BarrierType& barrier)
+	{
+		Asserts::CheckBool(Width() > 0, "Width is not valid");
+		Asserts::CheckBool(Height() > 0, "Height is not valid");
+		Asserts::CheckBool(SupportDepthStencil() == SupportsDepthStencil(Format()), "Format doesn't support depth stencil");
+		Asserts::CheckBool(!(SupportMipMapping() && Width() != Height()), "Non-square texture doesn't support mip maps");
+		Asserts::CheckBool(SupportRenderTarget() != SupportsDepthStencil(Format()), "Format doesn't support render target");
+		Asserts::CheckBool(!(SupportRenderTarget() && SupportDepthStencil()), "Format doesn't support render target and depth stencil at same time");
+		Asserts::CheckBool(!(SupportDepthStencil() && SupportUnorderedAccess()), "Format doesn't support depth stencil and unordered access at same time");
+
+		auto const& device = Engine().GraphicHardware().Device();
+		winrt::check_bool(device);
+
+		auto heapProperties = D3D12_HEAP_PROPERTIES{};
+		heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
+		heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+		heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+		heapProperties.CreationNodeMask = 0;
+		heapProperties.VisibleNodeMask = 0;
+
+		auto heapFlags = D3D12_HEAP_FLAG_CREATE_NOT_ZEROED;
+		heapFlags |= SupportShaderAtomics() ? D3D12_HEAP_FLAG_ALLOW_SHADER_ATOMICS : heapFlags;
+
+		auto resourceDesc = D3D12_RESOURCE_DESC{};
+		resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+		resourceDesc.Alignment = 0;
+		resourceDesc.Width = Width();
+		resourceDesc.Height = Height();
+		resourceDesc.DepthOrArraySize = 1;
+		resourceDesc.MipLevels = SupportMipMapping() ? 0 : 1;
+		resourceDesc.Format = ToInternalEnum(Format());
+		resourceDesc.SampleDesc = { 1, 0 };
+		resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+
+		resourceDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
+		resourceDesc.Flags |= SupportRenderTarget() ? D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET : resourceDesc.Flags;
+		resourceDesc.Flags |= SupportDepthStencil() ? D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL : resourceDesc.Flags;
+		resourceDesc.Flags |= SupportUnorderedAccess() ? D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS : resourceDesc.Flags;
+
+		auto resourceStates = D3D12_RESOURCE_STATE_COMMON;
+		barrier = resourceStates;
+
+		auto commitedResource = ResourceType{};
+		winrt::check_hresult(device->CreateCommittedResource(&heapProperties, heapFlags, &resourceDesc, resourceStates, nullptr, IID_PPV_ARGS(&commitedResource)));
+
+		winrt::check_bool(commitedResource);
+		resource = commitedResource;
+	}
+
+	void GrTexture2D::RefreshSelfFromInternalResource(ResourceType const& resource)
+	{
+		winrt::check_bool(resource);
+
+		auto heapProperties = D3D12_HEAP_PROPERTIES{};
+		auto heapFlags = D3D12_HEAP_FLAGS{};
+		winrt::check_hresult(resource->GetHeapProperties(&heapProperties, &heapFlags));
+
+		SupportShaderAtomics(heapFlags & D3D12_HEAP_FLAG_ALLOW_SHADER_ATOMICS);
+
+		auto const& resourceDesc = resource->GetDesc();
+		Asserts::CheckBool(resourceDesc.Dimension == D3D12_RESOURCE_DIMENSION_TEXTURE2D, "Resource is not a texture 2D");
+
+		Format(FromInternalEnum(resourceDesc.Format));
+		Width(resourceDesc.Width);
+		Height(resourceDesc.Height);
+		SupportDepthStencil(resourceDesc.Flags & D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
+		SupportMipMapping(resourceDesc.MipLevels != 1);
+		SupportRenderTarget(resourceDesc.Flags & D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+		SupportUnorderedAccess(resourceDesc.Flags & D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+	}
+
 }

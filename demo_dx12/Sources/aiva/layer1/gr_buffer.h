@@ -72,8 +72,8 @@ namespace aiva::layer1
 	// Internal Resource
 
 	protected:
-		void RefreshInternalResourceFromSelf(winrt::com_ptr<ID3D12Resource>& resource, aiva::utils::ResourceBarrier& barrier) override;
+		void RefreshInternalResourceFromSelf(ResourceType& resource, BarrierType& barrier) override;
 
-		void RefreshSelfFromInternalResource(winrt::com_ptr<ID3D12Resource> const& resource) override;
+		void RefreshSelfFromInternalResource(ResourceType const& resource) override;
 	};
 }

@@ -84,7 +84,7 @@ namespace aiva::layer1
 		return *this;
 	}
 
-	void GrBuffer::RefreshInternalResourceFromSelf(winrt::com_ptr<ID3D12Resource>& resource, ResourceBarrier& barrier)
+	void GrBuffer::RefreshInternalResourceFromSelf(ResourceType& resource, BarrierType& barrier)
 	{
 		Asserts::CheckBool(!(SupportShaderAtomics() && MemoryType() != MemoryTypeEnum::GpuOnly), "Shader atomics is not supported");
 		Asserts::CheckBool(Size() > 0, "Size is not valid");
@@ -123,10 +123,12 @@ namespace aiva::layer1
 
 		auto commitedResource = ResourceType{};
 		winrt::check_hresult(device->CreateCommittedResource(&heapProperties, heapFlags, &resourceDesc, resourceStates, nullptr, IID_PPV_ARGS(&commitedResource)));
+
+		winrt::check_bool(commitedResource);
 		resource = commitedResource;
 	}
 
-	void GrBuffer::RefreshSelfFromInternalResource(winrt::com_ptr<ID3D12Resource> const& resource)
+	void GrBuffer::RefreshSelfFromInternalResource(ResourceType const& resource)
 	{
 		winrt::check_bool(resource);
 

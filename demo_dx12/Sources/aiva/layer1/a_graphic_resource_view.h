@@ -28,10 +28,22 @@ namespace aiva::layer1
 		~AGraphicResourceView() override;
 
 	// ----------------------------------------------------
+	// Aliases
+
+	public:
+		using HeapTypeEnum = EDescriptorHeapType;
+
+		using ViewTypeEnum = EResourceViewType;
+
+	// ----------------------------------------------------
 	// Internal Resource
 
 	public:
 		using ResourceType = AGraphicResource;
+
+		using ResourceTypeShared = std::shared_ptr<ResourceType>;
+
+		using ResourceTypeWeak = std::weak_ptr<ResourceType>;
 
 	public:
 		std::shared_ptr<ResourceType> GetInternalResource();

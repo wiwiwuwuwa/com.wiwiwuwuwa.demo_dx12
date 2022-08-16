@@ -2,11 +2,8 @@
 #include <pch.h>
 
 #include <aiva/layer1/a_graphic_resource_view.h>
-
-namespace aiva::layer1
-{
-	struct GrBuffer;
-}
+#include <aiva/layer1/gr_buffer_fwd.h>
+#include <aiva/layer1/grv_cbv_to_buffer_fwd.h>
 
 namespace aiva::utils
 {
@@ -31,16 +28,29 @@ namespace aiva::layer1
 		~GrvCbvToBuffer() override;
 
 	// ----------------------------------------------------
-	// Buffer
+	// Aliases
 
 	public:
 		using BufferElementType = aiva::utils::DictBuffer;
 
 		using BufferPointerType = std::shared_ptr<BufferElementType>;
 
+		using ParentType = AGraphicResourceView;
+
+		using ResourceType = GrBuffer;
+
+		using ResourceTypeShared = std::shared_ptr<ResourceType>;
+
+		using ResourceTypeWeak = std::weak_ptr<ResourceType>;
+
 		using StructElementType = aiva::utils::DictStruct;
 
 		using StructPointerType = std::shared_ptr<StructElementType>;
+
+		using ThisType = GrvCbvToBuffer;
+
+	// ----------------------------------------------------
+	// Buffer
 
 	public:
 		StructElementType& Struct() const;
@@ -60,22 +70,22 @@ namespace aiva::layer1
 	// Graphic Resource View: Internal Resource
 
 	protected:
-		std::shared_ptr<ResourceType> CreateDefaultInternalResource() const override;
+		ParentType::ResourceTypeShared CreateDefaultInternalResource() const override;
 
-		void RefreshInternalResourceFromSelf(std::shared_ptr<ResourceType> const& aivaResource, EGrvCacheFlags const dirtyFlags) override;
+		void RefreshInternalResourceFromSelf(ParentType::ResourceTypeShared const& aivaResource, CacheFlagType const dirtyFlags) override;
 
 	private:
-		void RefreshInternalResourcePtr(std::shared_ptr<GrBuffer> const& aivaResource, std::vector<std::byte> const& binaryData) const;
+		void RefreshInternalResourcePtr(ResourceTypeShared const& aivaResource, std::vector<std::byte> const& binaryData) const;
 
-		void RefreshInternalResourceBin(std::shared_ptr<GrBuffer> const& aivaResource, std::vector<std::byte> const& binaryData) const;
+		void RefreshInternalResourceBin(ResourceTypeShared const& aivaResource, std::vector<std::byte> const& binaryData) const;
 
 	// ----------------------------------------------------
 	// Graphic Resource View: Metadata
 
 	public:
-		EDescriptorHeapType HeapType() const override;
+		HeapTypeEnum HeapType() const override;
 
-		EResourceViewType ViewType() const override;
+		ViewTypeEnum ViewType() const override;
 
 	// ----------------------------------------------------
 	// Graphic Resource View: Directx

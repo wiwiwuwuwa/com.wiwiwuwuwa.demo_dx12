@@ -2,7 +2,7 @@
 #include <aiva/layer2/scene_system.h>
 
 #include <aiva/layer1/e_descriptor_heap_type.h>
-#include <aiva/layer1/e_resource_memory_type.h>
+#include <aiva/layer1/e_buffer_memory_type.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gr_buffer.h>
 #include <aiva/layer1/grv_srv_to_buffer.h>

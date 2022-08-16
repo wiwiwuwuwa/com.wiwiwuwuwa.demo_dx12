@@ -2,7 +2,8 @@
 #include <pch.h>
 
 #include <aiva/layer1/a_graphic_resource.h>
-#include <aiva/layer1/e_resource_memory_type.h>
+#include <aiva/layer1/e_buffer_memory_type.h>
+#include <aiva/layer1/gr_buffer_fwd.h>
 
 namespace aiva::layer1
 {
@@ -21,15 +22,21 @@ namespace aiva::layer1
 		~GrBuffer() override;
 
 	// ----------------------------------------------------
+	// Aliases
+
+	public:
+		using MemoryTypeEnum = EBufferMemoryType;
+
+	// ----------------------------------------------------
 	// Metadata
 
 	public:
-		EResourceMemoryType MemoryType() const;
+		MemoryTypeEnum MemoryType() const;
 
-		GrBuffer& MemoryType(EResourceMemoryType const memoryType);
+		GrBuffer& MemoryType(MemoryTypeEnum const memoryType);
 
 	private:
-		EResourceMemoryType mMemoryType{ EResourceMemoryType::CpuToGpu };
+		MemoryTypeEnum mMemoryType{ MemoryTypeEnum::CpuToGpu };
 
 	// --------------------------------
 

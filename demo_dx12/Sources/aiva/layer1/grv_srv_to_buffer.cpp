@@ -4,6 +4,7 @@
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gr_buffer.h>
 #include <aiva/layer1/graphic_hardware.h>
+#include <aiva/layer1/shader_consts.h>
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/dict_buffer.h>
 #include <aiva/utils/dict_buffer_utils.h>
@@ -11,153 +12,156 @@
 #include <aiva/utils/layout_buffer_utils.h>
 #include <aiva/utils/object_utils.h>
 
-aiva::layer1::GrvSrvToBuffer::GrvSrvToBuffer(EngineType const& engine) : AGraphicResourceView{ engine }
-{
-	InitializeBuffer();
-}
-
-aiva::layer1::GrvSrvToBuffer::~GrvSrvToBuffer()
-{
-	TerminateBuffer();
-}
-
-aiva::layer1::GrvSrvToBuffer::BufferElementType& aiva::layer1::GrvSrvToBuffer::Buffer() const
-{
-	aiva::utils::Asserts::CheckBool(mBuffer, "Shader buffer is not valid");
-	return *mBuffer;
-}
-
-void aiva::layer1::GrvSrvToBuffer::InitializeBuffer()
-{
-	mBuffer = aiva::utils::NewObject<BufferElementType>();
-	aiva::utils::Asserts::CheckBool(mBuffer, "Shader buffer is not valid");
-
-	mBuffer->OnCacheDataChanged().connect(boost::bind(&GrvSrvToBuffer::Buffer_OnChanged, this));
-}
-
-void aiva::layer1::GrvSrvToBuffer::TerminateBuffer()
-{
-	aiva::utils::Asserts::CheckBool(mBuffer, "Shader buffer is not valid");
-
-	mBuffer->OnCacheDataChanged().disconnect(boost::bind(&GrvSrvToBuffer::Buffer_OnChanged, this));
-	mBuffer = {};
-}
-
-void aiva::layer1::GrvSrvToBuffer::Buffer_OnChanged()
-{
-	MarkCacheDataAsChanged(EGrvCacheFlags::BufferBin);
-}
-
-std::shared_ptr<aiva::layer1::GrvSrvToBuffer::ResourceType> aiva::layer1::GrvSrvToBuffer::CreateDefaultInternalResource() const
-{
-	return aiva::utils::NewObject<GrBuffer>(Engine());
-}
-
-void aiva::layer1::GrvSrvToBuffer::RefreshInternalResourceFromSelf(std::shared_ptr<ResourceType> const& aivaResource, EGrvCacheFlags const dirtyFlags)
+namespace aiva::layer1
 {
 	using namespace aiva::utils;
 
-	Asserts::CheckBool(aivaResource, "Aiva resource is not valid");
+	GrvSrvToBuffer::GrvSrvToBuffer(EngineType const& engine) : AGraphicResourceView{ engine }
+	{
+		InitializeBuffer();
+	}
 
-	auto const& dictBuffer = mBuffer;
-	Asserts::CheckBool(dictBuffer, "Dict buffer is not valid");
+	GrvSrvToBuffer::~GrvSrvToBuffer()
+	{
+		TerminateBuffer();
+	}
 
-	auto const binaryData = aiva::utils::DictBufferUtils::SerializeToBinary(dictBuffer);
-	Asserts::CheckBool(!std::empty(binaryData), "Binary data is empty");
+	GrvSrvToBuffer::BufferElementType& GrvSrvToBuffer::Buffer() const
+	{
+		Asserts::CheckBool(mBuffer, "Shader buffer is not valid");
+		return *mBuffer;
+	}
 
-	auto const& aivaBuffer = std::dynamic_pointer_cast<GrBuffer>(aivaResource);
-	Asserts::CheckBool(aivaBuffer, "Graphic resource doesn't support buffer");
+	void GrvSrvToBuffer::InitializeBuffer()
+	{
+		mBuffer = NewObject<BufferElementType>();
+		Asserts::CheckBool(mBuffer, "Shader buffer is not valid");
 
-	auto needRefreshPtr = false;
-	needRefreshPtr |= (EnumUtils::Has(dirtyFlags, EGrvCacheFlags::BufferPtr));
-	needRefreshPtr |= (EnumUtils::Has(dirtyFlags, EGrvCacheFlags::BufferBin) && aivaBuffer->Size() != std::size(binaryData));
-	needRefreshPtr |= (aivaBuffer->MemoryType() != EResourceMemoryType::CpuToGpu);
-	needRefreshPtr |= (aivaBuffer->SupportShaderAtomics() != false);
-	needRefreshPtr |= (aivaBuffer->SupportUnorderedAccess() != false);
-	needRefreshPtr ? RefreshInternalResourcePtr(aivaBuffer, binaryData) : [] {};
+		mBuffer->OnCacheDataChanged().connect(boost::bind(&ThisType::Buffer_OnChanged, this));
+	}
 
-	auto needRefreshBin = false;
-	needRefreshBin |= (needRefreshPtr);
-	needRefreshBin |= (EnumUtils::Has(dirtyFlags, EGrvCacheFlags::BufferBin));
-	needRefreshBin ? RefreshInternalResourceBin(aivaBuffer, binaryData) : [] {};
-}
+	void GrvSrvToBuffer::TerminateBuffer()
+	{
+		Asserts::CheckBool(mBuffer, "Shader buffer is not valid");
 
-void aiva::layer1::GrvSrvToBuffer::RefreshInternalResourcePtr(std::shared_ptr<GrBuffer> const& aivaResource, std::vector<std::byte> const& binaryData) const
-{
-	using namespace aiva::utils;
+		mBuffer->OnCacheDataChanged().disconnect(boost::bind(&ThisType::Buffer_OnChanged, this));
+		mBuffer = {};
+	}
 
-	Asserts::CheckBool(aivaResource, "Aiva resource is not valid");
-	Asserts::CheckBool(!std::empty(binaryData), "Binary data is empty");
+	void GrvSrvToBuffer::Buffer_OnChanged()
+	{
+		MarkCacheDataAsChanged(CacheFlagType::BufferBin);
+	}
 
-	aivaResource->MemoryType(EResourceMemoryType::CpuToGpu);
-	aivaResource->Size(std::size(binaryData));
-	aivaResource->SupportShaderAtomics(false);
-	aivaResource->SupportUnorderedAccess(false);
-}
+	GrvSrvToBuffer::ParentType::ResourceTypeShared GrvSrvToBuffer::CreateDefaultInternalResource() const
+	{
+		auto const resource = NewObject<ResourceType>(Engine());
+		Asserts::CheckBool(resource, "Resource is not valid");
 
-void aiva::layer1::GrvSrvToBuffer::RefreshInternalResourceBin(std::shared_ptr<GrBuffer> const& aivaResource, std::vector<std::byte> const& binaryData) const
-{
-	using namespace aiva::utils;
+		resource->Size(ShaderConsts::HEAP_SIZE);
+		return resource;
+	}
 
-	Asserts::CheckBool(aivaResource, "Aiva resource is not valid");
-	Asserts::CheckBool(!std::empty(binaryData), "Binary data is empty");
+	void GrvSrvToBuffer::RefreshInternalResourceFromSelf(ParentType::ResourceTypeShared const& aivaResource, CacheFlagType const dirtyFlags)
+	{
+		Asserts::CheckBool(aivaResource, "Aiva resource is not valid");
 
-	auto const& directxBuffer = aivaResource->GetInternalResource();
-	winrt::check_bool(directxBuffer);
+		auto const& dictBuffer = mBuffer;
+		Asserts::CheckBool(dictBuffer, "Dict buffer is not valid");
 
-	void* destinationMemory{};
-	winrt::check_hresult(directxBuffer->Map(0, nullptr, &destinationMemory));
-	Asserts::CheckBool(destinationMemory);
-	Asserts::CheckBool(memcpy_s(destinationMemory, std::size(binaryData), std::data(binaryData), std::size(binaryData)) == 0);
-	directxBuffer->Unmap(0, nullptr);
-}
+		auto const binaryData = DictBufferUtils::SerializeToBinary(dictBuffer);
+		Asserts::CheckBool(!std::empty(binaryData), "Binary data is empty");
 
-aiva::layer1::EDescriptorHeapType aiva::layer1::GrvSrvToBuffer::HeapType() const
-{
-	return EDescriptorHeapType::CbvSrvUav;
-}
+		auto const aivaBuffer = std::dynamic_pointer_cast<ResourceType>(aivaResource);
+		Asserts::CheckBool(aivaBuffer, "Graphic resource doesn't support buffer");
 
-aiva::layer1::EResourceViewType aiva::layer1::GrvSrvToBuffer::ViewType() const
-{
-	return EResourceViewType::Srv;
-}
+		auto needRefreshPtr = false;
+		needRefreshPtr |= (EnumUtils::Has(dirtyFlags, CacheFlagType::BufferPtr));
+		needRefreshPtr |= (EnumUtils::Has(dirtyFlags, CacheFlagType::BufferBin) && aivaBuffer->Size() != std::size(binaryData));
+		needRefreshPtr |= (aivaBuffer->MemoryType() != ResourceType::MemoryTypeEnum::CpuToGpu);
+		needRefreshPtr |= (aivaBuffer->SupportShaderAtomics() != false);
+		needRefreshPtr |= (aivaBuffer->SupportUnorderedAccess() != false);
+		needRefreshPtr ? RefreshInternalResourcePtr(aivaBuffer, binaryData) : [] {};
 
-void aiva::layer1::GrvSrvToBuffer::CreateDirectxView(D3D12_CPU_DESCRIPTOR_HANDLE const destination)
-{
-	auto const& device = Engine().GraphicHardware().Device();
-	winrt::check_bool(device);
+		auto needRefreshBin = false;
+		needRefreshBin |= (needRefreshPtr);
+		needRefreshBin |= (EnumUtils::Has(dirtyFlags, CacheFlagType::BufferBin));
+		needRefreshBin ? RefreshInternalResourceBin(aivaBuffer, binaryData) : [] {};
+	}
 
-	auto const& dictBuffer = mBuffer;
-	aiva::utils::Asserts::CheckBool(dictBuffer, "Dict buffer is not valid");
+	void GrvSrvToBuffer::RefreshInternalResourcePtr(ResourceTypeShared const& aivaResource, std::vector<std::byte> const& binaryData) const
+	{
+		Asserts::CheckBool(aivaResource, "Aiva resource is not valid");
+		Asserts::CheckBool(!std::empty(binaryData), "Binary data is empty");
 
-	auto const& layoutBuffer = aiva::utils::LayoutBufferUtils::GenerateFrom(mBuffer);
-	aiva::utils::Asserts::CheckBool(layoutBuffer, "Layout buffer is not valid");
+		aivaResource->MemoryType(ResourceType::MemoryTypeEnum::CpuToGpu);
+		aivaResource->Size(std::size(binaryData));
+		aivaResource->SupportShaderAtomics(false);
+		aivaResource->SupportUnorderedAccess(false);
+	}
 
-	auto const& resourceBuffer = std::dynamic_pointer_cast<GrBuffer>(GetInternalResource());
-	aiva::utils::Asserts::CheckBool(resourceBuffer, "Graphic resource doesn't support buffer");
+	void GrvSrvToBuffer::RefreshInternalResourceBin(ResourceTypeShared const& aivaResource, std::vector<std::byte> const& binaryData) const
+	{
+		Asserts::CheckBool(aivaResource, "Aiva resource is not valid");
+		Asserts::CheckBool(!std::empty(binaryData), "Binary data is empty");
 
-	auto const& resourceObject = resourceBuffer->GetInternalResource();
-	winrt::check_bool(resourceObject);
+		auto const& directxBuffer = aivaResource->GetInternalResource();
+		winrt::check_bool(directxBuffer);
 
-	auto const& resourceObjectDesc = resourceObject->GetDesc();
+		void* destinationMemory{};
+		winrt::check_hresult(directxBuffer->Map(0, nullptr, &destinationMemory));
+		Asserts::CheckBool(destinationMemory, "Destination memory is not valid");
+		Asserts::CheckBool(memcpy_s(destinationMemory, std::size(binaryData), std::data(binaryData), std::size(binaryData)) == 0, "Failed to memcpy_s");
+		directxBuffer->Unmap(0, nullptr);
+	}
 
-	auto viewDesc = D3D12_SHADER_RESOURCE_VIEW_DESC{};
-	viewDesc.Format = resourceObjectDesc.Format;
-	viewDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
-	viewDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	viewDesc.Buffer.FirstElement = 0;
-	viewDesc.Buffer.NumElements = Buffer().Num();
-	viewDesc.Buffer.StructureByteStride = layoutBuffer->Stride();
-	viewDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+	GrvSrvToBuffer::HeapTypeEnum GrvSrvToBuffer::HeapType() const
+	{
+		return HeapTypeEnum::CbvSrvUav;
+	}
 
-	device->CreateShaderResourceView(resourceObject.get(), &viewDesc, destination);
-}
+	GrvSrvToBuffer::ViewTypeEnum GrvSrvToBuffer::ViewType() const
+	{
+		return ViewTypeEnum::Srv;
+	}
 
-std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::GrvSrvToBuffer::CreateDirectxBarriers(bool const active)
-{
-	auto const& resource = GetInternalResource();
-	aiva::utils::Asserts::CheckBool(resource, "Graphic resource is not valid");
+	void GrvSrvToBuffer::CreateDirectxView(D3D12_CPU_DESCRIPTOR_HANDLE const destination)
+	{
+		auto const& device = Engine().GraphicHardware().Device();
+		winrt::check_bool(device);
 
-	auto const& state = active ? D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE : D3D12_RESOURCE_STATE_COMMON;
-	return resource->CreateDirectxBarriers(state);
+		auto const& dictBuffer = mBuffer;
+		Asserts::CheckBool(dictBuffer, "Dict buffer is not valid");
+
+		auto const layoutBuffer = LayoutBufferUtils::GenerateFrom(mBuffer);
+		Asserts::CheckBool(layoutBuffer, "Layout buffer is not valid");
+
+		auto const resourceBuffer = std::dynamic_pointer_cast<GrBuffer>(GetInternalResource());
+		Asserts::CheckBool(resourceBuffer, "Graphic resource doesn't support buffer");
+
+		auto const& resourceObject = resourceBuffer->GetInternalResource();
+		winrt::check_bool(resourceObject);
+
+		auto const resourceObjectDesc = resourceObject->GetDesc();
+
+		auto viewDesc = D3D12_SHADER_RESOURCE_VIEW_DESC{};
+		viewDesc.Format = resourceObjectDesc.Format;
+		viewDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+		viewDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+		viewDesc.Buffer.FirstElement = 0;
+		viewDesc.Buffer.NumElements = Buffer().Num();
+		viewDesc.Buffer.StructureByteStride = layoutBuffer->Stride();
+		viewDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+
+		device->CreateShaderResourceView(resourceObject.get(), &viewDesc, destination);
+	}
+
+	std::vector<D3D12_RESOURCE_BARRIER> GrvSrvToBuffer::CreateDirectxBarriers(bool const active)
+	{
+		auto const& resource = GetInternalResource();
+		Asserts::CheckBool(resource, "Graphic resource is not valid");
+
+		auto const state = active ? D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE : D3D12_RESOURCE_STATE_COMMON;
+		return resource->CreateDirectxBarriers(state);
+	}
 }

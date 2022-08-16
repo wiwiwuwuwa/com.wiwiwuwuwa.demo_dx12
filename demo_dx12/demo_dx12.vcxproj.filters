@@ -17,7 +17,7 @@
     <ClCompile Include="Sources\aiva\utils\changes_counter.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_dispatch.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gr_texture_2d.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\e_resource_memory_type.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\e_buffer_memory_type.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_resource_buffer_format.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gr_buffer.cpp" />
     <ClCompile Include="Sources\aiva\utils\action_batcher.cpp" />
@@ -116,7 +116,7 @@
     <ClInclude Include="Sources\aiva\utils\t_ev_action.h" />
     <ClInclude Include="Sources\aiva\utils\enum_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\gr_texture_2d.h" />
-    <ClInclude Include="Sources\aiva\layer1\e_resource_memory_type.h" />
+    <ClInclude Include="Sources\aiva\layer1\e_buffer_memory_type.h" />
     <ClInclude Include="Sources\aiva\layer1\e_resource_buffer_format.h" />
     <ClInclude Include="Sources\aiva\layer1\gr_buffer.h" />
     <ClInclude Include="Sources\aiva\utils\action_batcher.h" />
@@ -235,6 +235,9 @@
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_view_utils.h" />
     <ClInclude Include="Sources\aiva\utils\hash_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\gr_buffer_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\grv_srv_to_buffer_fwd.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

@@ -8,75 +8,85 @@
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/object_utils.h>
 
-aiva::layer1::GrvRtvToTexture2D::GrvRtvToTexture2D(EngineType const& engine) : AGraphicResourceView{ engine }
+namespace aiva::layer1
 {
+	using namespace aiva::utils;
 
-}
-
-aiva::layer1::GrvRtvToTexture2D::~GrvRtvToTexture2D()
-{
-
-}
-
-std::uint64_t aiva::layer1::GrvRtvToTexture2D::MipLevel() const
-{
-	return mMipLevel;
-}
-
-aiva::layer1::GrvRtvToTexture2D& aiva::layer1::GrvRtvToTexture2D::MipLevel(std::uint64_t const mipLevel)
-{
-	if (mMipLevel != mipLevel)
+	GrvRtvToTexture2D::GrvRtvToTexture2D(EngineType const& engine) : AGraphicResourceView{ engine }
 	{
-		mMipLevel = mipLevel;
-		MarkCacheDataAsChanged(EGrvCacheFlags::BufferBin);
+
 	}
 
-	return *this;
-}
+	GrvRtvToTexture2D::~GrvRtvToTexture2D()
+	{
 
-std::shared_ptr<aiva::layer1::GrvRtvToTexture2D::ResourceType> aiva::layer1::GrvRtvToTexture2D::CreateDefaultInternalResource() const
-{
-	return aiva::utils::NewObject<GrTexture2D>(Engine());
-}
+	}
 
-aiva::layer1::EDescriptorHeapType aiva::layer1::GrvRtvToTexture2D::HeapType() const
-{
-	return EDescriptorHeapType::Rtv;
-}
+	std::size_t GrvRtvToTexture2D::MipLevel() const
+	{
+		return mMipLevel;
+	}
 
-aiva::layer1::EResourceViewType aiva::layer1::GrvRtvToTexture2D::ViewType() const
-{
-	return EResourceViewType::Rtv;
-}
+	GrvRtvToTexture2D::ThisType& GrvRtvToTexture2D::MipLevel(std::size_t const mipLevel)
+	{
+		if (mMipLevel != mipLevel)
+		{
+			mMipLevel = mipLevel;
+			MarkCacheDataAsChanged(CacheFlagType::BufferBin);
+		}
 
-void aiva::layer1::GrvRtvToTexture2D::CreateDirectxView(D3D12_CPU_DESCRIPTOR_HANDLE const destination)
-{
-	auto const& device = Engine().GraphicHardware().Device();
-	winrt::check_bool(device);
+		return *this;
+	}
 
-	auto const& texture2D = std::dynamic_pointer_cast<GrTexture2D>(GetInternalResource());
-	aiva::utils::Asserts::CheckBool(texture2D, "Graphic resource doesn't support texture 2D");
-	aiva::utils::Asserts::CheckBool(texture2D->SupportRenderTarget(), "Graphic resource doesn't support render target");
+	GrvRtvToTexture2D::ParentType::ResourceTypeShared GrvRtvToTexture2D::CreateDefaultInternalResource() const
+	{
+		auto const resource = NewObject<ResourceType>(Engine());
+		Asserts::CheckBool(resource, "Resource is not valid");
 
-	auto const& resource = texture2D->GetInternalResource();
-	winrt::check_bool(resource);
+		resource->Format(EResourceBufferFormat::R32G32B32A32_FLOAT);
+		resource->SupportRenderTarget(true);
+		return resource;
+	}
 
-	auto const& resourceDesc = resource->GetDesc();
+	GrvRtvToTexture2D::HeapTypeEnum GrvRtvToTexture2D::HeapType() const
+	{
+		return HeapTypeEnum::Rtv;
+	}
 
-	auto viewDesc = D3D12_RENDER_TARGET_VIEW_DESC{};
-	viewDesc.Format = resourceDesc.Format;
-	viewDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
-	viewDesc.Texture2D.MipSlice = MipLevel();
-	viewDesc.Texture2D.PlaneSlice = 0;
+	GrvRtvToTexture2D::ViewTypeEnum GrvRtvToTexture2D::ViewType() const
+	{
+		return ViewTypeEnum::Rtv;
+	}
 
-	device->CreateRenderTargetView(resource.get(), &viewDesc, destination);
-}
+	void GrvRtvToTexture2D::CreateDirectxView(D3D12_CPU_DESCRIPTOR_HANDLE const destination)
+	{
+		auto const& device = Engine().GraphicHardware().Device();
+		winrt::check_bool(device);
 
-std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::GrvRtvToTexture2D::CreateDirectxBarriers(bool const active)
-{
-	auto const& resource = GetInternalResource();
-	aiva::utils::Asserts::CheckBool(resource, "Graphic resource is not valid");
+		auto const texture2D = std::dynamic_pointer_cast<GrTexture2D>(GetInternalResource());
+		Asserts::CheckBool(texture2D, "Graphic resource doesn't support texture 2D");
+		Asserts::CheckBool(texture2D->SupportRenderTarget(), "Graphic resource doesn't support render target");
 
-	auto const& state = active ? D3D12_RESOURCE_STATE_RENDER_TARGET : D3D12_RESOURCE_STATE_COMMON;
-	return resource->CreateDirectxBarriers(state, MipLevel());
+		auto const& resource = texture2D->GetInternalResource();
+		winrt::check_bool(resource);
+
+		auto const resourceDesc = resource->GetDesc();
+
+		auto viewDesc = D3D12_RENDER_TARGET_VIEW_DESC{};
+		viewDesc.Format = resourceDesc.Format;
+		viewDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+		viewDesc.Texture2D.MipSlice = MipLevel();
+		viewDesc.Texture2D.PlaneSlice = 0;
+
+		device->CreateRenderTargetView(resource.get(), &viewDesc, destination);
+	}
+
+	std::vector<D3D12_RESOURCE_BARRIER> GrvRtvToTexture2D::CreateDirectxBarriers(bool const active)
+	{
+		auto const& resource = GetInternalResource();
+		Asserts::CheckBool(resource, "Graphic resource is not valid");
+
+		auto const state = active ? D3D12_RESOURCE_STATE_RENDER_TARGET : D3D12_RESOURCE_STATE_COMMON;
+		return resource->CreateDirectxBarriers(state, MipLevel());
+	}
 }

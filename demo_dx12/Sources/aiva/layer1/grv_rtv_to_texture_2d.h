@@ -2,6 +2,7 @@
 #include <pch.h>
 
 #include <aiva/layer1/a_graphic_resource_view.h>
+#include <aiva/layer1/gr_texture_2d_fwd.h>
 #include <aiva/layer1/grv_rtv_to_texture_2d_fwd.h>
 
 namespace aiva::layer1
@@ -21,29 +22,43 @@ namespace aiva::layer1
 		~GrvRtvToTexture2D() override;
 
 	// ----------------------------------------------------
+	// Aliases
+
+	public:
+		using ParentType = AGraphicResourceViewType;
+
+		using ResourceType = GrTexture2DType;
+
+		using ResourceTypeShared = std::shared_ptr<ResourceType>;
+
+		using ResourceTypeWeak = std::weak_ptr<ResourceType>;
+
+		using ThisType = GrvRtvToTexture2DType;
+
+	// ----------------------------------------------------
 	// Metadata
 
 	public:
-		std::uint64_t MipLevel() const;
+		std::size_t MipLevel() const;
 
-		GrvRtvToTexture2D& MipLevel(std::uint64_t const mipLevel);
+		ThisType& MipLevel(std::size_t const mipLevel);
 
 	private:
-		std::uint64_t mMipLevel{};
+		std::size_t mMipLevel{};
 
 	// ----------------------------------------------------
 	// Graphic Resource View: Internal Resource
 
 	protected:
-		std::shared_ptr<ResourceType> CreateDefaultInternalResource() const override;
+		ParentType::ResourceTypeShared CreateDefaultInternalResource() const override;
 
 	// ----------------------------------------------------
 	// Graphic Resource View: Metadata
 
 	public:
-		EDescriptorHeapType HeapType() const override;
+		HeapTypeEnum HeapType() const override;
 
-		EResourceViewType ViewType() const override;
+		ViewTypeEnum ViewType() const override;
 
 	// ----------------------------------------------------
 	// Graphic Resource View: Directx

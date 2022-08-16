@@ -32,7 +32,7 @@ namespace aiva::layer1
 		if (mMipLevel != mipLevel)
 		{
 			mMipLevel = mipLevel;
-			MarkCacheDataAsChanged(EGrvCacheFlags::BufferBin);
+			MarkCacheDataAsChanged(CacheFlagType::BufferBin);
 		}
 
 		return *this;
@@ -43,6 +43,7 @@ namespace aiva::layer1
 		auto const resource = NewObject<ResourceType>(Engine());
 		Asserts::CheckBool(resource, "Resource is not valid");
 
+		resource->Format(EResourceBufferFormat::D32_FLOAT);
 		resource->SupportDepthStencil(true);
 		return resource;
 	}

@@ -2,6 +2,8 @@
 #include <pch.h>
 
 #include <aiva/layer1/a_graphic_resource_view.h>
+#include <aiva/layer1/gr_texture_2d_fwd.h>
+#include <aiva/layer1/grv_srv_to_texture_2d_fwd.h>
 
 namespace aiva::layer1
 {
@@ -20,12 +22,32 @@ namespace aiva::layer1
 		~GrvSrvToTexture2D() override;
 
 	// ----------------------------------------------------
+	// Aliases
+
+	public:
+		using ParentType = AGraphicResourceViewType;
+
+		using ResourceType = GrTexture2DType;
+
+		using ResourceTypeShared = std::shared_ptr<ResourceType>;
+
+		using ResourceTypeWeak = std::weak_ptr<ResourceType>;
+
+		using ThisType = GrvSrvToTexture2DType;
+
+	// ----------------------------------------------------
+	// Graphic Resource View: Internal Resource
+
+	protected:
+		ParentType::ResourceTypeShared CreateDefaultInternalResource() const override;
+
+	// ----------------------------------------------------
 	// Graphic Resource View: Metadata
 
 	public:
-		EDescriptorHeapType HeapType() const override;
+		HeapTypeEnum HeapType() const override;
 
-		EResourceViewType ViewType() const override;
+		ViewTypeEnum ViewType() const override;
 
 	// ----------------------------------------------------
 	// Graphic Resource View: DirectX

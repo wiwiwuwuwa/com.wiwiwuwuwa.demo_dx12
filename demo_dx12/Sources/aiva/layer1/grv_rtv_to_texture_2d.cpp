@@ -63,7 +63,7 @@ namespace aiva::layer1
 		auto const& device = Engine().GraphicHardware().Device();
 		winrt::check_bool(device);
 
-		auto const texture2D = std::dynamic_pointer_cast<GrTexture2D>(GetInternalResource());
+		auto const texture2D = std::dynamic_pointer_cast<ResourceType>(GetInternalResource());
 		Asserts::CheckBool(texture2D, "Graphic resource doesn't support texture 2D");
 		Asserts::CheckBool(texture2D->SupportRenderTarget(), "Graphic resource doesn't support render target");
 

@@ -1,9 +1,12 @@
 #include <pch.h>
 #include <aiva/layer1/grv_srv_to_texture_2d.h>
 
+#include <aiva/layer1/a_graphic_resource.h>
 #include <aiva/layer1/engine.h>
 #include <aiva/layer1/gr_texture_2d.h>
 #include <aiva/layer1/graphic_hardware.h>
+#include <aiva/utils/asserts.h>
+#include <aiva/utils/object_utils.h>
 
 namespace aiva::layer1
 {
@@ -19,14 +22,23 @@ namespace aiva::layer1
 
 	}
 
-	EDescriptorHeapType GrvSrvToTexture2D::HeapType() const
+	GrvSrvToTexture2D::HeapTypeEnum GrvSrvToTexture2D::HeapType() const
 	{
-		return EDescriptorHeapType::CbvSrvUav;
+		return HeapTypeEnum::CbvSrvUav;
 	}
 
-	EResourceViewType GrvSrvToTexture2D::ViewType() const
+	GrvSrvToTexture2D::ViewTypeEnum GrvSrvToTexture2D::ViewType() const
 	{
-		return EResourceViewType::Srv;
+		return ViewTypeEnum::Srv;
+	}
+
+	GrvSrvToTexture2D::ParentType::ResourceTypeShared GrvSrvToTexture2D::CreateDefaultInternalResource() const
+	{
+		auto const resource = NewObject<ResourceType>(Engine());
+		Asserts::CheckBool(resource, "Resource is not valid");
+
+		resource->Format(EResourceBufferFormat::R32G32B32A32_FLOAT);
+		return resource;
 	}
 
 	void GrvSrvToTexture2D::CreateDirectxView(D3D12_CPU_DESCRIPTOR_HANDLE const destination)
@@ -34,7 +46,7 @@ namespace aiva::layer1
 		auto const& device = Engine().GraphicHardware().Device();
 		winrt::check_bool(device);
 
-		auto const texture2D = std::dynamic_pointer_cast<GrTexture2D>(GetInternalResource());
+		auto const texture2D = std::dynamic_pointer_cast<ResourceType>(GetInternalResource());
 		Asserts::CheckBool(texture2D, "Texture 2D is not valid");
 
 		auto const& resource = texture2D->GetInternalResource();
@@ -56,10 +68,10 @@ namespace aiva::layer1
 
 	std::vector<D3D12_RESOURCE_BARRIER> GrvSrvToTexture2D::CreateDirectxBarriers(bool const active)
 	{
-		auto const resource = GetInternalResource();
+		auto const& resource = GetInternalResource();
 		Asserts::CheckBool(resource, "Resource is not valid");
 
-		auto const& state = active ? D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE : D3D12_RESOURCE_STATE_COMMON;
+		auto const state = active ? D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE : D3D12_RESOURCE_STATE_COMMON;
 		return resource->CreateDirectxBarriers(state);
 	}
 }

@@ -8,75 +8,84 @@
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/object_utils.h>
 
-aiva::layer1::GrvDsvToTexture2D::GrvDsvToTexture2D(EngineType const& engine) : AGraphicResourceView{ engine }
+namespace aiva::layer1
 {
+	using namespace aiva::utils;
 
-}
-
-aiva::layer1::GrvDsvToTexture2D::~GrvDsvToTexture2D()
-{
-
-}
-
-std::uint64_t aiva::layer1::GrvDsvToTexture2D::MipLevel() const
-{
-	return mMipLevel;
-}
-
-aiva::layer1::GrvDsvToTexture2D& aiva::layer1::GrvDsvToTexture2D::MipLevel(std::uint64_t const mipLevel)
-{
-	if (mMipLevel != mipLevel)
+	GrvDsvToTexture2D::GrvDsvToTexture2D(EngineType const& engine) : AGraphicResourceView{ engine }
 	{
-		mMipLevel = mipLevel;
-		MarkCacheDataAsChanged(EGrvCacheFlags::BufferBin);
+
 	}
 
-	return *this;
-}
+	GrvDsvToTexture2D::~GrvDsvToTexture2D()
+	{
 
-std::shared_ptr<aiva::layer1::GrvDsvToTexture2D::ResourceType> aiva::layer1::GrvDsvToTexture2D::CreateDefaultInternalResource() const
-{
-	return aiva::utils::NewObject<GrTexture2D>(Engine());
-}
+	}
 
-aiva::layer1::EDescriptorHeapType aiva::layer1::GrvDsvToTexture2D::HeapType() const
-{
-	return EDescriptorHeapType::Dsv;
-}
+	std::size_t GrvDsvToTexture2D::MipLevel() const
+	{
+		return mMipLevel;
+	}
 
-aiva::layer1::EResourceViewType aiva::layer1::GrvDsvToTexture2D::ViewType() const
-{
-	return EResourceViewType::Dsv;
-}
+	GrvDsvToTexture2D::ThisType& GrvDsvToTexture2D::MipLevel(std::size_t const mipLevel)
+	{
+		if (mMipLevel != mipLevel)
+		{
+			mMipLevel = mipLevel;
+			MarkCacheDataAsChanged(EGrvCacheFlags::BufferBin);
+		}
 
-void aiva::layer1::GrvDsvToTexture2D::CreateDirectxView(D3D12_CPU_DESCRIPTOR_HANDLE const destination)
-{
-	auto const& device = Engine().GraphicHardware().Device();
-	winrt::check_bool(device);
+		return *this;
+	}
 
-	auto const& texture2D = std::dynamic_pointer_cast<GrTexture2D>(GetInternalResource());
-	aiva::utils::Asserts::CheckBool(texture2D, "Graphic resource doesn't support texture 2D");
-	aiva::utils::Asserts::CheckBool(texture2D->SupportDepthStencil(), "Graphic resource doesn't support depth stencil");
+	GrvDsvToTexture2D::ParentType::ResourceTypeShared GrvDsvToTexture2D::CreateDefaultInternalResource() const
+	{
+		auto const resource = NewObject<ResourceType>(Engine());
+		Asserts::CheckBool(resource, "Resource is not valid");
 
-	auto const& resource = texture2D->GetInternalResource();
-	winrt::check_bool(resource);
+		resource->SupportDepthStencil(true);
+		return resource;
+	}
 
-	auto const& resourceDesc = resource->GetDesc();
+	GrvDsvToTexture2D::HeapTypeEnum GrvDsvToTexture2D::HeapType() const
+	{
+		return HeapTypeEnum::Dsv;
+	}
 
-	auto viewDesc = D3D12_DEPTH_STENCIL_VIEW_DESC{};
-	viewDesc.Format = resourceDesc.Format;
-	viewDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
-	viewDesc.Flags = D3D12_DSV_FLAG_NONE;
-	viewDesc.Texture2D.MipSlice = MipLevel();
+	GrvDsvToTexture2D::ViewTypeEnum GrvDsvToTexture2D::ViewType() const
+	{
+		return ViewTypeEnum::Dsv;
+	}
 
-	device->CreateDepthStencilView(resource.get(), &viewDesc, destination);
-}
+	void GrvDsvToTexture2D::CreateDirectxView(D3D12_CPU_DESCRIPTOR_HANDLE const destination)
+	{
+		auto const& device = Engine().GraphicHardware().Device();
+		winrt::check_bool(device);
 
-std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::GrvDsvToTexture2D::CreateDirectxBarriers(bool const active)
-{
-	auto const& resource = GetInternalResource();
-	aiva::utils::Asserts::CheckBool(resource, "Graphic resource is not valid");
+		auto const texture2D = std::dynamic_pointer_cast<ResourceType>(GetInternalResource());
+		Asserts::CheckBool(texture2D, "Graphic resource doesn't support texture 2D");
+		Asserts::CheckBool(texture2D->SupportDepthStencil(), "Graphic resource doesn't support depth stencil");
 
-	auto const& state = active ? D3D12_RESOURCE_STATE_DEPTH_WRITE : D3D12_RESOURCE_STATE_COMMON;
-	return resource->CreateDirectxBarriers(state, MipLevel());
+		auto const& resource = texture2D->GetInternalResource();
+		winrt::check_bool(resource);
+
+		auto const resourceDesc = resource->GetDesc();
+
+		auto viewDesc = D3D12_DEPTH_STENCIL_VIEW_DESC{};
+		viewDesc.Format = resourceDesc.Format;
+		viewDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+		viewDesc.Flags = D3D12_DSV_FLAG_NONE;
+		viewDesc.Texture2D.MipSlice = MipLevel();
+
+		device->CreateDepthStencilView(resource.get(), &viewDesc, destination);
+	}
+
+	std::vector<D3D12_RESOURCE_BARRIER> GrvDsvToTexture2D::CreateDirectxBarriers(bool const active)
+	{
+		auto const& resource = GetInternalResource();
+		Asserts::CheckBool(resource, "Graphic resource is not valid");
+
+		auto const state = active ? D3D12_RESOURCE_STATE_DEPTH_WRITE : D3D12_RESOURCE_STATE_COMMON;
+		return resource->CreateDirectxBarriers(state, MipLevel());
+	}
 }

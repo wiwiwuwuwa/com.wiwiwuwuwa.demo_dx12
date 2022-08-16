@@ -232,7 +232,6 @@
     <ClInclude Include="Sources\aiva\layer1\material_caching_entry.h" />
     <ClInclude Include="Sources\aiva\layer1\material_caching_system_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\e_material_append_mode.h" />
-    <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_view_utils.h" />
     <ClInclude Include="Sources\aiva\utils\hash_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\gr_buffer_fwd.h" />

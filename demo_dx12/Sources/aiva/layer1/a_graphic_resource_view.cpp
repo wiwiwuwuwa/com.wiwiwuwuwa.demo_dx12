@@ -5,91 +5,96 @@
 #include <aiva/layer1/engine.h>
 #include <aiva/utils/asserts.h>
 
-aiva::layer1::AGraphicResourceView::AGraphicResourceView(EngineType const& engine)
-	: aiva::utils::AObject{}, aiva::utils::TObjectCacheable<EGrvCacheFlags>{ true }, aiva::layer1::IObjectEngineable{ engine }
+namespace aiva::layer1
 {
-	InitializeInternalResource();
-}
+	using namespace aiva::utils;
 
-aiva::layer1::AGraphicResourceView::~AGraphicResourceView()
-{
-	TerminateInternalResource();
-}
-
-std::shared_ptr<aiva::layer1::AGraphicResourceView::ResourceType> aiva::layer1::AGraphicResourceView::GetInternalResource()
-{
-	FlushCacheDataChanges();
-	return mInternalResource;
-}
-
-std::shared_ptr<aiva::layer1::AGraphicResourceView::ResourceType> aiva::layer1::AGraphicResourceView::GetOrAddInternalResource()
-{
-	auto const existingInternalResource = GetInternalResource();
-	if (existingInternalResource)
+	AGraphicResourceView::AGraphicResourceView(EngineType const& engine)
+		: AObject{}, TObjectCacheable<CacheFlagType>{ true }, IObjectEngineable{ engine }
 	{
-		return existingInternalResource;
+		InitializeInternalResource();
 	}
 
-	auto const createdInternalResource = SetInternalResource(CreateDefaultInternalResource()).GetInternalResource();
-	if (createdInternalResource)
+	AGraphicResourceView::~AGraphicResourceView()
 	{
-		return createdInternalResource;
+		TerminateInternalResource();
 	}
 
-	aiva::utils::Asserts::CheckBool(false, "Failed to get or add internal resource");
-	return {};
-}
-
-aiva::layer1::AGraphicResourceView& aiva::layer1::AGraphicResourceView::SetInternalResource(std::shared_ptr<ResourceType> const resource)
-{
-	if (mInternalResource == resource)
+	AGraphicResourceView::ResourceTypeShared const& aiva::layer1::AGraphicResourceView::GetInternalResource()
 	{
+		FlushCacheDataChanges();
+		return mInternalResource;
+	}
+
+	AGraphicResourceView::ResourceTypeShared const& AGraphicResourceView::GetOrAddInternalResource()
+	{
+		auto const& existingInternalResource = GetInternalResource();
+		if (existingInternalResource)
+		{
+			return existingInternalResource;
+		}
+
+		auto const& createdInternalResource = SetInternalResource(CreateDefaultInternalResource()).GetInternalResource();
+		if (createdInternalResource)
+		{
+			return createdInternalResource;
+		}
+
+		Asserts::CheckBool(false, "Failed to get or add internal resource");
+		return {};
+	}
+
+	AGraphicResourceView& AGraphicResourceView::SetInternalResource(ResourceTypeShared const& resource)
+	{
+		if (mInternalResource == resource)
+		{
+			return *this;
+		}
+
+		if (mInternalResource)
+		{
+			mInternalResource->OnMarkCacheDataAsChanged().disconnect(boost::bind(&ThisType::InternalResource_OnMarkCacheDataAsChanged, this));
+		}
+
+		mInternalResource = resource;
+
+		if (mInternalResource)
+		{
+			mInternalResource->OnMarkCacheDataAsChanged().connect(boost::bind(&ThisType::InternalResource_OnMarkCacheDataAsChanged, this));
+		}
+
+		MarkCacheDataAsChanged();
 		return *this;
 	}
 
-	if (mInternalResource)
+	void AGraphicResourceView::InternalResource_OnMarkCacheDataAsChanged()
 	{
-		mInternalResource->OnMarkCacheDataAsChanged().disconnect(boost::bind(&AGraphicResourceView::InternalResource_OnMarkCacheDataAsChanged, this));
+		MarkCacheDataAsChanged();
 	}
 
-	mInternalResource = resource;
-
-	if (mInternalResource)
+	AGraphicResourceView::ResourceTypeShared AGraphicResourceView::CreateDefaultInternalResource() const
 	{
-		mInternalResource->OnMarkCacheDataAsChanged().connect(boost::bind(&AGraphicResourceView::InternalResource_OnMarkCacheDataAsChanged, this));
+		Asserts::CheckBool(false, "AGraphicResourceView::CreateDefaultInternalResource is not implemented");
+		return {};
 	}
 
-	MarkCacheDataAsChanged();
-	return *this;
-}
+	void AGraphicResourceView::RefreshInternalResourceFromSelf(ResourceTypeShared const&, CacheFlagType const dirtyFlags)
+	{
+		// Do nothing.
+	}
 
-void aiva::layer1::AGraphicResourceView::InternalResource_OnMarkCacheDataAsChanged()
-{
-	MarkCacheDataAsChanged();
-}
+	void AGraphicResourceView::InitializeInternalResource()
+	{
+		FlushCacheDataExecutors().connect(boost::bind(&ThisType::ExecuteFlushForInternalResource, this, boost::placeholders::_1));
+	}
 
-std::shared_ptr<aiva::layer1::AGraphicResourceView::ResourceType> aiva::layer1::AGraphicResourceView::CreateDefaultInternalResource() const
-{
-	aiva::utils::Asserts::CheckBool(false, "AGraphicResourceView::CreateDefaultInternalResource is not implemented");
-	return {};
-}
+	void AGraphicResourceView::TerminateInternalResource()
+	{
+		FlushCacheDataExecutors().disconnect(boost::bind(&ThisType::ExecuteFlushForInternalResource, this, boost::placeholders::_1));
+	}
 
-void aiva::layer1::AGraphicResourceView::RefreshInternalResourceFromSelf(std::shared_ptr<ResourceType> const&, EGrvCacheFlags const dirtyFlags)
-{
-	// Do nothing.
-}
-
-void aiva::layer1::AGraphicResourceView::InitializeInternalResource()
-{
-	FlushCacheDataExecutors().connect(boost::bind(&AGraphicResourceView::ExecuteFlushForInternalResource, this, boost::placeholders::_1));
-}
-
-void aiva::layer1::AGraphicResourceView::TerminateInternalResource()
-{
-	FlushCacheDataExecutors().disconnect(boost::bind(&AGraphicResourceView::ExecuteFlushForInternalResource, this, boost::placeholders::_1));
-}
-
-void aiva::layer1::AGraphicResourceView::ExecuteFlushForInternalResource(EGrvCacheFlags const dirtyFlags)
-{
-	RefreshInternalResourceFromSelf(GetOrAddInternalResource(), dirtyFlags);
+	void AGraphicResourceView::ExecuteFlushForInternalResource(CacheFlagType const dirtyFlags)
+	{
+		RefreshInternalResourceFromSelf(GetOrAddInternalResource(), dirtyFlags);
+	}
 }

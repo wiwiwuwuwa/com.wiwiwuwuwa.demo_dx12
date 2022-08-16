@@ -175,7 +175,6 @@
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_view.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_view_fwd.h" />
-    <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_view_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\e_cull_mode.h" />
     <ClInclude Include="Sources\aiva\layer1\e_comparison_func.h" />
     <ClInclude Include="Sources\aiva\layer1\e_descriptor_heap_type.h" />

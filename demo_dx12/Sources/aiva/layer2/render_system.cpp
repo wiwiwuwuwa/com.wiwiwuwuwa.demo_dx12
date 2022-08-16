@@ -2,7 +2,6 @@
 #include <aiva/layer2/render_system.h>
 
 #include <aiva/layer1/a_graphic_resource_view.h>
-#include <aiva/layer1/a_graphic_resource_view_utils.h>
 #include <aiva/layer1/e_descriptor_heap_type.h>
 #include <aiva/layer1/e_primitive_topology.h>
 #include <aiva/layer1/e_resource_view_type.h>

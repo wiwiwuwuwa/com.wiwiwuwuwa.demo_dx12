@@ -37,7 +37,7 @@ namespace aiva::layer1
 		auto const texture2D = std::dynamic_pointer_cast<GrTexture2D>(GetInternalResource());
 		Asserts::CheckBool(texture2D, "Texture 2D is not valid");
 
-		auto const& resource = texture2D->InternalResource();
+		auto const& resource = texture2D->GetInternalResource();
 		winrt::check_bool(resource);
 
 		auto const resourceDesc = resource->GetDesc();
@@ -60,6 +60,6 @@ namespace aiva::layer1
 		Asserts::CheckBool(resource, "Resource is not valid");
 
 		auto const& state = active ? D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE : D3D12_RESOURCE_STATE_COMMON;
-		return resource->PrepareBarriers(state);
+		return resource->CreateDirectxBarriers(state);
 	}
 }

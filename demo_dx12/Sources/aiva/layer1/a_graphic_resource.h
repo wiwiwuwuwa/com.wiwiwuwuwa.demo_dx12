@@ -1,10 +1,10 @@
 #pragma once
 #include <pch.h>
 
+#include <aiva/layer1/a_graphic_resource_fwd.h>
 #include <aiva/layer1/i_object_engineable.h>
 #include <aiva/utils/a_object.h>
 #include <aiva/utils/i_object_cacheable.h>
-#include <aiva/utils/i_object_changeable.h>
 
 namespace aiva::utils
 {
@@ -25,17 +25,25 @@ namespace aiva::layer1
 		~AGraphicResource() override;
 
 	// ----------------------------------------------------
+	// Aliases
+
+	public:
+		using ResourceType = winrt::com_ptr<ID3D12Resource>;
+
+		using BarrierType = aiva::utils::ResourceBarrier;
+
+	// ----------------------------------------------------
 	// Internal Resource
 
 	public:
-		winrt::com_ptr<ID3D12Resource> const& InternalResource();
+		ResourceType const& GetInternalResource();
 
-		void InternalResource(winrt::com_ptr<ID3D12Resource> const& resource);
+		void SetInternalResource(ResourceType const& resource);
 
 	protected:
-		virtual void RefreshInternalResourceFromSelf(winrt::com_ptr<ID3D12Resource>& resource, aiva::utils::ResourceBarrier& barrier) = 0;
+		virtual void RefreshInternalResourceFromSelf(ResourceType& resource, BarrierType& barrier) = 0;
 
-		virtual void RefreshSelfFromInternalResource(winrt::com_ptr<ID3D12Resource> const& resource) = 0;
+		virtual void RefreshSelfFromInternalResource(ResourceType const& resource) = 0;
 
 	private:
 		void InitializeInternalResource();
@@ -43,16 +51,16 @@ namespace aiva::layer1
 		void TerminateInternalResource();
 
 	private:
-		void ExecuteFlushForInternalResource();
+		void FlushInternalResource();
 
 	private:
-		winrt::com_ptr<ID3D12Resource> mInternalResource{};
+		ResourceType mInternalResource{};
 
 	// ----------------------------------------------------
 	// Resource Barriers
 
 	public:
-		std::vector<D3D12_RESOURCE_BARRIER> PrepareBarriers(D3D12_RESOURCE_STATES const desiredState, std::optional<std::size_t> const subresource = {});
+		std::vector<D3D12_RESOURCE_BARRIER> CreateDirectxBarriers(D3D12_RESOURCE_STATES const desiredState, std::optional<std::size_t> const subresource = {});
 
 	private:
 		void InitializeResourceBarrier();

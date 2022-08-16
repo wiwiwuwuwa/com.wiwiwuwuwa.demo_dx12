@@ -8,7 +8,7 @@
 namespace aiva::utils
 {
 	template <typename TDirtyFlags = ECacheFlags>
-	struct TObjectCacheable : public TObjectChangeable<TDirtyFlags>
+	struct TObjectCacheable
 	{
 	// ----------------------------------------------------
 	// Main
@@ -65,7 +65,7 @@ namespace aiva::utils
 namespace aiva::utils
 {
 	template <typename TDirtyFlags>
-	TObjectCacheable<TDirtyFlags>::TObjectCacheable(bool const initAsChanged) : TObjectChangeable<TDirtyFlags>{}
+	TObjectCacheable<TDirtyFlags>::TObjectCacheable(bool const initAsChanged)
 	{
 		auto const dirtyFlags = initAsChanged ? CacheFlagType::All : CacheFlagType::None;
 

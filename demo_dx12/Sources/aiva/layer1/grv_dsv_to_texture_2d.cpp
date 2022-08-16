@@ -58,7 +58,7 @@ void aiva::layer1::GrvDsvToTexture2D::CreateDirectxView(D3D12_CPU_DESCRIPTOR_HAN
 	aiva::utils::Asserts::CheckBool(texture2D, "Graphic resource doesn't support texture 2D");
 	aiva::utils::Asserts::CheckBool(texture2D->SupportDepthStencil(), "Graphic resource doesn't support depth stencil");
 
-	auto const& resource = texture2D->InternalResource();
+	auto const& resource = texture2D->GetInternalResource();
 	winrt::check_bool(resource);
 
 	auto const& resourceDesc = resource->GetDesc();
@@ -78,5 +78,5 @@ std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::GrvDsvToTexture2D::CreateDirec
 	aiva::utils::Asserts::CheckBool(resource, "Graphic resource is not valid");
 
 	auto const& state = active ? D3D12_RESOURCE_STATE_DEPTH_WRITE : D3D12_RESOURCE_STATE_COMMON;
-	return resource->PrepareBarriers(state, MipLevel());
+	return resource->CreateDirectxBarriers(state, MipLevel());
 }

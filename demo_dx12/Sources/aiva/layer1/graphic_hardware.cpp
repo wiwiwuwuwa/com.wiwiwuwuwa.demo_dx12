@@ -351,7 +351,7 @@ void aiva::layer1::GraphicHardware::InitializeScreenRenderTargets()
 		winrt::check_hresult(swapChain->GetBuffer(i, IID_PPV_ARGS(&directxResource)));
 
 		auto aivaTexture = GrTexture2D::FactoryType::Create<GrTexture2D>(mEngine);
-		aivaTexture->InternalResource(directxResource);
+		aivaTexture->SetInternalResource(directxResource);
 
 		auto aivaView = GrvRtvToTexture2D::FactoryType::Create<GrvRtvToTexture2D>(mEngine);
 		aivaView->SetInternalResource(aivaTexture);

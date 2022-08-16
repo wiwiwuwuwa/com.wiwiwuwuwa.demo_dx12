@@ -234,6 +234,7 @@
     <ClInclude Include="Sources\aiva\layer1\e_material_append_mode.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_view_utils.h" />
     <ClInclude Include="Sources\aiva\utils\hash_utils.h" />
+    <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_fwd.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

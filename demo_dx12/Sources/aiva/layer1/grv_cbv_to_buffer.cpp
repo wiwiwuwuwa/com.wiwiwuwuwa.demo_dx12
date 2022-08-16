@@ -106,7 +106,7 @@ void aiva::layer1::GrvCbvToBuffer::RefreshInternalResourceBin(std::shared_ptr<Gr
 	Asserts::CheckBool(aivaResource, "Aiva resource is not valid");
 	Asserts::CheckBool(!std::empty(binaryData), "Binary data is empty");
 
-	auto const& directxBuffer = aivaResource->InternalResource();
+	auto const& directxBuffer = aivaResource->GetInternalResource();
 	winrt::check_bool(directxBuffer);
 
 	void* destinationMemory{};
@@ -134,7 +134,7 @@ void aiva::layer1::GrvCbvToBuffer::CreateDirectxView(D3D12_CPU_DESCRIPTOR_HANDLE
 	auto const& buffer = std::dynamic_pointer_cast<GrBuffer>(GetInternalResource());
 	aiva::utils::Asserts::CheckBool(buffer, "Graphic resource doesn't support buffer");
 
-	auto const& resource = buffer->InternalResource();
+	auto const& resource = buffer->GetInternalResource();
 	winrt::check_bool(resource);
 
 	auto const& resourceDesc = resource->GetDesc();
@@ -152,5 +152,5 @@ std::vector<D3D12_RESOURCE_BARRIER> aiva::layer1::GrvCbvToBuffer::CreateDirectxB
 	aiva::utils::Asserts::CheckBool(resource, "Graphic resource is not valid");
 
 	auto const& state = active ? D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE : D3D12_RESOURCE_STATE_COMMON;
-	return resource->PrepareBarriers(state);
+	return resource->CreateDirectxBarriers(state);
 }

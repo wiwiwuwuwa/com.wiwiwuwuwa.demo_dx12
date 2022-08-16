@@ -172,6 +172,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Sources\aiva\layer0\app.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource.h" />
+    <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_view.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_view_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_view_utils.h" />

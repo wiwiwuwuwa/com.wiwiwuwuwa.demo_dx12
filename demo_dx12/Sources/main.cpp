@@ -3,8 +3,6 @@
 
 int __stdcall wWinMain(HINSTANCE, HINSTANCE, PWSTR, int)
 {
-	// hello world
-
 	auto const world = aiva::layer2::World::Create();
 	world->Run();
 

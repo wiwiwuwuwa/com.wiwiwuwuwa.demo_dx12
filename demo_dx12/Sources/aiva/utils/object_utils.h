@@ -11,8 +11,11 @@ namespace aiva::utils
 
 // --------------------------------------------------------
 
-template <typename TObject, typename... TArgs>
-std::shared_ptr<TObject> aiva::utils::NewObject(TArgs&&... args)
+namespace aiva::utils
 {
-	return TObject::FactoryType::Create<TObject>(std::forward<TArgs>(args)...);
+	template <typename TObject, typename... TArgs>
+	std::shared_ptr<TObject> NewObject(TArgs&&... args)
+	{
+		return TObject::FactoryType::Create<TObject>(std::forward<TArgs>(args)...);
+	}
 }

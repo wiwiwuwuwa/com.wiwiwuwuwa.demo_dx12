@@ -14,7 +14,6 @@
     <ClCompile Include="Sources\aiva\layer1\resource_system.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_shader_compute.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_material_compute.cpp" />
-    <ClCompile Include="Sources\aiva\utils\changes_counter.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gca_dispatch.cpp" />
     <ClCompile Include="Sources\aiva\layer1\gr_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva\layer1\e_buffer_memory_type.cpp" />
@@ -110,7 +109,6 @@
     <ClInclude Include="Sources\aiva\layer1\ro_shader_compute.h" />
     <ClInclude Include="Sources\aiva\layer1\i_cpu_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_material_compute.h" />
-    <ClInclude Include="Sources\aiva\utils\changes_counter.h" />
     <ClInclude Include="Sources\aiva\layer1\gca_dispatch.h" />
     <ClInclude Include="Sources\aiva\utils\t_cache_updater.h" />
     <ClInclude Include="Sources\aiva\utils\t_ev_action.h" />

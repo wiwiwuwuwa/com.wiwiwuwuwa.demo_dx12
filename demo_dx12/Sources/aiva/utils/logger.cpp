@@ -1,8 +1,11 @@
 #include <pch.h>
 #include <aiva/utils/logger.h>
 
-void aiva::utils::Logger::LogToDebugConsole(std::string const& message)
+namespace aiva::utils
 {
-	auto const aivaMessage = "aiva: " + message + "\n";
-	OutputDebugStringA(aivaMessage.c_str());
+	void Logger::LogToDebugConsole(std::string const& message)
+	{
+		auto const aivaMessage = "aiva: " + message + "\n";
+		OutputDebugStringA(aivaMessage.c_str());
+	}
 }

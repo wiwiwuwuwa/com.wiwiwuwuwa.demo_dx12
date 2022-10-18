@@ -19,11 +19,14 @@ namespace aiva::utils
 
 // --------------------------------------------------------
 
-template <typename T>
-void aiva::utils::Asserts::CheckBool(T const& value, std::string const& message /*= {}*/)
+namespace aiva::utils
 {
-	if (!value)
+	template <typename T>
+	void Asserts::CheckBool(T const& value, std::string const& message /*= {}*/)
 	{
-		throw std::runtime_error{ std::string{"aiva: "} + message };
+		if (!value)
+		{
+			throw std::runtime_error{ std::string{"aiva: "} + message };
+		}
 	}
 }

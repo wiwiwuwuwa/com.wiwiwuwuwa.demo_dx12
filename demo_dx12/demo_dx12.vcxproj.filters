@@ -90,7 +90,6 @@
     <ClCompile Include="Sources\aiva\layer1\material_caching_system.cpp" />
     <ClCompile Include="Sources\aiva\layer1\material_caching_entry.cpp" />
     <ClCompile Include="Sources\aiva\layer1\ro_texture_2d.cpp" />
-    <ClCompile Include="Sources\aiva\layer1\a_resource_object.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -238,9 +237,7 @@
     <ClInclude Include="Sources\aiva\layer1\grv_cbv_to_buffer_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\grv_srv_to_buffer_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_texture_2d.h" />
-    <ClInclude Include="Sources\aiva\layer1\a_resource_object.h" />
     <ClInclude Include="Sources\aiva\utils\m_object_body.h" />
-    <ClInclude Include="Sources\aiva\layer1\m_resource_object_body.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

@@ -1,17 +1,18 @@
 #pragma once
 #include <pch.h>
 
-#include <aiva/layer1/a_resource_object.h>
-#include <aiva/layer1/m_resource_object_body.h>
+#include <aiva/layer1/i_object_engineable.h>
+#include <aiva/utils/a_object.h>
+#include <aiva/utils/m_object_body.h>
 
 namespace aiva::layer1
 {
-	struct RoTexture2D final : public AResourceObject
+	struct RoTexture2D final : public aiva::utils::AObject, public aiva::layer1::IObjectEngineable
 	{
 	// ----------------------------------------------------
 	// Base
 
-	M_RESOURCE_OBJECT_BODY();
+	M_OBJECT_BODY();
 
 	// ----------------------------------------------------
 	// Main

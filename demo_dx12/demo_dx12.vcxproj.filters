@@ -238,6 +238,7 @@
     <ClInclude Include="Sources\aiva\layer1\grv_srv_to_buffer_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\ro_texture_2d.h" />
     <ClInclude Include="Sources\aiva\utils\m_object_body.h" />
+    <ClInclude Include="Sources\aiva\layer1\i_shader_resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

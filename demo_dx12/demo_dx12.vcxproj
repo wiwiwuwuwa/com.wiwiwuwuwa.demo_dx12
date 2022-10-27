@@ -199,6 +199,7 @@
     <ClInclude Include="Sources\aiva\layer1\gr_buffer_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\gr_texture_2d_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\i_object_engineable.h" />
+    <ClInclude Include="Sources\aiva\layer1\i_shader_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\material_caching_entry.h" />
     <ClInclude Include="Sources\aiva\layer1\material_caching_system.h" />
     <ClInclude Include="Sources\aiva\layer1\material_caching_system_fwd.h" />

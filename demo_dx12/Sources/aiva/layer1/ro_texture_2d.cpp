@@ -6,7 +6,7 @@ namespace aiva::layer1
 	using namespace aiva::utils;
 
 	RoTexture2D::RoTexture2D(EngineType const& engine)
-		: AObject{}, IObjectEngineable{ engine }
+		: AObject{}, IObjectEngineable{ engine }, IShaderResource{}
 	{
 
 	}

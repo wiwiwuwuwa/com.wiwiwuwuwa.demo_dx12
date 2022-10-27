@@ -3,7 +3,9 @@
 
 #include <aiva/layer1/a_graphic_resource_view.h>
 #include <aiva/layer1/e_resource_view_type.h>
+#include <aiva/layer1/i_shader_resource.h>
 #include <aiva/layer1/material_resource_descriptor.h>
+#include <aiva/layer1/material_resource_descriptor_utils.h>
 #include <aiva/layer1/res_view_desc_utils.h>
 #include <aiva/layer1/resource_view_heap.h>
 #include <aiva/layer1/resource_view_table.h>
@@ -81,5 +83,16 @@ namespace aiva::layer1
 		if (dstView && appendMode == EMaterialAppendMode::Soft) return;
 
 		dstHeap->SetView(dstName, srcView);
+	}
+
+	void RoMaterialGraphicUtils::SetShaderResource(RoMaterialGraphicTypeShared const& dstMaterial, std::string const& srcVariableName, IShaderResourceTypeShared const& srcShaderResource)
+	{
+		Asserts::CheckBool(dstMaterial, "Dst material is not valid");
+		Asserts::CheckBool(!std::empty(srcVariableName), "Src variable name is not valid");
+
+		auto const dstDescriptor = std::dynamic_pointer_cast<MaterialResourceDescriptorType>(dstMaterial->ResourceDescriptor().shared_from_this());
+		Asserts::CheckBool(dstDescriptor, "Dst descriptor is not valid");
+
+		MaterialResourceDescriptorUtils::SetSharedResource(dstDescriptor, srcVariableName, srcShaderResource);
 	}
 }

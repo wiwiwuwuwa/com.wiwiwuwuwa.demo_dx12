@@ -200,9 +200,12 @@
     <ClInclude Include="Sources\aiva\layer1\gr_texture_2d_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\i_object_engineable.h" />
     <ClInclude Include="Sources\aiva\layer1\i_shader_resource.h" />
+    <ClInclude Include="Sources\aiva\layer1\i_shader_resource_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\material_caching_entry.h" />
     <ClInclude Include="Sources\aiva\layer1\material_caching_system.h" />
     <ClInclude Include="Sources\aiva\layer1\material_caching_system_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\material_resource_descriptor_fwd.h" />
+    <ClInclude Include="Sources\aiva\layer1\material_resource_descriptor_utils.h" />
     <ClInclude Include="Sources\aiva\layer1\resource_view_heap_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\resource_view_table_fwd.h" />
     <ClInclude Include="Sources\aiva\layer1\res_view_desc.h" />
@@ -371,6 +374,7 @@
     <ClCompile Include="Sources\aiva\layer1\gr_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1\material_caching_entry.cpp" />
     <ClCompile Include="Sources\aiva\layer1\material_caching_system.cpp" />
+    <ClCompile Include="Sources\aiva\layer1\material_resource_descriptor_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_system.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_view_heap.cpp" />
     <ClCompile Include="Sources\aiva\layer1\resource_view_table.cpp" />

@@ -3,6 +3,7 @@
 
 #include <aiva/layer1/e_rvt_cache_flags.h>
 #include <aiva/layer1/i_object_engineable.h>
+#include <aiva/layer1/material_resource_descriptor_fwd.h>
 #include <aiva/layer1/resource_view_table_fwd.h>
 #include <aiva/utils/a_object.h>
 #include <aiva/utils/i_object_cacheable.h>

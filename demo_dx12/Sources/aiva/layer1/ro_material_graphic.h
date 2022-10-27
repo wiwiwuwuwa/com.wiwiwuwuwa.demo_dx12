@@ -2,29 +2,29 @@
 #include <pch.h>
 
 #include <aiva/layer1/i_cpu_resource.h>
-#include <aiva/utils/ev_action.h>
+#include <aiva/layer1/i_object_engineable.h>
+#include <aiva/utils/a_object.h>
+#include <aiva/utils/i_object_cacheable.h>
+#include <aiva/utils/m_object_body.h>
 
 namespace aiva::layer1
 {
-	struct Engine;
 	struct MaterialPipelineDescriptor;
 	struct RoShaderFragment;
 	struct RoShaderVertex;
 	struct MaterialResourceDescriptor;
 }
 
-namespace aiva::utils
-{
-	enum class ECopyMode;
-
-	template <typename, typename>
-	struct TCacheUpdater;
-}
-
 namespace aiva::layer1
 {
-	struct RoMaterialGraphic final : private boost::noncopyable, public std::enable_shared_from_this<RoMaterialGraphic>, public ICpuResource
+	struct RoMaterialGraphic final : public aiva::utils::AObject, public aiva::utils::IObjectCacheable, public aiva::layer1::IObjectEngineable, public aiva::layer1::ICpuResource
 	{
+	// ----------------------------------------------------
+	// Body
+
+	public:
+		M_OBJECT_BODY();
+
 	// ----------------------------------------------------
 	// Main
 
@@ -33,13 +33,10 @@ namespace aiva::layer1
 		static std::shared_ptr<RoMaterialGraphic> Create(Args&&... args);
 
 	private:
-		RoMaterialGraphic(Engine const& engine);
+		RoMaterialGraphic(EngineType const& engine);
 
 	public:
-		~RoMaterialGraphic();
-
-	private:
-		Engine const& mEngine;
+		~RoMaterialGraphic() override;
 
 	// ----------------------------------------------------
 	// ICpuResource
@@ -48,33 +45,10 @@ namespace aiva::layer1
 		void DeserealizeFromBinary(std::vector<std::byte> const& binaryData) override;
 
 	// ----------------------------------------------------
-	// Cache Refresh
-
-	public:
-		enum class EDirtyFlags
-		{
-			None = 0,
-			All = 1,
-		};
-
-		using CacheUpdaterType = aiva::utils::TCacheUpdater<RoMaterialGraphic, EDirtyFlags>;
-
-	public:
-		CacheUpdaterType& CacheUpdater() const;
-
-	private:
-		void InitializeCacheUpdater();
-
-		void TerminateCacheUpdater();
-
-	private:
-		std::unique_ptr<CacheUpdaterType> mCacheUpdater{};
-
-	// ----------------------------------------------------
 	// Vertex Shader
 
 	public:
-		std::shared_ptr<RoShaderVertex> VertexShader() const;
+		std::shared_ptr<RoShaderVertex> const& VertexShader() const;
 
 		RoMaterialGraphic& VertexShader(std::shared_ptr<RoShaderVertex> const& vertexShader);
 
@@ -85,7 +59,7 @@ namespace aiva::layer1
 	// Fragment Shader
 
 	public:
-		std::shared_ptr<RoShaderFragment> FragmentShader() const;
+		std::shared_ptr<RoShaderFragment> const& FragmentShader() const;
 
 		RoMaterialGraphic& FragmentShader(std::shared_ptr<RoShaderFragment> const& fragmentShader);
 
@@ -130,16 +104,14 @@ namespace aiva::layer1
 	// Internal Resources Data
 
 	public:
-		winrt::com_ptr<ID3D12PipelineState> const& InternalPipelineState() const;
+		winrt::com_ptr<ID3D12PipelineState> const& InternalPipelineState();
 
 	private:
-		void InitializeInternalResources();
+		void InitializeInternalPipelineState();
 
-		void TerminateInternalResources();
+		void TerminateInternalPipelineState();
 
 	private:
-		void RefreshInternalResources();
-
 		void RefreshInternalPipelineState();
 
 	private:
@@ -149,7 +121,7 @@ namespace aiva::layer1
 	// Resource Barriers
 
 	public:
-		std::vector<D3D12_RESOURCE_BARRIER> PrepareBarriers(bool const active) const;
+		std::vector<D3D12_RESOURCE_BARRIER> PrepareBarriers(bool const active);
 
 	// ----------------------------------------------------
 	// Copying
@@ -163,8 +135,13 @@ namespace aiva::layer1
 
 // --------------------------------------------------------
 
-template <typename... Args>
-std::shared_ptr<aiva::layer1::RoMaterialGraphic> aiva::layer1::RoMaterialGraphic::Create(Args&&... args)
+#include <aiva/utils/object_utils.h>
+
+namespace aiva::layer1
 {
-	return std::shared_ptr<RoMaterialGraphic>{new RoMaterialGraphic{ std::forward<Args>(args)... }};
+	template <typename... Args>
+	std::shared_ptr<RoMaterialGraphic> RoMaterialGraphic::Create(Args&&... args)
+	{
+		return aiva::utils::NewObject<RoMaterialGraphic>(std::forward<Args>(args)...);
+	}
 }

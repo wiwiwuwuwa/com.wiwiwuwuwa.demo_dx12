@@ -4,6 +4,7 @@
 #include <memory>
 #include <boost/core/noncopyable.hpp>
 #include <winrt/base.h>
+#include <aiva/layer1/engine_fwd.h>
 #include <aiva/layer1/material_caching_system_fwd.h>
 #include <aiva/utils/ev_action.h>
 

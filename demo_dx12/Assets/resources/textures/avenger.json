@@ -1,0 +1,7 @@
+{
+    "image_path": "resources\\textures\\avenger.png",
+    "support_mip_mapping": true,
+    "support_render_target": false,
+    "support_shader_atomics": false,
+    "support_unordered_access": false
+}

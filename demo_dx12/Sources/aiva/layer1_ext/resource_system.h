@@ -14,7 +14,7 @@ namespace aiva::layer1_ext
 	// Main
 
 	public:
-		M_OBJECT_BODY();
+		M_OBJECT_BODY(ResourceSystem);
 
 	protected:
 		ResourceSystem(aiva::layer1::Engine& engine);
@@ -26,7 +26,7 @@ namespace aiva::layer1_ext
 	// Fields
 
 	public:
-		M_OBJECT_FIELD_REF_3(aiva::layer1::Engine, Engine, public);
+		M_OBJECT_FIELD_REF_3(public, aiva::layer1::Engine, Engine);
 
 	// ----------------------------------------------------
 	// Resources
@@ -35,12 +35,17 @@ namespace aiva::layer1_ext
 		template <typename TResourceType>
 		std::shared_ptr<TResourceType> GetResource(std::filesystem::path const& fileName);
 
+		template <typename TResourceType, typename... TArgs>
+		std::shared_ptr<TResourceType> GetResource(std::filesystem::path const& fileName, TArgs&&... args);
+
 	private:
 		template <typename TResourceType>
 		std::shared_ptr<TResourceType> GetResourceFromHeap(std::filesystem::path const& fileName) const;
 
-		template <typename TResourceType>
-		std::shared_ptr<TResourceType> GetResourceFromFile(std::filesystem::path const& fileName) const;
+		template <typename TResourceType, typename... TArgs>
+		std::shared_ptr<TResourceType> GetResourceFromFile(std::filesystem::path const& fileName, TArgs&&... args) const;
+
+		std::shared_ptr<aiva::utils_ext::IObject> GetResourceFromHeap(std::filesystem::path const& fileName) const;
 
 		std::vector<std::byte> GetBinaryFromFile(std::filesystem::path const& fileName) const;
 
@@ -68,10 +73,21 @@ namespace aiva::layer1_ext
 	{
 		aiva::utils::Asserts::CheckBool(!std::empty(fileName), "File name is not valid");
 
+		auto const resource = GetResource<TResourceType>(fileName, mEngine);
+		aiva::utils::Asserts::CheckBool(resource, "Resource is not valid");
+
+		return resource;
+	}
+
+	template <typename TResourceType, typename... TArgs>
+	std::shared_ptr<TResourceType> ResourceSystem::GetResource(std::filesystem::path const& fileName, TArgs&&... args)
+	{
+		aiva::utils::Asserts::CheckBool(!std::empty(fileName), "File name is not valid");
+
 		auto const resourceFromHeap = GetResourceFromHeap<TResourceType>(fileName);
 		if (resourceFromHeap) return resourceFromHeap;
 
-		auto const resourceFromFile = GetResourceFromFile<TResourceType>(fileName);
+		auto const resourceFromFile = GetResourceFromFile<TResourceType>(fileName, std::forward<TArgs>(args)...);
 		aiva::utils::Asserts::CheckBool(resourceFromFile, "Resource from file is not valid");
 
 		SetResourceToHeap(fileName, resourceFromFile);
@@ -83,10 +99,7 @@ namespace aiva::layer1_ext
 	{
 		aiva::utils::Asserts::CheckBool(!std::empty(fileName), "File name is not valid");
 
-		auto const resourceItr = mResourceHeap.find(fileName);
-		if (resourceItr == std::end(mResourceHeap)) return {};
-
-		auto const basicResourcePtr = resourceItr->second.lock();
+		auto const basicResourcePtr = GetResourceFromHeap(fileName);
 		if (!basicResourcePtr) return {};
 
 		auto const specificResourcePtr = std::dynamic_pointer_cast<TResourceType>(basicResourcePtr);
@@ -95,19 +108,17 @@ namespace aiva::layer1_ext
 		return specificResourcePtr;
 	}
 
-	template <typename TResourceType>
-	std::shared_ptr<TResourceType> ResourceSystem::GetResourceFromFile(std::filesystem::path const& fileName) const
+	template <typename TResourceType, typename... TArgs>
+	std::shared_ptr<TResourceType> ResourceSystem::GetResourceFromFile(std::filesystem::path const& fileName, TArgs&&... args) const
 	{
 		aiva::utils::Asserts::CheckBool(!std::empty(fileName), "File name is not valid");
 
-		auto const resourcePtr = aiva::utils_ext::NewObject<TResourceType>(Engine());
+		auto const resourcePtr = aiva::utils_ext::NewObject<TResourceType>(std::forward<TArgs>(args)...);
 		aiva::utils::Asserts::CheckBool(resourcePtr, "Resource ptr is not valid");
 
 		if constexpr (std::is_base_of_v<aiva::utils_ext::ISerializableJson, TResourceType>)
 		{
 			auto const resourceJsn = GetJsonFromFile(fileName);
-			aiva::utils::Asserts::CheckBool(!std::empty(resourceJsn), "Resource jsn is not valid");
-
 			resourcePtr->DeserealizeFromJson(resourceJsn);
 		}
 		else

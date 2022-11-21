@@ -8,8 +8,12 @@
 #include <aiva/layer1/graphic_pipeline.h>
 #include <aiva/layer1/material_caching_system.h>
 #include <aiva/layer1/resource_system.h>
+#include <aiva/layer1_ext/graphic_executor.h>
+#include <aiva/layer1_ext/graphic_hardware.h>
+#include <aiva/layer1_ext/resource_system.h>
 #include <aiva/utils/asserts.h>
 #include <aiva/utils/object_utils.h>
+#include <aiva/utils_ext/object_utils.h>
 
 aiva::layer1::Engine::Engine()
 {
@@ -105,10 +109,22 @@ aiva::layer1::ResourceSystem& aiva::layer1::Engine::ResourceSystem() const
 	return *mResourceSystem;
 }
 
+aiva::layer1_ext::ResourceSystem& aiva::layer1::Engine::ResourceSystemExt() const
+{
+	aiva::utils::Asserts::CheckBool(mResourceSystemExt, "Resource system ext is not valid");
+	return *mResourceSystemExt;
+}
+
 aiva::layer1::GraphicHardware& aiva::layer1::Engine::GraphicHardware() const
 {
 	aiva::utils::Asserts::CheckBool(mGraphicHardware);
 	return *mGraphicHardware;
+}
+
+aiva::layer1_ext::GraphicHardware& aiva::layer1::Engine::GraphicHardwareExt() const
+{
+	aiva::utils::Asserts::CheckBool(mGraphicHardwareExt, "Graphic hardware ext is not valid");
+	return *mGraphicHardwareExt;
 }
 
 aiva::layer1::GraphicPipeline& aiva::layer1::Engine::GraphicPipeline() const
@@ -123,6 +139,12 @@ aiva::layer1::GraphicExecutor& aiva::layer1::Engine::GraphicExecutor() const
 	return *mGraphicExecutor;
 }
 
+aiva::layer1_ext::GraphicExecutor& aiva::layer1::Engine::GraphicExecutorExt() const
+{
+	aiva::utils::Asserts::CheckBool(mGraphicExecutorExt, "Graphic executor ext is not valid");
+	return *mGraphicExecutorExt;
+}
+
 aiva::layer1::MaterialCachingSystemType& aiva::layer1::Engine::MaterialCachingSystem() const
 {
 	aiva::utils::Asserts::CheckBool(mMaterialCachingSystem, "Material caching system is not valid");
@@ -132,9 +154,12 @@ aiva::layer1::MaterialCachingSystemType& aiva::layer1::Engine::MaterialCachingSy
 void aiva::layer1::Engine::InitializeSystems()
 {
 	mResourceSystem = std::make_unique<aiva::layer1::ResourceSystem>(*this);
+	mResourceSystemExt = aiva::utils_ext::NewObject<decltype(mResourceSystemExt)::element_type>(*this);
 	mGraphicHardware = std::make_unique<aiva::layer1::GraphicHardware>(*this);
+	mGraphicHardwareExt = aiva::utils_ext::NewObject<decltype(mGraphicHardwareExt)::element_type>(*this);
 	mGraphicPipeline = std::make_unique<aiva::layer1::GraphicPipeline>(*this);
 	mGraphicExecutor = std::make_unique<aiva::layer1::GraphicExecutor>(*this);
+	mGraphicExecutorExt = aiva::utils_ext::NewObject<decltype(mGraphicExecutorExt)::element_type>(*this);
 	mMaterialCachingSystem = aiva::utils::NewObject<MaterialCachingSystemType>(*this);
 }
 
@@ -143,7 +168,9 @@ void aiva::layer1::Engine::TerminateSystems()
 	mMaterialCachingSystem = {};
 	mGraphicExecutor = {};
 	mGraphicPipeline = {};
+	mGraphicHardwareExt = {};
 	mGraphicHardware = {};
+	mResourceSystemExt = {};
 	mResourceSystem = {};
 }
 

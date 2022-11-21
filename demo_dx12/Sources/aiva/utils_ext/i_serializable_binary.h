@@ -10,5 +10,7 @@ namespace aiva::utils_ext
 
 	public:
 		virtual void DeserealizeFromBinary(boost::span<const std::byte> const&) = NULL;
+
+		virtual ~ISerializableBinary() = default;
 	};
 }

@@ -1,10 +1,10 @@
 #pragma once
 #include <pch.h>
 
-#define M_OBJECT_FIELD_REF_3(FieldType, FieldName, GetterAccess)																													\
+#define M_OBJECT_FIELD_REF_3(FieldAccess, FieldType, FieldName)																														\
 /* ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */	\
 																																													\
-GetterAccess:																																										\
+FieldAccess:																																										\
 	FieldType& FieldName() const																																					\
 	{																																												\
 		return m##FieldName;																																						\

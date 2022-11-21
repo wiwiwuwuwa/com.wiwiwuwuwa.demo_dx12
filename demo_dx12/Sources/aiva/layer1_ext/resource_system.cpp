@@ -15,6 +15,16 @@ namespace aiva::layer1_ext
 
 	}
 
+	std::shared_ptr<aiva::utils_ext::IObject>  ResourceSystem::GetResourceFromHeap(std::filesystem::path const& fileName) const
+	{
+		aiva::utils::Asserts::CheckBool(!std::empty(fileName), "File name is not valid");
+
+		auto const resourceItr = mResourceHeap.find(fileName);
+		if (resourceItr == std::cend(mResourceHeap)) return {};
+
+		return resourceItr->second.lock();
+	}
+
 	std::vector<std::byte> ResourceSystem::GetBinaryFromFile(std::filesystem::path const& fileName) const
 	{
 		Asserts::CheckBool(!std::empty(fileName), "File name is not valid");
@@ -39,10 +49,7 @@ namespace aiva::layer1_ext
 		auto const fileBinary = GetBinaryFromFile(fileName);
 		Asserts::CheckBool(!std::empty(fileBinary), "File binary is not valid");
 
-		auto const fileJson = nlohmann::json::parse(fileBinary);
-		Asserts::CheckBool(!std::empty(fileJson), "File json is not valid");
-
-		return fileJson;
+		return nlohmann::json::parse(fileBinary);
 	}
 
 	void ResourceSystem::SetResourceToHeap(std::filesystem::path const& fileName, std::shared_ptr<aiva::utils_ext::IObject> const& resourcePtr)

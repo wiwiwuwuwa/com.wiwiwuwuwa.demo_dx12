@@ -2,6 +2,8 @@
 #include <pch.h>
 
 #include <aiva/layer2/world_fwd.h>
+#include <aiva/layer2_ext/render_system_fwd.h>
+#include <aiva/layer2_ext/sc_system_fwd.h>
 
 namespace aiva::layer1
 {
@@ -57,7 +59,11 @@ namespace aiva::layer2
 	public:
 		SceneSystem& SceneSystem() const;
 
+		aiva::layer2_ext::ScSystem& SceneSystemExt() const;
+
 		RenderSystem& RenderSystem() const;
+		
+		aiva::layer2_ext::RenderSystem& RenderSystemExt() const;
 
 	private:
 		void InitializeSystems();
@@ -67,7 +73,11 @@ namespace aiva::layer2
 	private:
 		std::shared_ptr<aiva::layer2::SceneSystem> mSceneSystem{};
 
+		std::shared_ptr<aiva::layer2_ext::ScSystem> mSceneSystemExt{};
+
 		std::shared_ptr<aiva::layer2::RenderSystem> mRenderSystem{};
+
+		std::shared_ptr<aiva::layer2_ext::RenderSystem> mRenderSystemExt{};
 	};
 }
 

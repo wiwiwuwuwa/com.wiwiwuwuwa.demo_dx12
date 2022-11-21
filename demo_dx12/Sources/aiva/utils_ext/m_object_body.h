@@ -1,10 +1,15 @@
 #pragma once
 #include <pch.h>
 
-#define M_OBJECT_BODY()																									\
+#include <aiva/utils_ext/m_single_arg.h>
+#include <aiva/utils_ext/t_object.h>
+
+#define M_OBJECT_BODY(ObjectType)																						\
 /* ----------------------------------------------------------------------------------------------------------------- */	\
 																														\
 public:																													\
-	friend aiva::utils_ext::TObject<ThisType>;																			\
+	using ThisType = M_SINGLE_ARG(ObjectType);																			\
+																														\
+	friend aiva::utils_ext::TObject<M_SINGLE_ARG(ObjectType)>;															\
 																														\
 /* ----------------------------------------------------------------------------------------------------------------- */	\

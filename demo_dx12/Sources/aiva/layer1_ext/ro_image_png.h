@@ -2,13 +2,12 @@
 #include <pch.h>
 
 #include <aiva/layer1/engine_fwd.h>
+#include <aiva/layer1_ext/ro_image_png_fwd.h>
 #include <aiva/utils_ext/i_serializable_binary.h>
 #include <aiva/utils_ext/m_object_body.h>
-#include <aiva/utils_ext/m_object_field_ptr.h>
 #include <aiva/utils_ext/m_object_field_ref.h>
-#include <aiva/utils_ext/m_object_field_val.h>
 #include <aiva/utils_ext/m_object_field_val_dirty_flags_eager.h>
-#include <aiva/utils_ext/t_dirty_flags_eager.h>
+#include <aiva/utils_ext/m_object_field_var.h>
 #include <aiva/utils_ext/t_object.h>
 
 namespace aiva::layer1_ext
@@ -19,7 +18,7 @@ namespace aiva::layer1_ext
 	// Main
 
 	public:
-		M_OBJECT_BODY();
+		M_OBJECT_BODY(RoImagePng);
 
 	protected:
 		RoImagePng(aiva::layer1::Engine& engine);
@@ -34,19 +33,26 @@ namespace aiva::layer1_ext
 		void DeserealizeFromBinary(boost::span<const std::byte> const& resourceBin) override;
 
 	// ----------------------------------------------------
-	// Fields
+	// Generic Fields
 
 	public:
-		M_OBJECT_FIELD_REF_3(aiva::layer1::Engine, Engine, public);
+		M_OBJECT_FIELD_REF_3(public, aiva::layer1::Engine, Engine);
 
-		M_OBJECT_FIELD_VAL_DIRTY_FLAGS_EAGER_2(OnUpdate, public);
+		M_OBJECT_FIELD_VAL_DIRTY_FLAGS_EAGER();
 
-		M_OBJECT_FIELD_VAL_4(std::size_t, Width, public, private);
-		
-		M_OBJECT_FIELD_VAL_4(std::size_t, Height, public, private);
+	// ----------------------------------------------------
+	// Params Fields
 
-		M_OBJECT_FIELD_VAL_4(std::size_t, Channels, public, private);
+	public:
+		M_OBJECT_FIELD_VAR_4(public, private, std::size_t, Width);
 
-		M_OBJECT_FIELD_PTR_4(std::byte, Data, private, private);
+		M_OBJECT_FIELD_VAR_4(public, private, std::size_t, Height);
+
+		M_OBJECT_FIELD_VAR_4(public, private, std::size_t, Channels);
+
+		M_OBJECT_FIELD_VAR_4(public, private, std::shared_ptr<std::byte>, Data);
+
+	public:
+		boost::span<const std::byte> Span() const;
 	};
 }

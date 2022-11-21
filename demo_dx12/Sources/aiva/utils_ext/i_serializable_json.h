@@ -10,5 +10,7 @@ namespace aiva::utils_ext
 
 	public:
 		virtual void DeserealizeFromJson(nlohmann::json const&) = NULL;
+
+		virtual ~ISerializableJson() = default;
 	};
 }

@@ -6,6 +6,9 @@
 #include <winrt/base.h>
 #include <aiva/layer1/engine_fwd.h>
 #include <aiva/layer1/material_caching_system_fwd.h>
+#include <aiva/layer1_ext/graphic_executor_fwd.h>
+#include <aiva/layer1_ext/graphic_hardware_fwd.h>
+#include <aiva/layer1_ext/resource_system_fwd.h>
 #include <aiva/utils/ev_action.h>
 
 namespace aiva::layer0
@@ -87,11 +90,17 @@ namespace aiva::layer1
 	public:
 		aiva::layer1::ResourceSystem& ResourceSystem() const;
 
+		aiva::layer1_ext::ResourceSystem& ResourceSystemExt() const;
+
 		aiva::layer1::GraphicHardware& GraphicHardware() const;
+
+		aiva::layer1_ext::GraphicHardware& GraphicHardwareExt() const;
 
 		aiva::layer1::GraphicPipeline& GraphicPipeline() const;
 
 		aiva::layer1::GraphicExecutor& GraphicExecutor() const;
+
+		aiva::layer1_ext::GraphicExecutor& GraphicExecutorExt() const;
 
 		MaterialCachingSystemType& MaterialCachingSystem() const;
 
@@ -103,11 +112,17 @@ namespace aiva::layer1
 	private:
 		std::unique_ptr<aiva::layer1::ResourceSystem> mResourceSystem{};
 
+		std::shared_ptr<aiva::layer1_ext::ResourceSystem> mResourceSystemExt{};
+
 		std::unique_ptr<aiva::layer1::GraphicHardware> mGraphicHardware{};
+
+		std::shared_ptr<aiva::layer1_ext::GraphicHardware> mGraphicHardwareExt{};
 
 		std::unique_ptr<aiva::layer1::GraphicPipeline> mGraphicPipeline{};
 
 		std::unique_ptr<aiva::layer1::GraphicExecutor> mGraphicExecutor{};
+
+		std::shared_ptr<aiva::layer1_ext::GraphicExecutor> mGraphicExecutorExt{};
 
 		MaterialCachingSystemTypeShared mMaterialCachingSystem{};
 

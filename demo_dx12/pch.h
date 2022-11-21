@@ -14,6 +14,8 @@
 
 #include <cstring>
 
+#include <deque>
+
 #include <exception>
 
 #include <filesystem>
@@ -37,6 +39,10 @@
 #include <optional>
 
 #include <ratio>
+
+#include <regex>
+
+#include <set>
 
 #include <stdexcept>
 
@@ -80,7 +86,7 @@
 
 #include <d3dcompiler.h>
 
-#define GLM_FORCE_RIGHT_HANDE
+#define GLM_FORCE_RIGHT_HANDED
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_SIZE_T_LENGTH
@@ -88,6 +94,8 @@
 #include <glm/glm.hpp>
 
 #include <glm/ext.hpp>
+
+#include <glm/gtx/std_based_type.hpp>
 
 #include <nlohmann/json.hpp>
 #define TINYGLTF_NO_INCLUDE_JSON

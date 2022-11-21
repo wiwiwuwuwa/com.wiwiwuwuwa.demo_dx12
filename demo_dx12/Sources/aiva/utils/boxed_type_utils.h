@@ -29,7 +29,7 @@ namespace aiva::utils
 		void InitializeGltfParsing();
 
 		void TerminateGltfParsing();
-
+		;
 	private:
 		std::unordered_map<GltfTypeDesc, EBoxedType, boost::hash<GltfTypeDesc>> mGltfParsingValues{};
 	};

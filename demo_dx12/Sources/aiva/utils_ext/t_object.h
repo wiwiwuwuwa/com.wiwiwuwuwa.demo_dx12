@@ -11,9 +11,6 @@ namespace aiva::utils_ext
 	// ----------------------------------------------------
 	// Main
 
-	public:
-		using ThisType = TObjectType;
-
 	protected:
 		TObject();
 

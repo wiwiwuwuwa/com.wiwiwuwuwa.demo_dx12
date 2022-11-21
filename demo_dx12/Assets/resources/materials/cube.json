@@ -1,0 +1,21 @@
+{
+    "pipeline_params": {
+        "vertex_shader": "resources\\shaders\\mesh_gbuffer_ext_vs.hlsl",
+        "fragment_shader": "resources\\shaders\\mesh_gbuffer_ext_ps.hlsl",
+        "fill_mode": "Solid",
+        "cull_mode": "Back",
+        "depth_test": true,
+        "depth_write": true,
+        "depth_func": "LessEqual",
+        "render_targets": [
+            "R8G8B8A8_UNORM"
+        ],
+        "depth_target": "UNKNOWN"
+    },
+    "resources_params": [
+        {
+            "name": "tex_albedo",
+            "path": "resources\\textures\\avenger.json"
+        }
+    ]
+}

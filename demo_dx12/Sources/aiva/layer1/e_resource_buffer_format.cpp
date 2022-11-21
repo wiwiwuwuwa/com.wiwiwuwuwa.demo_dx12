@@ -5,6 +5,9 @@ aiva::layer1::EResourceBufferFormat aiva::layer1::FromInternalEnum(DXGI_FORMAT c
 {
 	switch (format)
 	{
+	case DXGI_FORMAT_UNKNOWN:
+		return EResourceBufferFormat::UNKNOWN;
+
 	case DXGI_FORMAT_R32G32B32A32_FLOAT:
 		return EResourceBufferFormat::R32G32B32A32_FLOAT;
 
@@ -24,6 +27,9 @@ DXGI_FORMAT aiva::layer1::ToInternalEnum(EResourceBufferFormat const format)
 {
 	switch (format)
 	{
+	case EResourceBufferFormat::UNKNOWN:
+		return DXGI_FORMAT_UNKNOWN;
+
 	case EResourceBufferFormat::R32G32B32A32_FLOAT:
 		return DXGI_FORMAT_R32G32B32A32_FLOAT;
 
@@ -39,8 +45,40 @@ DXGI_FORMAT aiva::layer1::ToInternalEnum(EResourceBufferFormat const format)
 	}
 }
 
+aiva::layer1::EResourceBufferFormat aiva::layer1::FromPngChannels(std::size_t const channels)
+{
+	switch (channels)
+	{
+	case 4:
+		return EResourceBufferFormat::R8G8B8A8_UNORM;
+
+	default:
+		aiva::utils::Asserts::CheckBool(false, "Failed to convert png channels to resource buffer format");
+		return {};
+	}
+}
+
+std::size_t aiva::layer1::ToPngChannels(EResourceBufferFormat const format)
+{
+	switch (format)
+	{
+	case EResourceBufferFormat::R8G8B8A8_UNORM:
+		return 4;
+
+	default:
+		aiva::utils::Asserts::CheckBool(false, "Failed to convert resource buffer format to png channels");
+		return {};
+	}
+}
+
 bool aiva::layer1::TryParse(std::string const& enumStr, EResourceBufferFormat& enumVal)
 {
+	if (enumStr == "UNKNOWN")
+	{
+		enumVal = EResourceBufferFormat::UNKNOWN;
+		return true;
+	}
+
 	if (enumStr == "R32G32B32A32_FLOAT")
 	{
 		enumVal = EResourceBufferFormat::R32G32B32A32_FLOAT;
@@ -67,6 +105,9 @@ std::string aiva::layer1::ToString(EResourceBufferFormat const format)
 {
 	switch (format)
 	{
+	case EResourceBufferFormat::UNKNOWN:
+		return "UNKNOWN";
+
 	case EResourceBufferFormat::R32G32B32A32_FLOAT:
 		return "R32G32B32A32_FLOAT";
 

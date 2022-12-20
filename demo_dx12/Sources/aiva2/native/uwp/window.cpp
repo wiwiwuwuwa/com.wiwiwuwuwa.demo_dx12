@@ -22,32 +22,32 @@ namespace aiva2::native
 		mNativeWindow = winrt::make_self<decltype(mNativeWindow)::type>();
 		Asserts::IsTrue(mNativeWindow, "Native window is not valid");
 
-		mNativeWindow->OnInit().AttachListener(&ThisType::NativeWindow_OnInit, this);
-		mNativeWindow->OnTick().AttachListener(&ThisType::NativeWindow_OnTick, this);
-		mNativeWindow->OnShut().AttachListener(&ThisType::NativeWindow_OnShut, this);
+		mNativeWindow->OnInit().AttachListener(&ThisType::NativeWindow_When_Window_OnInit, this);
+		mNativeWindow->OnTick().AttachListener(&ThisType::NativeWindow_When_Window_OnTick, this);
+		mNativeWindow->OnShut().AttachListener(&ThisType::NativeWindow_When_Window_OnShut, this);
 	}
 
 	void Window::ShutNativeWindow()
 	{
 		Asserts::IsTrue(mNativeWindow, "Native window is not valid");
-		mNativeWindow->OnShut().RemoveListener(&ThisType::NativeWindow_OnShut, this);
-		mNativeWindow->OnTick().RemoveListener(&ThisType::NativeWindow_OnTick, this);
-		mNativeWindow->OnInit().RemoveListener(&ThisType::NativeWindow_OnInit, this);
+		mNativeWindow->OnShut().RemoveListener(&ThisType::NativeWindow_When_Window_OnShut, this);
+		mNativeWindow->OnTick().RemoveListener(&ThisType::NativeWindow_When_Window_OnTick, this);
+		mNativeWindow->OnInit().RemoveListener(&ThisType::NativeWindow_When_Window_OnInit, this);
 
 		mNativeWindow = {};
 	}
 
-	void Window::NativeWindow_OnInit()
+	void Window::NativeWindow_When_Window_OnInit()
 	{
 		OnInit().Broadcast();
 	}
 
-	void Window::NativeWindow_OnTick()
+	void Window::NativeWindow_When_Window_OnTick()
 	{
 		OnTick().Broadcast();
 	}
 
-	void Window::NativeWindow_OnShut()
+	void Window::NativeWindow_When_Window_OnShut()
 	{
 		OnShut().Broadcast();
 	}

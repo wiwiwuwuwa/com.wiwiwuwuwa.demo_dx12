@@ -36,11 +36,11 @@ namespace aiva2::native
         void ShutNativeWindow();
 
     private:
-        void NativeWindow_OnInit();
+        void NativeWindow_When_Window_OnInit();
 
-        void NativeWindow_OnTick();
+        void NativeWindow_When_Window_OnTick();
 
-        void NativeWindow_OnShut();
+        void NativeWindow_When_Window_OnShut();
 
     // ----------------------------------------------------
     // IWindow

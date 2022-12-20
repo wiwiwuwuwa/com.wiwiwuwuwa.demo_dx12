@@ -2,62 +2,93 @@
 #include <aiva2/engine/engine.h>
 
 #include <aiva2/engine/asserts.h>
-#include <aiva2/engine/i_window.h>
-#include <aiva2/native/window_factory.h>
+#include <aiva2/engine/graphic_hardware.h>
+#include <aiva2/engine/object_utils.h>
+#include <aiva2/engine/time_system.h>
+#include <aiva2/engine/window_system.h>
 
 namespace aiva2::engine
 {
-	using namespace native;
-
 	Engine::Engine()
 	{
-		InitWindow();
+		InitSystems();
 	}
 
 	Engine::~Engine()
 	{
-		ShutWindow();
+		ShutSystems();
 	}
 
 	void Engine::Run()
 	{
-		Asserts::IsTrue(mWindow, "Window is not valid");
-		mWindow->Run();
+		WindowSystem().Run();
 	}
 
-	void Engine::InitWindow()
+	void Engine::InitSystems()
 	{
-		mWindow = WindowFactory::Create();
-		Asserts::IsTrue(mWindow, "Window is not valid");
-
-		mWindow->OnInit().AttachListener(&ThisType::Window_OnInit, this);
-		mWindow->OnTick().AttachListener(&ThisType::Window_OnTick, this);
-		mWindow->OnShut().AttachListener(&ThisType::Window_OnShut, this);
+		InitWindowSystem();
+		InitTimeSystem();
+		InitGraphicHardware();
 	}
 
-	void Engine::ShutWindow()
+	void Engine::ShutSystems()
 	{
-		Asserts::IsTrue(mWindow, "Window is not valid");
-		mWindow->OnShut().AttachListener(&ThisType::Window_OnShut, this);
-		mWindow->OnTick().AttachListener(&ThisType::Window_OnTick, this);
-		mWindow->OnInit().AttachListener(&ThisType::Window_OnInit, this);
-
-		mWindow = {};
+		ShutGraphicHardware();
+		ShutTimeSystem();
+		ShutWindowSystem();
 	}
 
-	void Engine::Window_OnInit()
+	engine::WindowSystem& Engine::WindowSystem()
 	{
-		OnInit().Broadcast();
+		Asserts::IsTrue(mWindowSystem, "Window system is not valid");
+		return *mWindowSystem;
 	}
 
-	void Engine::Window_OnTick()
+	void Engine::InitWindowSystem()
 	{
-		OnTick().Broadcast();
-		OnDraw().Broadcast();
+		Asserts::IsTrue(mWindowSystem, "Window system is not valid");
+		mWindowSystem = NewObject<decltype(mWindowSystem)::element_type>(*this);
 	}
 
-	void Engine::Window_OnShut()
+	void Engine::ShutWindowSystem()
 	{
-		OnShut().Broadcast();
+		Asserts::IsTrue(mWindowSystem, "Window system is not valid");
+		mWindowSystem = {};
+	}
+
+	engine::TimeSystem& Engine::TimeSystem()
+	{
+		Asserts::IsTrue(mTimeSystem, "Time system is not valid");
+		return *mTimeSystem;
+	}
+
+	void Engine::InitTimeSystem()
+	{
+		Asserts::IsTrue(mTimeSystem, "Time system is not valid");
+		mTimeSystem = NewObject<decltype(mTimeSystem)::element_type>(*this);
+	}
+
+	void Engine::ShutTimeSystem()
+	{
+		Asserts::IsTrue(mTimeSystem, "Time system is not valid");
+		mTimeSystem = {};
+	}
+
+	engine::GraphicHardware& Engine::GraphicHardware()
+	{
+		Asserts::IsTrue(mGraphicHardware, "Graphic hardware is not valid");
+		return *mGraphicHardware;
+	}
+
+	void Engine::InitGraphicHardware()
+	{
+		Asserts::IsTrue(mGraphicHardware, "Graphic hardware is not valid");
+		mGraphicHardware = NewObject<decltype(mGraphicHardware)::element_type>(*this);
+	}
+
+	void Engine::ShutGraphicHardware()
+	{
+		Asserts::IsTrue(mGraphicHardware, "Graphic hardware is not valid");
+		mGraphicHardware = {};
 	}
 }

@@ -104,7 +104,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
     <ClCompile>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;AIVA_PLATFORM_UWP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">$(ProjectDir)Sources;$(ProjectDir)External Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">$(ProjectDir)Sources;$(ProjectDir)External Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)Sources;$(ProjectDir)External Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -137,7 +137,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
     <ClCompile>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;AIVA_PLATFORM_UWP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">$(ProjectDir)Sources;$(ProjectDir)External Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">$(ProjectDir)Sources;$(ProjectDir)External Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)Sources;$(ProjectDir)External Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -178,6 +178,26 @@
     <ClInclude Include="External Sources\tinygltf\tiny_gltf.h" />
     <ClInclude Include="External Sources\tinyutf8\tinyutf8.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Sources\aiva2\engine\asserts.h" />
+    <ClInclude Include="Sources\aiva2\engine\i_object.h" />
+    <ClInclude Include="Sources\aiva2\engine\i_object_fwd.h" />
+    <ClInclude Include="Sources\aiva2\engine\i_window_fwd.h" />
+    <ClInclude Include="Sources\aiva2\engine\m_field_by_var.h" />
+    <ClInclude Include="Sources\aiva2\engine\m_field_for_event.h" />
+    <ClInclude Include="Sources\aiva2\engine\m_struct_body.h" />
+    <ClInclude Include="Sources\aiva2\engine\object_utils.h" />
+    <ClInclude Include="Sources\aiva2\engine\t_event_action.h" />
+    <ClInclude Include="Sources\aiva2\engine\t_event_action_base.h" />
+    <ClInclude Include="Sources\aiva2\engine\t_event_action_readonly.h" />
+    <ClInclude Include="Sources\aiva2\engine\t_event_action_readwrite.h" />
+    <ClInclude Include="Sources\aiva2\engine\m_field_by_val.h" />
+    <ClInclude Include="Sources\aiva2\engine\m_single_arg.h" />
+    <ClInclude Include="Sources\aiva2\engine\i_window.h" />
+    <ClInclude Include="Sources\aiva2\native\window_factory.h" />
+    <ClInclude Include="Sources\aiva2\native\uwp\uwp_window.h" />
+    <ClInclude Include="Sources\aiva2\native\uwp\uwp_window_fwd.h" />
+    <ClInclude Include="Sources\aiva2\native\uwp\window.h" />
+    <ClInclude Include="Sources\aiva2\native\uwp\window_fwd.h" />
     <ClInclude Include="Sources\aiva\layer0\app.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_fwd.h" />
@@ -532,6 +552,9 @@
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Sources\aiva2\native\window_factory.cpp" />
+    <ClCompile Include="Sources\aiva2\native\uwp\uwp_window.cpp" />
+    <ClCompile Include="Sources\aiva2\native\uwp\window.cpp" />
     <ClCompile Include="Sources\aiva\layer0\app.cpp" />
     <ClCompile Include="Sources\aiva\layer1\a_graphic_resource.cpp" />
     <ClCompile Include="Sources\aiva\layer1\a_graphic_resource_view.cpp" />
@@ -873,6 +896,7 @@
     <Text Include="readme.txt">
       <DeploymentContent>false</DeploymentContent>
     </Text>
+    <Text Include="Sources\aiva2\defines.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\resources\shaders\mesh_gbuffer_ext_ps.hlsl">

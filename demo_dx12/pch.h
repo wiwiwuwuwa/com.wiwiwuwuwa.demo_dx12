@@ -74,6 +74,8 @@
 
 #include <Unknwn.h>
 
+#include <winrt/base.h>
+
 #include <winrt/Windows.ApplicationModel.Core.h>
 
 #include <winrt/Windows.System.Diagnostics.h>

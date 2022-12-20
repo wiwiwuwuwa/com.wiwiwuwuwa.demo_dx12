@@ -179,6 +179,8 @@
     <ClInclude Include="External Sources\tinyutf8\tinyutf8.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Sources\aiva2\engine\asserts.h" />
+    <ClInclude Include="Sources\aiva2\engine\engine.h" />
+    <ClInclude Include="Sources\aiva2\engine\engine_fwd.h" />
     <ClInclude Include="Sources\aiva2\engine\i_object.h" />
     <ClInclude Include="Sources\aiva2\engine\i_object_fwd.h" />
     <ClInclude Include="Sources\aiva2\engine\i_window_fwd.h" />
@@ -552,6 +554,7 @@
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Sources\aiva2\engine\engine.cpp" />
     <ClCompile Include="Sources\aiva2\native\window_factory.cpp" />
     <ClCompile Include="Sources\aiva2\native\uwp\uwp_window.cpp" />
     <ClCompile Include="Sources\aiva2\native\uwp\window.cpp" />

@@ -158,6 +158,7 @@
     <ClCompile Include="Sources\aiva2\native\uwp\uwp_window.cpp" />
     <ClCompile Include="Sources\aiva2\native\window_factory.cpp" />
     <ClCompile Include="Sources\aiva2\native\uwp\window.cpp" />
+    <ClCompile Include="Sources\aiva2\engine\engine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -513,6 +514,8 @@
     <ClInclude Include="Sources\aiva2\engine\asserts.h" />
     <ClInclude Include="Sources\aiva2\engine\i_object_fwd.h" />
     <ClInclude Include="Sources\aiva2\engine\i_object.h" />
+    <ClInclude Include="Sources\aiva2\engine\engine.h" />
+    <ClInclude Include="Sources\aiva2\engine\engine_fwd.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

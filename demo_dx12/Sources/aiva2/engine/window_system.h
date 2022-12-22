@@ -3,16 +3,13 @@
 
 #include <aiva2/engine/engine_fwd.h>
 #include <aiva2/engine/i_object.h>
-#include <aiva2/engine/i_window_fwd.h>
-#include <aiva2/engine/m_field_by_ref.h>
-#include <aiva2/engine/m_field_by_var.h>
-#include <aiva2/engine/m_field_for_event.h>
 #include <aiva2/engine/m_struct_body.h>
+#include <aiva2/engine/t_event_action.h>
 #include <aiva2/engine/window_system_fwd.h>
 
 namespace aiva2::engine
 {
-	struct WindowSystem final : public IObject
+	struct WindowSystem : public IObject
 	{
 	// ----------------------------------------------------
 	// Main
@@ -21,39 +18,27 @@ namespace aiva2::engine
 		M_STRUCT_BODY(WindowSystem);
 
 	public:
-		WindowSystem(engine::Engine& engine);
+		WindowSystem();
 
 		~WindowSystem() override;
 
+	// ----------------------------------------------------
+	// Engine (Virtual)
+
 	public:
-		M_FIELD_BY_REF_3(public, engine::Engine, Engine);
+		virtual auto Engine() const -> engine::Engine& = NULL;
 
 	// ----------------------------------------------------
-	// Window
+	// Window (Virtual)
 
 	public:
-		M_FIELD_BY_VAR_4(public, private, std::shared_ptr<IWindow>, Window);
+		virtual auto OnWindowInit() -> EventActionReadOnly& = NULL;
+
+		virtual auto OnWindowTick() -> EventActionReadOnly& = NULL;
+
+		virtual auto OnWindowShut() -> EventActionReadOnly& = NULL;
 
 	public:
-		M_FIELD_FOR_EVENT_2(public, OnWindowInit);
-
-		M_FIELD_FOR_EVENT_2(public, OnWindowTick);
-
-		M_FIELD_FOR_EVENT_2(public, OnWindowShut);
-
-	public:
-		void Run();
-
-	private:
-		void InitWindow();
-
-		void ShutWindow();
-
-	private:
-		void Window_When_Window_OnInit();
-
-		void Window_When_Window_OnTick();
-
-		void WIndow_When_Window_OnShut();
+		virtual void RunWindow() = NULL;
 	};
 }

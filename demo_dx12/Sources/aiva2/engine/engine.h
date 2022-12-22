@@ -10,7 +10,7 @@
 
 namespace aiva2::engine
 {
-	struct Engine final : public IObject
+	struct Engine : public IObject
 	{
 	// ----------------------------------------------------
 	// Main
@@ -27,6 +27,14 @@ namespace aiva2::engine
 		void Run();
 
 	// ----------------------------------------------------
+	// IObject
+
+	public:
+		void Init() override;
+
+		void Shut() override;
+
+	// ----------------------------------------------------
 	// Systems
 
 	private:
@@ -35,22 +43,10 @@ namespace aiva2::engine
 		void ShutSystems();
 
 	// ----------------------------------------------------
+	// Systems (Generic)
 
 	public:
-		engine::WindowSystem& WindowSystem();
-
-	private:
-		void InitWindowSystem();
-
-		void ShutWindowSystem();
-
-	private:
-		std::shared_ptr<engine::WindowSystem> mWindowSystem{};
-
-	// ----------------------------------------------------
-
-	public:
-		engine::TimeSystem& TimeSystem();
+		auto TimeSystem() const -> engine::TimeSystem&;
 
 	private:
 		void InitTimeSystem();
@@ -61,16 +57,24 @@ namespace aiva2::engine
 		std::shared_ptr<engine::TimeSystem> mTimeSystem{};
 
 	// ----------------------------------------------------
+	// Systems (Virtual)
 
 	public:
-		engine::GraphicHardware& GraphicHardware();
+		virtual auto WindowSystem() const -> engine::WindowSystem& = NULL;
 
-	private:
-		void InitGraphicHardware();
+	protected:
+		virtual void InitWindowSystem() = NULL;
 
-		void ShutGraphicHardware();
+		virtual void ShutWindowSystem() = NULL;
 
-	private:
-		std::shared_ptr<engine::GraphicHardware> mGraphicHardware{};
+	// ----------------------------------------------------
+
+	public:
+		virtual auto GraphicHardware() const -> engine::GraphicHardware& = NULL;
+
+	protected:
+		virtual void InitGraphicHardware() = NULL;
+
+		virtual void ShutGraphicHardware() = NULL;
 	};
 }

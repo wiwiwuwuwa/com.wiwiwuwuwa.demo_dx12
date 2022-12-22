@@ -10,7 +10,7 @@ namespace aiva2::native
 
     void UwpWindow::Initialize(CoreApplicationView const&)
     {
-
+        mWindow = nullptr;
     }
 
     void UwpWindow::Load(winrt::hstring const&)
@@ -20,7 +20,7 @@ namespace aiva2::native
 
     void UwpWindow::Uninitialize()
     {
-
+        mWindow = nullptr;
     }
 
     void UwpWindow::Run()
@@ -41,8 +41,13 @@ namespace aiva2::native
         OnShut().Broadcast();
     }
 
-    void UwpWindow::SetWindow(CoreWindow const&)
+    void UwpWindow::SetWindow(CoreWindow const& window)
     {
+        mWindow = window;
+    }
 
+    CoreWindow const& UwpWindow::Window() const
+    {
+        return mWindow;
     }
 }

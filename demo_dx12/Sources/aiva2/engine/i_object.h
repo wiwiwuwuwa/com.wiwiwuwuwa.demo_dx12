@@ -11,5 +11,12 @@ namespace aiva2::engine
 
 	public:
 		virtual ~IObject() = default;
+
+	// ----------------------------------------------------
+
+	public:
+		virtual void Init() {};
+
+		virtual void Shut() {};
 	};
 }

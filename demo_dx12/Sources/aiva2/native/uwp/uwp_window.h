@@ -10,6 +10,7 @@ namespace aiva2::native
     struct UwpWindow : winrt::implements<UwpWindow, IFrameworkViewSource, IFrameworkView>
     {
     // ----------------------------------------------------
+    // Main
 
     public:
         M_STRUCT_BODY(UwpWindow);
@@ -41,6 +42,15 @@ namespace aiva2::native
 
         void Run();
 
-        void SetWindow(CoreWindow const&);
+        void SetWindow(CoreWindow const& window);
+
+    // ----------------------------------------------------
+    // Window
+
+    public:
+        CoreWindow const& Window() const;
+
+    private:
+        CoreWindow mWindow{ nullptr };
     };
 }

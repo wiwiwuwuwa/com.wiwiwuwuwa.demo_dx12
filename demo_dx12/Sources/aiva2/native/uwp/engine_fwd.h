@@ -3,5 +3,5 @@
 
 namespace aiva2::native
 {
-	struct Window;
+	struct Engine;
 }

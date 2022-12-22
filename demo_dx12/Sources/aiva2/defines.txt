@@ -1,2 +1,0 @@
-Platforms:
-AIVA_PLATFORM_UWP

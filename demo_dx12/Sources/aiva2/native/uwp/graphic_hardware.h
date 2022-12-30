@@ -1,14 +1,15 @@
 #pragma once
 #include <pch.h>
 
-#include <aiva2/engine/graphic_hardware.h>
+#include <aiva2/engine/i_object.h>
+#include <aiva2/engine/m_field_by_ref.h>
 #include <aiva2/engine/m_struct_body.h>
-#include <aiva2/native/uwp/engine.h>
+#include <aiva2/native/engine_fwd.h>
 #include <aiva2/native/uwp/graphic_hardware_fwd.h>
 
 namespace aiva2::native
 {
-	struct GraphicHardware final : public engine::GraphicHardware
+	struct GraphicHardware final : public engine::IObject
 	{
 	// ----------------------------------------------------
 	// Main
@@ -21,22 +22,8 @@ namespace aiva2::native
 
 		~GraphicHardware() override;
 
-	// ----------------------------------------------------
-	// Engine (Virtual)
-
 	public:
-		native::Engine& Engine() const override;
-
-	private:
-		native::Engine& mEngine;
-
-	// ----------------------------------------------------
-	// IObject
-
-	public:
-		void Init() override;
-
-		void Shut() override;
+		M_FIELD_BY_REF_3(public, native::Engine, Engine);
 
 	// ----------------------------------------------------
 	// Components
@@ -50,7 +37,7 @@ namespace aiva2::native
 
 #if defined(_DEBUG)
 	public:
-		ID3D12Debug6& Debug() const;
+		auto Debug() const -> ID3D12Debug6&;
 
 	private:
 		void InitDebug();
@@ -64,7 +51,7 @@ namespace aiva2::native
 	// ----------------------------------------------------
 
 	public:
-		IDXGIFactory7& Factory() const;
+		auto Factory() const -> IDXGIFactory7&;
 
 	private:
 		void InitFactory();
@@ -77,7 +64,7 @@ namespace aiva2::native
 	// ----------------------------------------------------
 
 	public:
-		IDXGIAdapter4& Adapter() const;
+		auto Adapter() const -> IDXGIAdapter4&;
 
 	private:
 		void InitAdapter();
@@ -90,7 +77,7 @@ namespace aiva2::native
 	// ----------------------------------------------------
 
 	public:
-		ID3D12Device9& Device() const;
+		auto Device() const -> ID3D12Device9&;
 
 	private:
 		void InitDevice();
@@ -104,7 +91,7 @@ namespace aiva2::native
 
 #if defined(_DEBUG)
 	public:
-		ID3D12InfoQueue1& InfoQueue() const;
+		auto InfoQueue() const -> ID3D12InfoQueue1&;
 
 	private:
 		void InitInfoQueue();
@@ -118,7 +105,7 @@ namespace aiva2::native
 	// ----------------------------------------------------
 
 	public:
-		ID3D12CommandQueue& CommandQueue() const;
+		auto CommandQueue() const -> ID3D12CommandQueue&;
 
 	private:
 		void InitCommandQueue();
@@ -131,7 +118,7 @@ namespace aiva2::native
 	// ----------------------------------------------------
 
 	public:
-		bool IsTearingAllowed() const;
+		auto IsTearingAllowed() const -> bool;
 
 	private:
 		void InitIsTearingAllowed();
@@ -144,7 +131,7 @@ namespace aiva2::native
 	// ----------------------------------------------------
 
 	public:
-		IDXGISwapChain4& SwapChain() const;
+		auto SwapChain() const -> IDXGISwapChain4&;
 
 	private:
 		void InitSwapChain();
@@ -157,7 +144,7 @@ namespace aiva2::native
 	// ----------------------------------------------------
 
 	public:
-		ID3D12CommandAllocator& CommandAllocator() const;
+		auto CommandAllocator() const -> ID3D12CommandAllocator&;
 
 	private:
 		void InitCommandAllocator();
@@ -170,7 +157,7 @@ namespace aiva2::native
 	// ----------------------------------------------------
 
 	public:
-		ID3D12GraphicsCommandList6& CommandList() const;
+		auto CommandList() const -> ID3D12GraphicsCommandList6&;
 
 	private:
 		void InitCommandList();
@@ -183,7 +170,7 @@ namespace aiva2::native
 	// ----------------------------------------------------
 
 	public:
-		ID3D12Fence1& Fence() const;
+		auto Fence() const -> ID3D12Fence1&;
 
 	private:
 		void InitFence();

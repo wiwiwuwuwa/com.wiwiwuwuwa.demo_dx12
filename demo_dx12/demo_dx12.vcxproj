@@ -181,8 +181,6 @@
     <ClInclude Include="Sources\aiva2\engine\asserts.h" />
     <ClInclude Include="Sources\aiva2\engine\engine.h" />
     <ClInclude Include="Sources\aiva2\engine\engine_fwd.h" />
-    <ClInclude Include="Sources\aiva2\engine\graphic_hardware.h" />
-    <ClInclude Include="Sources\aiva2\engine\graphic_hardware_fwd.h" />
     <ClInclude Include="Sources\aiva2\engine\i_object.h" />
     <ClInclude Include="Sources\aiva2\engine\i_object_fwd.h" />
     <ClInclude Include="Sources\aiva2\engine\m_field_by_ref.h" />
@@ -190,25 +188,25 @@
     <ClInclude Include="Sources\aiva2\engine\m_field_for_event.h" />
     <ClInclude Include="Sources\aiva2\engine\m_struct_body.h" />
     <ClInclude Include="Sources\aiva2\engine\object_utils.h" />
-    <ClInclude Include="Sources\aiva2\engine\time_system.h" />
-    <ClInclude Include="Sources\aiva2\engine\time_system_fwd.h" />
     <ClInclude Include="Sources\aiva2\engine\t_event_action.h" />
     <ClInclude Include="Sources\aiva2\engine\t_event_action_base.h" />
     <ClInclude Include="Sources\aiva2\engine\t_event_action_readonly.h" />
     <ClInclude Include="Sources\aiva2\engine\t_event_action_readwrite.h" />
     <ClInclude Include="Sources\aiva2\engine\m_field_by_val.h" />
     <ClInclude Include="Sources\aiva2\engine\m_single_arg.h" />
-    <ClInclude Include="Sources\aiva2\engine\window_system.h" />
-    <ClInclude Include="Sources\aiva2\engine\window_system_fwd.h" />
     <ClInclude Include="Sources\aiva2\init.h" />
-    <ClInclude Include="Sources\aiva2\native\uwp\engine.h" />
-    <ClInclude Include="Sources\aiva2\native\uwp\engine_fwd.h" />
+    <ClInclude Include="Sources\aiva2\native\engine.h" />
+    <ClInclude Include="Sources\aiva2\native\engine_fwd.h" />
+    <ClInclude Include="Sources\aiva2\native\graphic_hardware.h" />
+    <ClInclude Include="Sources\aiva2\native\graphic_hardware_fwd.h" />
     <ClInclude Include="Sources\aiva2\native\uwp\graphic_hardware.h" />
     <ClInclude Include="Sources\aiva2\native\uwp\graphic_hardware_fwd.h" />
-    <ClInclude Include="Sources\aiva2\native\uwp\uwp_window.h" />
-    <ClInclude Include="Sources\aiva2\native\uwp\uwp_window_fwd.h" />
+    <ClInclude Include="Sources\aiva2\native\uwp\window.h" />
+    <ClInclude Include="Sources\aiva2\native\uwp\window_fwd.h" />
     <ClInclude Include="Sources\aiva2\native\uwp\window_system.h" />
     <ClInclude Include="Sources\aiva2\native\uwp\window_system_fwd.h" />
+    <ClInclude Include="Sources\aiva2\native\window_system.h" />
+    <ClInclude Include="Sources\aiva2\native\window_system_fwd.h" />
     <ClInclude Include="Sources\aiva\layer0\app.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_fwd.h" />
@@ -564,12 +562,9 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Sources\aiva2\engine\engine.cpp" />
-    <ClCompile Include="Sources\aiva2\engine\graphic_hardware.cpp" />
-    <ClCompile Include="Sources\aiva2\engine\time_system.cpp" />
-    <ClCompile Include="Sources\aiva2\engine\window_system.cpp" />
-    <ClCompile Include="Sources\aiva2\native\uwp\engine.cpp" />
+    <ClCompile Include="Sources\aiva2\native\engine.cpp" />
     <ClCompile Include="Sources\aiva2\native\uwp\graphic_hardware.cpp" />
-    <ClCompile Include="Sources\aiva2\native\uwp\uwp_window.cpp" />
+    <ClCompile Include="Sources\aiva2\native\uwp\window.cpp" />
     <ClCompile Include="Sources\aiva2\native\uwp\window_system.cpp" />
     <ClCompile Include="Sources\aiva\layer0\app.cpp" />
     <ClCompile Include="Sources\aiva\layer1\a_graphic_resource.cpp" />

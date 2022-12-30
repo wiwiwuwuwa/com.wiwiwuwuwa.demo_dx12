@@ -11,10 +11,7 @@
 
 #include <aiva2/engine/asserts.h>
 #include <aiva2/engine/object_utils.h>
-
-#if defined(AIVA_PLATFORM_UWP)
-#include <aiva2/native/uwp/engine.h>
-#endif
+#include <aiva2/native/engine.h>
 
 namespace aiva2
 {

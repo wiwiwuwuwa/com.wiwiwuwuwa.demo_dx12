@@ -3,67 +3,40 @@
 
 #include <aiva2/engine/asserts.h>
 #include <aiva2/engine/object_utils.h>
-#include <aiva2/engine/time_system.h>
-#include <aiva2/engine/window_system.h>
+#include <aiva2/native/engine.h>
 
 namespace aiva2::engine
 {
 	Engine::Engine()
 	{
-		
+		InitNative();
 	}
 
 	Engine::~Engine()
 	{
-		
+		ShutNative();
 	}
 
-	void Engine::Run()
+	void Engine::Run() const
 	{
-		WindowSystem().RunWindow();
+		Native().Run();
 	}
 
-	void Engine::Init()
+	auto Engine::Native() const -> native::Engine&
 	{
-		IObject::Init();
-		InitSystems();
+		Asserts::IsTrue(mNative, "Native is not valid");
+		return *mNative;
 	}
 
-	void Engine::Shut()
+	void Engine::InitNative()
 	{
-		ShutSystems();
-		IObject::Shut();
+		mNative = NewObject<decltype(mNative)::element_type>();
+		Asserts::IsTrue(mNative, "Native is not valid");
 	}
 
-	void Engine::InitSystems()
+	void Engine::ShutNative()
 	{
-		InitWindowSystem();
-		InitTimeSystem();
-		InitGraphicHardware();
-	}
-
-	void Engine::ShutSystems()
-	{
-		ShutGraphicHardware();
-		ShutTimeSystem();
-		ShutWindowSystem();
-	}
-
-	auto Engine::TimeSystem() const -> engine::TimeSystem&
-	{
-		Asserts::IsTrue(mTimeSystem, "Time system is not valid");
-		return *mTimeSystem;
-	}
-
-	void Engine::InitTimeSystem()
-	{
-		Asserts::IsTrue(mTimeSystem, "Time system is not valid");
-		mTimeSystem = NewObject<decltype(mTimeSystem)::element_type>(*this);
-	}
-
-	void Engine::ShutTimeSystem()
-	{
-		Asserts::IsTrue(mTimeSystem, "Time system is not valid");
-		mTimeSystem = {};
+		Asserts::IsTrue(mNative, "Native is not valid");
+		mNative = {};
 	}
 }

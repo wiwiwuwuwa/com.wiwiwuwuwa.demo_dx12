@@ -3,19 +3,20 @@
 
 #include <aiva2/engine/m_field_for_event.h>
 #include <aiva2/engine/m_struct_body.h>
-#include <aiva2/native/uwp/uwp_window_fwd.h>
+#include <aiva2/native/uwp/window_fwd.h>
 
 namespace aiva2::native
 {
-    struct UwpWindow : winrt::implements<UwpWindow, IFrameworkViewSource, IFrameworkView>
+    struct Window : winrt::implements<Window, IFrameworkViewSource, IFrameworkView>
     {
     // ----------------------------------------------------
     // Main
 
     public:
-        M_STRUCT_BODY(UwpWindow);
+        using CoreWindowType = winrt::Windows::UI::Core::CoreWindow;
 
-    // ----------------------------------------------------
+    public:
+        M_STRUCT_BODY(Window);
 
     public:
         M_FIELD_FOR_EVENT_2(public, OnInit);
@@ -28,7 +29,7 @@ namespace aiva2::native
     // IFrameworkViewSource
 
     public:
-        IFrameworkView CreateView();
+        auto CreateView() -> IFrameworkView;
 
     // ----------------------------------------------------
     // IFrameworkView
@@ -42,15 +43,15 @@ namespace aiva2::native
 
         void Run();
 
-        void SetWindow(CoreWindow const& window);
+        void SetWindow(CoreWindowType const& window);
 
     // ----------------------------------------------------
     // Window
 
     public:
-        CoreWindow const& Window() const;
+        auto CoreWindow() const -> CoreWindowType const&;
 
     private:
-        CoreWindow mWindow{ nullptr };
+        CoreWindowType mWindow{ nullptr };
     };
 }

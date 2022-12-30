@@ -2,6 +2,8 @@
 #include <aiva2/native/uwp/graphic_hardware.h>
 
 #include <aiva2/engine/asserts.h>
+#include <aiva2/native/engine.h>
+#include <aiva2/native/window_system.h>
 
 namespace aiva2::native
 {
@@ -9,29 +11,12 @@ namespace aiva2::native
 
 	GraphicHardware::GraphicHardware(native::Engine& engine) : mEngine{ engine }
 	{
-		
+		InitComponents();
 	}
 
 	GraphicHardware::~GraphicHardware()
 	{
-		
-	}
-
-	native::Engine& GraphicHardware::Engine() const
-	{
-		return mEngine;
-	}
-
-	void GraphicHardware::Init()
-	{
-		engine::GraphicHardware::Init();
-		InitComponents();
-	}
-
-	void GraphicHardware::Shut()
-	{
 		ShutComponents();
-		engine::GraphicHardware::Shut();
 	}
 
 	void GraphicHardware::InitComponents()
@@ -73,7 +58,7 @@ namespace aiva2::native
 	}
 
 #if defined(_DEBUG)
-	ID3D12Debug6& GraphicHardware::Debug() const
+	auto GraphicHardware::Debug() const -> ID3D12Debug6&
 	{
 		Asserts::IsTrue(mDebug, "Debug is not valid");
 		return *mDebug;
@@ -101,7 +86,7 @@ namespace aiva2::native
 	}
 #endif
 
-	IDXGIFactory7& GraphicHardware::Factory() const
+	auto GraphicHardware::Factory() const -> IDXGIFactory7&
 	{
 		Asserts::IsTrue(mFactory, "Factory is not valid");
 		return *mFactory;
@@ -132,7 +117,7 @@ namespace aiva2::native
 		mFactory = {};
 	}
 
-	IDXGIAdapter4& GraphicHardware::Adapter() const
+	auto GraphicHardware::Adapter() const -> IDXGIAdapter4&
 	{
 		Asserts::IsTrue(mAdapter, "Adapter is not valid");
 		return *mAdapter;
@@ -157,7 +142,7 @@ namespace aiva2::native
 		mAdapter = {};
 	}
 
-	ID3D12Device9& GraphicHardware::Device() const
+	auto GraphicHardware::Device() const -> ID3D12Device9&
 	{
 		Asserts::IsTrue(mDevice, "Device is not valid");
 		return *mDevice;
@@ -183,7 +168,7 @@ namespace aiva2::native
 	}
 
 #if defined(_DEBUG)
-	ID3D12InfoQueue1& GraphicHardware::InfoQueue() const
+	auto GraphicHardware::InfoQueue() const -> ID3D12InfoQueue1&
 	{
 		Asserts::IsTrue(mInfoQueue, "Info queue is not valid");
 		return *mInfoQueue;
@@ -226,7 +211,7 @@ namespace aiva2::native
 	}
 #endif
 
-	ID3D12CommandQueue& GraphicHardware::CommandQueue() const
+	auto GraphicHardware::CommandQueue() const -> ID3D12CommandQueue&
 	{
 		Asserts::IsTrue(mCommandQueue, "Command queue is not valid");
 		return *mCommandQueue;
@@ -253,7 +238,7 @@ namespace aiva2::native
 		mCommandQueue = {};
 	}
 
-	bool GraphicHardware::IsTearingAllowed() const
+	auto GraphicHardware::IsTearingAllowed() const -> bool
 	{
 		Asserts::IsTrue(mIsTearingAllowed, "Is tearing allowed is not valid");
 		return *mIsTearingAllowed;
@@ -273,7 +258,7 @@ namespace aiva2::native
 		mIsTearingAllowed = {};
 	}
 
-	IDXGISwapChain4& GraphicHardware::SwapChain() const
+	auto GraphicHardware::SwapChain() const -> IDXGISwapChain4&
 	{
 		Asserts::IsTrue(mSwapChain, "Swap chain is not valid");
 		return *mSwapChain;
@@ -295,7 +280,7 @@ namespace aiva2::native
 		desc.Flags = IsTearingAllowed() ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : NULL;
 
 		auto basicSwapChain = winrt::com_ptr<IDXGISwapChain1>{};
-		winrt::check_hresult(Factory().CreateSwapChainForCoreWindow(&CommandQueue(), winrt::get_unknown(Engine().WindowSystem().Window().Window()), &desc, nullptr, basicSwapChain.put()));
+		winrt::check_hresult(Factory().CreateSwapChainForCoreWindow(&CommandQueue(), winrt::get_unknown(Engine().WindowSystem().CoreWindow()), &desc, nullptr, basicSwapChain.put()));
 		Asserts::IsTrue(basicSwapChain, "Basic swap chain is not valid");
 
 		auto specificSwapChain = winrt::com_ptr<IDXGISwapChain4>{};
@@ -311,7 +296,7 @@ namespace aiva2::native
 		mSwapChain = {};
 	}
 
-	ID3D12CommandAllocator& GraphicHardware::CommandAllocator() const
+	auto GraphicHardware::CommandAllocator() const -> ID3D12CommandAllocator&
 	{
 		Asserts::IsTrue(mCommandAllocator, "Command allocator is not valid");
 		return *mCommandAllocator;
@@ -323,7 +308,7 @@ namespace aiva2::native
 		winrt::check_hresult(Device().CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator)));
 		Asserts::IsTrue(commandAllocator, "Command allocator is not valid");
 
-		mCommandAllocator = {};
+		mCommandAllocator = commandAllocator;
 	}
 
 	void GraphicHardware::ShutCommandAllocator()
@@ -332,7 +317,7 @@ namespace aiva2::native
 		mCommandAllocator = {};
 	}
 
-	ID3D12GraphicsCommandList6& GraphicHardware::CommandList() const
+	auto GraphicHardware::CommandList() const -> ID3D12GraphicsCommandList6&
 	{
 		Asserts::IsTrue(mCommandList, "Command list is not valid");
 		return *mCommandList;
@@ -359,7 +344,7 @@ namespace aiva2::native
 		mCommandList = {};
 	}
 
-	ID3D12Fence1& GraphicHardware::Fence() const
+	auto GraphicHardware::Fence() const -> ID3D12Fence1&
 	{
 		Asserts::IsTrue(mFence, "Fence is not valid");
 		return *mFence;

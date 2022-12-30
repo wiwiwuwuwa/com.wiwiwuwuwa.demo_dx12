@@ -2,11 +2,9 @@
 #include <pch.h>
 
 #include <aiva2/engine/engine_fwd.h>
-#include <aiva2/engine/graphic_hardware_fwd.h>
 #include <aiva2/engine/i_object.h>
 #include <aiva2/engine/m_struct_body.h>
-#include <aiva2/engine/time_system_fwd.h>
-#include <aiva2/engine/window_system_fwd.h>
+#include <aiva2/native/engine_fwd.h>
 
 namespace aiva2::engine
 {
@@ -24,57 +22,20 @@ namespace aiva2::engine
 		~Engine() override;
 
 	public:
-		void Run();
+		void Run() const;
 
 	// ----------------------------------------------------
-	// IObject
+	// Native
 
 	public:
-		void Init() override;
-
-		void Shut() override;
-
-	// ----------------------------------------------------
-	// Systems
+		auto Native() const -> native::Engine&;
 
 	private:
-		void InitSystems();
+		void InitNative();
 
-		void ShutSystems();
-
-	// ----------------------------------------------------
-	// Systems (Generic)
-
-	public:
-		auto TimeSystem() const -> engine::TimeSystem&;
+		void ShutNative();
 
 	private:
-		void InitTimeSystem();
-
-		void ShutTimeSystem();
-
-	private:
-		std::shared_ptr<engine::TimeSystem> mTimeSystem{};
-
-	// ----------------------------------------------------
-	// Systems (Virtual)
-
-	public:
-		virtual auto WindowSystem() const -> engine::WindowSystem& = NULL;
-
-	protected:
-		virtual void InitWindowSystem() = NULL;
-
-		virtual void ShutWindowSystem() = NULL;
-
-	// ----------------------------------------------------
-
-	public:
-		virtual auto GraphicHardware() const -> engine::GraphicHardware& = NULL;
-
-	protected:
-		virtual void InitGraphicHardware() = NULL;
-
-		virtual void ShutGraphicHardware() = NULL;
+		std::shared_ptr<native::Engine> mNative{};
 	};
 }

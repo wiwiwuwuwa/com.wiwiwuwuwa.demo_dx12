@@ -1,8 +1,10 @@
 #include <pch.h>
-#include <aiva2/native/uwp/engine.h>
+#include <aiva2/native/engine.h>
 
 #include <aiva2/engine/asserts.h>
 #include <aiva2/engine/object_utils.h>
+#include <aiva2/native/graphic_hardware.h>
+#include <aiva2/native/window_system.h>
 
 namespace aiva2::native
 {
@@ -10,15 +12,42 @@ namespace aiva2::native
 
 	Engine::Engine()
 	{
-
+		InitSystems();
 	}
 
 	Engine::~Engine()
 	{
-
+		ShutSystems();
 	}
 
-	native::WindowSystem& Engine::WindowSystem() const
+	void Engine::Run() const
+	{
+		WindowSystem().RunWindow();
+	}
+
+	void Engine::InitSystems()
+	{
+		InitWindowSystem();
+		WindowSystem().OnWindowInit().AttachListener(&ThisType::Systems_When_WindowSystem_OnWindowInit, this);
+	}
+
+	void Engine::ShutSystems()
+	{
+		WindowSystem().OnWindowInit().RemoveListener(&ThisType::Systems_When_WindowSystem_OnWindowInit, this);
+		ShutWindowSystem();
+	}
+
+	void Engine::Systems_When_WindowSystem_OnWindowInit()
+	{
+		InitGraphicHardware();
+	}
+
+	void Engine::Systems_When_WindowSystem_OnWindowShut()
+	{
+		ShutGraphicHardware();
+	}
+
+	auto Engine::WindowSystem() const -> native::WindowSystem&
 	{
 		Asserts::IsTrue(mWindowSystem, "Window system is not valid");
 		return *mWindowSystem;
@@ -36,7 +65,7 @@ namespace aiva2::native
 		mWindowSystem = {};
 	}
 
-	native::GraphicHardware& Engine::GraphicHardware() const
+	auto Engine::GraphicHardware() const -> native::GraphicHardware&
 	{
 		Asserts::IsTrue(mGraphicHardware, "Graphic hardware is not valid");
 		return *mGraphicHardware;

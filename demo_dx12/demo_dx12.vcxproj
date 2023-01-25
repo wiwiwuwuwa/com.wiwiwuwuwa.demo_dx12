@@ -179,6 +179,7 @@
     <ClInclude Include="External Sources\tinyutf8\tinyutf8.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Sources\aiva2\core\asserts.h" />
+    <ClInclude Include="Sources\aiva2\core\event_action.h" />
     <ClInclude Include="Sources\aiva2\core\event_action_read_only.h" />
     <ClInclude Include="Sources\aiva2\core\event_action_read_write.h" />
     <ClInclude Include="Sources\aiva2\core\object.h" />

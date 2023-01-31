@@ -24,7 +24,7 @@ namespace aiva2::core
 		auto get_event() -> event_type&;
 
 	private:
-		event_type event{};
+		event_type m_event{};
 
 		// ------------------------------------------------
 	};
@@ -49,12 +49,12 @@ namespace aiva2::core
 	template <typename... t_args>
 	auto event_action_base_t<t_args...>::get_event() const -> event_type const&
 	{
-		return event;
+		return m_event;
 	}
 
 	template <typename... t_args>
 	auto event_action_base_t<t_args...>::get_event() -> event_type&
 	{
-		return event;
+		return m_event;
 	}
 }

@@ -155,7 +155,8 @@
     <ClCompile Include="Sources\aiva\layer1_ext\gc_copy_buffer_to_buffer.cpp" />
     <ClCompile Include="Sources\aiva\layer1_ext\ut_graphic_command_utils.cpp" />
     <ClCompile Include="Sources\aiva\layer1_ext\gc_copy_buffer_to_texture_2d.cpp" />
-    <ClCompile Include="Sources\aiva2\core\object.cpp" />
+    <ClCompile Include="Sources\aiva2\native\engine.cpp" />
+    <ClCompile Include="Sources\aiva2\core\engine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -503,6 +504,8 @@
     <ClInclude Include="Sources\aiva2\core\engine.h" />
     <ClInclude Include="Sources\aiva2\core\engine_fwd.h" />
     <ClInclude Include="Sources\aiva2\init.h" />
+    <ClInclude Include="Sources\aiva2\native\engine.h" />
+    <ClInclude Include="Sources\aiva2\native\engine_fwd.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

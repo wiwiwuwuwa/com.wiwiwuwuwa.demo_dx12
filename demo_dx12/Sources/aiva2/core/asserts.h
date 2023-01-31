@@ -28,7 +28,7 @@ namespace aiva2::core
 namespace aiva2::core
 {
 	template <typename t_val>
-	void check_true(t_val const& value, std::string const& message = {})
+	void asserts_t::check_true(t_val const& value, std::string const& message /*= {}*/)
 	{
 		if (!value)
 		{
@@ -37,7 +37,7 @@ namespace aiva2::core
 	}
 
 	template <typename t_val>
-	void check_false(t_val const& value, std::string const& message = {})
+	void asserts_t::check_false(t_val const& value, std::string const& message /*= {}*/)
 	{
 		check_true(!value, message);
 	}

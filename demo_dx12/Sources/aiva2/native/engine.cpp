@@ -1,7 +1,7 @@
 #include <pch.h>
-#include <aiva2/core/engine.h>
+#include <aiva2/native/engine.h>
 
-namespace aiva2::core
+namespace aiva2::native
 {
 	engine_t::engine_t()
 	{

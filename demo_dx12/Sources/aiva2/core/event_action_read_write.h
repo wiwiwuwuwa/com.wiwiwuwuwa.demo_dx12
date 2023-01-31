@@ -15,6 +15,8 @@ namespace aiva2::core
 
 		friend owner_type;
 
+		// ------------------------------------------------
+
 	protected:
 		event_action_read_write_t();
 

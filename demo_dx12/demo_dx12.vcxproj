@@ -179,13 +179,17 @@
     <ClInclude Include="External Sources\tinyutf8\tinyutf8.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Sources\aiva2\core\asserts.h" />
+    <ClInclude Include="Sources\aiva2\core\engine.h" />
+    <ClInclude Include="Sources\aiva2\core\engine_fwd.h" />
     <ClInclude Include="Sources\aiva2\core\event_action.h" />
     <ClInclude Include="Sources\aiva2\core\event_action_read_only.h" />
     <ClInclude Include="Sources\aiva2\core\event_action_read_write.h" />
+    <ClInclude Include="Sources\aiva2\core\implements.h" />
     <ClInclude Include="Sources\aiva2\core\object.h" />
     <ClInclude Include="Sources\aiva2\core\object_fwd.h" />
     <ClInclude Include="Sources\aiva2\core\object_utils.h" />
     <ClInclude Include="Sources\aiva2\core\event_action_base.h" />
+    <ClInclude Include="Sources\aiva2\init.h" />
     <ClInclude Include="Sources\aiva\layer0\app.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_fwd.h" />
@@ -540,6 +544,7 @@
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Sources\aiva2\core\object.cpp" />
     <ClCompile Include="Sources\aiva\layer0\app.cpp" />
     <ClCompile Include="Sources\aiva\layer1\a_graphic_resource.cpp" />
     <ClCompile Include="Sources\aiva\layer1\a_graphic_resource_view.cpp" />
@@ -875,6 +880,7 @@
     <None Include="demo_dx12_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="PropertySheet.props" />
+    <None Include="Sources\aiva2\info.md" />
     <None Include="Sources\resources\scenes\avenger.blend" />
     <None Include="Sources\resources\scenes\de_dust2.blend" />
     <None Include="Sources\resources\scenes\quad_blit.blend" />

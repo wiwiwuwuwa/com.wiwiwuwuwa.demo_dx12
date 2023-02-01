@@ -13,5 +13,7 @@ namespace aiva2
 	namespace native
 	{
 		struct engine_t;
+
+		struct window_t;
 	}
 }

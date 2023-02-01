@@ -190,6 +190,8 @@
     <ClInclude Include="Sources\aiva2\base.hpp" />
     <ClInclude Include="Sources\aiva2\init.hpp" />
     <ClInclude Include="Sources\aiva2\native\engine.hpp" />
+    <ClInclude Include="Sources\aiva2\native\uwp\window.hpp" />
+    <ClInclude Include="Sources\aiva2\native\window.hpp" />
     <ClInclude Include="Sources\aiva\layer0\app.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource.h" />
     <ClInclude Include="Sources\aiva\layer1\a_graphic_resource_fwd.h" />
@@ -547,6 +549,7 @@
     <ClCompile Include="Sources\aiva2\core\engine.cpp" />
     <ClCompile Include="Sources\aiva2\init.cpp" />
     <ClCompile Include="Sources\aiva2\native\engine.cpp" />
+    <ClCompile Include="Sources\aiva2\native\uwp\window.cpp" />
     <ClCompile Include="Sources\aiva\layer0\app.cpp" />
     <ClCompile Include="Sources\aiva\layer1\a_graphic_resource.cpp" />
     <ClCompile Include="Sources\aiva\layer1\a_graphic_resource_view.cpp" />

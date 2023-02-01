@@ -1,6 +1,8 @@
 #pragma once
 #include <aiva2/base.hpp>
 
+#include <aiva2/core/event_action.hpp>
+
 namespace aiva2::core
 {
     template <typename... t_interfaces>
@@ -13,6 +15,9 @@ namespace aiva2::core
 
     public:
         using this_type = t_this;
+
+        template <typename... t_args>
+        using event_action_type = event_action_for_var_t<this_type, t_args...>;
 
         // ------------------------------------------------
 

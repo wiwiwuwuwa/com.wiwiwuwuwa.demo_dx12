@@ -1,9 +1,8 @@
 #pragma once
-#include <pch.h>
+#include <aiva2/base.hpp>
 
-#include <aiva2/core/implements.h>
-#include <aiva2/core/object.h>
-#include <aiva2/native/engine_fwd.h>
+#include <aiva2/core/implements.hpp>
+#include <aiva2/core/object.hpp>
 
 namespace aiva2::native
 {

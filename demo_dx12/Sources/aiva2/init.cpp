@@ -1,7 +1,7 @@
-#pragma once
 #include <pch.h>
+#include <aiva2/init.hpp>
 
-#include <aiva2/core/engine.h>
+#include <aiva2/core/engine.hpp>
 
 namespace aiva2
 {

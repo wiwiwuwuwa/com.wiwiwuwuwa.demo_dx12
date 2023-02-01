@@ -1,7 +1,7 @@
 #pragma once
-#include <pch.h>
+#include <aiva2/base.hpp>
 
-#include <aiva2/core/event_action_read_only.h>
+#include <aiva2/core/event_action_read_only.hpp>
 
 namespace aiva2::core
 {

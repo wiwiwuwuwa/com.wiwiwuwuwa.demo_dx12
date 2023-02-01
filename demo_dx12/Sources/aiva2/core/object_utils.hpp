@@ -1,5 +1,5 @@
 #pragma once
-#include <pch.h>
+#include <aiva2/base.hpp>
 
 namespace aiva2::core
 {
@@ -8,8 +8,6 @@ namespace aiva2::core
 }
 
 // --------------------------------------------------------
-
-#include <aiva2/core/asserts.h>
 
 namespace aiva2::core
 {

@@ -1,8 +1,8 @@
 #include <pch.h>
-#include <aiva2/core/engine.h>
+#include <aiva2/core/engine.hpp>
 
-#include <aiva2/core/asserts.h>
-#include <aiva2/native/engine.h>
+#include <aiva2/core/asserts.hpp>
+#include <aiva2/native/engine.hpp>
 
 namespace aiva2::core
 {

@@ -9,6 +9,7 @@ namespace aiva2::core
 	struct engine_t final : public implements_t<engine_t, object_t>
 	{
 		// ------------------------------------------------
+		// engine
 
 	public:
 		engine_t();
@@ -16,6 +17,12 @@ namespace aiva2::core
 		~engine_t() override;
 
 		// ------------------------------------------------
+
+	public:
+		void run() const;
+
+		// ------------------------------------------------
+		// native
 
 	public:
 		auto get_native() const -> native::engine_t&;
@@ -26,7 +33,7 @@ namespace aiva2::core
 		void shut_native();
 
 	private:
-		std::unique_ptr<native::engine_t> m_native{};
+		std::shared_ptr<native::engine_t> m_native{};
 
 		// ------------------------------------------------
 	};

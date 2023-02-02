@@ -2,7 +2,6 @@
 #include <aiva2/native/engine.hpp>
 
 #include <aiva2/core/asserts.hpp>
-#include <aiva2/core/object_utils.hpp>
 #include <aiva2/native/window_system.hpp>
 
 namespace aiva2::native
@@ -30,7 +29,7 @@ namespace aiva2::native
 
 	void engine_t::init_window_system()
 	{
-		m_window_system = core::new_object<window_system_t>(*this);
+		m_window_system = std::make_unique<window_system_t>(*this);
 		core::asserts_t::check_true(m_window_system, "window system is not valid");
 	}
 

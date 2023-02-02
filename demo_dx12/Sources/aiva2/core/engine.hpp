@@ -33,7 +33,7 @@ namespace aiva2::core
 		void shut_native();
 
 	private:
-		std::shared_ptr<native::engine_t> m_native{};
+		std::unique_ptr<native::engine_t> m_native{};
 
 		// ------------------------------------------------
 	};

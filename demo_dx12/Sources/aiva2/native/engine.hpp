@@ -33,6 +33,6 @@ namespace aiva2::native
 		void shut_window_system();
 
 	private:
-		std::shared_ptr<window_system_t> m_window_system{};
+		std::unique_ptr<window_system_t> m_window_system{};
 	};
 }

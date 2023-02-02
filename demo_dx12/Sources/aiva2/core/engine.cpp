@@ -2,7 +2,6 @@
 #include <aiva2/core/engine.hpp>
 
 #include <aiva2/core/asserts.hpp>
-#include <aiva2/core/object_utils.hpp>
 #include <aiva2/native/engine.hpp>
 
 namespace aiva2::core
@@ -30,7 +29,7 @@ namespace aiva2::core
 
 	void engine_t::init_native()
 	{
-		m_native = new_object<native::engine_t>();
+		m_native = std::make_unique<native::engine_t>();
 		asserts_t::check_true(m_native, "native engine is not valid");
 	}
 

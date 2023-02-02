@@ -185,7 +185,6 @@
     <ClInclude Include="Sources\aiva2\core\event_action_read_write.hpp" />
     <ClInclude Include="Sources\aiva2\core\implements.hpp" />
     <ClInclude Include="Sources\aiva2\core\object.hpp" />
-    <ClInclude Include="Sources\aiva2\core\object_utils.hpp" />
     <ClInclude Include="Sources\aiva2\core\event_action_base.hpp" />
     <ClInclude Include="Sources\aiva2\base.hpp" />
     <ClInclude Include="Sources\aiva2\init.hpp" />

@@ -497,7 +497,6 @@
     <ClInclude Include="Sources\aiva\layer1_ext\gc_copy_buffer_to_texture_2d_fwd.h" />
     <ClInclude Include="Sources\aiva2\core\asserts.hpp" />
     <ClInclude Include="Sources\aiva2\core\object.hpp" />
-    <ClInclude Include="Sources\aiva2\core\object_utils.hpp" />
     <ClInclude Include="Sources\aiva2\core\event_action_base.hpp" />
     <ClInclude Include="Sources\aiva2\core\event_action_read_only.hpp" />
     <ClInclude Include="Sources\aiva2\core\event_action_read_write.hpp" />

@@ -16,8 +16,6 @@ namespace aiva2::native
 
 		~time_system_t() override;
 
-		// ------------------------------------------------
-
 	public:
 		auto get_engine() const->engine_t&;
 

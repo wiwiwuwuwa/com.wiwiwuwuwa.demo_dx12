@@ -45,6 +45,8 @@ namespace aiva2::native
 
 	void time_system_t::tick_time_system()
 	{
+		get_on_update().broadcast();
+		get_on_render().broadcast();
 		m_tick++;
 	}
 

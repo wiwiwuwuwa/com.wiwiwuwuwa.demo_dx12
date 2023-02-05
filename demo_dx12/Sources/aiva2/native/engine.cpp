@@ -3,6 +3,7 @@
 
 #include <aiva2/core/asserts.hpp>
 #include <aiva2/native/graphic_hardware.hpp>
+#include <aiva2/native/graphic_pipeline.hpp>
 #include <aiva2/native/time_system.hpp>
 #include <aiva2/native/window_system.hpp>
 
@@ -39,6 +40,12 @@ namespace aiva2::native
 	{
 		core::asserts_t::check_true(m_graphic_hardware, "graphic hardware is not valid");
 		return *m_graphic_hardware;
+	}
+
+	auto engine_t::get_graphic_pipeline() const -> graphic_pipeline_t&
+	{
+		core::asserts_t::check_true(m_graphic_pipeline, "graphic pipeline is not valid");
+		return *m_graphic_pipeline;
 	}
 
 	void engine_t::init_systems()
@@ -102,10 +109,23 @@ namespace aiva2::native
 		m_graphic_hardware = {};
 	}
 
+	void engine_t::init_graphic_pipeline()
+	{
+		m_graphic_pipeline = std::make_unique<graphic_pipeline_t>(*this);
+		core::asserts_t::check_true(m_graphic_pipeline, "graphic pipeline is not valid");
+	}
+
+	void engine_t::shut_graphic_pipeline()
+	{
+		core::asserts_t::check_true(m_graphic_pipeline, "graphic pipeline is not valid");
+		m_graphic_pipeline = {};
+	}
+
 	void engine_t::systems_when_window_system_on_init()
 	{
 		init_time_system();
 		init_graphic_hardware();
+		init_graphic_pipeline();
 	}
 
 	void engine_t::systems_when_window_system_on_tick()
@@ -115,6 +135,7 @@ namespace aiva2::native
 
 	void engine_t::systems_when_window_system_on_shut()
 	{
+		shut_graphic_pipeline();
 		shut_graphic_hardware();
 		shut_time_system();
 	}

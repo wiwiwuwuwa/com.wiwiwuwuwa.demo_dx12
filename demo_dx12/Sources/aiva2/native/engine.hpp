@@ -27,6 +27,8 @@ namespace aiva2::native
 	public:
 		auto get_window_system() const -> window_system_t&;
 
+		auto get_time_system() const->time_system_t&;
+
 		auto get_graphic_hardware() const->graphic_hardware_t&;
 
 	private:
@@ -38,16 +40,26 @@ namespace aiva2::native
 
 		void shut_window_system();
 
+		void init_time_system();
+
+		void tick_time_system();
+
+		void shut_time_system();
+
 		void init_graphic_hardware();
 
 		void shut_graphic_hardware();
 
 		void systems_when_window_system_on_init();
 
+		void systems_when_window_system_on_tick();
+
 		void systems_when_window_system_on_shut();
 
 	private:
 		std::unique_ptr<window_system_t> m_window_system{};
+
+		std::unique_ptr<time_system_t> m_time_system{};
 
 		std::unique_ptr<graphic_hardware_t> m_graphic_hardware{};
 	};

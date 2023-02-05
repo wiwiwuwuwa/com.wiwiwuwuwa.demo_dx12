@@ -16,6 +16,8 @@ namespace aiva2
 
 		struct graphic_hardware_t;
 
+		struct time_system_t;
+
 		struct window_t;
 
 		struct window_system_t;

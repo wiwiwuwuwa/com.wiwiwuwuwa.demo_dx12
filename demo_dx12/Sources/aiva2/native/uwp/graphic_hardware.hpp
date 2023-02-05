@@ -9,17 +9,17 @@ namespace aiva2::native
 	{
 		// ------------------------------------------------
 		// graphic hardware
-		
+
 	public:
 		graphic_hardware_t(engine_t& engine);
 
 		~graphic_hardware_t() override;
-		
+
 		// ------------------------------------------------
-		
+
 	public:
-		auto get_engine() const -> engine_t&;
-		
+		auto get_engine() const->engine_t&;
+
 	private:
 		engine_t& m_engine;
 
@@ -28,28 +28,28 @@ namespace aiva2::native
 
 	public:
 #if defined(_DEBUG)
-		auto get_debug() const -> ID3D12Debug6&;
+		auto get_debug() const->ID3D12Debug6&;
 #endif
-		
-		auto get_factory() const -> IDXGIFactory7&;
 
-		auto get_adapter() const -> IDXGIAdapter4&;
+		auto get_factory() const->IDXGIFactory7&;
 
-		auto get_device() const -> ID3D12Device9&;
+		auto get_adapter() const->IDXGIAdapter4&;
+
+		auto get_device() const->ID3D12Device9&;
 
 #if defined(_DEBUG)
-		auto get_info_queue() const -> ID3D12InfoQueue1&;
+		auto get_info_queue() const->ID3D12InfoQueue1&;
 #endif
 
-		auto get_command_queue() const -> ID3D12CommandQueue&;
+		auto get_command_queue() const->ID3D12CommandQueue&;
 
-		auto get_swap_chain() const -> IDXGISwapChain4&;
+		auto get_swap_chain() const->IDXGISwapChain4&;
 
-		auto get_command_allocator() const -> ID3D12CommandAllocator&;
+		auto get_command_allocator() const->ID3D12CommandAllocator&;
 
-		auto get_command_list() const -> ID3D12GraphicsCommandList6&;
+		auto get_command_list() const->ID3D12GraphicsCommandList6&;
 
-		auto get_fence() const -> ID3D12Fence1&;
+		auto get_fence() const->ID3D12Fence1&;
 
 		auto get_is_tearing_allowed() const -> bool;
 
@@ -81,7 +81,7 @@ namespace aiva2::native
 
 		void shut_info_queue();
 #endif
-		
+
 		void init_command_queue();
 
 		void shut_command_queue();
@@ -124,7 +124,7 @@ namespace aiva2::native
 		winrt::com_ptr<ID3D12CommandQueue> m_command_queue{};
 
 		std::optional<bool> m_is_tearing_allowed{};
-		
+
 		winrt::com_ptr<IDXGISwapChain4> m_swap_chain{};
 
 		winrt::com_ptr<ID3D12CommandAllocator> m_command_allocator{};

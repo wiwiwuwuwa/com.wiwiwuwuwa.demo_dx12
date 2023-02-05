@@ -55,7 +55,7 @@ namespace aiva2::native
 		return *m_info_queue;
 	}
 #endif
-	
+
 	auto graphic_hardware_t::get_command_queue() const -> ID3D12CommandQueue&
 	{
 		core::asserts_t::check_true(m_command_queue, "command queue is not valid");
@@ -140,7 +140,7 @@ namespace aiva2::native
 		auto specific_debug = winrt::com_ptr<ID3D12Debug6>{};
 		basic_debug.as(specific_debug);
 		core::asserts_t::check_true(specific_debug, "specific debug is not valid");
-		
+
 		specific_debug->EnableDebugLayer();
 		m_debug = specific_debug;
 	}
@@ -159,7 +159,7 @@ namespace aiva2::native
 #else
 		auto const flags = UINT{};
 #endif
-		
+
 		auto basic_factory = winrt::com_ptr<IDXGIFactory2>{};
 		winrt::check_hresult(CreateDXGIFactory2(flags, IID_PPV_ARGS(&basic_factory)));
 		core::asserts_t::check_true(basic_factory, "basic factory is not valid");
@@ -182,11 +182,11 @@ namespace aiva2::native
 		auto basic_adapter = winrt::com_ptr<IDXGIAdapter>{};
 		winrt::check_hresult(get_factory().EnumAdapterByGpuPreference(0, DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE, IID_PPV_ARGS(&basic_adapter)));
 		core::asserts_t::check_true(basic_adapter, "basic adapter is not valid");
-		
+
 		auto specific_adapter = winrt::com_ptr<IDXGIAdapter4>{};
 		basic_adapter.as(specific_adapter);
 		core::asserts_t::check_true(specific_adapter, "specific adapter is not valid");
-		
+
 		m_adapter = specific_adapter;
 	}
 
@@ -205,7 +205,7 @@ namespace aiva2::native
 		auto specific_device = winrt::com_ptr<ID3D12Device9>{};
 		basic_device.as(specific_device);
 		core::asserts_t::check_true(specific_device, "specific device is not valid");
-		
+
 		m_device = specific_device;
 	}
 
@@ -220,11 +220,11 @@ namespace aiva2::native
 	{
 		auto const& device = m_device;
 		core::asserts_t::check_true(device, "device is not valid");
-		
+
 		auto info_queue = winrt::com_ptr<ID3D12InfoQueue1>{};
 		device.as(info_queue);
 		core::asserts_t::check_true(info_queue, "info queue is not valid");
-		
+
 		info_queue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
 		info_queue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
 		info_queue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
@@ -260,7 +260,7 @@ namespace aiva2::native
 		desc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;
 		desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 		desc.NodeMask = {};
-		
+
 		auto command_queue = winrt::com_ptr<ID3D12CommandQueue>{};
 		winrt::check_hresult(get_device().CreateCommandQueue(&desc, IID_PPV_ARGS(&command_queue)));
 		core::asserts_t::check_true(command_queue, "command queue is not valid");
@@ -302,15 +302,15 @@ namespace aiva2::native
 		desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 		desc.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
 		desc.Flags = get_is_tearing_allowed() ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : NULL;
-		
+
 		auto basic_swap_chain = winrt::com_ptr<IDXGISwapChain1>{};
 		winrt::check_hresult(get_factory().CreateSwapChainForCoreWindow(&get_command_queue(), winrt::get_unknown(get_engine().get_window_system().get_core_window()), &desc, nullptr, basic_swap_chain.put()));
 		core::asserts_t::check_true(basic_swap_chain, "basic swap chain is not valid");
-		
+
 		auto specific_swap_chain = winrt::com_ptr<IDXGISwapChain4>{};
 		basic_swap_chain.as(specific_swap_chain);
 		core::asserts_t::check_true(specific_swap_chain, "specific swap chain is not valid");
-		
+
 		m_swap_chain = specific_swap_chain;
 	}
 
@@ -325,7 +325,7 @@ namespace aiva2::native
 		auto command_allocator = winrt::com_ptr<ID3D12CommandAllocator>{};
 		winrt::check_hresult(get_device().CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&command_allocator)));
 		core::asserts_t::check_true(command_allocator, "command allocator is not valid");
-		
+
 		m_command_allocator = command_allocator;
 	}
 
@@ -340,11 +340,11 @@ namespace aiva2::native
 		auto basic_command_list = winrt::com_ptr<ID3D12GraphicsCommandList>{};
 		winrt::check_hresult(get_device().CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, &get_command_allocator(), nullptr, IID_PPV_ARGS(&basic_command_list)));
 		core::asserts_t::check_true(basic_command_list, "basic command list is not valid");
-		
+
 		auto specific_command_list = winrt::com_ptr<ID3D12GraphicsCommandList6>{};
 		basic_command_list.as(specific_command_list);
 		core::asserts_t::check_true(specific_command_list, "specific command list is not valid");
-		
+
 		winrt::check_hresult(specific_command_list->Close());
 		m_command_list = specific_command_list;
 	}
@@ -360,11 +360,11 @@ namespace aiva2::native
 		auto basic_fence = winrt::com_ptr<ID3D12Fence>{};
 		winrt::check_hresult(get_device().CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&basic_fence)));
 		core::asserts_t::check_true(basic_fence, "basic fence is not valid");
-		
+
 		auto specific_fence = winrt::com_ptr<ID3D12Fence1>{};
 		basic_fence.as(specific_fence);
 		core::asserts_t::check_true(specific_fence, "specific fence is not valid");
-		
+
 		m_fence = specific_fence;
 	}
 

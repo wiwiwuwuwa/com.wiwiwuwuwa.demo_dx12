@@ -22,7 +22,7 @@ namespace aiva2::native
 		auto get_engine() const->engine_t&;
 
 		auto get_on_update() -> event_action_type<>&;
-		
+
 		auto get_on_render() -> event_action_type<>&;
 
 		auto get_tick() const->uint64_t;

@@ -25,7 +25,7 @@ namespace aiva2::native
 		// systems
 
 	public:
-		auto get_window_system() const -> window_system_t&;
+		auto get_window_system() const->window_system_t&;
 
 		auto get_time_system() const->time_system_t&;
 
@@ -33,9 +33,9 @@ namespace aiva2::native
 
 	private:
 		void init_systems();
-		
+
 		void shut_systems();
-		
+
 		void init_window_system();
 
 		void shut_window_system();

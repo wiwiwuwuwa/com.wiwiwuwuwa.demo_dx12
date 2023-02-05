@@ -68,7 +68,7 @@ namespace aiva2::native
 		m_window_system->get_on_shut().remove_listener(&this_type::systems_when_window_system_on_shut, this);
 		m_window_system->get_on_tick().remove_listener(&this_type::systems_when_window_system_on_tick, this);
 		m_window_system->get_on_init().remove_listener(&this_type::systems_when_window_system_on_init, this);
-		
+
 		m_window_system = {};
 	}
 
@@ -89,7 +89,7 @@ namespace aiva2::native
 		core::asserts_t::check_true(m_time_system, "time system is not valid");
 		m_time_system = {};
 	}
-	
+
 	void engine_t::init_graphic_hardware()
 	{
 		m_graphic_hardware = std::make_unique<graphic_hardware_t>(*this);

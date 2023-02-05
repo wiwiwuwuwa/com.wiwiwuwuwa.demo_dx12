@@ -47,7 +47,7 @@ namespace aiva2::native
 	{
 		m_tick++;
 	}
-	
+
 	void time_system_t::shut_time_system()
 	{
 		m_tick = {};

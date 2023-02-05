@@ -189,6 +189,8 @@
     <ClInclude Include="Sources\aiva2\base.hpp" />
     <ClInclude Include="Sources\aiva2\init.hpp" />
     <ClInclude Include="Sources\aiva2\native\engine.hpp" />
+    <ClInclude Include="Sources\aiva2\native\uwp\graphic_hardware.hpp" />
+    <ClInclude Include="Sources\aiva2\native\graphic_hardware.hpp" />
     <ClInclude Include="Sources\aiva2\native\uwp\window.hpp" />
     <ClInclude Include="Sources\aiva2\native\uwp\window_system.hpp" />
     <ClInclude Include="Sources\aiva2\native\window.hpp" />
@@ -550,6 +552,7 @@
     <ClCompile Include="Sources\aiva2\core\engine.cpp" />
     <ClCompile Include="Sources\aiva2\init.cpp" />
     <ClCompile Include="Sources\aiva2\native\engine.cpp" />
+    <ClCompile Include="Sources\aiva2\native\uwp\graphic_hardware.cpp" />
     <ClCompile Include="Sources\aiva2\native\uwp\window.cpp" />
     <ClCompile Include="Sources\aiva2\native\uwp\window_system.cpp" />
     <ClCompile Include="Sources\aiva\layer0\app.cpp" />

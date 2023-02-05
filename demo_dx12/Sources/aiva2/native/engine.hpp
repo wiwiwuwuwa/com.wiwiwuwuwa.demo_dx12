@@ -22,17 +22,33 @@ namespace aiva2::native
 		void run() const;
 
 		// ------------------------------------------------
-		// window system
+		// systems
 
 	public:
 		auto get_window_system() const -> window_system_t&;
 
+		auto get_graphic_hardware() const->graphic_hardware_t&;
+
 	private:
+		void init_systems();
+		
+		void shut_systems();
+		
 		void init_window_system();
 
 		void shut_window_system();
 
+		void init_graphic_hardware();
+
+		void shut_graphic_hardware();
+
+		void systems_when_window_system_on_init();
+
+		void systems_when_window_system_on_shut();
+
 	private:
 		std::unique_ptr<window_system_t> m_window_system{};
+
+		std::unique_ptr<graphic_hardware_t> m_graphic_hardware{};
 	};
 }

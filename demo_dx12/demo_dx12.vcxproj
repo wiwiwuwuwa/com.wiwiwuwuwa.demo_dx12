@@ -562,6 +562,7 @@
     <ClCompile Include="Sources\aiva2\init.cpp" />
     <ClCompile Include="Sources\aiva2\native\engine.cpp" />
     <ClCompile Include="Sources\aiva2\native\gcd_set_viewports.cpp" />
+    <ClCompile Include="Sources\aiva2\native\gce_set_viewports.cpp" />
     <ClCompile Include="Sources\aiva2\native\graphic_command_executors.cpp" />
     <ClCompile Include="Sources\aiva2\native\graphic_executor.cpp" />
     <ClCompile Include="Sources\aiva2\native\time_system.cpp" />

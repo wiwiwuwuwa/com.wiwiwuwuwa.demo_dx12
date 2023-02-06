@@ -4,12 +4,9 @@
 #include <aiva2/native/engine.hpp>
 #include <aiva2/native/gcd_set_viewports.hpp>
 #include <aiva2/native/graphic_hardware.hpp>
-#include <aiva2/native/register_graphic_command_executor.hpp>
 
 namespace aiva2::native
-{
-	REGISTER_GRAPHIC_COMMAND_EXECUTOR(gcd_set_viewports_t, gce_set_viewports_t);
-	
+{	
 	void gce_set_viewports_t::execute(gcd_set_viewports_t& command, engine_t& engine)
 	{
 		execute_set_scissor_rects(command, engine);

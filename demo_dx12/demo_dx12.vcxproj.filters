@@ -167,6 +167,7 @@
     <ClCompile Include="Sources\aiva2\native\gcd_set_viewports.cpp" />
     <ClCompile Include="Sources\aiva2\native\uwp\gce_set_viewports.cpp" />
     <ClCompile Include="Sources\aiva2\native\graphic_command_executors.cpp" />
+    <ClCompile Include="Sources\aiva2\native\gce_set_viewports.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

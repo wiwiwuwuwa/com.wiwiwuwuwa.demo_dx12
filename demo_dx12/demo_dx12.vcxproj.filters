@@ -163,6 +163,10 @@
     <ClCompile Include="Sources\aiva2\native\uwp\graphic_hardware.cpp" />
     <ClCompile Include="Sources\aiva2\native\time_system.cpp" />
     <ClCompile Include="Sources\aiva2\native\uwp\graphic_pipeline.cpp" />
+    <ClCompile Include="Sources\aiva2\native\graphic_executor.cpp" />
+    <ClCompile Include="Sources\aiva2\native\gcd_set_viewports.cpp" />
+    <ClCompile Include="Sources\aiva2\native\uwp\gce_set_viewports.cpp" />
+    <ClCompile Include="Sources\aiva2\native\graphic_command_executors.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -518,6 +522,12 @@
     <ClInclude Include="Sources\aiva2\native\time_system.hpp" />
     <ClInclude Include="Sources\aiva2\native\uwp\graphic_pipeline.hpp" />
     <ClInclude Include="Sources\aiva2\native\graphic_pipeline.hpp" />
+    <ClInclude Include="Sources\aiva2\native\graphic_executor.hpp" />
+    <ClInclude Include="Sources\aiva2\native\gcd_set_viewports.hpp" />
+    <ClInclude Include="Sources\aiva2\native\uwp\gce_set_viewports.hpp" />
+    <ClInclude Include="Sources\aiva2\native\gce_set_viewports.hpp" />
+    <ClInclude Include="Sources\aiva2\native\graphic_command_executors.hpp" />
+    <ClInclude Include="Sources\aiva2\native\register_graphic_command_executor.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

@@ -19,7 +19,7 @@ namespace aiva2::native
 	public:
 		auto get_engine() const->engine_t&;
 
-		auto get_on_execute_commands() -> event_action_type<>&;
+		auto get_on_populate_commands() -> event_action_type<>&;
 
 	private:
 		void init_graphic_pipeline();
@@ -46,6 +46,6 @@ namespace aiva2::native
 	private:
 		engine_t& m_engine;
 
-		event_action_type<> m_on_execute_commands{};
+		event_action_type<> m_on_populate_commands{};
 	};
 }

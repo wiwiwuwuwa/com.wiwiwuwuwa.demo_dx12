@@ -14,9 +14,19 @@ namespace aiva2
 	{
 		struct engine_t;
 
+		struct gcd_set_viewports_t;
+
+		struct gce_set_viewports_t;
+
+		struct graphic_command_executors_t;
+
+		struct graphic_executor_t;
+
 		struct graphic_hardware_t;
 
 		struct graphic_pipeline_t;
+
+		struct graphic_remapper_t;
 
 		struct time_system_t;
 

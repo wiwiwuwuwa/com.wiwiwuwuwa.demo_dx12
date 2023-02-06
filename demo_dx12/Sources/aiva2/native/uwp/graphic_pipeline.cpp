@@ -23,9 +23,9 @@ namespace aiva2::native
 		return m_engine;
 	}
 
-	auto graphic_pipeline_t::get_on_execute_commands() -> event_action_type<>&
+	auto graphic_pipeline_t::get_on_populate_commands() -> event_action_type<>&
 	{
-		return m_on_execute_commands;
+		return m_on_populate_commands;
 	}
 
 	void graphic_pipeline_t::init_graphic_pipeline()
@@ -90,7 +90,7 @@ namespace aiva2::native
 
 	void graphic_pipeline_t::populate_command_list()
 	{
-		get_on_execute_commands().broadcast();
+		get_on_populate_commands().broadcast();
 	}
 
 	void graphic_pipeline_t::close_command_list()

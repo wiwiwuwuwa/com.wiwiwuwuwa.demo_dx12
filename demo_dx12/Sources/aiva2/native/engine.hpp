@@ -33,6 +33,8 @@ namespace aiva2::native
 
 		auto get_graphic_pipeline() const->graphic_pipeline_t&;
 
+		auto get_graphic_executor() const->graphic_executor_t&;
+
 	private:
 		void init_systems();
 
@@ -56,6 +58,10 @@ namespace aiva2::native
 
 		void shut_graphic_pipeline();
 
+		void init_graphic_executor();
+
+		void shut_graphic_executor();
+
 		void systems_when_window_system_on_init();
 
 		void systems_when_window_system_on_tick();
@@ -70,5 +76,7 @@ namespace aiva2::native
 		std::unique_ptr<graphic_hardware_t> m_graphic_hardware{};
 
 		std::unique_ptr<graphic_pipeline_t> m_graphic_pipeline{};
+
+		std::unique_ptr<graphic_executor_t> m_graphic_executor{};
 	};
 }

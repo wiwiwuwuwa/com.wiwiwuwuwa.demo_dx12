@@ -49,7 +49,7 @@ namespace aiva2::native
 			auto const& command = m_pending_commands.front();
 			core::asserts_t::check_true(command, "command is not valid");
 			
-			graphic_command_executors_t::execute_command(command, get_engine());
+			graphic_command_executors_t::execute_command(*command, get_engine());
 
 			m_executing_commands.push_back(command);
 			m_pending_commands.pop_front();

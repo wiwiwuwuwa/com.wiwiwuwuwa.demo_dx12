@@ -9,7 +9,7 @@ namespace aiva2::native
 		// graphic command executors
 
 	private:
-		using executor_type = std::function<void(std::shared_ptr<core::object_t> const&, engine_t&)>;
+		using executor_type = std::function<void(core::object_t&, engine_t&)>;
 
 	private:
 		graphic_command_executors_t() = delete;
@@ -18,7 +18,7 @@ namespace aiva2::native
 		template <typename t_command_data, typename t_command_exec>
 		static void register_executor();
 
-		static void execute_command(std::shared_ptr<core::object_t> const& command, engine_t& engine);
+		static void execute_command(core::object_t& command, engine_t& engine);
 		
 	private:
 		static std::unordered_map<std::type_index, executor_type> m_executors;
@@ -37,9 +37,9 @@ namespace aiva2::native
 		m_executors.insert_or_assign
 		(
 			typeid(t_command_data),
-			[](std::shared_ptr<core::object_t> const& basic_command, engine_t& engine)
+			[](core::object_t& basic_command, engine_t& engine)
 			{
-				auto const specific_command = std::dynamic_pointer_cast<t_command_data>(basic_command);
+				auto const specific_command = dynamic_cast<t_command_data*>(&basic_command);
 				core::asserts_t::check_true(specific_command, "specific command is not valid");
 
 				t_command_exec::execute(*specific_command, engine);

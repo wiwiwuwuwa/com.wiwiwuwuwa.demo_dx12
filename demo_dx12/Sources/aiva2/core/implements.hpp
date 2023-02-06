@@ -28,7 +28,7 @@ namespace aiva2::core
     };
 
     template <typename t_this, typename t_base>
-    struct implements_t<t_this, t_base> : public implements_t<t_this>
+	struct implements_t<t_this, t_base> : public implements_t<t_this>, public t_base
     {
         // ------------------------------------------------
 

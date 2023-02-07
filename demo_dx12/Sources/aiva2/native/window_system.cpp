@@ -1,8 +1,8 @@
 #include <pch.h>
-#include <aiva2/native/uwp/window_system.hpp>
+#include <aiva2/native/window_system.hpp>
 
 #include <aiva2/core/asserts.hpp>
-#include <aiva2/native/uwp/window.hpp>
+#include <aiva2/native/window.hpp>
 #include <aiva2/native/engine.hpp>
 
 namespace aiva2::native

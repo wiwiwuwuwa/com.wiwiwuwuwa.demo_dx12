@@ -1,5 +1,5 @@
 #include <pch.h>
-#include <aiva2/native/uwp/graphic_pipeline.hpp>
+#include <aiva2/native/graphic_pipeline.hpp>
 
 #include <aiva2/core/asserts.hpp>
 #include <aiva2/native/engine.hpp>

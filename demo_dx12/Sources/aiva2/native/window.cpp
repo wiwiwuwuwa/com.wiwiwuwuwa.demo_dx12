@@ -1,5 +1,5 @@
 #include <pch.h>
-#include <aiva2/native/uwp/window.hpp>
+#include <aiva2/native/window.hpp>
 
 namespace aiva2::native
 {

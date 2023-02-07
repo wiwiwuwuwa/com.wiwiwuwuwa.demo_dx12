@@ -60,7 +60,7 @@ namespace aiva2::native
 		resource_desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
 		resource_desc.Alignment = {};
 		resource_desc.Width = static_cast<UINT64>(m_params.get_width());
-		resource_desc.Height = static_cast<UINT64>(m_params.get_height());
+		resource_desc.Height = static_cast<UINT>(m_params.get_height());
 		resource_desc.DepthOrArraySize = 1;
 		resource_desc.MipLevels = m_params.get_support_mip_mappping() ? 0 : 1;
 		resource_desc.Format = to_dxgi_format(m_params.get_format());

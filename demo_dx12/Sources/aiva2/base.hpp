@@ -12,11 +12,17 @@ namespace aiva2
 
 	namespace native
 	{
+		enum class buffer_format_t;
+		
 		struct engine_t;
 
 		struct gcd_set_viewports_t;
 
 		struct gce_set_viewports_t;
+		
+		struct gr_texture_2d_t;
+
+		struct gr_texture_2d_params_t;
 
 		struct graphic_command_executors_t;
 

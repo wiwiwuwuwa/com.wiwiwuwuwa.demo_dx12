@@ -170,6 +170,7 @@
     <ClCompile Include="Sources\aiva2\native\gr_texture_2d_params.cpp" />
     <ClCompile Include="Sources\aiva2\native\gr_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva2\native\engine_object.cpp" />
+    <ClCompile Include="Sources\aiva2\native\graphic_resource.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -533,6 +534,7 @@
     <ClInclude Include="Sources\aiva2\native\gr_texture_2d_params.hpp" />
     <ClInclude Include="Sources\aiva2\native\gr_texture_2d.hpp" />
     <ClInclude Include="Sources\aiva2\native\engine_object.hpp" />
+    <ClInclude Include="Sources\aiva2\native\graphic_resource.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

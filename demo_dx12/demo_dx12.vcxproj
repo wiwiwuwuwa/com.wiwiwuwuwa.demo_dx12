@@ -196,6 +196,7 @@
     <ClInclude Include="Sources\aiva2\native\engine_object.hpp" />
     <ClInclude Include="Sources\aiva2\native\graphic_command_executors.hpp" />
     <ClInclude Include="Sources\aiva2\native\graphic_executor.hpp" />
+    <ClInclude Include="Sources\aiva2\native\graphic_resource.hpp" />
     <ClInclude Include="Sources\aiva2\native\gr_texture_2d_params.hpp" />
     <ClInclude Include="Sources\aiva2\native\register_graphic_command_executor.hpp" />
     <ClInclude Include="Sources\aiva2\native\time_system.hpp" />
@@ -567,6 +568,7 @@
     <ClCompile Include="Sources\aiva2\native\gcd_set_viewports.cpp" />
     <ClCompile Include="Sources\aiva2\native\graphic_command_executors.cpp" />
     <ClCompile Include="Sources\aiva2\native\graphic_executor.cpp" />
+    <ClCompile Include="Sources\aiva2\native\graphic_resource.cpp" />
     <ClCompile Include="Sources\aiva2\native\gr_texture_2d_params.cpp" />
     <ClCompile Include="Sources\aiva2\native\time_system.cpp" />
     <ClCompile Include="Sources\aiva2\native\graphic_hardware.cpp" />

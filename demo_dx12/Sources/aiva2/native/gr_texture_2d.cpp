@@ -14,7 +14,7 @@ namespace aiva2::native
 		init_resource_from_params();
 	}
 
-	gr_texture_2d_t::gr_texture_2d_t(engine_t& engine, winrt::com_ptr<ID3D12Resource> const& resource) : impl_type{ engine }, m_resource{ resource }	
+	gr_texture_2d_t::gr_texture_2d_t(engine_t& engine, winrt::com_ptr<ID3D12Resource> const& resource) : impl_type{ engine, resource }
 	{
 		init_params_from_resource();
 	}

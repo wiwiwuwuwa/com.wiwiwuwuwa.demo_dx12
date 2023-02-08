@@ -2,12 +2,12 @@
 #include <aiva2/base.hpp>
 
 #include <aiva2/core/implements.hpp>
-#include <aiva2/native/engine_object.hpp>
+#include <aiva2/native/graphic_resource.hpp>
 #include <aiva2/native/gr_texture_2d_params.hpp>
 
 namespace aiva2::native
 {
-	struct gr_texture_2d_t final : public core::implements_t<gr_texture_2d_t, engine_object_t>
+	struct gr_texture_2d_t final : public core::implements_t<gr_texture_2d_t, graphic_resource_t>
 	{
 		// ------------------------------------------------
 		// texture 2d data
@@ -29,9 +29,5 @@ namespace aiva2::native
 
 	private:
 		gr_texture_2d_params_t m_params{};
-
-		winrt::com_ptr<ID3D12Resource> m_resource{};
-
-		// TODO: add support for barriers
 	};
 }

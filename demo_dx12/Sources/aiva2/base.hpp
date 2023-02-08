@@ -34,7 +34,7 @@ namespace aiva2
 
 		struct graphic_pipeline_t;
 
-		struct graphic_remapper_t;
+		struct graphic_resource_t;
 
 		struct time_system_t;
 

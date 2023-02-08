@@ -9,12 +9,12 @@
 
 namespace aiva2::native
 {
-	gr_texture_2d_t::gr_texture_2d_t(engine_t& engine, gr_texture_2d_params_t const& params) : m_engine{ engine }, m_params{ params }
+	gr_texture_2d_t::gr_texture_2d_t(engine_t& engine, gr_texture_2d_params_t const& params) : impl_type{ engine }, m_params{ params }
 	{
 		init_resource_from_params();
 	}
 
-	gr_texture_2d_t::gr_texture_2d_t(engine_t& engine, winrt::com_ptr<ID3D12Resource> const& resource) : m_engine{ engine }, m_resource{ resource }
+	gr_texture_2d_t::gr_texture_2d_t(engine_t& engine, winrt::com_ptr<ID3D12Resource> const& resource) : impl_type{ engine }, m_resource{ resource }	
 	{
 		init_params_from_resource();
 	}
@@ -22,16 +22,6 @@ namespace aiva2::native
 	gr_texture_2d_t::~gr_texture_2d_t()
 	{
 
-	}
-
-	gr_texture_2d_t::gr_texture_2d_t(engine_t& engine) : m_engine{ engine }
-	{
-
-	}
-
-	auto gr_texture_2d_t::get_engine() const->engine_t&
-	{
-		return m_engine;
 	}
 
 	auto gr_texture_2d_t::get_params() const->gr_texture_2d_params_t const&

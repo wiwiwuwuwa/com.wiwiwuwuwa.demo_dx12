@@ -2,11 +2,11 @@
 #include <aiva2/base.hpp>
 
 #include <aiva2/core/implements.hpp>
-#include <aiva2/core/object.hpp>
+#include <aiva2/native/engine_object.hpp>
 
 namespace aiva2::native
 {
-	struct graphic_pipeline_t final : public core::implements_t<graphic_pipeline_t, core::object_t>
+	struct graphic_pipeline_t final : public core::implements_t<graphic_pipeline_t, engine_object_t>
 	{
 		// ------------------------------------------------
 		// graphic pipeline
@@ -17,8 +17,6 @@ namespace aiva2::native
 		~graphic_pipeline_t() override;
 
 	public:
-		auto get_engine() const->engine_t&;
-
 		auto get_on_populate_commands() -> event_action_type<>&;
 
 	private:
@@ -44,8 +42,6 @@ namespace aiva2::native
 		void execute_signal_for_frame();
 
 	private:
-		engine_t& m_engine;
-
 		event_action_type<> m_on_populate_commands{};
 	};
 }

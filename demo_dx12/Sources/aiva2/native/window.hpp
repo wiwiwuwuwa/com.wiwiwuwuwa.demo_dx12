@@ -13,8 +13,6 @@ namespace aiva2::native
 	public:
 		using core_window_type = winrt::Windows::UI::Core::CoreWindow;
 
-		using this_type = window_t;
-
 		// ------------------------------------------------
 		// events
 

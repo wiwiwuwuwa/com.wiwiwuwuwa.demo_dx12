@@ -2,10 +2,11 @@
 #include <aiva2/base.hpp>
 
 #include <aiva2/core/implements.hpp>
+#include <aiva2/native/engine_object.hpp>
 
 namespace aiva2::native
 {
-	struct graphic_hardware_t : public core::implements_t<graphic_hardware_t>
+	struct graphic_hardware_t : public core::implements_t<graphic_hardware_t, engine_object_t>
 	{
 		// ------------------------------------------------
 		// graphic hardware
@@ -14,14 +15,6 @@ namespace aiva2::native
 		graphic_hardware_t(engine_t& engine);
 
 		~graphic_hardware_t() override;
-
-		// ------------------------------------------------
-
-	public:
-		auto get_engine() const->engine_t&;
-
-	private:
-		engine_t& m_engine;
 
 		// ------------------------------------------------
 		// components

@@ -2,11 +2,11 @@
 #include <aiva2/base.hpp>
 
 #include <aiva2/core/implements.hpp>
-#include <aiva2/core/object.hpp>
+#include <aiva2/native/engine_object.hpp>
 
 namespace aiva2::native
 {
-	struct window_system_t final : public core::implements_t<window_system_t, core::object_t>
+	struct window_system_t final : public core::implements_t<window_system_t, engine_object_t>
 	{
 		// ------------------------------------------------
 		// window system
@@ -19,8 +19,6 @@ namespace aiva2::native
 		// ------------------------------------------------
 
 	public:
-		auto get_engine() const->engine_t&;
-
 		auto get_on_init() -> event_action_type<>&;
 
 		auto get_on_tick() -> event_action_type<>&;
@@ -41,8 +39,6 @@ namespace aiva2::native
 		void window_system_when_window_on_shut();
 
 	private:
-		engine_t& m_engine;
-
 		event_action_type<> m_on_init{};
 
 		event_action_type<> m_on_tick{};

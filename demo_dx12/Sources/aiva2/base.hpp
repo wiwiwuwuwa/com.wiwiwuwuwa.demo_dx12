@@ -16,6 +16,8 @@ namespace aiva2
 		
 		struct engine_t;
 
+		struct engine_object_t;
+
 		struct gcd_set_viewports_t;
 
 		struct gce_set_viewports_t;

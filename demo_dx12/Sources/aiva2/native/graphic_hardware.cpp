@@ -7,7 +7,7 @@
 
 namespace aiva2::native
 {
-	graphic_hardware_t::graphic_hardware_t(engine_t& engine) : m_engine{ engine }
+	graphic_hardware_t::graphic_hardware_t(engine_t& engine) : impl_type{ engine }
 	{
 		init_components();
 	}
@@ -15,11 +15,6 @@ namespace aiva2::native
 	graphic_hardware_t::~graphic_hardware_t()
 	{
 		shut_components();
-	}
-
-	auto graphic_hardware_t::get_engine() const -> engine_t&
-	{
-		return m_engine;
 	}
 
 #if defined(_DEBUG)

@@ -7,7 +7,7 @@
 
 namespace aiva2::native
 {
-	window_system_t::window_system_t(engine_t& engine) : m_engine{ engine }
+	window_system_t::window_system_t(engine_t& engine) : impl_type{ engine }
 	{
 		init_window();
 		init_window_system();
@@ -17,11 +17,6 @@ namespace aiva2::native
 	{
 		shut_window_system();
 		shut_window();
-	}
-
-	auto window_system_t::get_engine() const -> engine_t&
-	{
-		return m_engine;
 	}
 
 	auto window_system_t::get_on_init() -> event_action_type<>&

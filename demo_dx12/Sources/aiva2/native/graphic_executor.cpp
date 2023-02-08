@@ -8,7 +8,7 @@
 
 namespace aiva2::native
 {
-	graphic_executor_t::graphic_executor_t(engine_t& engine) : m_engine{ engine }
+	graphic_executor_t::graphic_executor_t(engine_t& engine) : impl_type{ engine }
 	{
 		init_graphic_executor();
 	}
@@ -16,11 +16,6 @@ namespace aiva2::native
 	graphic_executor_t::~graphic_executor_t()
 	{
 		shut_graphic_executor();
-	}
-
-	auto graphic_executor_t::get_engine() const -> engine_t&
-	{
-		return m_engine;
 	}
 
 	void graphic_executor_t::execute_command(std::shared_ptr<core::object_t> const& command)
@@ -33,7 +28,7 @@ namespace aiva2::native
 	{
 		m_pending_commands = {};
 		m_executing_commands = {};
-
+		
 		get_engine().get_graphic_pipeline().get_on_populate_commands().attach_listener(&this_type::tick_graphic_executor, this);
 	}
 

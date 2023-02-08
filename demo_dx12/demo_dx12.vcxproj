@@ -193,6 +193,7 @@
     <ClInclude Include="Sources\aiva2\native\buffer_format_to_dxgi_format.hpp" />
     <ClInclude Include="Sources\aiva2\native\dxgi_format_to_buffer_format.hpp" />
     <ClInclude Include="Sources\aiva2\native\engine.hpp" />
+    <ClInclude Include="Sources\aiva2\native\engine_object.hpp" />
     <ClInclude Include="Sources\aiva2\native\graphic_command_executors.hpp" />
     <ClInclude Include="Sources\aiva2\native\graphic_executor.hpp" />
     <ClInclude Include="Sources\aiva2\native\gr_texture_2d_params.hpp" />
@@ -562,6 +563,7 @@
     <ClCompile Include="Sources\aiva2\core\engine.cpp" />
     <ClCompile Include="Sources\aiva2\init.cpp" />
     <ClCompile Include="Sources\aiva2\native\engine.cpp" />
+    <ClCompile Include="Sources\aiva2\native\engine_object.cpp" />
     <ClCompile Include="Sources\aiva2\native\gcd_set_viewports.cpp" />
     <ClCompile Include="Sources\aiva2\native\graphic_command_executors.cpp" />
     <ClCompile Include="Sources\aiva2\native\graphic_executor.cpp" />

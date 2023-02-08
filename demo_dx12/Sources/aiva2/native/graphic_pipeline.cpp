@@ -8,7 +8,7 @@
 
 namespace aiva2::native
 {
-	graphic_pipeline_t::graphic_pipeline_t(engine_t& engine) : m_engine{ engine }
+	graphic_pipeline_t::graphic_pipeline_t(engine_t& engine) : impl_type{ engine }
 	{
 		init_graphic_pipeline();
 	}
@@ -16,11 +16,6 @@ namespace aiva2::native
 	graphic_pipeline_t::~graphic_pipeline_t()
 	{
 		shut_graphic_pipeline();
-	}
-
-	auto graphic_pipeline_t::get_engine() const -> engine_t&
-	{
-		return m_engine;
 	}
 
 	auto graphic_pipeline_t::get_on_populate_commands() -> event_action_type<>&

@@ -3,7 +3,7 @@
 
 namespace aiva2::native
 {
-	time_system_t::time_system_t(engine_t& engine) : m_engine{ engine }
+	time_system_t::time_system_t(engine_t& engine) : impl_type{ engine }
 	{
 		init_time_system();
 	}
@@ -11,11 +11,6 @@ namespace aiva2::native
 	time_system_t::~time_system_t()
 	{
 		shut_time_system();
-	}
-
-	auto time_system_t::get_engine() const -> engine_t&
-	{
-		return m_engine;
 	}
 
 	auto time_system_t::get_on_update() -> event_action_type<>&

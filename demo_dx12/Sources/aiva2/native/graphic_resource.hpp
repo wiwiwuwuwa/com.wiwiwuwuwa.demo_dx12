@@ -3,6 +3,7 @@
 
 #include <aiva2/core/implements.hpp>
 #include <aiva2/native/engine_object.hpp>
+#include <aiva2/native/graphic_resource_states.hpp>
 
 namespace aiva2::native
 {
@@ -21,6 +22,6 @@ namespace aiva2::native
 	protected:
 		winrt::com_ptr<ID3D12Resource> m_resource{};
 
-		// TODO: add support for barriers
+		graphic_resource_states_t m_states{};
 	};
 }

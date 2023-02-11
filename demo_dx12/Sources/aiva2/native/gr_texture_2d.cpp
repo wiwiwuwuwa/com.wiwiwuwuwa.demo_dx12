@@ -3,6 +3,8 @@
 
 #include <aiva2/core/asserts.hpp>
 #include <aiva2/native/buffer_format_to_dxgi_format.hpp>
+#include <aiva2/native/d3d12_resource_desc_utils.hpp>
+#include <aiva2/native/d3d12_resource_utils.hpp>
 #include <aiva2/native/dxgi_format_to_buffer_format.hpp>
 #include <aiva2/native/engine.hpp>
 #include <aiva2/native/graphic_hardware.hpp>
@@ -73,6 +75,8 @@ namespace aiva2::native
 			/* Resource */ IID_PPV_ARGS(&m_resource)
 		));
 		core::asserts_t::check_true(m_resource, "resource is not valid");
+
+		m_states = graphic_resource_states_t{ D3D12_RESOURCE_STATE_COMMON, d3d12_resource_utils_t::get_subresources_count(*m_resource), false };
 	}
 
 	void gr_texture_2d_t::init_params_from_resource()
@@ -96,5 +100,7 @@ namespace aiva2::native
 		m_params.set_support_render_target(resource_desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
 		m_params.set_support_depth_stencil(resource_desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
 		m_params.set_support_unordered_access(resource_desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+
+		m_states = graphic_resource_states_t{ D3D12_RESOURCE_STATE_COMMON, d3d12_resource_desc_utils_t::get_subresources_count(resource_desc), false };
 	}
 }

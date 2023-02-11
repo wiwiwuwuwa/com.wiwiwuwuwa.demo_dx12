@@ -171,6 +171,9 @@
     <ClCompile Include="Sources\aiva2\native\gr_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva2\native\engine_object.cpp" />
     <ClCompile Include="Sources\aiva2\native\graphic_resource.cpp" />
+    <ClCompile Include="Sources\aiva2\native\d3d12_resource_desc_utils.cpp" />
+    <ClCompile Include="Sources\aiva2\native\graphic_resource_states.cpp" />
+    <ClCompile Include="Sources\aiva2\native\d3d12_resource_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -535,6 +538,9 @@
     <ClInclude Include="Sources\aiva2\native\gr_texture_2d.hpp" />
     <ClInclude Include="Sources\aiva2\native\engine_object.hpp" />
     <ClInclude Include="Sources\aiva2\native\graphic_resource.hpp" />
+    <ClInclude Include="Sources\aiva2\native\d3d12_resource_desc_utils.hpp" />
+    <ClInclude Include="Sources\aiva2\native\graphic_resource_states.hpp" />
+    <ClInclude Include="Sources\aiva2\native\d3d12_resource_utils.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

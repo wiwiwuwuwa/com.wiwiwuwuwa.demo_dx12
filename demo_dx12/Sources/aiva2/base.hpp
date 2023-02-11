@@ -36,6 +36,8 @@ namespace aiva2
 
 		struct graphic_resource_t;
 
+		struct graphic_resource_states_t;
+
 		struct time_system_t;
 
 		struct window_t;

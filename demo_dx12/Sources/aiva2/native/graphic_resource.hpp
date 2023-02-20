@@ -23,5 +23,7 @@ namespace aiva2::native
 		winrt::com_ptr<ID3D12Resource> m_resource{};
 
 		graphic_resource_states_t m_states{};
+
+		// ------------------------------------------------
 	};
 }

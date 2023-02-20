@@ -29,5 +29,7 @@ namespace aiva2::native
 
 	private:
 		texture_2d_params_t m_params{};
+
+		// ------------------------------------------------
 	};
 }

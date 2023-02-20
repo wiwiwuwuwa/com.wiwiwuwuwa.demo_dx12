@@ -67,5 +67,7 @@ namespace aiva2::native
 		bool m_support_depth_stencil{};
 
 		bool m_support_unordered_access{};
+
+		// ------------------------------------------------
 	};
 }

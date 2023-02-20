@@ -7,7 +7,7 @@
 
 namespace aiva2::native
 {
-	struct gr_texture_2d_params_t final : public core::implements_t<gr_texture_2d_params_t, core::struct_t>
+	struct texture_2d_params_t final : public core::implements_t<texture_2d_params_t, core::struct_t>
 	{
 		// ------------------------------------------------
 		// texture 2d params

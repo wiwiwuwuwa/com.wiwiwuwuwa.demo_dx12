@@ -22,9 +22,9 @@ namespace aiva2
 
 		struct gce_set_viewports_t;
 		
-		struct gr_texture_2d_t;
+		struct texture_2d_t;
 
-		struct gr_texture_2d_params_t;
+		struct texture_2d_params_t;
 
 		struct graphic_command_executors_t;
 

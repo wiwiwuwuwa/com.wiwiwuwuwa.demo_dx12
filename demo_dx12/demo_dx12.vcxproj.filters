@@ -167,8 +167,8 @@
     <ClCompile Include="Sources\aiva2\native\gcd_set_viewports.cpp" />
     <ClCompile Include="Sources\aiva2\native\gce_set_viewports.cpp" />
     <ClCompile Include="Sources\aiva2\native\graphic_command_executors.cpp" />
-    <ClCompile Include="Sources\aiva2\native\gr_texture_2d_params.cpp" />
-    <ClCompile Include="Sources\aiva2\native\gr_texture_2d.cpp" />
+    <ClCompile Include="Sources\aiva2\native\texture_2d_params.cpp" />
+    <ClCompile Include="Sources\aiva2\native\texture_2d.cpp" />
     <ClCompile Include="Sources\aiva2\native\engine_object.cpp" />
     <ClCompile Include="Sources\aiva2\native\graphic_resource.cpp" />
     <ClCompile Include="Sources\aiva2\native\d3d12_resource_desc_utils.cpp" />
@@ -534,8 +534,8 @@
     <ClInclude Include="Sources\aiva2\native\buffer_format.hpp" />
     <ClInclude Include="Sources\aiva2\native\buffer_format_to_dxgi_format.hpp" />
     <ClInclude Include="Sources\aiva2\native\dxgi_format_to_buffer_format.hpp" />
-    <ClInclude Include="Sources\aiva2\native\gr_texture_2d_params.hpp" />
-    <ClInclude Include="Sources\aiva2\native\gr_texture_2d.hpp" />
+    <ClInclude Include="Sources\aiva2\native\texture_2d_params.hpp" />
+    <ClInclude Include="Sources\aiva2\native\texture_2d.hpp" />
     <ClInclude Include="Sources\aiva2\native\engine_object.hpp" />
     <ClInclude Include="Sources\aiva2\native\graphic_resource.hpp" />
     <ClInclude Include="Sources\aiva2\native\d3d12_resource_desc_utils.hpp" />

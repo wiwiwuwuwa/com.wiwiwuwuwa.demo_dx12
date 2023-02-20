@@ -1,5 +1,5 @@
 #include <pch.h>
-#include <aiva2/native/gr_texture_2d.hpp>
+#include <aiva2/native/texture_2d.hpp>
 
 #include <aiva2/core/asserts.hpp>
 #include <aiva2/native/buffer_format_to_dxgi_format.hpp>
@@ -11,27 +11,27 @@
 
 namespace aiva2::native
 {
-	gr_texture_2d_t::gr_texture_2d_t(engine_t& engine, gr_texture_2d_params_t const& params) : impl_type{ engine }, m_params{ params }
+	texture_2d_t::texture_2d_t(engine_t& engine, texture_2d_params_t const& params) : impl_type{ engine }, m_params{ params }
 	{
 		init_resource_from_params();
 	}
 
-	gr_texture_2d_t::gr_texture_2d_t(engine_t& engine, winrt::com_ptr<ID3D12Resource> const& resource) : impl_type{ engine, resource }
+	texture_2d_t::texture_2d_t(engine_t& engine, winrt::com_ptr<ID3D12Resource> const& resource) : impl_type{ engine, resource }
 	{
 		init_params_from_resource();
 	}
 
-	gr_texture_2d_t::~gr_texture_2d_t()
+	texture_2d_t::~texture_2d_t()
 	{
 
 	}
 
-	auto gr_texture_2d_t::get_params() const->gr_texture_2d_params_t const&
+	auto texture_2d_t::get_params() const->texture_2d_params_t const&
 	{
 		return m_params;
 	}
 
-	void gr_texture_2d_t::init_resource_from_params()
+	void texture_2d_t::init_resource_from_params()
 	{
 		core::asserts_t::check_true(m_params.get_format() != buffer_format_t::UNKNOWN, "texture format must be known");
 		core::asserts_t::check_true(m_params.get_width() > 0, "texture width must be greater than 0");
@@ -79,7 +79,7 @@ namespace aiva2::native
 		m_states = graphic_resource_states_t{ D3D12_RESOURCE_STATE_COMMON, d3d12_resource_utils_t::get_subresources_count(*m_resource), false };
 	}
 
-	void gr_texture_2d_t::init_params_from_resource()
+	void texture_2d_t::init_params_from_resource()
 	{
 		core::asserts_t::check_true(m_resource, "resource is not valid");
 		

@@ -1,7 +1,7 @@
 #pragma once
-#include <aiva2/base.hpp>
+#include <aiva2/_core.hpp>
 
-namespace aiva2::core
+namespace aiva2
 {
 	template <typename... t_args>
 	struct event_action_base_t : private boost::noncopyable
@@ -19,7 +19,7 @@ namespace aiva2::core
 		using event_type = boost::signals2::signal<void(t_args...)>;
 
 	protected:
-		auto get_event() const -> event_type const&;
+		auto get_event() const->event_type const&;
 
 		auto get_event() -> event_type&;
 
@@ -32,7 +32,7 @@ namespace aiva2::core
 
 // --------------------------------------------------------
 
-namespace aiva2::core
+namespace aiva2
 {
 	template <typename... t_args>
 	event_action_base_t<t_args...>::event_action_base_t()

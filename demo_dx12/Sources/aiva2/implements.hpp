@@ -1,9 +1,8 @@
 #pragma once
-#include <aiva2/base.hpp>
+#include <aiva2/_core.hpp>
+#include <aiva2/event_action.hpp>
 
-#include <aiva2/core/event_action.hpp>
-
-namespace aiva2::core
+namespace aiva2
 {
 	template <typename... t_interfaces>
 	struct implements_t;

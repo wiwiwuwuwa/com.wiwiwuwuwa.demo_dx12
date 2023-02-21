@@ -1,9 +1,8 @@
 #pragma once
-#include <aiva2/base.hpp>
+#include <aiva2/_core.hpp>
+#include <aiva2/event_action_base.hpp>
 
-#include <aiva2/core/event_action_base.hpp>
-
-namespace aiva2::core
+namespace aiva2
 {
 	template <typename... t_args>
 	struct event_action_read_only_t : public event_action_base_t<t_args...>
@@ -30,7 +29,7 @@ namespace aiva2::core
 
 // --------------------------------------------------------
 
-namespace aiva2::core
+namespace aiva2
 {
 	template <typename... t_args>
 	event_action_read_only_t<t_args...>::event_action_read_only_t()

@@ -1,7 +1,7 @@
 #pragma once
-#include <aiva2/base.hpp>
+#include <aiva2/_core.hpp>
 
-namespace aiva2::core
+namespace aiva2
 {
 	struct asserts_t final
 	{
@@ -25,7 +25,7 @@ namespace aiva2::core
 
 // --------------------------------------------------------
 
-namespace aiva2::core
+namespace aiva2
 {
 	template <typename t_val>
 	void asserts_t::check_true(t_val const& value, std::string const& message /*= {}*/)

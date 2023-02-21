@@ -1,5 +1,5 @@
 #include <pch.h>
-#include <aiva2/init.hpp>
+#include <aiva2/_init.hpp>
 
 int __stdcall wWinMain(HINSTANCE, HINSTANCE, PWSTR, int)
 {

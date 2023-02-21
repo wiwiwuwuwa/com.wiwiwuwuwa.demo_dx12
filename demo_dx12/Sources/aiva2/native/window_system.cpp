@@ -55,17 +55,17 @@ namespace aiva2::native
 
 	void window_system_t::window_system_when_window_on_init()
 	{
-		get_on_init().broadcast();
+		get_on_init().invoke();
 	}
 
 	void window_system_t::window_system_when_window_on_tick()
 	{
-		get_on_tick().broadcast();
+		get_on_tick().invoke();
 	}
 
 	void window_system_t::window_system_when_window_on_shut()
 	{
-		get_on_shut().broadcast();
+		get_on_shut().invoke();
 	}
 
 	auto window_system_t::get_base_window() const->window_t&

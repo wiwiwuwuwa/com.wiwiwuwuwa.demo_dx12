@@ -85,7 +85,7 @@ namespace aiva2::native
 
 	void graphic_pipeline_t::populate_command_list()
 	{
-		get_on_populate_commands().broadcast();
+		get_on_populate_commands().invoke();
 	}
 
 	void graphic_pipeline_t::close_command_list()

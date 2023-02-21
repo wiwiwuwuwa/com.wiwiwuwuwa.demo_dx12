@@ -48,17 +48,17 @@ namespace aiva2::native
 		auto window = core_window_type::GetForCurrentThread();
 		window.Activate();
 
-		get_on_init().broadcast();
+		get_on_init().invoke();
 
 		while (true)
 		{
 			auto dispatcher = window.Dispatcher();
 			dispatcher.ProcessEvents(CoreProcessEventsOption::ProcessAllIfPresent);
 
-			get_on_tick().broadcast();
+			get_on_tick().invoke();
 		}
 
-		get_on_shut().broadcast();
+		get_on_shut().invoke();
 	}
 
 	void window_t::SetWindow(core_window_type const& core_window)

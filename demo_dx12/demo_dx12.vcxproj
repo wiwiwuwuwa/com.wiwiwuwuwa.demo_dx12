@@ -189,6 +189,7 @@
     <ClInclude Include="Sources\aiva2\implements.hpp" />
     <ClInclude Include="Sources\aiva2\object.hpp" />
     <ClInclude Include="Sources\aiva2\struct.hpp" />
+    <ClInclude Include="Sources\aiva2\time_system.hpp" />
     <ClInclude Include="Sources\aiva2\window.hpp" />
     <ClInclude Include="Sources\aiva2\window_system.hpp" />
     <ClInclude Include="Sources\aiva2\_core.hpp" />
@@ -550,6 +551,7 @@
     <ClCompile Include="Sources\aiva2\engine.cpp" />
     <ClCompile Include="Sources\aiva2\engine_object.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_hardware.cpp" />
+    <ClCompile Include="Sources\aiva2\time_system.cpp" />
     <ClCompile Include="Sources\aiva2\window.cpp" />
     <ClCompile Include="Sources\aiva2\window_system.cpp" />
     <ClCompile Include="Sources\aiva2\_init.cpp" />

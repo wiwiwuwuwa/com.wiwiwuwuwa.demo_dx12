@@ -2,6 +2,7 @@
 #include <aiva2/engine.hpp>
 
 #include <aiva2/asserts.hpp>
+#include <aiva2/time_system.hpp>
 #include <aiva2/window_system.hpp>
 
 namespace aiva2
@@ -49,16 +50,39 @@ namespace aiva2
 
 	void engine_t::engine_when_window_system_on_window_init()
 	{
-
+		init_time_system();
 	}
 
 	void engine_t::engine_when_window_system_on_window_tick()
 	{
-
+		tick_time_system();
 	}
 
 	void engine_t::engine_when_window_system_on_window_shut()
 	{
+		shut_time_system();
+	}
 
+	auto engine_t::get_time_system() const->time_system_t&
+	{
+		asserts_t::check_true(m_time_system, "m_time_system is not valid");
+		return *m_time_system;
+	}
+
+	void engine_t::init_time_system()
+	{
+		m_time_system = std::make_unique<time_system_t>(*this);
+		asserts_t::check_true(m_time_system, "m_time_system is not valid");
+	}
+
+	void engine_t::tick_time_system()
+	{
+		get_time_system().tick();
+	}
+
+	void engine_t::shut_time_system()
+	{
+		asserts_t::check_true(m_time_system, "m_time_system is not valid");
+		m_time_system = {};
 	}
 }

@@ -38,5 +38,20 @@ namespace aiva2
 		std::unique_ptr<window_system_t> m_window_system{};
 
 		// ------------------------------------------------
+
+	public:
+		auto get_time_system() const->time_system_t&;
+
+	private:
+		void init_time_system();
+
+		void tick_time_system();
+
+		void shut_time_system();
+		
+	private:
+		std::unique_ptr<time_system_t> m_time_system{};
+
+		// ------------------------------------------------
 	};
 }

@@ -179,13 +179,18 @@
     <ClInclude Include="External Sources\tinyutf8\tinyutf8.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Sources\aiva2\asserts.hpp" />
+    <ClInclude Include="Sources\aiva2\engine.hpp" />
+    <ClInclude Include="Sources\aiva2\engine_object.hpp" />
     <ClInclude Include="Sources\aiva2\event_action.hpp" />
     <ClInclude Include="Sources\aiva2\event_action_base.hpp" />
     <ClInclude Include="Sources\aiva2\event_action_read_only.hpp" />
     <ClInclude Include="Sources\aiva2\event_action_read_write.hpp" />
+    <ClInclude Include="Sources\aiva2\graphic_hardware.hpp" />
     <ClInclude Include="Sources\aiva2\implements.hpp" />
     <ClInclude Include="Sources\aiva2\object.hpp" />
     <ClInclude Include="Sources\aiva2\struct.hpp" />
+    <ClInclude Include="Sources\aiva2\window.hpp" />
+    <ClInclude Include="Sources\aiva2\window_system.hpp" />
     <ClInclude Include="Sources\aiva2\_core.hpp" />
     <ClInclude Include="Sources\aiva2\_init.hpp" />
     <ClInclude Include="Sources\aiva\layer0\app.h" />
@@ -542,6 +547,11 @@
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Sources\aiva2\engine.cpp" />
+    <ClCompile Include="Sources\aiva2\engine_object.cpp" />
+    <ClCompile Include="Sources\aiva2\graphic_hardware.cpp" />
+    <ClCompile Include="Sources\aiva2\window.cpp" />
+    <ClCompile Include="Sources\aiva2\window_system.cpp" />
     <ClCompile Include="Sources\aiva2\_init.cpp" />
     <ClCompile Include="Sources\aiva\layer0\app.cpp" />
     <ClCompile Include="Sources\aiva\layer1\a_graphic_resource.cpp" />

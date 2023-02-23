@@ -41,6 +41,10 @@ namespace aiva2
 
 		using this_type = t_this;
 
+	public:
+		template <typename... t_args>
+		using event_action_type = event_action_for_var_t<t_this, t_args...>;
+
 	protected:
 		template <typename... t_args>
 		implements_t(t_args&&... args) : t_base{ std::forward<t_args>(args)... } {};

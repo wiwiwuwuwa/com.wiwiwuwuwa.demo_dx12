@@ -24,7 +24,7 @@ namespace aiva2
 		// ------------------------------------------------
 
 	protected:
-		void broadcast(t_args const&... args);
+		void invoke(t_args const&... args);
 
 		// ------------------------------------------------
 	};
@@ -47,7 +47,7 @@ namespace aiva2
 	}
 
 	template <typename t_owner, typename... t_args>
-	void event_action_read_write_t<t_owner, t_args...>::broadcast(t_args const&... args)
+	void event_action_read_write_t<t_owner, t_args...>::invoke(t_args const&... args)
 	{
 		get_event()(std::forward<t_args const>(args)...);
 	}

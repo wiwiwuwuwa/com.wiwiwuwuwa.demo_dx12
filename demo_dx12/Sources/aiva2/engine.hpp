@@ -53,5 +53,18 @@ namespace aiva2
 		std::unique_ptr<time_system_t> m_time_system{};
 
 		// ------------------------------------------------
+
+	public:
+		auto get_graphic_hardware() const->graphic_hardware_t&;
+		
+	private:
+		void init_graphic_hardware();
+
+		void shut_graphic_hardware();
+
+	private:
+		std::unique_ptr<graphic_hardware_t> m_graphic_hardware{};
+
+		// ------------------------------------------------
 	};
 }

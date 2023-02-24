@@ -3,6 +3,7 @@
 
 #include <aiva2/asserts.hpp>
 #include <aiva2/graphic_hardware.hpp>
+#include <aiva2/graphic_pipeline.hpp>
 #include <aiva2/time_system.hpp>
 #include <aiva2/window_system.hpp>
 
@@ -53,6 +54,7 @@ namespace aiva2
 	{
 		init_time_system();
 		init_graphic_hardware();
+		init_graphic_pipeline();
 	}
 
 	void engine_t::engine_when_window_system_on_window_tick()
@@ -62,6 +64,7 @@ namespace aiva2
 
 	void engine_t::engine_when_window_system_on_window_shut()
 	{
+		shut_graphic_pipeline();
 		shut_graphic_hardware();
 		shut_time_system();
 	}
@@ -105,5 +108,23 @@ namespace aiva2
 	{
 		asserts_t::check_true(m_graphic_hardware, "m_graphic_hardware is not valid");
 		m_graphic_hardware = {};
+	}
+
+	auto engine_t::get_graphic_pipeline() const->graphic_pipeline_t&
+	{
+		asserts_t::check_true(m_graphic_pipeline, "m_graphic_pipeline is not valid");
+		return *m_graphic_pipeline;
+	}
+	
+	void engine_t::init_graphic_pipeline()
+	{
+		m_graphic_pipeline = std::make_unique<graphic_pipeline_t>(*this);
+		asserts_t::check_true(m_graphic_pipeline, "m_graphic_pipeline is not valid");
+	}
+	
+	void engine_t::shut_graphic_pipeline()
+	{
+		asserts_t::check_true(m_graphic_pipeline, "m_graphic_pipeline is not valid");
+		m_graphic_pipeline = {};
 	}
 }

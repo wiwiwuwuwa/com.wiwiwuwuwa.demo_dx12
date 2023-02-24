@@ -186,6 +186,7 @@
     <ClInclude Include="Sources\aiva2\event_action_read_only.hpp" />
     <ClInclude Include="Sources\aiva2\event_action_read_write.hpp" />
     <ClInclude Include="Sources\aiva2\graphic_hardware.hpp" />
+    <ClInclude Include="Sources\aiva2\graphic_pipeline.hpp" />
     <ClInclude Include="Sources\aiva2\implements.hpp" />
     <ClInclude Include="Sources\aiva2\object.hpp" />
     <ClInclude Include="Sources\aiva2\struct.hpp" />
@@ -551,6 +552,7 @@
     <ClCompile Include="Sources\aiva2\engine.cpp" />
     <ClCompile Include="Sources\aiva2\engine_object.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_hardware.cpp" />
+    <ClCompile Include="Sources\aiva2\graphic_pipeline.cpp" />
     <ClCompile Include="Sources\aiva2\time_system.cpp" />
     <ClCompile Include="Sources\aiva2\window.cpp" />
     <ClCompile Include="Sources\aiva2\window_system.cpp" />

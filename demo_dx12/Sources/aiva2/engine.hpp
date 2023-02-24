@@ -66,5 +66,18 @@ namespace aiva2
 		std::unique_ptr<graphic_hardware_t> m_graphic_hardware{};
 
 		// ------------------------------------------------
+
+	public:
+		auto get_graphic_pipeline() const->graphic_pipeline_t&;
+		
+	private:
+		void init_graphic_pipeline();
+		
+		void shut_graphic_pipeline();
+
+	private:
+		std::unique_ptr<graphic_pipeline_t> m_graphic_pipeline{};
+
+		// ------------------------------------------------
 	};
 }

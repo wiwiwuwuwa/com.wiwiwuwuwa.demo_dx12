@@ -162,6 +162,7 @@
     <ClCompile Include="Sources\aiva2\window.cpp" />
     <ClCompile Include="Sources\aiva2\window_system.cpp" />
     <ClCompile Include="Sources\aiva2\time_system.cpp" />
+    <ClCompile Include="Sources\aiva2\graphic_pipeline.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -513,6 +514,7 @@
     <ClInclude Include="Sources\aiva2\window.hpp" />
     <ClInclude Include="Sources\aiva2\window_system.hpp" />
     <ClInclude Include="Sources\aiva2\time_system.hpp" />
+    <ClInclude Include="Sources\aiva2\graphic_pipeline.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

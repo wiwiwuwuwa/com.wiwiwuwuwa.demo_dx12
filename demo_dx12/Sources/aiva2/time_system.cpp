@@ -23,7 +23,7 @@ namespace aiva2
 		return m_on_render;
 	}
 
-	auto time_system_t::get_tick() const -> uint64_t
+	auto time_system_t::get_tick() const -> size_t
 	{
 		return m_tick;
 	}

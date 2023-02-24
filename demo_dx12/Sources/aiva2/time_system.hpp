@@ -19,7 +19,7 @@ namespace aiva2
 		
 		auto get_on_render() -> event_action_type<>&;
 
-		auto get_tick() const->uint64_t;
+		auto get_tick() const->size_t;
 		
 		void tick();
 		

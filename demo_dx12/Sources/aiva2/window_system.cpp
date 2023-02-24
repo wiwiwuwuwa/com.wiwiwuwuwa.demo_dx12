@@ -63,9 +63,9 @@ namespace aiva2
 	{
 		asserts_t::check_true(m_base_window, "m_base_window is not valid");
 
-		get_base_window().get_on_shut().remove_listener(&this_type::window_system_when_window_on_shut, this);
-		get_base_window().get_on_tick().remove_listener(&this_type::window_system_when_window_on_tick, this);
-		get_base_window().get_on_init().remove_listener(&this_type::window_system_when_window_on_init, this);
+		get_base_window().get_on_shut().detach_listener(&this_type::window_system_when_window_on_shut, this);
+		get_base_window().get_on_tick().detach_listener(&this_type::window_system_when_window_on_tick, this);
+		get_base_window().get_on_init().detach_listener(&this_type::window_system_when_window_on_init, this);
 		m_base_window = {};
 	}
 

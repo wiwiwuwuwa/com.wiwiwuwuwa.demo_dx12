@@ -21,7 +21,7 @@ namespace aiva2
 		void attach_listener(t_bind_args&&... args);
 
 		template <typename... t_bind_args>
-		void remove_listener(t_bind_args&&... args);
+		void detach_listener(t_bind_args&&... args);
 
 		// ------------------------------------------------
 	};
@@ -52,7 +52,7 @@ namespace aiva2
 
 	template <typename... t_args>
 	template <typename... t_bind_args>
-	void event_action_read_only_t<t_args...>::remove_listener(t_bind_args&&... args)
+	void event_action_read_only_t<t_args...>::detach_listener(t_bind_args&&... args)
 	{
 		get_event().disconnect(boost::bind(std::forward<t_bind_args>(args)...));
 	}

@@ -42,7 +42,7 @@ namespace aiva2
 
 	void graphic_pipeline_t::shut_graphic_pipeline()
 	{
-		get_engine().get_time_system().get_on_render().remove_listener(&this_type::tick_graphic_pipeline, this);
+		get_engine().get_time_system().get_on_render().detach_listener(&this_type::tick_graphic_pipeline, this);
 	}
 
 	void graphic_pipeline_t::wait_frame()

@@ -2,6 +2,7 @@
 #include <aiva2/engine.hpp>
 
 #include <aiva2/asserts.hpp>
+#include <aiva2/graphic_executor.hpp>
 #include <aiva2/graphic_hardware.hpp>
 #include <aiva2/graphic_pipeline.hpp>
 #include <aiva2/time_system.hpp>
@@ -55,6 +56,7 @@ namespace aiva2
 		init_time_system();
 		init_graphic_hardware();
 		init_graphic_pipeline();
+		init_graphic_executor();
 	}
 
 	void engine_t::engine_when_window_system_on_window_tick()
@@ -64,6 +66,7 @@ namespace aiva2
 
 	void engine_t::engine_when_window_system_on_window_shut()
 	{
+		shut_graphic_executor();
 		shut_graphic_pipeline();
 		shut_graphic_hardware();
 		shut_time_system();
@@ -126,5 +129,23 @@ namespace aiva2
 	{
 		asserts_t::check_true(m_graphic_pipeline, "m_graphic_pipeline is not valid");
 		m_graphic_pipeline = {};
+	}
+
+	auto engine_t::get_graphic_executor() const->graphic_executor_t&
+	{
+		asserts_t::check_true(m_graphic_executor, "m_graphic_executor is not valid");
+		return *m_graphic_executor;
+	}
+
+	void engine_t::init_graphic_executor()
+	{
+		m_graphic_executor = std::make_unique<graphic_executor_t>(*this);
+		asserts_t::check_true(m_graphic_executor, "m_graphic_executor is not valid");
+	}
+	
+	void engine_t::shut_graphic_executor()
+	{
+		asserts_t::check_true(m_graphic_executor, "m_graphic_executor is not valid");
+		m_graphic_executor = {};
 	}
 }

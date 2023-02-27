@@ -165,6 +165,7 @@
     <ClCompile Include="Sources\aiva2\graphic_pipeline.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_base.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_executor.cpp" />
+    <ClCompile Include="Sources\aiva2\texture_2d_info.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -522,6 +523,7 @@
     <ClInclude Include="Sources\aiva2\buffer_format.hpp" />
     <ClInclude Include="Sources\aiva2\buffer_format_to_dxgi_format.hpp" />
     <ClInclude Include="Sources\aiva2\dxgi_format_to_buffer_format.hpp" />
+    <ClInclude Include="Sources\aiva2\texture_2d_info.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

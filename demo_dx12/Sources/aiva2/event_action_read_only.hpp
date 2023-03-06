@@ -1,5 +1,6 @@
 #pragma once
 #include <aiva2/_core.hpp>
+
 #include <aiva2/event_action_base.hpp>
 
 namespace aiva2

@@ -1,5 +1,6 @@
 #pragma once
-#include <aiva2/_init.hpp>
+#include <aiva2/_core.hpp>
+
 #include <aiva2/engine_object.hpp>
 #include <aiva2/implements.hpp>
 

@@ -1,7 +1,7 @@
 #include <pch.h>
 #include <aiva2/graphic_executor.hpp>
 
-#include <aiva2/asserts.hpp>
+#include <aiva2/assert.hpp>
 #include <aiva2/engine.hpp>
 #include <aiva2/gpu_cmd_base.hpp>
 #include <aiva2/graphic_pipeline.hpp>
@@ -21,7 +21,7 @@ namespace aiva2
 	
 	void graphic_executor_t::execute_command(std::shared_ptr<gpu_cmd_base_t> const& command)
 	{
-		asserts_t::check_true(command, "command is not valid");
+		assert_t::check_bool(command, "command is not valid");
 		m_pending_commands.push_back(command);
 	}
 
@@ -43,7 +43,7 @@ namespace aiva2
 		while (!std::empty(m_pending_commands))
 		{
 			auto const& command = m_pending_commands.front();
-			asserts_t::check_true(command, "command is not valid");
+			assert_t::check_bool(command, "command is not valid");
 
 			(*command).execute();
 

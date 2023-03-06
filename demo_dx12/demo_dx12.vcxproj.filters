@@ -503,7 +503,7 @@
     <ClInclude Include="Sources\aiva\layer1_ext\gc_copy_buffer_to_texture_2d_fwd.h" />
     <ClInclude Include="Sources\aiva2\_core.hpp" />
     <ClInclude Include="Sources\aiva2\_init.hpp" />
-    <ClInclude Include="Sources\aiva2\asserts.hpp" />
+    <ClInclude Include="Sources\aiva2\assert.hpp" />
     <ClInclude Include="Sources\aiva2\event_action.hpp" />
     <ClInclude Include="Sources\aiva2\event_action_base.hpp" />
     <ClInclude Include="Sources\aiva2\event_action_read_only.hpp" />

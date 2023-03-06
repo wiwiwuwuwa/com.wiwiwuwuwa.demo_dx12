@@ -1,7 +1,7 @@
 #include <pch.h>
 #include <aiva2/window_system.hpp>
 
-#include <aiva2/asserts.hpp>
+#include <aiva2/assert.hpp>
 #include <aiva2/engine.hpp>
 #include <aiva2/window.hpp>
 
@@ -25,7 +25,7 @@ namespace aiva2
 
 	auto window_system_t::get_base_window() const -> window_t&
 	{
-		asserts_t::check_true(m_base_window, "m_base_window is not valid");
+		assert_t::check_bool(m_base_window, "m_base_window is not valid");
 		return *m_base_window;
 	}
 
@@ -52,7 +52,7 @@ namespace aiva2
 	void window_system_t::init_window()
 	{
 		m_base_window = winrt::make_self<window_t>();
-		asserts_t::check_true(m_base_window, "m_base_window is not valid");
+		assert_t::check_bool(m_base_window, "m_base_window is not valid");
 
 		get_base_window().get_on_init().attach_listener(&this_type::window_system_when_window_on_init, this);
 		get_base_window().get_on_tick().attach_listener(&this_type::window_system_when_window_on_tick, this);
@@ -61,7 +61,7 @@ namespace aiva2
 
 	void window_system_t::shut_window()
 	{
-		asserts_t::check_true(m_base_window, "m_base_window is not valid");
+		assert_t::check_bool(m_base_window, "m_base_window is not valid");
 
 		get_base_window().get_on_shut().detach_listener(&this_type::window_system_when_window_on_shut, this);
 		get_base_window().get_on_tick().detach_listener(&this_type::window_system_when_window_on_tick, this);

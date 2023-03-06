@@ -1,7 +1,7 @@
 #pragma once
 #include <aiva2/_core.hpp>
 
-#include <aiva2/asserts.hpp>
+#include <aiva2/assert.hpp>
 #include <aiva2/buffer_format.hpp>
 
 namespace aiva2
@@ -23,7 +23,7 @@ namespace aiva2
 			return buffer_format_t::D32_FLOAT;
 
 		default:
-			asserts_t::check_true(false, "unsupported dxgi format");
+			assert_t::check_bool(false, "unsupported dxgi format");
 			return buffer_format_t::UNKNOWN;
 		}
 	}

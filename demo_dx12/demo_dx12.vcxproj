@@ -178,7 +178,7 @@
     <ClInclude Include="External Sources\tinygltf\tiny_gltf.h" />
     <ClInclude Include="External Sources\tinyutf8\tinyutf8.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Sources\aiva2\asserts.hpp" />
+    <ClInclude Include="Sources\aiva2\assert.hpp" />
     <ClInclude Include="Sources\aiva2\buffer_format.hpp" />
     <ClInclude Include="Sources\aiva2\buffer_format_to_dxgi_format.hpp" />
     <ClInclude Include="Sources\aiva2\dxgi_format_to_buffer_format.hpp" />

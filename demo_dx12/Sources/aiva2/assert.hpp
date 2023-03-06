@@ -25,17 +25,29 @@ namespace aiva2
 
 // --------------------------------------------------------
 
+#include <aiva2/logger.hpp>
+
 namespace aiva2
 {
 	template <typename t_val>
 	void assert_t::check_bool(t_val const& value, std::string const& message /*= {}*/)
 	{
-		winrt::check_bool(static_cast<bool>(value));
+		auto const is_valid = static_cast<bool>(value);
+		if (!is_valid)
+		{
+			logger_t::log("aiva > " + message + "\n");
+			winrt::check_bool(false);
+		}
 	}
 
 	template <typename t_val>
 	void assert_t::check_hresult(t_val const& value, std::string const& message /*= {}*/)
 	{
-		winrt::check_hresult(value);
+		auto const is_valid = SUCCEEDED(value);
+		if (!is_valid)
+		{
+			logger_t::log("aiva > " + message + "\n");
+			winrt::check_hresult(value);
+		}
 	}
 }

@@ -20,7 +20,12 @@ namespace aiva2
 
 	}
 
-	auto gpu_res_state_t::set_state(D3D12_RESOURCE_STATES const state, std::optional<size_t> const index) -> std::vector<D3D12_RESOURCE_BARRIER>
+	auto gpu_res_state_t::get_locked() const -> bool
+	{
+		return m_locked;
+	}
+
+	auto gpu_res_state_t::set_state(D3D12_RESOURCE_STATES const state, std::optional<size_t> const index) -> std::vector<D3D12_RESOURCE_TRANSITION_BARRIER>
 	{
 		assert_t::check_bool(std::size(m_states) >= 1, "resource has no subresources");
 		assert_t::check_bool(!m_locked, "resource is locked");
@@ -35,7 +40,7 @@ namespace aiva2
 		}
 	}
 
-	auto gpu_res_state_t::set_state_for_one_subresource_vec(D3D12_RESOURCE_STATES const state, size_t const index) -> std::vector<D3D12_RESOURCE_BARRIER>
+	auto gpu_res_state_t::set_state_for_one_subresource_vec(D3D12_RESOURCE_STATES const state, size_t const index) -> std::vector<D3D12_RESOURCE_TRANSITION_BARRIER>
 	{
 		auto const barrier = set_state_for_one_subresource_opt(state, index);
 		if (barrier.has_value())
@@ -48,7 +53,7 @@ namespace aiva2
 		}
 	}
 
-	auto gpu_res_state_t::set_state_for_one_subresource_opt(D3D12_RESOURCE_STATES const state, size_t const index) -> std::optional<D3D12_RESOURCE_BARRIER>
+	auto gpu_res_state_t::set_state_for_one_subresource_opt(D3D12_RESOURCE_STATES const state, size_t const index) -> std::optional<D3D12_RESOURCE_TRANSITION_BARRIER>
 	{
 		assert_t::check_bool(index >= 0 && index < std::size(m_states), "index out of range");
 
@@ -63,19 +68,17 @@ namespace aiva2
 
 		m_states[index] = new_state;
 
-		auto barrier = D3D12_RESOURCE_BARRIER{};
-		barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-		barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-		barrier.Transition.pResource = {};
-		barrier.Transition.Subresource = static_cast<UINT>(index);
-		barrier.Transition.StateBefore = old_state;
-		barrier.Transition.StateAfter = new_state;
+		auto barrier = D3D12_RESOURCE_TRANSITION_BARRIER{};
+		barrier.pResource = {};
+		barrier.Subresource = static_cast<UINT>(index);
+		barrier.StateBefore = old_state;
+		barrier.StateAfter = new_state;
 		return barrier;
 	}
 
-	auto gpu_res_state_t::set_state_for_all_subresources_vec(D3D12_RESOURCE_STATES const state) -> std::vector<D3D12_RESOURCE_BARRIER>
+	auto gpu_res_state_t::set_state_for_all_subresources_vec(D3D12_RESOURCE_STATES const state) -> std::vector<D3D12_RESOURCE_TRANSITION_BARRIER>
 	{
-		auto barriers = std::vector<D3D12_RESOURCE_BARRIER>{};
+		auto barriers = std::vector<D3D12_RESOURCE_TRANSITION_BARRIER>{};
 		for (auto i = size_t{}; i < std::size(m_states); ++i)
 		{
 			auto const barrier = set_state_for_one_subresource_opt(state, i);

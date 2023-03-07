@@ -191,6 +191,7 @@
     <ClInclude Include="Sources\aiva2\event_action_read_only.hpp" />
     <ClInclude Include="Sources\aiva2\event_action_read_write.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_base.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_res_base.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_res_state.hpp" />
     <ClInclude Include="Sources\aiva2\graphic_executor.hpp" />
     <ClInclude Include="Sources\aiva2\graphic_hardware.hpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="Sources\aiva2\logger.hpp" />
     <ClInclude Include="Sources\aiva2\object.hpp" />
     <ClInclude Include="Sources\aiva2\struct.hpp" />
+    <ClInclude Include="Sources\aiva2\texture_2d.hpp" />
     <ClInclude Include="Sources\aiva2\texture_2d_info.hpp" />
     <ClInclude Include="Sources\aiva2\time_system.hpp" />
     <ClInclude Include="Sources\aiva2\window.hpp" />
@@ -564,11 +566,13 @@
     <ClCompile Include="Sources\aiva2\engine.cpp" />
     <ClCompile Include="Sources\aiva2\engine_object.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_base.cpp" />
+    <ClCompile Include="Sources\aiva2\gpu_res_base.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_res_state.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_executor.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_hardware.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_pipeline.cpp" />
     <ClCompile Include="Sources\aiva2\logger.cpp" />
+    <ClCompile Include="Sources\aiva2\texture_2d.cpp" />
     <ClCompile Include="Sources\aiva2\texture_2d_info.cpp" />
     <ClCompile Include="Sources\aiva2\time_system.cpp" />
     <ClCompile Include="Sources\aiva2\window.cpp" />

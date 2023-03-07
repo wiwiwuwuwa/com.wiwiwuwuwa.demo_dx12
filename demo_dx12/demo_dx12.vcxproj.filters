@@ -170,6 +170,8 @@
     <ClCompile Include="Sources\aiva2\gpu_res_state.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_resource_desc_utils.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_resource_utils.cpp" />
+    <ClCompile Include="Sources\aiva2\gpu_res_base.cpp" />
+    <ClCompile Include="Sources\aiva2\texture_2d.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -532,6 +534,8 @@
     <ClInclude Include="Sources\aiva2\gpu_res_state.hpp" />
     <ClInclude Include="Sources\aiva2\d3d12_resource_desc_utils.hpp" />
     <ClInclude Include="Sources\aiva2\d3d12_resource_utils.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_res_base.hpp" />
+    <ClInclude Include="Sources\aiva2\texture_2d.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

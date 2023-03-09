@@ -201,6 +201,8 @@
     <ClInclude Include="Sources\aiva2\object.hpp" />
     <ClInclude Include="Sources\aiva2\render_color_texture_2d.hpp" />
     <ClInclude Include="Sources\aiva2\render_color_texture_2d_info.hpp" />
+    <ClInclude Include="Sources\aiva2\render_depth_texture_2d.hpp" />
+    <ClInclude Include="Sources\aiva2\render_depth_texture_2d_info.hpp" />
     <ClInclude Include="Sources\aiva2\struct.hpp" />
     <ClInclude Include="Sources\aiva2\texture_2d.hpp" />
     <ClInclude Include="Sources\aiva2\texture_2d_info.hpp" />
@@ -577,6 +579,8 @@
     <ClCompile Include="Sources\aiva2\logger.cpp" />
     <ClCompile Include="Sources\aiva2\render_color_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva2\render_color_texture_2d_info.cpp" />
+    <ClCompile Include="Sources\aiva2\render_depth_texture_2d.cpp" />
+    <ClCompile Include="Sources\aiva2\render_depth_texture_2d_info.cpp" />
     <ClCompile Include="Sources\aiva2\texture_2d.cpp" />
     <ClCompile Include="Sources\aiva2\texture_2d_info.cpp" />
     <ClCompile Include="Sources\aiva2\texture_2d_utils.cpp" />

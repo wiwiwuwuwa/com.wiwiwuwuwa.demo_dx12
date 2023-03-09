@@ -4,6 +4,7 @@
 #include <aiva2/assert.hpp>
 #include <aiva2/d3d12_resource_utils.hpp>
 #include <aiva2/render_color_texture_2d_info.hpp>
+#include <aiva2/render_depth_texture_2d_info.hpp>
 #include <aiva2/texture_2d.hpp>
 
 namespace aiva2
@@ -19,5 +20,10 @@ namespace aiva2
 	size_t texture_2d_utils_t::get_subresource_index(texture_2d_t const& resource, render_color_texture_2d_info_t const& info)
 	{
 		return get_subresource_index(resource, info.get_mip_slice(), info.get_plane_slice());
+	}
+
+	size_t texture_2d_utils_t::get_subresource_index(texture_2d_t const& resource, render_depth_texture_2d_info_t const& info)
+	{
+		return get_subresource_index(resource, info.get_mip_slice(), {});
 	}
 }

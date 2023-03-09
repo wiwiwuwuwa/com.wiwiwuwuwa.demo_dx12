@@ -17,6 +17,11 @@ namespace aiva2
 		
 	}
 
+	auto gpu_res_base_t::get_resource() const->winrt::com_ptr<ID3D12Resource> const&
+	{
+		return m_resource;
+	}
+
 	auto gpu_res_base_t::set_state_for_transition(D3D12_RESOURCE_STATES const state, std::optional<size_t> const index /*= {}*/) -> std::vector<D3D12_RESOURCE_BARRIER>
 	{
 		assert_t::check_bool(m_resource, "resource is not valid");

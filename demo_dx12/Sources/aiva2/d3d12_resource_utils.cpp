@@ -7,7 +7,11 @@ namespace aiva2
 {
 	size_t d3d12_resource_utils_t::get_subresources_count(ID3D12Resource& resource)
 	{
-		auto const desc = resource.GetDesc();
-		return d3d12_resource_desc_utils_t::get_subresources_count(desc);
+		return d3d12_resource_desc_utils_t::get_subresources_count(resource.GetDesc());
+	}
+
+	size_t d3d12_resource_utils_t::get_subresource_index(ID3D12Resource& resource, size_t const mip_slice, size_t const array_slice, size_t const plane_slice)
+	{
+		return d3d12_resource_desc_utils_t::get_subresource_index(resource.GetDesc(), mip_slice, array_slice, plane_slice);
 	}
 }

@@ -17,6 +17,9 @@ namespace aiva2
 		~gpu_res_base_t() override;
 
 		// ------------------------------------------------
+
+	public:
+		auto get_resource() const->winrt::com_ptr<ID3D12Resource> const&;
 		
 	protected:
 		winrt::com_ptr<ID3D12Resource> m_resource{};

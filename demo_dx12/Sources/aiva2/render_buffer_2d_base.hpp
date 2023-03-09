@@ -11,7 +11,7 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
-		render_buffer_2d_base_t(engine_t& engine, std::shared_ptr<texture_2d_t> const& resource);
+		render_buffer_2d_base_t(engine_t& engine);
 
 		~render_buffer_2d_base_t() override;
 
@@ -20,9 +20,15 @@ namespace aiva2
 	public:
 		auto get_resource() const->std::shared_ptr<texture_2d_t> const&;
 		
-	private:
+	protected:
 		std::shared_ptr<texture_2d_t> m_resource{};
 
 		// ------------------------------------------------
+
+	public:
+		auto get_cpu_descriptor_handle() const->D3D12_CPU_DESCRIPTOR_HANDLE;
+		
+	protected:
+		winrt::com_ptr<ID3D12DescriptorHeap> m_descriptor_heap{};
 	};
 }

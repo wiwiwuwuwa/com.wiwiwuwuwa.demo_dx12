@@ -21,6 +21,14 @@ namespace aiva2
 
 		~render_depth_buffer_2d_t() override;
 
+	public:
+		void set_state_for_transition() const;
+
+		void set_state_for_uav() const;
+
+	private:
+		void init_descriptor_heap();
+
 		// ------------------------------------------------
 
 	public:
@@ -28,16 +36,7 @@ namespace aiva2
 
 	private:
 		render_depth_buffer_2d_info_t m_info{};
-
-		// ------------------------------------------------
-
-	public:
-		void create_in_handle(D3D12_CPU_DESCRIPTOR_HANDLE const& dst_handle) const;
-
-		void set_state_for_transition() const;
-
-		void set_state_for_uav() const;
-
+		
 		// ------------------------------------------------
 	};
 }

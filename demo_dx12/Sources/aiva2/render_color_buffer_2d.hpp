@@ -20,6 +20,14 @@ namespace aiva2
 		render_color_buffer_2d_t(engine_t& engine, render_color_buffer_2d_info_t const& info, winrt::com_ptr<ID3D12Resource> const& resource);
 
 		~render_color_buffer_2d_t() override;
+
+	public:
+		void set_state_for_transition() const;
+
+		void set_state_for_uav() const;
+
+	private:
+		void init_descriptor_heap();
 		
 		// ------------------------------------------------
 
@@ -28,15 +36,6 @@ namespace aiva2
 
 	private:
 		render_color_buffer_2d_info_t m_info{};
-
-		// ------------------------------------------------
-
-	public:
-		void create_in_handle(D3D12_CPU_DESCRIPTOR_HANDLE const& dst_handle) const;
-		
-		void set_state_for_transition() const;
-
-		void set_state_for_uav() const;
 
 		// ------------------------------------------------
 	};

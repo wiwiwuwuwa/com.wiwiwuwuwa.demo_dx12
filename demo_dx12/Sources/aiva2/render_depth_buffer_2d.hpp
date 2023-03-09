@@ -1,14 +1,14 @@
 #pragma once
 #include <aiva2/_core.hpp>
 
-#include <aiva2/engine_object.hpp>
 #include <aiva2/implements.hpp>
+#include <aiva2/render_buffer_2d_base.hpp>
 #include <aiva2/render_depth_buffer_2d_info.hpp>
 #include <aiva2/texture_2d_info.hpp>
 
 namespace aiva2
 {
-	struct render_depth_buffer_2d_t final : public implements_t<render_depth_buffer_2d_t, engine_object_t>
+	struct render_depth_buffer_2d_t final : public implements_t<render_depth_buffer_2d_t, render_buffer_2d_base_t>
 	{
 		// ------------------------------------------------
 
@@ -28,14 +28,6 @@ namespace aiva2
 
 	private:
 		render_depth_buffer_2d_info_t m_info{};
-
-		// ------------------------------------------------
-
-	public:
-		auto get_resource() const->std::shared_ptr<texture_2d_t> const&;
-
-	private:
-		std::shared_ptr<texture_2d_t> m_resource{};
 
 		// ------------------------------------------------
 

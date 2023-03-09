@@ -13,9 +13,9 @@ namespace aiva2
 
 	struct graphic_pipeline_t;
 
-	struct render_color_texture_2d_info_t;
+	struct render_color_buffer_2d_info_t;
 
-	struct render_depth_texture_2d_info_t;
+	struct render_depth_buffer_2d_info_t;
 
 	struct texture_2d_t;
 

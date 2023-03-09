@@ -3,31 +3,31 @@
 
 #include <aiva2/engine_object.hpp>
 #include <aiva2/implements.hpp>
-#include <aiva2/render_color_texture_2d_info.hpp>
+#include <aiva2/render_color_buffer_2d_info.hpp>
 #include <aiva2/texture_2d_info.hpp>
 
 namespace aiva2
 {
-	struct render_color_texture_2d_t final : public implements_t<render_color_texture_2d_t, engine_object_t>
+	struct render_color_buffer_2d_t final : public implements_t<render_color_buffer_2d_t, engine_object_t>
 	{
 		// ------------------------------------------------
 
 	public:
-		render_color_texture_2d_t(engine_t& engine, render_color_texture_2d_info_t const& info, std::shared_ptr<texture_2d_t> const& resource);
+		render_color_buffer_2d_t(engine_t& engine, render_color_buffer_2d_info_t const& info, std::shared_ptr<texture_2d_t> const& resource);
 
-		render_color_texture_2d_t(engine_t& engine, render_color_texture_2d_info_t const& info, texture_2d_info_t const& resource);
+		render_color_buffer_2d_t(engine_t& engine, render_color_buffer_2d_info_t const& info, texture_2d_info_t const& resource);
 
-		render_color_texture_2d_t(engine_t& engine, render_color_texture_2d_info_t const& info, winrt::com_ptr<ID3D12Resource> const& resource);
+		render_color_buffer_2d_t(engine_t& engine, render_color_buffer_2d_info_t const& info, winrt::com_ptr<ID3D12Resource> const& resource);
 
-		~render_color_texture_2d_t() override;
+		~render_color_buffer_2d_t() override;
 		
 		// ------------------------------------------------
 
 	public:
-		auto get_info() const->render_color_texture_2d_info_t const&;
+		auto get_info() const->render_color_buffer_2d_info_t const&;
 
 	private:
-		render_color_texture_2d_info_t m_info{};
+		render_color_buffer_2d_info_t m_info{};
 
 		// ------------------------------------------------
 		

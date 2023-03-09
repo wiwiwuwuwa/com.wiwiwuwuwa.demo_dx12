@@ -15,9 +15,8 @@ namespace aiva2
 	public:
 		render_color_buffer_2d_t(engine_t& engine, render_color_buffer_2d_info_t const& info, std::shared_ptr<texture_2d_t> const& resource);
 
-		render_color_buffer_2d_t(engine_t& engine, render_color_buffer_2d_info_t const& info, texture_2d_info_t const& resource);
-
-		render_color_buffer_2d_t(engine_t& engine, render_color_buffer_2d_info_t const& info, winrt::com_ptr<ID3D12Resource> const& resource);
+		template <typename... t_resource_args>
+		render_color_buffer_2d_t(engine_t& engine, render_color_buffer_2d_info_t const& info, t_resource_args&&... resource_args);
 
 		~render_color_buffer_2d_t() override;
 
@@ -39,4 +38,21 @@ namespace aiva2
 
 		// ------------------------------------------------
 	};
+}
+
+// --------------------------------------------------------
+
+namespace aiva2
+{
+	template <typename... t_resource_args>
+	render_color_buffer_2d_t::render_color_buffer_2d_t(engine_t& engine, render_color_buffer_2d_info_t const& info, t_resource_args&&... resource_args)
+		: render_color_buffer_2d_t
+		{
+			/*engine*/ engine,
+			/*info*/ info,
+			/*resource*/ std::make_shared<texture_2d_t>(engine, std::forward<t_resource_args>(resource_args)...)
+		}
+	{
+		
+	}
 }

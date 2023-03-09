@@ -18,28 +18,6 @@ namespace aiva2
 		init_descriptor_heap();
 	}
 
-	render_color_buffer_2d_t::render_color_buffer_2d_t(engine_t& engine, render_color_buffer_2d_info_t const& info, texture_2d_info_t const& resource)
-		: render_color_buffer_2d_t
-		{
-			/*engine*/ engine,
-			/*info*/ info,
-			/*resource*/ std::make_shared<texture_2d_t>(engine, resource)
-		}
-	{
-		
-	}
-
-	render_color_buffer_2d_t::render_color_buffer_2d_t(engine_t& engine, render_color_buffer_2d_info_t const& info, winrt::com_ptr<ID3D12Resource> const& resource)
-		: render_color_buffer_2d_t
-		{
-			/*engine*/ engine,
-			/*info*/ info,
-			/*resource*/ std::make_shared<texture_2d_t>(engine, resource)
-		}
-	{
-		
-	}
-
 	render_color_buffer_2d_t::~render_color_buffer_2d_t()
 	{
 

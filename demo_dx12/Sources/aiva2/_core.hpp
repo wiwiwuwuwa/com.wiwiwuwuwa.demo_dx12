@@ -16,12 +16,16 @@ namespace aiva2
 	struct render_color_buffer_2d_t;
 
 	struct render_color_buffer_2d_info_t;
+	
+	struct render_color_target_t;
 
 	struct render_depth_buffer_2d_t;
 
 	struct render_depth_buffer_2d_info_t;
 
-	struct render_texture_2d_t;
+	struct render_depth_target_t;
+
+	struct render_target_t;
 	
 	struct texture_2d_t;
 

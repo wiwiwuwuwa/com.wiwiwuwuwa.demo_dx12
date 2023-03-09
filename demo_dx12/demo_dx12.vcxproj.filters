@@ -179,6 +179,7 @@
     <ClCompile Include="Sources\aiva2\texture_2d_utils.cpp" />
     <ClCompile Include="Sources\aiva2\render_buffer_2d_base.cpp" />
     <ClCompile Include="Sources\aiva2\render_texture_2d.cpp" />
+    <ClCompile Include="Sources\aiva2\render_texture_2d_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -550,6 +551,7 @@
     <ClInclude Include="Sources\aiva2\texture_2d_utils.hpp" />
     <ClInclude Include="Sources\aiva2\render_buffer_2d_base.hpp" />
     <ClInclude Include="Sources\aiva2\render_texture_2d.hpp" />
+    <ClInclude Include="Sources\aiva2\render_texture_2d_utils.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

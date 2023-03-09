@@ -55,7 +55,7 @@ namespace aiva2
 		return m_resource;
 	}
 	
-	auto render_depth_texture_2d_t::create_in_handle(D3D12_CPU_DESCRIPTOR_HANDLE const& dst_handle) const
+	void render_depth_texture_2d_t::create_in_handle(D3D12_CPU_DESCRIPTOR_HANDLE const& dst_handle) const
 	{
 		assert_t::check_bool(m_resource, "m_resource is not valid");
 
@@ -63,7 +63,7 @@ namespace aiva2
 		desc.Format = to_dxgi_format(m_info.get_format());
 		desc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 		desc.Flags = D3D12_DSV_FLAG_NONE;
-		desc.Texture2D.MipSlice = m_info.get_mip_slice();
+		desc.Texture2D.MipSlice = static_cast<UINT>(m_info.get_mip_slice());
 		
 		get_engine().get_graphic_hardware().get_device().CreateDepthStencilView
 		(
@@ -73,17 +73,17 @@ namespace aiva2
 		);
 	}
 
-	auto render_depth_texture_2d_t::set_state_for_transition() const->std::vector<D3D12_RESOURCE_BARRIER>
+	void render_depth_texture_2d_t::set_state_for_transition() const
 	{
 		assert_t::check_bool(m_resource, "m_resource is not valid");
 
 		auto const subresource_index = texture_2d_utils_t::get_subresource_index((*m_resource), m_info);
-		return (*m_resource).set_state_for_transition(D3D12_RESOURCE_STATE_DEPTH_WRITE, subresource_index);
+		(*m_resource).set_state_for_transition(D3D12_RESOURCE_STATE_DEPTH_WRITE, subresource_index);
 	}
 
-	auto render_depth_texture_2d_t::set_state_for_uav() const->D3D12_RESOURCE_BARRIER
+	void render_depth_texture_2d_t::set_state_for_uav() const
 	{
 		assert_t::check_bool(m_resource, "m_resource is not valid");
-		return (*m_resource).set_state_for_uav();
+		(*m_resource).set_state_for_uav();
 	}
 }

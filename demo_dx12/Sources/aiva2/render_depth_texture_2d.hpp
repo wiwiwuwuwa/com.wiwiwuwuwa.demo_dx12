@@ -40,11 +40,11 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
-		auto create_in_handle(D3D12_CPU_DESCRIPTOR_HANDLE const& dst_handle) const;
+		void create_in_handle(D3D12_CPU_DESCRIPTOR_HANDLE const& dst_handle) const;
 
-		auto set_state_for_transition() const->std::vector<D3D12_RESOURCE_BARRIER>;
+		void set_state_for_transition() const;
 
-		auto set_state_for_uav() const->D3D12_RESOURCE_BARRIER;
+		void set_state_for_uav() const;
 
 		// ------------------------------------------------
 	};

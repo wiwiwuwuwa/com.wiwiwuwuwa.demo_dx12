@@ -7,7 +7,7 @@
 
 namespace aiva2
 {
-	struct render_color_buffer_2d_info_t final : public implements_t<render_color_buffer_2d_info_t, struct_t>
+	struct render_color_texture_2d_info_t final : public implements_t<render_color_texture_2d_info_t, struct_t>
 	{
 		// ------------------------------------------------
 

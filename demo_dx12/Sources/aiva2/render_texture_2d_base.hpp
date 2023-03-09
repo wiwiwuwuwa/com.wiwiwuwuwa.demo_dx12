@@ -6,14 +6,14 @@
 
 namespace aiva2
 {
-	struct render_buffer_2d_base_t : public implements_t<render_buffer_2d_base_t, engine_object_t>
+	struct render_texture_2d_base_t : public implements_t<render_texture_2d_base_t, engine_object_t>
 	{
 		// ------------------------------------------------
 
 	public:
-		render_buffer_2d_base_t(engine_t& engine);
+		render_texture_2d_base_t(engine_t& engine);
 
-		~render_buffer_2d_base_t() override;
+		~render_texture_2d_base_t() override;
 
 		// ------------------------------------------------
 

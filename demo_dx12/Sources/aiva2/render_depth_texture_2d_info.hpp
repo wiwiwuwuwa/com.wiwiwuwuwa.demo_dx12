@@ -7,7 +7,7 @@
 
 namespace aiva2
 {
-	struct render_depth_buffer_2d_info_t final : public implements_t<render_depth_buffer_2d_info_t, struct_t>
+	struct render_depth_texture_2d_info_t final : public implements_t<render_depth_texture_2d_info_t, struct_t>
 	{
 		// ------------------------------------------------
 

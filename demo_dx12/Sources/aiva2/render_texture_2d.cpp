@@ -18,6 +18,31 @@ namespace aiva2
 		
 	}
 
+	auto render_texture_2d_t::get_color_cpu_descriptor_handles() const->std::vector<D3D12_CPU_DESCRIPTOR_HANDLE>
+	{
+		auto handles = std::vector<D3D12_CPU_DESCRIPTOR_HANDLE>{};
+		for (auto i = size_t{}; i < std::size(m_color_buffers); i++)
+		{
+			auto const& buffer = m_color_buffers[i];
+			assert_t::check_bool(buffer, "buffer is not valid");
+
+			auto const handle = (*buffer).get_cpu_descriptor_handle();
+			handles.push_back(handle);
+		}
+		return handles;
+	}
+
+	auto render_texture_2d_t::get_depth_cpu_descriptor_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>
+	{
+		auto const& buffer = m_depth_buffer;
+		if (!buffer)
+		{
+			return {};
+		}
+
+		return (*buffer).get_cpu_descriptor_handle();
+	}
+
 	void render_texture_2d_t::set_state_for_transition() const
 	{
 		for (auto const& color_buffer : m_color_buffers)

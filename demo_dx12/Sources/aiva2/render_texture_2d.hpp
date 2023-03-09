@@ -16,6 +16,10 @@ namespace aiva2
 		~render_texture_2d_t() override;
 		
 	public:
+		auto get_color_cpu_descriptor_handles() const -> std::vector<D3D12_CPU_DESCRIPTOR_HANDLE>;
+
+		auto get_depth_cpu_descriptor_handle() const -> std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>;
+
 		void set_state_for_transition() const;
 
 		void set_state_for_uav() const;

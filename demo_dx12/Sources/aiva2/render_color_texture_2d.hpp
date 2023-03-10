@@ -2,13 +2,13 @@
 #include <aiva2/_core.hpp>
 
 #include <aiva2/implements.hpp>
-#include <aiva2/render_texture_2d_base.hpp>
+#include <aiva2/render_texture_base.hpp>
 #include <aiva2/render_color_texture_2d_info.hpp>
 #include <aiva2/texture_2d_info.hpp>
 
 namespace aiva2
 {
-	struct render_color_texture_2d_t final : public implements_t<render_color_texture_2d_t, render_texture_2d_base_t>
+	struct render_color_texture_2d_t final : public implements_t<render_color_texture_2d_t, render_texture_base_t>
 	{
 		// ------------------------------------------------
 
@@ -32,6 +32,14 @@ namespace aiva2
 
 	private:
 		void init_descriptor_heap();
+
+		// ------------------------------------------------
+
+	public:
+		auto get_resource() const->std::shared_ptr<texture_2d_t> const&;
+
+	private:
+		std::shared_ptr<texture_2d_t> m_resource{};
 		
 		// ------------------------------------------------
 

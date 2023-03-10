@@ -12,9 +12,9 @@ namespace aiva2
 {
 	render_depth_texture_2d_t::render_depth_texture_2d_t(engine_t& engine, std::shared_ptr<texture_2d_t> const& resource, render_depth_texture_2d_info_t const& info /*= {}*/)
 		: impl_type{ engine }
+		, m_resource{ resource }
 		, m_info{ info }
 	{
-		m_resource = resource;
 		init_descriptor_heap();
 	}
 
@@ -71,6 +71,11 @@ namespace aiva2
 			/*pDesc*/ &viewDesc,
 			/*DestDescriptor*/ (*m_descriptor_heap).GetCPUDescriptorHandleForHeapStart()
 		);
+	}
+
+	auto render_depth_texture_2d_t::get_resource() const->std::shared_ptr<texture_2d_t> const&
+	{
+		return m_resource;
 	}
 
 	auto render_depth_texture_2d_t::get_info() const->render_depth_texture_2d_info_t const&

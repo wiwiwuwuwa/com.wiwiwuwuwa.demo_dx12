@@ -16,9 +16,17 @@ namespace aiva2
 		~time_system_t() override;
 		
 	public:
+		auto get_on_pre_update() -> event_action_type<>&;
+
 		auto get_on_update() -> event_action_type<>&;
+
+		auto get_on_post_update() -> event_action_type<>&;
+
+		auto get_on_pre_render() -> event_action_type<>&;
 		
 		auto get_on_render() -> event_action_type<>&;
+
+		auto get_on_post_render() -> event_action_type<>&;
 
 		auto get_tick() const->size_t;
 		
@@ -32,9 +40,17 @@ namespace aiva2
 		void shut_time_system();
 
 	private:
+		event_action_type<> m_on_pre_update{};
+
 		event_action_type<> m_on_update{};
 
+		event_action_type<> m_on_post_update{};
+
+		event_action_type<> m_on_pre_render{};
+
 		event_action_type<> m_on_render{};
+
+		event_action_type<> m_on_post_render{};
 
 		size_t m_tick{};
 		

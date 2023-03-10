@@ -13,14 +13,34 @@ namespace aiva2
 		shut_time_system();
 	}
 
+	auto time_system_t::get_on_pre_update() -> event_action_type<>&
+	{
+		return m_on_pre_update;
+	}
+
 	auto time_system_t::get_on_update() -> event_action_type<>&
 	{
 		return m_on_update;
 	}
 
+	auto time_system_t::get_on_post_update() -> event_action_type<>&
+	{
+		return m_on_post_update;
+	}
+
+	auto time_system_t::get_on_pre_render() -> event_action_type<>&
+	{
+		return m_on_pre_render;
+	}
+
 	auto time_system_t::get_on_render() -> event_action_type<>&
 	{
 		return m_on_render;
+	}
+
+	auto time_system_t::get_on_post_render() -> event_action_type<>&
+	{
+		return m_on_post_render;
 	}
 
 	auto time_system_t::get_tick() const -> size_t
@@ -40,8 +60,12 @@ namespace aiva2
 
 	void time_system_t::tick_time_system()
 	{
+		get_on_pre_update().invoke();
 		get_on_update().invoke();
+		get_on_post_update().invoke();
+		get_on_pre_render().invoke();
 		get_on_render().invoke();
+		get_on_post_render().invoke();
 		m_tick++;
 	}
 

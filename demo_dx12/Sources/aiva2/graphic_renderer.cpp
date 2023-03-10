@@ -3,6 +3,8 @@
 
 #include <aiva2/assert.hpp>
 #include <aiva2/engine.hpp>
+#include <aiva2/gpu_cmd_base.hpp>
+#include <aiva2/graphic_executor.hpp>
 #include <aiva2/graphic_hardware.hpp>
 #include <aiva2/render_target.hpp>
 #include <aiva2/render_color_texture_2d.hpp>
@@ -15,19 +17,22 @@ namespace aiva2
 		: impl_type{ engine }
 	{
 		init_screen_targets();
+		init_on_render_world();
 	}
 
 	graphic_renderer_t::~graphic_renderer_t()
 	{
+		shut_on_render_world();
 		shut_screen_targets();
 	}
 
 	auto graphic_renderer_t::get_screen_target() const->std::shared_ptr<render_target_t> const&
 	{
-		auto const target_index = static_cast<size_t>(get_engine().get_graphic_hardware().get_swap_chain().GetCurrentBackBufferIndex());
-		assert_t::check_bool(target_index >= size_t{} && target_index < std::size(m_screen_targets), "target_index is not valid");
+		auto const num_screen_targets = static_cast<size_t>(std::size(m_screen_targets));
+		assert_t::check_bool(num_screen_targets > 0, "num_screen_targets is not valid");
+		auto const screen_target_index = (get_engine().get_time_system().get_tick() + 1) % num_screen_targets;
 		
-		return m_screen_targets[target_index];
+		return m_screen_targets[screen_target_index];
 	}
 
 	void graphic_renderer_t::init_screen_targets()
@@ -73,5 +78,10 @@ namespace aiva2
 	void graphic_renderer_t::shut_on_render_world()
 	{
 		get_engine().get_time_system().get_on_pre_render().detach_listener(&this_type::tick_on_render_world, this);
+	}
+
+	void graphic_renderer_t::execute_render_command(std::shared_ptr<gpu_cmd_base_t> const& render_command)
+	{
+		get_engine().get_graphic_executor().execute_command(render_command);
 	}
 }

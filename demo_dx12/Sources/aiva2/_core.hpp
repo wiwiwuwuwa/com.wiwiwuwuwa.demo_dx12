@@ -3,6 +3,8 @@
 
 namespace aiva2
 {
+	struct deffered_renderer_t;
+
 	struct engine_t;
 
 	struct gpu_cmd_base_t;

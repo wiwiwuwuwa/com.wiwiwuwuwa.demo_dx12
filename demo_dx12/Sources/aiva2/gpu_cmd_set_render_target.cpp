@@ -46,4 +46,14 @@ namespace aiva2
 			/*pDepthStencilDescriptor*/ depth_target ? &(*depth_target) : nullptr
 		);
 	}
+
+	auto gpu_cmd_set_render_target_t::get_render_target() const->std::shared_ptr<render_target_t> const&
+	{
+		return m_render_target;
+	}
+
+	void gpu_cmd_set_render_target_t::set_render_target(std::shared_ptr<render_target_t> const& render_target)
+	{
+		m_render_target = render_target;
+	}
 }

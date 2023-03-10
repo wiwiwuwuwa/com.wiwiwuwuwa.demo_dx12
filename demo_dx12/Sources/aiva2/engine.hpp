@@ -106,5 +106,18 @@ namespace aiva2
 		std::unique_ptr<graphic_renderer_t> m_graphic_renderer{};
 
 		// ------------------------------------------------
+
+	public:
+		auto get_deffered_renderer() const->deffered_renderer_t&;
+
+	private:
+		void init_deffered_renderer();
+
+		void shut_deffered_renderer();
+
+	private:
+		std::unique_ptr<deffered_renderer_t> m_deffered_renderer{};
+
+		// ------------------------------------------------
 	};
 }

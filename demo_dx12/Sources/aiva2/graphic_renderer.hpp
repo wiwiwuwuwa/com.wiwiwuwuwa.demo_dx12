@@ -44,5 +44,10 @@ namespace aiva2
 		event_action_type<> m_on_render_world{};
 
 		// ------------------------------------------------
+
+	public:
+		void execute_render_command(std::shared_ptr<gpu_cmd_base_t> const& render_command);
+		
+		// ------------------------------------------------
 	};
 }

@@ -2,6 +2,7 @@
 #include <aiva2/engine.hpp>
 
 #include <aiva2/assert.hpp>
+#include <aiva2/deffered_renderer.hpp>
 #include <aiva2/graphic_executor.hpp>
 #include <aiva2/graphic_hardware.hpp>
 #include <aiva2/graphic_pipeline.hpp>
@@ -59,6 +60,7 @@ namespace aiva2
 		init_graphic_pipeline();
 		init_graphic_executor();
 		init_graphic_renderer();
+		init_deffered_renderer();
 	}
 
 	void engine_t::engine_when_window_system_on_window_tick()
@@ -68,6 +70,7 @@ namespace aiva2
 
 	void engine_t::engine_when_window_system_on_window_shut()
 	{
+		shut_deffered_renderer();
 		shut_graphic_renderer();
 		shut_graphic_executor();
 		shut_graphic_pipeline();
@@ -168,5 +171,23 @@ namespace aiva2
 	{
 		assert_t::check_bool(m_graphic_renderer, "m_graphic_renderer is not valid");
 		m_graphic_renderer = {};
+	}
+
+	auto engine_t::get_deffered_renderer() const->deffered_renderer_t&
+	{
+		assert_t::check_bool(m_deffered_renderer, "m_deffered_renderer is not valid");
+		return *m_deffered_renderer;
+	}
+
+	void engine_t::init_deffered_renderer()
+	{
+		m_deffered_renderer = std::make_unique<deffered_renderer_t>(*this);
+		assert_t::check_bool(m_deffered_renderer, "m_deffered_renderer is not valid");
+	}
+
+	void engine_t::shut_deffered_renderer()
+	{
+		assert_t::check_bool(m_deffered_renderer, "m_deffered_renderer is not valid");
+		m_deffered_renderer = {};
 	}
 }

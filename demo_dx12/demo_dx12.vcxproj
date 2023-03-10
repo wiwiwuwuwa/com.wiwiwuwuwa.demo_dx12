@@ -183,6 +183,7 @@
     <ClInclude Include="Sources\aiva2\buffer_format_to_dxgi_format.hpp" />
     <ClInclude Include="Sources\aiva2\d3d12_resource_desc_utils.hpp" />
     <ClInclude Include="Sources\aiva2\d3d12_resource_utils.hpp" />
+    <ClInclude Include="Sources\aiva2\deffered_renderer.hpp" />
     <ClInclude Include="Sources\aiva2\dxgi_format_to_buffer_format.hpp" />
     <ClInclude Include="Sources\aiva2\engine.hpp" />
     <ClInclude Include="Sources\aiva2\engine_object.hpp" />
@@ -573,6 +574,7 @@
     </ClCompile>
     <ClCompile Include="Sources\aiva2\d3d12_resource_desc_utils.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_resource_utils.cpp" />
+    <ClCompile Include="Sources\aiva2\deffered_renderer.cpp" />
     <ClCompile Include="Sources\aiva2\engine.cpp" />
     <ClCompile Include="Sources\aiva2\engine_object.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_base.cpp" />

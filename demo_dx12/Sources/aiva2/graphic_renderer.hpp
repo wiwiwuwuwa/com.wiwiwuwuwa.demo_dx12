@@ -18,7 +18,7 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
-		auto get_current_screen_target() const->std::shared_ptr<render_target_t> const&;
+		auto get_screen_target() const->std::shared_ptr<render_target_t> const&;
 
 	private:
 		void init_screen_targets();

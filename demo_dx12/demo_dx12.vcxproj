@@ -191,6 +191,7 @@
     <ClInclude Include="Sources\aiva2\event_action_read_only.hpp" />
     <ClInclude Include="Sources\aiva2\event_action_read_write.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_base.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_cmd_present.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_set_render_target.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_res_base.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_res_state.hpp" />
@@ -575,6 +576,7 @@
     <ClCompile Include="Sources\aiva2\engine.cpp" />
     <ClCompile Include="Sources\aiva2\engine_object.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_base.cpp" />
+    <ClCompile Include="Sources\aiva2\gpu_cmd_present.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_set_render_target.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_res_base.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_res_state.cpp" />

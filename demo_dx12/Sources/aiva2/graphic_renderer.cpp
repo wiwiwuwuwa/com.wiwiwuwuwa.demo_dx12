@@ -21,7 +21,7 @@ namespace aiva2
 		shut_screen_targets();
 	}
 
-	auto graphic_renderer_t::get_current_screen_target() const->std::shared_ptr<render_target_t> const&
+	auto graphic_renderer_t::get_screen_target() const->std::shared_ptr<render_target_t> const&
 	{
 		auto const target_index = static_cast<size_t>(get_engine().get_graphic_hardware().get_swap_chain().GetCurrentBackBufferIndex());
 		assert_t::check_bool(target_index >= size_t{} && target_index < std::size(m_screen_targets), "target_index is not valid");

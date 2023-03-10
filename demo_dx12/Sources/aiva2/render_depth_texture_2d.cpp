@@ -23,18 +23,26 @@ namespace aiva2
 
 	}
 
-	void render_depth_texture_2d_t::set_state_for_transition() const
+	void render_depth_texture_2d_t::init_state_for_transition() const
 	{
 		assert_t::check_bool(m_resource, "m_resource is not valid");
 
 		auto const subresource_index = texture_2d_utils_t::get_subresource_index((*m_resource), m_info);
-		(*m_resource).set_state_for_transition(D3D12_RESOURCE_STATE_DEPTH_WRITE, subresource_index);
+		(*m_resource).init_state_for_transition(D3D12_RESOURCE_STATE_DEPTH_WRITE, subresource_index);
 	}
 
-	void render_depth_texture_2d_t::set_state_for_uav() const
+	void render_depth_texture_2d_t::shut_state_for_transition() const
 	{
 		assert_t::check_bool(m_resource, "m_resource is not valid");
-		(*m_resource).set_state_for_uav();
+
+		auto const subresource_index = texture_2d_utils_t::get_subresource_index((*m_resource), m_info);
+		(*m_resource).init_state_for_transition(D3D12_RESOURCE_STATE_COMMON, subresource_index);
+	}
+
+	void render_depth_texture_2d_t::init_state_for_uav() const
+	{
+		assert_t::check_bool(m_resource, "m_resource is not valid");
+		(*m_resource).init_state_for_uav();
 	}
 
 	void render_depth_texture_2d_t::init_descriptor_heap()

@@ -24,9 +24,11 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
-		void set_state_for_transition() const override;
+		void init_state_for_transition() const override;
 
-		void set_state_for_uav() const override;
+		void shut_state_for_transition() const override;
+
+		void init_state_for_uav() const override;
 
 	private:
 		void init_descriptor_heap();

@@ -18,31 +18,45 @@ namespace aiva2
 
 	}
 
-	void render_target_t::set_state_for_transition() const
+	void render_target_t::init_state_for_transition() const
 	{
 		for (auto const& color_texture : m_color_textures)
 		{
 			assert_t::check_bool(color_texture, "color_texture is not valid");
-			(*color_texture).set_state_for_transition();
+			(*color_texture).init_state_for_transition();
 		}
 
 		if (m_depth_texture)
 		{
-			(*m_depth_texture).set_state_for_transition();
+			(*m_depth_texture).init_state_for_transition();
 		}
 	}
 
-	void render_target_t::set_state_for_uav() const
+	void render_target_t::shut_state_for_transition() const
 	{
 		for (auto const& color_texture : m_color_textures)
 		{
 			assert_t::check_bool(color_texture, "color_texture is not valid");
-			(*color_texture).set_state_for_uav();
+			(*color_texture).shut_state_for_transition();
 		}
 
 		if (m_depth_texture)
 		{
-			(*m_depth_texture).set_state_for_uav();
+			(*m_depth_texture).shut_state_for_transition();
+		}
+	}
+
+	void render_target_t::init_state_for_uav() const
+	{
+		for (auto const& color_texture : m_color_textures)
+		{
+			assert_t::check_bool(color_texture, "color_texture is not valid");
+			(*color_texture).init_state_for_uav();
+		}
+
+		if (m_depth_texture)
+		{
+			(*m_depth_texture).init_state_for_uav();
 		}
 	}
 

@@ -18,9 +18,11 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
-		virtual void set_state_for_transition() const = 0;
+		virtual void init_state_for_transition() const = 0;
 
-		virtual void set_state_for_uav() const = 0;
+		virtual void shut_state_for_transition() const = 0;
+
+		virtual void init_state_for_uav() const = 0;
 
 		// ------------------------------------------------
 

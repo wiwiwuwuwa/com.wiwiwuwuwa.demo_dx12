@@ -16,9 +16,11 @@ namespace aiva2
 		~render_target_t() override;
 
 	public:
-		void set_state_for_transition() const;
+		void init_state_for_transition() const;
+
+		void shut_state_for_transition() const;
 		
-		void set_state_for_uav() const;
+		void init_state_for_uav() const;
 
 		// ------------------------------------------------
 

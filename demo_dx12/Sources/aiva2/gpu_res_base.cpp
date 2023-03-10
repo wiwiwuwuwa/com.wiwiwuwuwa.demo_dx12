@@ -23,7 +23,7 @@ namespace aiva2
 		return m_resource;
 	}
 
-	void gpu_res_base_t::set_state_for_transition(D3D12_RESOURCE_STATES const state, std::optional<size_t> const index /*= {}*/)
+	void gpu_res_base_t::init_state_for_transition(D3D12_RESOURCE_STATES const state, std::optional<size_t> const index /*= {}*/)
 	{
 		assert_t::check_bool(m_resource, "m_resource is not valid");
 		
@@ -44,7 +44,7 @@ namespace aiva2
 		}
 	}
 
-	void gpu_res_base_t::set_state_for_uav()
+	void gpu_res_base_t::init_state_for_uav()
 	{
 		assert_t::check_bool(m_resource, "m_resource is not valid");
 

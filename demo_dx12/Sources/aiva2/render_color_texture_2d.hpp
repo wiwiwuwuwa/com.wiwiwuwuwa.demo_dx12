@@ -13,14 +13,20 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
-		render_color_texture_2d_t(engine_t& engine, render_color_texture_2d_info_t const& info, std::shared_ptr<texture_2d_t> const& resource);
+		render_color_texture_2d_t(engine_t& engine, std::shared_ptr<texture_2d_t> const& resource, render_color_texture_2d_info_t const& info = {});
 
 		~render_color_texture_2d_t() override;
 
 	public:
-		void set_state_for_transition() const;
+		template <typename t_resource>
+		render_color_texture_2d_t(engine_t& engine, t_resource const& resource, render_color_texture_2d_info_t const& info = {});
 
-		void set_state_for_uav() const;
+		// ------------------------------------------------
+
+	public:
+		void set_state_for_transition() const override;
+
+		void set_state_for_uav() const override;
 
 	private:
 		void init_descriptor_heap();
@@ -35,4 +41,21 @@ namespace aiva2
 
 		// ------------------------------------------------
 	};
+}
+
+// --------------------------------------------------------
+
+namespace aiva2
+{
+	template <typename t_resource>
+	render_color_texture_2d_t::render_color_texture_2d_t(engine_t& engine, t_resource const& resource, render_color_texture_2d_info_t const& info /*= {}*/)
+		: render_color_texture_2d_t
+		{
+			/*engine*/ engine,
+			/*resource*/ std::make_shared<texture_2d_t>(engine, resource),
+			/*info*/ info
+		}
+	{
+
+	}
 }

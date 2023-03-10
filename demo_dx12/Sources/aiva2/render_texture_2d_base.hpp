@@ -1,16 +1,16 @@
 #pragma once
 #include <aiva2/_core.hpp>
 
-#include <aiva2/engine_object.hpp>
 #include <aiva2/implements.hpp>
+#include <aiva2/render_texture_base.hpp>
 
 namespace aiva2
 {
-	struct render_texture_2d_base_t : public implements_t<render_texture_2d_base_t, engine_object_t>
+	struct render_texture_2d_base_t : public implements_t<render_texture_2d_base_t, render_texture_base_t>
 	{
 		// ------------------------------------------------
 
-	public:
+	protected:
 		render_texture_2d_base_t(engine_t& engine);
 
 		~render_texture_2d_base_t() override;
@@ -24,11 +24,5 @@ namespace aiva2
 		std::shared_ptr<texture_2d_t> m_resource{};
 
 		// ------------------------------------------------
-
-	public:
-		auto get_cpu_descriptor_handle() const->D3D12_CPU_DESCRIPTOR_HANDLE;
-		
-	protected:
-		winrt::com_ptr<ID3D12DescriptorHeap> m_descriptor_heap{};
 	};
 }

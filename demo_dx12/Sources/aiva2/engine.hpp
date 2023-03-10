@@ -93,5 +93,18 @@ namespace aiva2
 		std::unique_ptr<graphic_executor_t> m_graphic_executor{};
 
 		// ------------------------------------------------
+
+	public:
+		auto get_graphic_renderer() const->graphic_renderer_t&;
+
+	private:
+		void init_graphic_renderer();
+
+		void shut_graphic_renderer();
+		
+	private:
+		std::unique_ptr<graphic_renderer_t> m_graphic_renderer{};
+
+		// ------------------------------------------------
 	};
 }

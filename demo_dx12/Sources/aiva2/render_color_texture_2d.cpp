@@ -10,7 +10,7 @@
 
 namespace aiva2
 {
-	render_color_texture_2d_t::render_color_texture_2d_t(engine_t& engine, render_color_texture_2d_info_t const& info, std::shared_ptr<texture_2d_t> const& resource)
+	render_color_texture_2d_t::render_color_texture_2d_t(engine_t& engine, std::shared_ptr<texture_2d_t> const& resource, render_color_texture_2d_info_t const& info /*= {}*/)
 		: impl_type{ engine }
 		, m_info{ info }
 	{

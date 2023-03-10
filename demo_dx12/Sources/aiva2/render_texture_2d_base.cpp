@@ -22,10 +22,4 @@ namespace aiva2
 	{
 		return m_resource;
 	}
-
-	auto render_texture_2d_base_t::get_cpu_descriptor_handle() const->D3D12_CPU_DESCRIPTOR_HANDLE
-	{
-		assert_t::check_bool(m_descriptor_heap, "m_descriptor_heap is not valid");
-		return (*m_descriptor_heap).GetCPUDescriptorHandleForHeapStart();
-	}
 }

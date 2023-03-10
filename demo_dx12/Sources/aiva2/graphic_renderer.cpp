@@ -7,6 +7,7 @@
 #include <aiva2/render_target.hpp>
 #include <aiva2/render_color_texture_2d.hpp>
 #include <aiva2/texture_2d.hpp>
+#include <aiva2/time_system.hpp>
 
 namespace aiva2
 {
@@ -52,5 +53,25 @@ namespace aiva2
 	void graphic_renderer_t::shut_screen_targets()
 	{
 		m_screen_targets = {};
+	}
+	
+	auto graphic_renderer_t::get_on_render_world() -> event_action_type<>&
+	{
+		return m_on_render_world;
+	}
+
+	void graphic_renderer_t::init_on_render_world()
+	{
+		get_engine().get_time_system().get_on_pre_render().attach_listener(&this_type::tick_on_render_world, this);
+	}
+
+	void graphic_renderer_t::tick_on_render_world()
+	{
+		m_on_render_world.invoke();
+	}
+	
+	void graphic_renderer_t::shut_on_render_world()
+	{
+		get_engine().get_time_system().get_on_pre_render().detach_listener(&this_type::tick_on_render_world, this);
 	}
 }

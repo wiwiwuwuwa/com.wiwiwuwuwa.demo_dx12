@@ -29,5 +29,20 @@ namespace aiva2
 		std::vector<std::shared_ptr<render_target_t>> m_screen_targets{};
 
 		// ------------------------------------------------
+		
+	public:
+		auto get_on_render_world() -> event_action_type<>&;
+
+	private:
+		void init_on_render_world();
+
+		void tick_on_render_world();
+
+		void shut_on_render_world();
+
+	private:
+		event_action_type<> m_on_render_world{};
+
+		// ------------------------------------------------
 	};
 }

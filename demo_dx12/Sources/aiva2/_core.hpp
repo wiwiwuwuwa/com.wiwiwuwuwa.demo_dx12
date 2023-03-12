@@ -7,6 +7,8 @@ namespace aiva2
 
 	struct engine_t;
 
+	struct engine_object_t;
+
 	struct gpu_cmd_base_t;
 
 	struct graphic_executor_t;
@@ -30,6 +32,8 @@ namespace aiva2
 	struct render_texture_base_t;
 
 	struct render_target_t;
+
+	struct resource_system_t;
 	
 	struct texture_2d_t;
 

@@ -41,6 +41,19 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
+		auto get_resource_system() const->resource_system_t&;
+
+	private:
+		void init_resource_system();
+
+		void shut_resource_system();
+
+	private:
+		std::unique_ptr<resource_system_t> m_resource_system{};
+
+		// ------------------------------------------------
+
+	public:
 		auto get_time_system() const->time_system_t&;
 
 	private:

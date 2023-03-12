@@ -7,6 +7,7 @@
 #include <aiva2/graphic_hardware.hpp>
 #include <aiva2/graphic_pipeline.hpp>
 #include <aiva2/graphic_renderer.hpp>
+#include <aiva2/resource_system.hpp>
 #include <aiva2/time_system.hpp>
 #include <aiva2/window_system.hpp>
 
@@ -55,6 +56,7 @@ namespace aiva2
 
 	void engine_t::engine_when_window_system_on_window_init()
 	{
+		init_resource_system();
 		init_time_system();
 		init_graphic_hardware();
 		init_graphic_pipeline();
@@ -76,6 +78,25 @@ namespace aiva2
 		shut_graphic_pipeline();
 		shut_graphic_hardware();
 		shut_time_system();
+		shut_resource_system();
+	}
+
+	auto engine_t::get_resource_system() const->resource_system_t&
+	{
+		assert_t::check_bool(m_resource_system, "m_resource_system is not valid");
+		return *m_resource_system;
+	}
+
+	void engine_t::init_resource_system()
+	{
+		m_resource_system = std::make_unique<resource_system_t>(*this);
+		assert_t::check_bool(m_resource_system, "m_resource_system is not valid");
+	}
+
+	void engine_t::shut_resource_system()
+	{
+		assert_t::check_bool(m_resource_system, "m_resource_system is not valid");
+		m_resource_system = {};
 	}
 
 	auto engine_t::get_time_system() const->time_system_t&

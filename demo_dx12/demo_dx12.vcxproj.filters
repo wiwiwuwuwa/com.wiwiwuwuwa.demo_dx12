@@ -183,6 +183,7 @@
     <ClCompile Include="Sources\aiva2\gpu_cmd_set_render_target.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_present.cpp" />
     <ClCompile Include="Sources\aiva2\deffered_renderer.cpp" />
+    <ClCompile Include="Sources\aiva2\resource_system.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -558,6 +559,7 @@
     <ClInclude Include="Sources\aiva2\gpu_cmd_set_render_target.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_present.hpp" />
     <ClInclude Include="Sources\aiva2\deffered_renderer.hpp" />
+    <ClInclude Include="Sources\aiva2\resource_system.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

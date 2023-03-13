@@ -210,6 +210,9 @@
     <ClInclude Include="Sources\aiva2\render_target.hpp" />
     <ClInclude Include="Sources\aiva2\render_texture_base.hpp" />
     <ClInclude Include="Sources\aiva2\resource_system.hpp" />
+    <ClInclude Include="Sources\aiva2\shader_info.hpp" />
+    <ClInclude Include="Sources\aiva2\shader_info_for_code.hpp" />
+    <ClInclude Include="Sources\aiva2\shader_info_for_meta.hpp" />
     <ClInclude Include="Sources\aiva2\struct.hpp" />
     <ClInclude Include="Sources\aiva2\texture_2d.hpp" />
     <ClInclude Include="Sources\aiva2\texture_2d_info.hpp" />
@@ -595,6 +598,9 @@
     <ClCompile Include="Sources\aiva2\render_target.cpp" />
     <ClCompile Include="Sources\aiva2\render_texture_base.cpp" />
     <ClCompile Include="Sources\aiva2\resource_system.cpp" />
+    <ClCompile Include="Sources\aiva2\shader_info.cpp" />
+    <ClCompile Include="Sources\aiva2\shader_info_for_code.cpp" />
+    <ClCompile Include="Sources\aiva2\shader_info_for_meta.cpp" />
     <ClCompile Include="Sources\aiva2\texture_2d.cpp" />
     <ClCompile Include="Sources\aiva2\texture_2d_info.cpp" />
     <ClCompile Include="Sources\aiva2\texture_2d_utils.cpp" />
@@ -968,6 +974,28 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
       <FileType>Document</FileType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Assets\resources2\shaders\random.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+    </Text>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

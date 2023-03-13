@@ -184,6 +184,9 @@
     <ClCompile Include="Sources\aiva2\gpu_cmd_present.cpp" />
     <ClCompile Include="Sources\aiva2\deffered_renderer.cpp" />
     <ClCompile Include="Sources\aiva2\resource_system.cpp" />
+    <ClCompile Include="Sources\aiva2\shader_info.cpp" />
+    <ClCompile Include="Sources\aiva2\shader_info_for_code.cpp" />
+    <ClCompile Include="Sources\aiva2\shader_info_for_meta.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -560,6 +563,9 @@
     <ClInclude Include="Sources\aiva2\gpu_cmd_present.hpp" />
     <ClInclude Include="Sources\aiva2\deffered_renderer.hpp" />
     <ClInclude Include="Sources\aiva2\resource_system.hpp" />
+    <ClInclude Include="Sources\aiva2\shader_info.hpp" />
+    <ClInclude Include="Sources\aiva2\shader_info_for_code.hpp" />
+    <ClInclude Include="Sources\aiva2\shader_info_for_meta.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">
@@ -627,5 +633,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme.txt" />
+    <Text Include="Assets\resources2\shaders\random.hlsl" />
   </ItemGroup>
 </Project>

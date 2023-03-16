@@ -187,6 +187,9 @@
     <ClCompile Include="Sources\aiva2\shader_info.cpp" />
     <ClCompile Include="Sources\aiva2\shader_info_for_code.cpp" />
     <ClCompile Include="Sources\aiva2\shader_info_for_meta.cpp" />
+    <ClCompile Include="Sources\aiva2\shader_base.cpp" />
+    <ClCompile Include="Sources\aiva2\string_utils.cpp" />
+    <ClCompile Include="Sources\aiva2\compute_shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -566,6 +569,9 @@
     <ClInclude Include="Sources\aiva2\shader_info.hpp" />
     <ClInclude Include="Sources\aiva2\shader_info_for_code.hpp" />
     <ClInclude Include="Sources\aiva2\shader_info_for_meta.hpp" />
+    <ClInclude Include="Sources\aiva2\shader_base.hpp" />
+    <ClInclude Include="Sources\aiva2\string_utils.hpp" />
+    <ClInclude Include="Sources\aiva2\compute_shader.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

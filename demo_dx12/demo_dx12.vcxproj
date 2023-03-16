@@ -181,6 +181,7 @@
     <ClInclude Include="Sources\aiva2\assert.hpp" />
     <ClInclude Include="Sources\aiva2\buffer_format.hpp" />
     <ClInclude Include="Sources\aiva2\buffer_format_to_dxgi_format.hpp" />
+    <ClInclude Include="Sources\aiva2\compute_shader.hpp" />
     <ClInclude Include="Sources\aiva2\d3d12_resource_desc_utils.hpp" />
     <ClInclude Include="Sources\aiva2\d3d12_resource_utils.hpp" />
     <ClInclude Include="Sources\aiva2\deffered_renderer.hpp" />
@@ -210,9 +211,11 @@
     <ClInclude Include="Sources\aiva2\render_target.hpp" />
     <ClInclude Include="Sources\aiva2\render_texture_base.hpp" />
     <ClInclude Include="Sources\aiva2\resource_system.hpp" />
+    <ClInclude Include="Sources\aiva2\shader_base.hpp" />
     <ClInclude Include="Sources\aiva2\shader_info.hpp" />
     <ClInclude Include="Sources\aiva2\shader_info_for_code.hpp" />
     <ClInclude Include="Sources\aiva2\shader_info_for_meta.hpp" />
+    <ClInclude Include="Sources\aiva2\string_utils.hpp" />
     <ClInclude Include="Sources\aiva2\struct.hpp" />
     <ClInclude Include="Sources\aiva2\texture_2d.hpp" />
     <ClInclude Include="Sources\aiva2\texture_2d_info.hpp" />
@@ -576,6 +579,7 @@
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Sources\aiva2\compute_shader.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_resource_desc_utils.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_resource_utils.cpp" />
     <ClCompile Include="Sources\aiva2\deffered_renderer.cpp" />
@@ -598,9 +602,11 @@
     <ClCompile Include="Sources\aiva2\render_target.cpp" />
     <ClCompile Include="Sources\aiva2\render_texture_base.cpp" />
     <ClCompile Include="Sources\aiva2\resource_system.cpp" />
+    <ClCompile Include="Sources\aiva2\shader_base.cpp" />
     <ClCompile Include="Sources\aiva2\shader_info.cpp" />
     <ClCompile Include="Sources\aiva2\shader_info_for_code.cpp" />
     <ClCompile Include="Sources\aiva2\shader_info_for_meta.cpp" />
+    <ClCompile Include="Sources\aiva2\string_utils.cpp" />
     <ClCompile Include="Sources\aiva2\texture_2d.cpp" />
     <ClCompile Include="Sources\aiva2\texture_2d_info.cpp" />
     <ClCompile Include="Sources\aiva2\texture_2d_utils.cpp" />

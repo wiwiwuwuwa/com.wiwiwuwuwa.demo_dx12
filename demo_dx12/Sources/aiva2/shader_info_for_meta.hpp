@@ -41,5 +41,35 @@ namespace aiva2
 		std::string m_entry_for_comp{};
 
 		// ------------------------------------------------
+
+	public:
+		auto get_entry_for_vert() const->std::string const&;
+
+		auto has_entry_for_vert() const->bool;
+
+	private:
+		void init_entry_for_vert();
+
+		void shut_entry_for_vert();
+
+	private:
+		std::string m_entry_for_vert{};
+
+		// ------------------------------------------------
+
+	public:
+		auto get_entry_for_frag() const->std::string const&;
+		
+		auto has_entry_for_frag() const->bool;
+		
+	private:
+		void init_entry_for_frag();
+		
+		void shut_entry_for_frag();
+
+	private:
+		std::string m_entry_for_frag{};
+
+		// ------------------------------------------------
 	};
 }

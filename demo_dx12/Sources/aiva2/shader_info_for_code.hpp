@@ -26,5 +26,20 @@ namespace aiva2
 		std::string m_text{};
 
 		// ------------------------------------------------
+
+	public:
+		auto get_resource(size_t const index) const->shader_info_for_resource_t const&;
+		
+		auto num_resource() const->size_t;
+
+	private:
+		void init_resources();
+
+		void shut_resources();
+
+	private:
+		std::vector<std::shared_ptr<shader_info_for_resource_t>> m_resources{};
+
+		// ------------------------------------------------
 	};
 }

@@ -11,6 +11,8 @@ namespace aiva2
 		string_utils_t() = delete;
 
 	public:
+		static auto filter_comments(std::string const& text) -> std::string;
+
 		static auto to_string(boost::span<std::byte const> const& span) -> std::string;
 
 		static auto to_string(winrt::com_ptr<ID3DBlob> const& blob) -> std::string;

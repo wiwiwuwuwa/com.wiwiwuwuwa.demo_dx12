@@ -5,12 +5,13 @@
 #include <aiva2/engine.hpp>
 #include <aiva2/shader_info_for_code.hpp>
 #include <aiva2/shader_info_for_meta.hpp>
+#include <aiva2/string_utils.hpp>
 
 namespace aiva2
 {
 	shader_info_t::shader_info_t(engine_t& engine, std::string const& text)
 		: impl_type{ engine }
-		, m_text{ text }
+		, m_text{ string_utils_t::filter_comments(text) }
 	{
 		init_meta_block();
 		init_code_block();

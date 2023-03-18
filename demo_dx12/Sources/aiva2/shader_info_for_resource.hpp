@@ -3,6 +3,7 @@
 
 #include <aiva2/engine_object.hpp>
 #include <aiva2/implements.hpp>
+#include <aiva2/shader_register_type.hpp>
 
 namespace aiva2
 {
@@ -24,6 +25,27 @@ namespace aiva2
 
 	private:
 		std::string m_text{};
+
+		// ------------------------------------------------
+
+	public:
+		auto get_register_type() const->shader_register_type_t;
+
+		auto get_register_index() const->size_t;
+		
+		auto get_register_space() const->size_t;
+
+	private:
+		void init_register();
+
+		void shut_register();
+		
+	private:
+		shader_register_type_t m_register_type{};
+
+		size_t m_register_index{};
+		
+		size_t m_register_space{};
 
 		// ------------------------------------------------
 	};

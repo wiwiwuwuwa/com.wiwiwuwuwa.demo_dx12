@@ -188,6 +188,7 @@
     <ClInclude Include="Sources\aiva2\dxgi_format_to_buffer_format.hpp" />
     <ClInclude Include="Sources\aiva2\engine.hpp" />
     <ClInclude Include="Sources\aiva2\engine_object.hpp" />
+    <ClInclude Include="Sources\aiva2\enum_utils.hpp" />
     <ClInclude Include="Sources\aiva2\event_action.hpp" />
     <ClInclude Include="Sources\aiva2\event_action_base.hpp" />
     <ClInclude Include="Sources\aiva2\event_action_read_only.hpp" />
@@ -216,6 +217,8 @@
     <ClInclude Include="Sources\aiva2\shader_info_for_code.hpp" />
     <ClInclude Include="Sources\aiva2\shader_info_for_meta.hpp" />
     <ClInclude Include="Sources\aiva2\shader_info_for_resource.hpp" />
+    <ClInclude Include="Sources\aiva2\shader_register_type.hpp" />
+    <ClInclude Include="Sources\aiva2\shader_register_type_utils.hpp" />
     <ClInclude Include="Sources\aiva2\string_utils.hpp" />
     <ClInclude Include="Sources\aiva2\struct.hpp" />
     <ClInclude Include="Sources\aiva2\texture_2d.hpp" />

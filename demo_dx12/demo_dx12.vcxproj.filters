@@ -574,6 +574,9 @@
     <ClInclude Include="Sources\aiva2\string_utils.hpp" />
     <ClInclude Include="Sources\aiva2\compute_shader.hpp" />
     <ClInclude Include="Sources\aiva2\shader_info_for_resource.hpp" />
+    <ClInclude Include="Sources\aiva2\shader_register_type.hpp" />
+    <ClInclude Include="Sources\aiva2\shader_register_type_utils.hpp" />
+    <ClInclude Include="Sources\aiva2\enum_utils.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

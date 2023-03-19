@@ -11,12 +11,14 @@ namespace aiva2
 		: impl_type{ engine }
 		, m_text{ text }
 	{
+		init_name();
 		init_register();
 	}
 
 	shader_info_for_resource_t::~shader_info_for_resource_t()
 	{
 		shut_register();
+		shut_name();
 	}
 
 	auto shader_info_for_resource_t::get_text() const->std::string const&
@@ -27,6 +29,37 @@ namespace aiva2
 	auto shader_info_for_resource_t::has_text() const->bool
 	{
 		return !std::empty(m_text);
+	}
+	
+	auto shader_info_for_resource_t::get_name() const->std::string const&
+	{
+		return m_name;
+	}
+
+	auto shader_info_for_resource_t::has_name() const->bool
+	{
+		return !std::empty(m_name);
+	}
+
+	void shader_info_for_resource_t::init_name()
+	{
+		auto const regex_for_name = std::regex{ R"(\b(\w+?)\s*?(?:\[[\s\S]*?\])?\s*?:)", std::regex::icase | std::regex::optimize };
+		auto match_for_name = std::smatch{};
+
+		assert_t::check_bool(std::regex_search(m_text, match_for_name, regex_for_name), "failed to find name");
+		assert_t::check_bool(match_for_name.ready(), "failed to find name");
+		assert_t::check_bool(std::size(match_for_name) == 2, "failed to find name");
+
+		auto const& name_match = match_for_name[1];
+		assert_t::check_bool(name_match.matched, "name_match is not valid");
+
+		m_name = name_match.str();
+		assert_t::check_bool(!std::empty(m_name), "name is not valid");
+	}
+
+	void shader_info_for_resource_t::shut_name()
+	{
+		m_name.clear();
 	}
 
 	auto shader_info_for_resource_t::get_register_type() const->shader_register_type_t

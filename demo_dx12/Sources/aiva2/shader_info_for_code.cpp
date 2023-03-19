@@ -4,6 +4,7 @@
 #include <aiva2/assert.hpp>
 #include <aiva2/engine.hpp>
 #include <aiva2/shader_info_for_resource.hpp>
+#include <aiva2/shader_info_for_resource_utils.hpp>
 
 namespace aiva2
 {
@@ -62,6 +63,8 @@ namespace aiva2
 			auto const& resource_info = m_resources.emplace_back(std::make_shared<shader_info_for_resource_t>(get_engine(), resource_string));
 			assert_t::check_bool(resource_info, "resource_info is not valid");
 		}
+
+		std::sort(std::begin(m_resources), std::end(m_resources));
 	}
 
 	void shader_info_for_code_t::shut_resources()

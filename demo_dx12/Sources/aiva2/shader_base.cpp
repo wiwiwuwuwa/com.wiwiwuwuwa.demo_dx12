@@ -2,6 +2,7 @@
 #include <aiva2/shader_base.hpp>
 
 #include <aiva2/assert.hpp>
+#include <aiva2/d3d12_root_signature_desc.hpp>
 #include <aiva2/engine.hpp>
 #include <aiva2/graphic_hardware.hpp>
 #include <aiva2/shader_info.hpp>
@@ -52,21 +53,14 @@ namespace aiva2
 
 	void shader_base_t::init_root_signature()
 	{
-		auto root_signature_desc = D3D12_VERSIONED_ROOT_SIGNATURE_DESC{};
-		root_signature_desc.Version = D3D_ROOT_SIGNATURE_VERSION_1_1;
-		root_signature_desc.Desc_1_1.NumParameters = {};
-		root_signature_desc.Desc_1_1.pParameters = {};
-		root_signature_desc.Desc_1_1.NumStaticSamplers = {};
-		root_signature_desc.Desc_1_1.pStaticSamplers = {};
-		root_signature_desc.Desc_1_1.Flags = D3D12_ROOT_SIGNATURE_FLAG_NONE;
-		if (get_info().get_meta_block().has_entry_for_vert()) root_signature_desc.Desc_1_1.Flags |= D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+		auto const root_signature_desc = d3d12_root_signature_desc_t{ get_info() };
 
 		auto root_signature_blob = winrt::com_ptr<ID3DBlob>{};
 		auto error_message = winrt::com_ptr<ID3DBlob>{};
 		
 		auto const serialize_root_signature_result = D3D12SerializeVersionedRootSignature
 		(
-			/*pRootSignature*/ &root_signature_desc,
+			/*pRootSignature*/ &root_signature_desc.get_root_signature_desc(),
 			/*ppBlob*/ root_signature_blob.put(),
 			/*ppErrorBlob*/ error_message.put()
 		);

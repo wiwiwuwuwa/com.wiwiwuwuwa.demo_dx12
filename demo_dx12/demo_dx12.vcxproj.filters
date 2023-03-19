@@ -191,6 +191,8 @@
     <ClCompile Include="Sources\aiva2\string_utils.cpp" />
     <ClCompile Include="Sources\aiva2\compute_shader.cpp" />
     <ClCompile Include="Sources\aiva2\shader_info_for_resource.cpp" />
+    <ClCompile Include="Sources\aiva2\d3d12_root_signature_desc.cpp" />
+    <ClCompile Include="Sources\aiva2\shader_info_for_resource_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -577,6 +579,9 @@
     <ClInclude Include="Sources\aiva2\shader_register_type.hpp" />
     <ClInclude Include="Sources\aiva2\shader_register_type_utils.hpp" />
     <ClInclude Include="Sources\aiva2\enum_utils.hpp" />
+    <ClInclude Include="Sources\aiva2\d3d12_root_signature_desc.hpp" />
+    <ClInclude Include="Sources\aiva2\shader_info_for_resource_utils.hpp" />
+    <ClInclude Include="Sources\aiva2\shader_register_group_type.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

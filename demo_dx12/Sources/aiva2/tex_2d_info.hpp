@@ -7,7 +7,7 @@
 
 namespace aiva2
 {
-	struct texture_2d_info_t final : public implements_t<texture_2d_info_t, struct_t>
+	struct tex_2d_info_t final : public implements_t<tex_2d_info_t, struct_t>
 	{
 		// ------------------------------------------------
 

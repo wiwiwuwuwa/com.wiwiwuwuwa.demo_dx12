@@ -43,9 +43,9 @@ namespace aiva2
 
 	struct shader_info_for_resource_t;
 	
-	struct texture_2d_t;
+	struct tex_2d_t;
 
-	struct texture_2d_info_t;
+	struct tex_2d_info_t;
 
 	struct time_system_t;
 

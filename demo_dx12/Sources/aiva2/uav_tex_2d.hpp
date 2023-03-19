@@ -11,7 +11,7 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
-		uav_tex_2d_t(engine_t& engine, std::shared_ptr<texture_2d_t> const& resource, uav_tex_2d_info_t const& info = {});
+		uav_tex_2d_t(engine_t& engine, std::shared_ptr<tex_2d_t> const& resource, uav_tex_2d_info_t const& info = {});
 
 		~uav_tex_2d_t() override;
 
@@ -28,12 +28,12 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
-		auto get_resource_ptr() const->std::shared_ptr<texture_2d_t> const&;
+		auto get_resource_ptr() const->std::shared_ptr<tex_2d_t> const&;
 
-		auto get_resource_ref() const->texture_2d_t&;
+		auto get_resource_ref() const->tex_2d_t&;
 		
 	private:
-		std::shared_ptr<texture_2d_t> m_resource{};
+		std::shared_ptr<tex_2d_t> m_resource{};
 
 		// ------------------------------------------------
 

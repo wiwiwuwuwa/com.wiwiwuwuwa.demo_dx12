@@ -7,14 +7,14 @@
 
 namespace aiva2
 {
-	struct gpu_res_base_t : public implements_t<gpu_res_base_t, engine_object_t>
+	struct gpu_res_t : public implements_t<gpu_res_t, engine_object_t>
 	{
 		// ------------------------------------------------
 
 	protected:
-		gpu_res_base_t(engine_t& engine);
+		gpu_res_t(engine_t& engine);
 
-		~gpu_res_base_t() override;
+		~gpu_res_t() override;
 
 		// ------------------------------------------------
 

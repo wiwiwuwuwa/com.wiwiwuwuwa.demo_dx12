@@ -1,5 +1,5 @@
 #include <pch.h>
-#include <aiva2/texture_2d.hpp>
+#include <aiva2/tex_2d.hpp>
 
 #include <aiva2/assert.hpp>
 #include <aiva2/buffer_format_to_dxgi_format.hpp>
@@ -11,31 +11,31 @@
 
 namespace aiva2
 {
-	texture_2d_t::texture_2d_t(engine_t& engine, texture_2d_info_t const& info)
+	tex_2d_t::tex_2d_t(engine_t& engine, tex_2d_info_t const& info)
 		: impl_type{ engine }
 	{
 		m_info = info;
 		init_resource_from_info();
 	}
 
-	texture_2d_t::texture_2d_t(engine_t& engine, winrt::com_ptr<ID3D12Resource> const& resource)
+	tex_2d_t::tex_2d_t(engine_t& engine, winrt::com_ptr<ID3D12Resource> const& resource)
 		: impl_type{ engine }
 	{
 		m_resource = resource;
 		init_info_from_resource();
 	}
 
-	texture_2d_t::~texture_2d_t()
+	tex_2d_t::~tex_2d_t()
 	{
 
 	}
 
-	auto texture_2d_t::get_info() const->texture_2d_info_t const&
+	auto tex_2d_t::get_info() const->tex_2d_info_t const&
 	{
 		return m_info;
 	}
 
-	void texture_2d_t::init_resource_from_info()
+	void tex_2d_t::init_resource_from_info()
 	{
 		assert_t::check_bool(m_info.get_format() != buffer_format_t::UNKNOWN, "texture format must be known");
 		assert_t::check_bool(m_info.get_width() > 0, "texture width must be greater than 0");
@@ -83,7 +83,7 @@ namespace aiva2
 		m_states = gpu_res_state_t{ D3D12_RESOURCE_STATE_COMMON, d3d12_resource_utils_t::get_subresources_count(*m_resource), false };
 	}
 
-	void texture_2d_t::init_info_from_resource()
+	void tex_2d_t::init_info_from_resource()
 	{
 		assert_t::check_bool(m_resource, "resource is not valid");
 

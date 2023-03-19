@@ -8,7 +8,7 @@
 #include <aiva2/graphic_hardware.hpp>
 #include <aiva2/render_target.hpp>
 #include <aiva2/render_color_texture_2d.hpp>
-#include <aiva2/texture_2d.hpp>
+#include <aiva2/tex_2d.hpp>
 #include <aiva2/time_system.hpp>
 
 namespace aiva2

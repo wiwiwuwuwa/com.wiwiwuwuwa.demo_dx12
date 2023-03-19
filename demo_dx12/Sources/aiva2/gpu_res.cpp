@@ -1,5 +1,5 @@
 #include <pch.h>
-#include <aiva2/gpu_res_base.hpp>
+#include <aiva2/gpu_res.hpp>
 
 #include <aiva2/assert.hpp>
 #include <aiva2/engine.hpp>
@@ -7,23 +7,23 @@
 
 namespace aiva2
 {
-	gpu_res_base_t::gpu_res_base_t(engine_t& engine)
+	gpu_res_t::gpu_res_t(engine_t& engine)
 		: impl_type{ engine }
 	{
 		
 	}
 
-	gpu_res_base_t::~gpu_res_base_t()
+	gpu_res_t::~gpu_res_t()
 	{
 		
 	}
 
-	auto gpu_res_base_t::get_resource() const->winrt::com_ptr<ID3D12Resource> const&
+	auto gpu_res_t::get_resource() const->winrt::com_ptr<ID3D12Resource> const&
 	{
 		return m_resource;
 	}
 
-	void gpu_res_base_t::init_state_for_transition(D3D12_RESOURCE_STATES const state, std::optional<size_t> const index /*= {}*/)
+	void gpu_res_t::init_state_for_transition(D3D12_RESOURCE_STATES const state, std::optional<size_t> const index /*= {}*/)
 	{
 		assert_t::check_bool(m_resource, "m_resource is not valid");
 		
@@ -44,7 +44,7 @@ namespace aiva2
 		}
 	}
 
-	void gpu_res_base_t::init_state_for_uav()
+	void gpu_res_t::init_state_for_uav()
 	{
 		assert_t::check_bool(m_resource, "m_resource is not valid");
 

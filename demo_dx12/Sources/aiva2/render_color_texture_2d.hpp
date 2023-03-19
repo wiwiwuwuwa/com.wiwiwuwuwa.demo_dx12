@@ -4,7 +4,7 @@
 #include <aiva2/implements.hpp>
 #include <aiva2/render_texture_base.hpp>
 #include <aiva2/render_color_texture_2d_info.hpp>
-#include <aiva2/texture_2d_info.hpp>
+#include <aiva2/tex_2d_info.hpp>
 
 namespace aiva2
 {
@@ -13,7 +13,7 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
-		render_color_texture_2d_t(engine_t& engine, std::shared_ptr<texture_2d_t> const& resource, render_color_texture_2d_info_t const& info = {});
+		render_color_texture_2d_t(engine_t& engine, std::shared_ptr<tex_2d_t> const& resource, render_color_texture_2d_info_t const& info = {});
 
 		~render_color_texture_2d_t() override;
 
@@ -36,10 +36,10 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
-		auto get_resource() const->std::shared_ptr<texture_2d_t> const&;
+		auto get_resource() const->std::shared_ptr<tex_2d_t> const&;
 
 	private:
-		std::shared_ptr<texture_2d_t> m_resource{};
+		std::shared_ptr<tex_2d_t> m_resource{};
 		
 		// ------------------------------------------------
 
@@ -62,7 +62,7 @@ namespace aiva2
 		: render_color_texture_2d_t
 		{
 			/*engine*/ engine,
-			/*resource*/ std::make_shared<texture_2d_t>(engine, resource),
+			/*resource*/ std::make_shared<tex_2d_t>(engine, resource),
 			/*info*/ info
 		}
 	{

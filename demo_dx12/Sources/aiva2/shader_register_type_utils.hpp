@@ -151,6 +151,39 @@ namespace aiva2
 	
 	template <shader_register_type_t t_type>
 	constexpr auto to_d3d12_descriptor_range_type_v = to_d3d12_descriptor_range_type_t<t_type>::value;
-	
+
+	// ----------------------------------------------------
+
+	constexpr auto to_d3d12_root_descriptor_parameter_type(shader_register_type_t const type)
+	{
+		switch (type)
+		{
+		case shader_register_type_t::CONSTANT_BUFFER:
+			return D3D12_ROOT_PARAMETER_TYPE_CBV;
+
+		case shader_register_type_t::SHADER_RESOURCE:
+			return D3D12_ROOT_PARAMETER_TYPE_SRV;
+
+		case shader_register_type_t::UNORDERED_ACCESS:
+			return D3D12_ROOT_PARAMETER_TYPE_UAV;
+
+		default:
+			assert_t::check_bool(false, "unsupported shader register type");
+			return D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+		}
+	}
+
+	template <shader_register_type_t t_type>
+	constexpr auto to_d3d12_root_descriptor_parameter_type()
+	{
+		return to_d3d12_root_descriptor_parameter_type(t_type);
+	}
+
+	template <shader_register_type_t t_type>
+	struct to_d3d12_root_descriptor_parameter_type_t : public std::integral_constant<D3D12_ROOT_PARAMETER_TYPE, to_d3d12_root_descriptor_parameter_type<t_type>> {};
+
+	template <shader_register_type_t t_type>
+	constexpr auto to_d3d12_root_descriptor_parameter_type_v = to_d3d12_root_descriptor_parameter_type_t<t_type>::value;
+
 	// ----------------------------------------------------
 }

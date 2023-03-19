@@ -19,16 +19,6 @@ namespace aiva2
 		// ------------------------------------------------
 
 	private:
-		void init_descriptor_ranges(shader_info_t const& shader_info);
-
-		void shut_descriptor_ranges();
-
-	private:
-		std::map<shader_register_group_type_t, std::vector<D3D12_DESCRIPTOR_RANGE1>> m_descriptor_ranges{};
-
-		// ------------------------------------------------
-
-	private:
 		void init_root_parameters(shader_info_t const& shader_info);
 
 		void shut_root_parameters();

@@ -11,7 +11,6 @@ namespace aiva2
 {
 	d3d12_root_signature_desc_t::d3d12_root_signature_desc_t(shader_info_t const& shader_info)
 	{
-		init_descriptor_ranges(shader_info);
 		init_root_parameters(shader_info);
 		init_root_signature_desc(shader_info);
 	}
@@ -20,48 +19,29 @@ namespace aiva2
 	{
 		shut_root_signature_desc();
 		shut_root_parameters();
-		shut_descriptor_ranges();
-	}
-
-	void d3d12_root_signature_desc_t::init_descriptor_ranges(shader_info_t const& shader_info)
-	{
-		m_descriptor_ranges = {};
-		
-		for (auto i = size_t{}; i < shader_info.get_code_block().num_resource(); i++)
-		{
-			auto const& resource = shader_info.get_code_block().get_resource(i);
-
-			auto const register_type = resource.get_register_type();
-			assert_t::check_bool(is_valid(register_type), "register_type is not valid");
-			
-			auto const register_group_type = to_group_type(register_type);
-			assert_t::check_bool(is_valid(register_group_type), "register_group_type is not valid");
-
-			auto& descriptor_range = m_descriptor_ranges[register_group_type].emplace_back();
-			descriptor_range.RangeType = to_d3d12_descriptor_range_type(register_type);
-			descriptor_range.NumDescriptors = 1;
-			descriptor_range.BaseShaderRegister = static_cast<UINT>(resource.get_register_index());
-			descriptor_range.RegisterSpace = static_cast<UINT>(resource.get_register_space());
-			descriptor_range.Flags = D3D12_DESCRIPTOR_RANGE_FLAG_NONE;
-			descriptor_range.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-		}
-	}
-
-	void d3d12_root_signature_desc_t::shut_descriptor_ranges()
-	{
-		m_descriptor_ranges = {};
 	}
 
 	void d3d12_root_signature_desc_t::init_root_parameters(shader_info_t const& shader_info)
 	{
 		m_root_parameters = {};
 
-		for (auto const& [register_group_type, descriptor_ranges] : m_descriptor_ranges)
+		for (auto i = size_t{}; i < shader_info.get_code_block().num_resource(); i++)
 		{
+			auto const& resource = shader_info.get_code_block().get_resource(i);
+
+			auto const register_type = resource.get_register_type();
+			assert_t::check_bool(is_valid(register_type), "register_type is not valid");
+
+			auto const register_group_type = to_group_type(register_type);
+			assert_t::check_bool(is_valid(register_group_type), "register_group_type is not valid");
+			
+			if (register_group_type != shader_register_group_type_t::GENERAL) continue;
+			
 			auto& root_parameter = m_root_parameters.emplace_back();
-			root_parameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-			root_parameter.DescriptorTable.NumDescriptorRanges = static_cast<UINT>(std::size(descriptor_ranges));
-			root_parameter.DescriptorTable.pDescriptorRanges = std::data(descriptor_ranges);
+			root_parameter.ParameterType = to_d3d12_root_descriptor_parameter_type(register_type);
+			root_parameter.Descriptor.ShaderRegister = static_cast<UINT>(resource.get_register_index());
+			root_parameter.Descriptor.RegisterSpace = static_cast<UINT>(resource.get_register_space());
+			root_parameter.Descriptor.Flags = D3D12_ROOT_DESCRIPTOR_FLAG_NONE;
 			root_parameter.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 		}
 	}

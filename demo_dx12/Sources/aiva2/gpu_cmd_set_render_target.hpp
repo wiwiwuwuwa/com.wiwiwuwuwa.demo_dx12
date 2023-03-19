@@ -18,11 +18,6 @@ namespace aiva2
 	public:
 		void execute() override;
 
-	private:
-		void execute_resource_barrier();
-
-		void execute_set_render_target();
-
 		// ------------------------------------------------
 
 	public:

@@ -41,17 +41,22 @@ namespace aiva2
 		void set_color_texture(size_t const index, t_color_texture_args&&... render_texture_args);
 
 	private:
+		void init_color_texture_for_rendering() const;
+
+		void shut_color_texture_for_rendering() const;
+
+	private:
 		std::vector<std::shared_ptr<rtv_eye_t>> m_color_textures{};
 
 		// ------------------------------------------------
 
-	public:
+	private:
 		auto get_color_texture_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>;
 
 		auto num_color_texture_handle() const->size_t;
 
 	private:
-		void refresh_color_heap();
+		void upd_color_texture_handle();
 		
 	private:
 		winrt::com_ptr<ID3D12DescriptorHeap> m_color_heap{};
@@ -70,18 +75,30 @@ namespace aiva2
 		void set_depth_texture(t_depth_texture_args&&... render_texture_args);
 
 	private:
+		void init_depth_texture_for_rendering() const;
+
+		void shut_depth_texture_for_rendering() const;
+
+	private:
 		std::shared_ptr<dsv_eye_t> m_depth_texture{};
 
 		// ------------------------------------------------
 
-	public:
+	private:
 		auto get_depth_texture_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>;
 
 	private:
-		void refresh_depth_heap();
+		void upd_depth_texture_handle();
 		
 	private:
 		winrt::com_ptr<ID3D12DescriptorHeap> m_depth_heap{};
+
+		// ------------------------------------------------
+
+	private:
+		void init_render_target_for_rendering() const;
+
+		void shut_render_target_for_rendering() const;
 
 		// ------------------------------------------------
 	};

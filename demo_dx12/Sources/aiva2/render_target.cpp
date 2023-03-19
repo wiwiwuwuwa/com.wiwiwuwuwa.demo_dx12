@@ -23,37 +23,23 @@ namespace aiva2
 
 	void render_target_t::init_for_rendering() const
 	{
-		for (auto const& color_texture : m_color_textures)
-		{
-			assert_t::check_bool(color_texture, "color_texture is not valid");
-			(*color_texture).init_for_rendering();
-		}
-
-		if (m_depth_texture)
-		{
-			(*m_depth_texture).init_for_rendering();
-		}
+		init_color_texture_for_rendering();
+		init_depth_texture_for_rendering();
+		init_render_target_for_rendering();
 	}
 
 	void render_target_t::shut_for_rendering() const
 	{
-		for (auto const& color_texture : m_color_textures)
-		{
-			assert_t::check_bool(color_texture, "color_texture is not valid");
-			(*color_texture).shut_for_rendering();
-		}
-
-		if (m_depth_texture)
-		{
-			(*m_depth_texture).shut_for_rendering();
-		}
+		shut_render_target_for_rendering();
+		shut_depth_texture_for_rendering();
+		shut_color_texture_for_rendering();
 	}
 
 	void render_target_t::add_color_texture(std::shared_ptr<rtv_eye_t> const& color_texture)
 	{
 		assert_t::check_bool(color_texture, "color_texture is not valid");
 		m_color_textures.push_back(color_texture);
-		refresh_color_heap();
+		upd_color_texture_handle();
 	}
 
 	auto render_target_t::get_color_texture(size_t const index) const->std::shared_ptr<rtv_eye_t> const&
@@ -71,7 +57,7 @@ namespace aiva2
 	{
 		assert_t::check_bool(index >= 0 && index < std::size(m_color_textures), "index is out of range");
 		m_color_textures.erase(std::next(std::cbegin(m_color_textures), index));
-		refresh_color_heap();
+		upd_color_texture_handle();
 	}
 	
 	void render_target_t::set_color_texture(size_t const index, std::shared_ptr<rtv_eye_t> const& color_texture)
@@ -79,7 +65,25 @@ namespace aiva2
 		assert_t::check_bool(index >= 0 && index < std::size(m_color_textures), "index is out of range");
 		assert_t::check_bool(color_texture, "color_texture is not valid");
 		m_color_textures[index] = color_texture;
-		refresh_color_heap();
+		upd_color_texture_handle();
+	}
+
+	void render_target_t::init_color_texture_for_rendering() const
+	{
+		for (auto const& color_texture : m_color_textures)
+		{
+			assert_t::check_bool(color_texture, "color_texture is not valid");
+			(*color_texture).init_for_rendering();
+		}
+	}
+
+	void render_target_t::shut_color_texture_for_rendering() const
+	{
+		for (auto const& color_texture : m_color_textures)
+		{
+			assert_t::check_bool(color_texture, "color_texture is not valid");
+			(*color_texture).shut_for_rendering();
+		}
 	}
 
 	auto render_target_t::get_color_texture_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>
@@ -99,7 +103,7 @@ namespace aiva2
 		return std::size(m_color_textures);
 	}
 
-	void render_target_t::refresh_color_heap()
+	void render_target_t::upd_color_texture_handle()
 	{
 		if (std::empty(m_color_textures))
 		{
@@ -145,7 +149,23 @@ namespace aiva2
 	void render_target_t::set_depth_texture(std::shared_ptr<dsv_eye_t> const& depth_texture)
 	{
 		m_depth_texture = depth_texture;
-		refresh_depth_heap();
+		upd_depth_texture_handle();
+	}
+
+	void render_target_t::init_depth_texture_for_rendering() const
+	{
+		if (m_depth_texture)
+		{
+			(*m_depth_texture).init_for_rendering();
+		}
+	}
+
+	void render_target_t::shut_depth_texture_for_rendering() const
+	{
+		if (m_depth_texture)
+		{
+			(*m_depth_texture).shut_for_rendering();
+		}
 	}
 
 	auto render_target_t::get_depth_texture_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>
@@ -160,7 +180,7 @@ namespace aiva2
 		}
 	}
 
-	void render_target_t::refresh_depth_heap()
+	void render_target_t::upd_depth_texture_handle()
 	{
 		if (!m_depth_texture)
 		{
@@ -183,5 +203,31 @@ namespace aiva2
 
 		auto const bind_place = (*m_depth_heap).GetCPUDescriptorHandleForHeapStart();
 		(*m_depth_texture).bind_for_rendering(bind_place);
+	}
+
+	void render_target_t::init_render_target_for_rendering() const
+	{
+		auto const color_texture_handle_opt = get_color_texture_handle();
+		auto const color_texture_handle_num = num_color_texture_handle();
+		auto const depth_texture_handle_opt = get_depth_texture_handle();
+
+		get_engine().get_graphic_hardware().get_command_list().OMSetRenderTargets
+		(
+			/*NumRenderTargetDescriptors*/ static_cast<UINT>(color_texture_handle_num),
+			/*pRenderTargetDescriptors*/ color_texture_handle_opt ? &(*color_texture_handle_opt) : nullptr,
+			/*RTsSingleHandleToDescriptorRange*/ TRUE,
+			/*pDepthStencilDescriptor*/ depth_texture_handle_opt ? &(*depth_texture_handle_opt) : nullptr
+		);
+	}
+
+	void render_target_t::shut_render_target_for_rendering() const
+	{
+		get_engine().get_graphic_hardware().get_command_list().OMSetRenderTargets
+		(
+			/*NumRenderTargetDescriptors*/ {},
+			/*pRenderTargetDescriptors*/ {},
+			/*RTsSingleHandleToDescriptorRange*/ {},
+			/*pDepthStencilDescriptor*/ {}
+		);
 	}
 }

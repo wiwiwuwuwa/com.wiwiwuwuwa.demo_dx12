@@ -16,6 +16,8 @@ namespace aiva2
 		static size_t get_subresource_index(D3D12_RESOURCE_DESC const& desc, size_t const mip_slice, size_t const array_slice, size_t const plane_slice);
 		
 		static size_t get_subresources_count(D3D12_RESOURCE_DESC const& desc);
+
+		static auto get_support_unordered_access(D3D12_RESOURCE_DESC const& desc) -> bool;
 		
 		// ------------------------------------------------
 	};

@@ -11,6 +11,8 @@ namespace aiva2
 
 	struct gpu_cmd_base_t;
 
+	struct gpu_eye_init_info_t;
+
 	struct graphic_executor_t;
 
 	struct graphic_hardware_t;
@@ -19,17 +21,19 @@ namespace aiva2
 
 	struct graphic_renderer_t;
 
-	struct render_color_texture_2d_t;
+	struct rtv_tex_2d_t;
 
-	struct render_color_texture_2d_info_t;
+	struct rtv_tex_2d_info_t;
 	
-	struct render_texture_base_t;
+	struct rtv_eye_t;
 
-	struct render_depth_texture_2d_t;
+	struct dsv_tex_2d_t;
 
-	struct render_depth_texture_2d_info_t;
+	struct dsv_tex_2d_info_t;
 
-	struct render_texture_base_t;
+	struct rtv_eye_t;
+
+	struct rtv_eye_init_info_t;
 
 	struct render_target_t;
 

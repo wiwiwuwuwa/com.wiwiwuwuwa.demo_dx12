@@ -7,7 +7,7 @@
 #include <aiva2/graphic_executor.hpp>
 #include <aiva2/graphic_hardware.hpp>
 #include <aiva2/render_target.hpp>
-#include <aiva2/render_color_texture_2d.hpp>
+#include <aiva2/rtv_tex_2d.hpp>
 #include <aiva2/tex_2d.hpp>
 #include <aiva2/time_system.hpp>
 
@@ -51,7 +51,7 @@ namespace aiva2
 			auto const& screen_target = m_screen_targets.emplace_back(std::make_shared<render_target_t>(get_engine()));
 			assert_t::check_bool(screen_target, "screen_target is not valid");
 
-			(*screen_target).add_color_texture<render_color_texture_2d_t>(texture_resource);
+			(*screen_target).add_color_texture<rtv_tex_2d_t>(texture_resource);
 		}
 	}
 

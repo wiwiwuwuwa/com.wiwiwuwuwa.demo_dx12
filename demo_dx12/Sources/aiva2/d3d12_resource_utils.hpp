@@ -15,6 +15,8 @@ namespace aiva2
 
 		static size_t get_subresource_index(ID3D12Resource& resource, size_t const mip_slice, size_t const array_slice, size_t const plane_slice);
 
+		static auto get_support_unordered_access(ID3D12Resource& resource) -> bool;
+
 		// ------------------------------------------------
 	};
 }

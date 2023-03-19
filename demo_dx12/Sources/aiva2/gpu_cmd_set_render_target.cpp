@@ -28,7 +28,7 @@ namespace aiva2
 	void gpu_cmd_set_render_target_t::execute_resource_barrier()
 	{
 		assert_t::check_bool(m_render_target, "m_render_target is not valid");
-		(*m_render_target).init_state_for_transition();
+		(*m_render_target).init_for_rendering();
 	}
 
 	void gpu_cmd_set_render_target_t::execute_set_render_target()

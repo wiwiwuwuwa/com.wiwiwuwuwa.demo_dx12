@@ -14,4 +14,9 @@ namespace aiva2
 	{
 		return d3d12_resource_desc_utils_t::get_subresource_index(resource.GetDesc(), mip_slice, array_slice, plane_slice);
 	}
+
+	auto d3d12_resource_utils_t::get_support_unordered_access(ID3D12Resource& resource) -> bool
+	{
+		return d3d12_resource_desc_utils_t::get_support_unordered_access(resource.GetDesc());
+	}
 }

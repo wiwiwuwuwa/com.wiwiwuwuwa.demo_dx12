@@ -30,6 +30,6 @@ namespace aiva2
 		auto const& screen_target = get_engine().get_graphic_renderer().get_screen_target();
 		assert_t::check_bool(screen_target, "screen_target is not valid");
 		
-		(*screen_target).shut_state_for_transition();
+		(*screen_target).shut_for_rendering();
 	}
 }

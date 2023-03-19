@@ -5,14 +5,17 @@
 
 namespace aiva2
 {
-	struct mat_eye_t : public implements_t<mat_eye_t, gpu_eye_t>
+	struct rtv_eye_t : public implements_t<rtv_eye_t, gpu_eye_t>
 	{
 		// ------------------------------------------------
 
-	protected:
-		mat_eye_t(engine_t& engine);
+	public:
+		using init_info_type = rtv_eye_init_info_t;
 
-		~mat_eye_t() override;
+	protected:
+		rtv_eye_t(engine_t& engine, init_info_type const& init_info);
+
+		~rtv_eye_t() override;
 
 		// ------------------------------------------------
 	};

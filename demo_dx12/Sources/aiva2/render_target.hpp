@@ -16,24 +16,22 @@ namespace aiva2
 		~render_target_t() override;
 
 	public:
-		void init_state_for_transition() const;
+		void init_for_rendering() const;
 
-		void shut_state_for_transition() const;
-		
-		void init_state_for_uav() const;
+		void shut_for_rendering() const;
 
 		// ------------------------------------------------
 
 	public:
-		void add_color_texture(std::shared_ptr<render_texture_base_t> const& color_texture);
+		void add_color_texture(std::shared_ptr<rtv_eye_t> const& color_texture);
 		
-		auto get_color_texture(size_t const index) const->std::shared_ptr<render_texture_base_t> const&;
+		auto get_color_texture(size_t const index) const->std::shared_ptr<rtv_eye_t> const&;
 		
 		auto num_color_texture() const->size_t;
 		
 		void rem_color_texture(size_t const index);
 		
-		void set_color_texture(size_t const index, std::shared_ptr<render_texture_base_t> const& color_texture);
+		void set_color_texture(size_t const index, std::shared_ptr<rtv_eye_t> const& color_texture);
 
 	public:
 		auto get_color_cpu_descriptor_handles() const->std::vector<D3D12_CPU_DESCRIPTOR_HANDLE>;
@@ -46,16 +44,16 @@ namespace aiva2
 		void set_color_texture(size_t const index, t_render_texture_args&&... render_texture_args);
 
 	private:
-		std::vector<std::shared_ptr<render_texture_base_t>> m_color_textures{};
+		std::vector<std::shared_ptr<rtv_eye_t>> m_color_textures{};
 
 		// ------------------------------------------------
 
 	public:
-		auto get_depth_texture() const->std::shared_ptr<render_texture_base_t> const&;
+		auto get_depth_texture() const->std::shared_ptr<rtv_eye_t> const&;
 
 		auto has_depth_texture() const->bool;
 
-		void set_depth_texture(std::shared_ptr<render_texture_base_t> const& depth_texture);
+		void set_depth_texture(std::shared_ptr<rtv_eye_t> const& depth_texture);
 
 	public:
 		auto get_depth_cpu_descriptor_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>;
@@ -65,7 +63,7 @@ namespace aiva2
 		void set_depth_texture(t_render_texture_args&&... render_texture_args);
 
 	private:
-		std::shared_ptr<render_texture_base_t> m_depth_texture{};
+		std::shared_ptr<rtv_eye_t> m_depth_texture{};
 
 		// ------------------------------------------------
 	};

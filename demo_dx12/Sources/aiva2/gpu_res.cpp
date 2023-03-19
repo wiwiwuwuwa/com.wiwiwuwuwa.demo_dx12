@@ -2,6 +2,7 @@
 #include <aiva2/gpu_res.hpp>
 
 #include <aiva2/assert.hpp>
+#include <aiva2/d3d12_resource_utils.hpp>
 #include <aiva2/engine.hpp>
 #include <aiva2/graphic_hardware.hpp>
 
@@ -47,6 +48,11 @@ namespace aiva2
 	void gpu_res_t::init_state_for_uav()
 	{
 		assert_t::check_bool(m_resource, "m_resource is not valid");
+
+		if (!d3d12_resource_utils_t::get_support_unordered_access(*m_resource))
+		{
+			return;
+		}
 
 		auto barrier = D3D12_RESOURCE_BARRIER{};
 		barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_UAV;

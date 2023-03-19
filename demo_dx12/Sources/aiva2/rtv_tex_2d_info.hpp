@@ -7,7 +7,7 @@
 
 namespace aiva2
 {
-	struct render_depth_texture_2d_info_t final : public implements_t<render_depth_texture_2d_info_t, struct_t>
+	struct rtv_tex_2d_info_t final : public implements_t<rtv_tex_2d_info_t, struct_t>
 	{
 		// ------------------------------------------------
 
@@ -28,6 +28,16 @@ namespace aiva2
 
 	private:
 		size_t m_mip_slice{};
+
+		// ------------------------------------------------
+
+	public:
+		auto get_plane_slice() const->size_t;
+
+		void set_plane_slice(size_t const plane_slice);
+
+	private:
+		size_t m_plane_slice{};
 
 		// ------------------------------------------------
 	};

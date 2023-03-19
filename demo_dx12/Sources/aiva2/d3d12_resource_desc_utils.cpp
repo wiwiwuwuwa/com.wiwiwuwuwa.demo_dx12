@@ -21,4 +21,9 @@ namespace aiva2
 		auto const mip_levels = static_cast<size_t>(desc.MipLevels);
 		return mip_levels * array_size;
 	}
+
+	auto d3d12_resource_desc_utils_t::get_support_unordered_access(D3D12_RESOURCE_DESC const& desc) -> bool
+	{
+		return (desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS) != 0;
+	}
 }

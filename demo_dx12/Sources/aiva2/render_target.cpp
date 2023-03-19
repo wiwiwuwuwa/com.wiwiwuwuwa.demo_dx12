@@ -2,8 +2,8 @@
 #include <aiva2/render_target.hpp>
 
 #include <aiva2/assert.hpp>
-#include <aiva2/render_texture_base.hpp>
-#include <aiva2/render_texture_base.hpp>
+#include <aiva2/rtv_eye.hpp>
+#include <aiva2/rtv_eye.hpp>
 
 namespace aiva2
 {
@@ -18,55 +18,41 @@ namespace aiva2
 
 	}
 
-	void render_target_t::init_state_for_transition() const
+	void render_target_t::init_for_rendering() const
 	{
 		for (auto const& color_texture : m_color_textures)
 		{
 			assert_t::check_bool(color_texture, "color_texture is not valid");
-			(*color_texture).init_state_for_transition();
+			(*color_texture).init_for_rendering();
 		}
 
 		if (m_depth_texture)
 		{
-			(*m_depth_texture).init_state_for_transition();
+			(*m_depth_texture).init_for_rendering();
 		}
 	}
 
-	void render_target_t::shut_state_for_transition() const
+	void render_target_t::shut_for_rendering() const
 	{
 		for (auto const& color_texture : m_color_textures)
 		{
 			assert_t::check_bool(color_texture, "color_texture is not valid");
-			(*color_texture).shut_state_for_transition();
+			(*color_texture).shut_for_rendering();
 		}
 
 		if (m_depth_texture)
 		{
-			(*m_depth_texture).shut_state_for_transition();
+			(*m_depth_texture).shut_for_rendering();
 		}
 	}
 
-	void render_target_t::init_state_for_uav() const
-	{
-		for (auto const& color_texture : m_color_textures)
-		{
-			assert_t::check_bool(color_texture, "color_texture is not valid");
-			(*color_texture).init_state_for_uav();
-		}
-
-		if (m_depth_texture)
-		{
-			(*m_depth_texture).init_state_for_uav();
-		}
-	}
-
-	void render_target_t::add_color_texture(std::shared_ptr<render_texture_base_t> const& color_texture)
+	void render_target_t::add_color_texture(std::shared_ptr<rtv_eye_t> const& color_texture)
 	{
 		assert_t::check_bool(color_texture, "color_texture is not valid");
 		m_color_textures.push_back(color_texture);
 	}
 
-	auto render_target_t::get_color_texture(size_t const index) const->std::shared_ptr<render_texture_base_t> const&
+	auto render_target_t::get_color_texture(size_t const index) const->std::shared_ptr<rtv_eye_t> const&
 	{
 		assert_t::check_bool(index >= 0 && index < std::size(m_color_textures), "index is out of range");
 		return m_color_textures[index];
@@ -83,7 +69,7 @@ namespace aiva2
 		m_color_textures.erase(std::next(std::cbegin(m_color_textures), index));
 	}
 	
-	void render_target_t::set_color_texture(size_t const index, std::shared_ptr<render_texture_base_t> const& color_texture)
+	void render_target_t::set_color_texture(size_t const index, std::shared_ptr<rtv_eye_t> const& color_texture)
 	{
 		assert_t::check_bool(index >= 0 && index < std::size(m_color_textures), "index is out of range");
 		assert_t::check_bool(color_texture, "color_texture is not valid");
@@ -101,7 +87,7 @@ namespace aiva2
 		return handles;
 	}
 
-	auto render_target_t::get_depth_texture() const->std::shared_ptr<render_texture_base_t> const&
+	auto render_target_t::get_depth_texture() const->std::shared_ptr<rtv_eye_t> const&
 	{
 		return m_depth_texture;
 	}
@@ -111,7 +97,7 @@ namespace aiva2
 		return m_depth_texture != nullptr;
 	}
 
-	void render_target_t::set_depth_texture(std::shared_ptr<render_texture_base_t> const& depth_texture)
+	void render_target_t::set_depth_texture(std::shared_ptr<rtv_eye_t> const& depth_texture)
 	{
 		m_depth_texture = depth_texture;
 	}

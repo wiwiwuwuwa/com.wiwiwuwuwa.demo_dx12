@@ -34,14 +34,11 @@ namespace aiva2
 		void set_color_texture(size_t const index, std::shared_ptr<rtv_eye_t> const& color_texture);
 
 	public:
-		auto get_color_cpu_descriptor_handles() const->std::vector<D3D12_CPU_DESCRIPTOR_HANDLE>;
+		template <typename t_color_texture_type, typename... t_color_texture_args>
+		void add_color_texture(t_color_texture_args&&... render_texture_args);
 
-	public:
-		template <typename t_render_texture_struct, typename... t_render_texture_args>
-		void add_color_texture(t_render_texture_args&&... render_texture_args);
-
-		template <typename t_render_texture_struct, typename... t_render_texture_args>
-		void set_color_texture(size_t const index, t_render_texture_args&&... render_texture_args);
+		template <typename t_color_texture_type, typename... t_color_texture_args>
+		void set_color_texture(size_t const index, t_color_texture_args&&... render_texture_args);
 
 	private:
 		std::vector<std::shared_ptr<rtv_eye_t>> m_color_textures{};
@@ -49,21 +46,42 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
-		auto get_depth_texture() const->std::shared_ptr<rtv_eye_t> const&;
+		auto get_color_texture_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>;
+
+		auto num_color_texture_handle() const->size_t;
+
+	private:
+		void refresh_color_heap();
+		
+	private:
+		winrt::com_ptr<ID3D12DescriptorHeap> m_color_heap{};
+
+		// ------------------------------------------------
+
+	public:
+		auto get_depth_texture() const->std::shared_ptr<dsv_eye_t> const&;
 
 		auto has_depth_texture() const->bool;
 
-		void set_depth_texture(std::shared_ptr<rtv_eye_t> const& depth_texture);
-
-	public:
-		auto get_depth_cpu_descriptor_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>;
+		void set_depth_texture(std::shared_ptr<dsv_eye_t> const& depth_texture);
 		
 	public:
-		template <typename t_render_texture_struct, typename... t_render_texture_args>
-		void set_depth_texture(t_render_texture_args&&... render_texture_args);
+		template <typename t_depth_texture_type, typename... t_depth_texture_args>
+		void set_depth_texture(t_depth_texture_args&&... render_texture_args);
 
 	private:
-		std::shared_ptr<rtv_eye_t> m_depth_texture{};
+		std::shared_ptr<dsv_eye_t> m_depth_texture{};
+
+		// ------------------------------------------------
+
+	public:
+		auto get_depth_texture_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>;
+
+	private:
+		void refresh_depth_heap();
+		
+	private:
+		winrt::com_ptr<ID3D12DescriptorHeap> m_depth_heap{};
 
 		// ------------------------------------------------
 	};
@@ -73,28 +91,28 @@ namespace aiva2
 
 namespace aiva2
 {
-	template <typename t_render_texture_struct, typename... t_render_texture_args>
-	void render_target_t::add_color_texture(t_render_texture_args&&... render_texture_args)
+	template <typename t_color_texture_type, typename... t_color_texture_args>
+	void render_target_t::add_color_texture(t_color_texture_args&&... render_texture_args)
 	{
-		auto const color_texture = std::make_shared<t_render_texture_struct>(get_engine(), std::forward<t_render_texture_args>(render_texture_args)...);
+		auto const color_texture = std::make_shared<t_color_texture_type>(get_engine(), std::forward<t_color_texture_args>(render_texture_args)...);
 		assert_t::check_bool(color_texture, "color_texture is not valid");
 		
 		add_color_texture(color_texture);
 	}
 
-	template <typename t_render_texture_struct, typename... t_render_texture_args>
-	void render_target_t::set_color_texture(size_t const index, t_render_texture_args&&... render_texture_args)
+	template <typename t_color_texture_type, typename... t_color_texture_args>
+	void render_target_t::set_color_texture(size_t const index, t_color_texture_args&&... render_texture_args)
 	{
-		auto const color_texture = std::make_shared<t_render_texture_struct>(get_engine(), std::forward<t_render_texture_args>(render_texture_args)...);
+		auto const color_texture = std::make_shared<t_color_texture_type>(get_engine(), std::forward<t_color_texture_args>(render_texture_args)...);
 		assert_t::check_bool(color_texture, "color_texture is not valid");
 
 		set_color_texture(index, color_texture);
 	}
 
-	template <typename t_render_texture_struct, typename... t_render_texture_args>
-	void render_target_t::set_depth_texture(t_render_texture_args&&... render_texture_args)
+	template <typename t_depth_texture_type, typename... t_depth_texture_args>
+	void render_target_t::set_depth_texture(t_depth_texture_args&&... render_texture_args)
 	{
-		auto const depth_texture = std::make_shared<t_render_texture_struct>(get_engine(), std::forward<t_render_texture_args>(render_texture_args)...);
+		auto const depth_texture = std::make_shared<t_depth_texture_type>(get_engine(), std::forward<t_depth_texture_args>(render_texture_args)...);
 		assert_t::check_bool(depth_texture, "depth_texture is not valid");
 
 		set_depth_texture(depth_texture);

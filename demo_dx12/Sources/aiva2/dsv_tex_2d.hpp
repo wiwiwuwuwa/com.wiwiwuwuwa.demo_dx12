@@ -1,13 +1,13 @@
 #pragma once
 #include <aiva2/_core.hpp>
 
-#include <aiva2/rtv_eye.hpp>
+#include <aiva2/dsv_eye.hpp>
 #include <aiva2/dsv_tex_2d_info.hpp>
 #include <aiva2/tex_2d_info.hpp>
 
 namespace aiva2
 {
-	struct dsv_tex_2d_t final : public implements_t<dsv_tex_2d_t, rtv_eye_t>
+	struct dsv_tex_2d_t final : public implements_t<dsv_tex_2d_t, dsv_eye_t>
 	{
 		// ------------------------------------------------
 
@@ -25,10 +25,9 @@ namespace aiva2
 	public:
 		void init_for_rendering() const override;
 
-		void shut_for_rendering() const override;
+		void bind_for_rendering(D3D12_CPU_DESCRIPTOR_HANDLE const& bind_place) const override;
 
-	private:
-		void create_view() const;
+		void shut_for_rendering() const override;
 
 		// ------------------------------------------------
 

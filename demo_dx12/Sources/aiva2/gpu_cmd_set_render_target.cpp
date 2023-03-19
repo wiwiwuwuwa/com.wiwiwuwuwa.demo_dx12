@@ -35,15 +35,16 @@ namespace aiva2
 	{
 		assert_t::check_bool(m_render_target, "m_render_target is not valid");
 
-		auto const color_targets = (*m_render_target).get_color_cpu_descriptor_handles();
-		auto const depth_target = (*m_render_target).get_depth_cpu_descriptor_handle();
+		auto const color_texture_handle_opt = (*m_render_target).get_color_texture_handle();
+		auto const color_texture_handle_num = (*m_render_target).num_color_texture_handle();
+		auto const depth_texture_handle_opt = (*m_render_target).get_depth_texture_handle();
 		
 		get_engine().get_graphic_hardware().get_command_list().OMSetRenderTargets
 		(
-			/*NumRenderTargetDescriptors*/ static_cast<UINT>(std::size(color_targets)),
-			/*pRenderTargetDescriptors*/ std::data(color_targets),
-			/*RTsSingleHandleToDescriptorRange*/ FALSE,
-			/*pDepthStencilDescriptor*/ depth_target ? &(*depth_target) : nullptr
+			/*NumRenderTargetDescriptors*/ static_cast<UINT>(color_texture_handle_num),
+			/*pRenderTargetDescriptors*/ color_texture_handle_opt ? &(*color_texture_handle_opt) : nullptr,
+			/*RTsSingleHandleToDescriptorRange*/ TRUE,
+			/*pDepthStencilDescriptor*/ depth_texture_handle_opt ? &(*depth_texture_handle_opt) : nullptr
 		);
 	}
 

@@ -2,7 +2,10 @@
 #include <aiva2/render_target.hpp>
 
 #include <aiva2/assert.hpp>
-#include <aiva2/rtv_eye.hpp>
+#include <aiva2/d3d12_cpu_descriptor_handle_utils.hpp>
+#include <aiva2/engine.hpp>
+#include <aiva2/dsv_eye.hpp>
+#include <aiva2/graphic_hardware.hpp>
 #include <aiva2/rtv_eye.hpp>
 
 namespace aiva2
@@ -50,6 +53,7 @@ namespace aiva2
 	{
 		assert_t::check_bool(color_texture, "color_texture is not valid");
 		m_color_textures.push_back(color_texture);
+		refresh_color_heap();
 	}
 
 	auto render_target_t::get_color_texture(size_t const index) const->std::shared_ptr<rtv_eye_t> const&
@@ -67,6 +71,7 @@ namespace aiva2
 	{
 		assert_t::check_bool(index >= 0 && index < std::size(m_color_textures), "index is out of range");
 		m_color_textures.erase(std::next(std::cbegin(m_color_textures), index));
+		refresh_color_heap();
 	}
 	
 	void render_target_t::set_color_texture(size_t const index, std::shared_ptr<rtv_eye_t> const& color_texture)
@@ -74,20 +79,60 @@ namespace aiva2
 		assert_t::check_bool(index >= 0 && index < std::size(m_color_textures), "index is out of range");
 		assert_t::check_bool(color_texture, "color_texture is not valid");
 		m_color_textures[index] = color_texture;
+		refresh_color_heap();
 	}
 
-	auto render_target_t::get_color_cpu_descriptor_handles() const->std::vector<D3D12_CPU_DESCRIPTOR_HANDLE>
+	auto render_target_t::get_color_texture_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>
 	{
-		auto handles = std::vector<D3D12_CPU_DESCRIPTOR_HANDLE>{};
-		for (auto const& color_texture : m_color_textures)
+		if (m_color_heap)
 		{
-			assert_t::check_bool(color_texture, "color_texture is not valid");
-			handles.push_back((*color_texture).get_cpu_descriptor_handle());
+			return (*m_color_heap).GetCPUDescriptorHandleForHeapStart();
 		}
-		return handles;
+		else
+		{
+			return {};
+		}
 	}
 
-	auto render_target_t::get_depth_texture() const->std::shared_ptr<rtv_eye_t> const&
+	auto render_target_t::num_color_texture_handle() const->size_t
+	{
+		return std::size(m_color_textures);
+	}
+
+	void render_target_t::refresh_color_heap()
+	{
+		if (std::empty(m_color_textures))
+		{
+			m_color_heap = {};
+			return;
+		}
+		
+		auto heap_desc = D3D12_DESCRIPTOR_HEAP_DESC{};
+		heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+		heap_desc.NumDescriptors = static_cast<UINT>(std::size(m_color_textures));
+		heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+		heap_desc.NodeMask = {};
+
+		assert_t::check_hresult(get_engine().get_graphic_hardware().get_device().CreateDescriptorHeap
+		(
+			/*pDescriptorHeapDesc*/ &heap_desc,
+			/*Heap*/ IID_PPV_ARGS(&m_color_heap)
+		));
+		assert_t::check_bool(m_color_heap, "m_color_heap is not valid");
+
+		auto const increment_size = get_engine().get_graphic_hardware().get_device().GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+
+		for (auto i = size_t{}; i < std::size(m_color_textures); ++i)
+		{
+			auto const& color_texture = m_color_textures[i];
+			assert_t::check_bool(color_texture, "color_texture is not valid");
+
+			auto const bind_place = (*m_color_heap).GetCPUDescriptorHandleForHeapStart() + i * increment_size;
+			(*color_texture).bind_for_rendering(bind_place);
+		}
+	}
+
+	auto render_target_t::get_depth_texture() const->std::shared_ptr<dsv_eye_t> const&
 	{
 		return m_depth_texture;
 	}
@@ -97,20 +142,46 @@ namespace aiva2
 		return m_depth_texture != nullptr;
 	}
 
-	void render_target_t::set_depth_texture(std::shared_ptr<rtv_eye_t> const& depth_texture)
+	void render_target_t::set_depth_texture(std::shared_ptr<dsv_eye_t> const& depth_texture)
 	{
 		m_depth_texture = depth_texture;
+		refresh_depth_heap();
 	}
 
-	auto render_target_t::get_depth_cpu_descriptor_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>
+	auto render_target_t::get_depth_texture_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>
 	{
-		if (m_depth_texture)
+		if (m_depth_heap)
 		{
-			return (*m_depth_texture).get_cpu_descriptor_handle();
+			return (*m_depth_heap).GetCPUDescriptorHandleForHeapStart();
 		}
 		else
 		{
 			return {};
 		}
+	}
+
+	void render_target_t::refresh_depth_heap()
+	{
+		if (!m_depth_texture)
+		{
+			m_depth_heap = {};
+			return;
+		}
+
+		auto heap_desc = D3D12_DESCRIPTOR_HEAP_DESC{};
+		heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+		heap_desc.NumDescriptors = 1;
+		heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+		heap_desc.NodeMask = {};
+
+		assert_t::check_hresult(get_engine().get_graphic_hardware().get_device().CreateDescriptorHeap
+		(
+			/*pDescriptorHeapDesc*/ &heap_desc,
+			/*Heap*/ IID_PPV_ARGS(&m_depth_heap)
+		));
+		assert_t::check_bool(m_depth_heap, "m_depth_heap is not valid");
+
+		auto const bind_place = (*m_depth_heap).GetCPUDescriptorHandleForHeapStart();
+		(*m_depth_texture).bind_for_rendering(bind_place);
 	}
 }

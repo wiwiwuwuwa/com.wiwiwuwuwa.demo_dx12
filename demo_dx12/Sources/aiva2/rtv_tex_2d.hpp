@@ -25,10 +25,9 @@ namespace aiva2
 	public:
 		void init_for_rendering() const override;
 
+		void bind_for_rendering(D3D12_CPU_DESCRIPTOR_HANDLE const& bind_place) const override;
+
 		void shut_for_rendering() const override;
-		
-	private:
-		void create_view() const;
 
 		// ------------------------------------------------
 

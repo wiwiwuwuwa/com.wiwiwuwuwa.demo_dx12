@@ -5,15 +5,15 @@
 
 namespace aiva2
 {
-	struct rtv_eye_t : public implements_t<rtv_eye_t, gpu_eye_t>
+	struct dsv_eye_t : public implements_t<dsv_eye_t, gpu_eye_t>
 	{
 		// ------------------------------------------------
 
 	protected:
-		rtv_eye_t(engine_t& engine);
+		dsv_eye_t(engine_t& engine);
 
-		~rtv_eye_t() override;
-		
+		~dsv_eye_t() override;
+
 		// ------------------------------------------------
 	};
 }

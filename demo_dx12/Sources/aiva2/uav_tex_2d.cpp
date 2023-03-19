@@ -15,7 +15,7 @@ namespace aiva2
 		, m_resource{ resource }
 		, m_info{ info }
 	{
-		create_view();
+		
 	}
 
 	uav_tex_2d_t::~uav_tex_2d_t()
@@ -25,33 +25,33 @@ namespace aiva2
 
 	void uav_tex_2d_t::init_for_rendering() const
 	{
-		auto const subresource_index = tex_2d_utils_t::get_subresource_index(get_resource_ref(), m_info.get_mip_slice(), m_info.get_plane_slice());
+		auto const subresource_index = tex_2d_utils_t::get_subresource_index(get_resource_ref(), get_info().get_mip_slice(), get_info().get_plane_slice());
 		get_resource_ref().init_state_for_transition(D3D12_RESOURCE_STATE_UNORDERED_ACCESS, subresource_index);
 		get_resource_ref().init_state_for_uav();
 	}
-
-	void uav_tex_2d_t::shut_for_rendering() const
-	{
-		auto const subresource_index = tex_2d_utils_t::get_subresource_index(get_resource_ref(), m_info.get_mip_slice(), m_info.get_plane_slice());
-		get_resource_ref().init_state_for_transition(D3D12_RESOURCE_STATE_COMMON, subresource_index);
-		get_resource_ref().init_state_for_uav();
-	}
-
-	void uav_tex_2d_t::create_view() const
+	
+	void uav_tex_2d_t::bind_for_rendering(D3D12_CPU_DESCRIPTOR_HANDLE const& bind_place) const
 	{
 		auto view_desc = D3D12_UNORDERED_ACCESS_VIEW_DESC{};
-		view_desc.Format = to_dxgi_format(m_info.get_format());
+		view_desc.Format = to_dxgi_format(get_info().get_format());
 		view_desc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
-		view_desc.Texture2D.MipSlice = static_cast<UINT>(m_info.get_mip_slice());
-		view_desc.Texture2D.PlaneSlice = static_cast<UINT>(m_info.get_plane_slice());
+		view_desc.Texture2D.MipSlice = static_cast<UINT>(get_info().get_mip_slice());
+		view_desc.Texture2D.PlaneSlice = static_cast<UINT>(get_info().get_plane_slice());
 
 		get_engine().get_graphic_hardware().get_device().CreateUnorderedAccessView
 		(
 			/*pResource*/ get_resource_ref().get_resource().get(),
-			/*pCounterResource*/ {},
+			/*pCounterResource*/{},
 			/*pDesc*/ &view_desc,
-			/*DestDescriptor*/ get_cpu_descriptor_handle()
+			/*DestDescriptor*/ bind_place
 		);
+	}
+
+	void uav_tex_2d_t::shut_for_rendering() const
+	{
+		auto const subresource_index = tex_2d_utils_t::get_subresource_index(get_resource_ref(), get_info().get_mip_slice(), get_info().get_plane_slice());
+		get_resource_ref().init_state_for_transition(D3D12_RESOURCE_STATE_COMMON, subresource_index);
+		get_resource_ref().init_state_for_uav();
 	}
 
 	auto uav_tex_2d_t::get_resource_ptr() const-> std::shared_ptr<tex_2d_t> const&

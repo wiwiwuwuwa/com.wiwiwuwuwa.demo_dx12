@@ -5,13 +5,17 @@ namespace aiva2
 {
 	struct deffered_renderer_t;
 
+	struct dsv_eye_t;
+
+	struct dsv_tex_2d_info_t;
+	
+	struct dsv_tex_2d_t;
+
 	struct engine_t;
 
 	struct engine_object_t;
 
 	struct gpu_cmd_base_t;
-
-	struct gpu_eye_init_info_t;
 
 	struct graphic_executor_t;
 
@@ -21,23 +25,17 @@ namespace aiva2
 
 	struct graphic_renderer_t;
 
-	struct rtv_tex_2d_t;
-
-	struct rtv_tex_2d_info_t;
-	
-	struct rtv_eye_t;
-
-	struct dsv_tex_2d_t;
-
-	struct dsv_tex_2d_info_t;
-
-	struct rtv_eye_t;
-
-	struct rtv_eye_init_info_t;
+	struct mat_eye_t;
 
 	struct render_target_t;
 
 	struct resource_system_t;
+
+	struct rtv_eye_t;
+	
+	struct rtv_tex_2d_info_t;
+
+	struct rtv_tex_2d_t;
 
 	struct shader_info_t;
 
@@ -52,6 +50,10 @@ namespace aiva2
 	struct tex_2d_info_t;
 
 	struct time_system_t;
+
+	struct uav_tex_2d_info_t;
+
+	struct uav_tex_2d_t;
 
 	struct window_t;
 

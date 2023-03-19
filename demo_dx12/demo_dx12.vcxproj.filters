@@ -197,6 +197,7 @@
     <ClCompile Include="Sources\aiva2\uav_tex_2d_info.cpp" />
     <ClCompile Include="Sources\aiva2\uav_tex_2d.cpp" />
     <ClCompile Include="Sources\aiva2\mat_eye.cpp" />
+    <ClCompile Include="Sources\aiva2\gpu_eye.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -590,6 +591,7 @@
     <ClInclude Include="Sources\aiva2\uav_tex_2d_info.hpp" />
     <ClInclude Include="Sources\aiva2\uav_tex_2d.hpp" />
     <ClInclude Include="Sources\aiva2\mat_eye.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_eye.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

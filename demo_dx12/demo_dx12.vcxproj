@@ -197,6 +197,7 @@
     <ClInclude Include="Sources\aiva2\gpu_cmd_base.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_present.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_set_render_target.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_eye.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_res.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_res_state.hpp" />
     <ClInclude Include="Sources\aiva2\graphic_executor.hpp" />
@@ -600,6 +601,7 @@
     <ClCompile Include="Sources\aiva2\gpu_cmd_base.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_present.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_set_render_target.cpp" />
+    <ClCompile Include="Sources\aiva2\gpu_eye.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_res.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_res_state.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_executor.cpp" />

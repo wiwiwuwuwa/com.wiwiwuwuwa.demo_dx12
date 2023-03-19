@@ -5,14 +5,14 @@
 
 namespace aiva2
 {
-	struct mat_res_t : public implements_t<mat_res_t, engine_object_t>
+	struct mat_eye_t : public implements_t<mat_eye_t, engine_object_t>
 	{
 		// ------------------------------------------------
 
 	protected:
-		mat_res_t(engine_t& engine);
+		mat_eye_t(engine_t& engine);
 
-		~mat_res_t() override;
+		~mat_eye_t() override;
 
 		// ------------------------------------------------
 

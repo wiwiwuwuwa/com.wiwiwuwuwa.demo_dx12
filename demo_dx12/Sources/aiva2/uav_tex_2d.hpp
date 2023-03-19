@@ -1,12 +1,12 @@
 #pragma once
 #include <aiva2/_core.hpp>
 
-#include <aiva2/mat_res.hpp>
+#include <aiva2/mat_eye.hpp>
 #include <aiva2/uav_tex_2d_info.hpp>
 
 namespace aiva2
 {
-	struct uav_tex_2d_t final : public implements_t<uav_tex_2d_t, mat_res_t>
+	struct uav_tex_2d_t final : public implements_t<uav_tex_2d_t, mat_eye_t>
 	{
 		// ------------------------------------------------
 

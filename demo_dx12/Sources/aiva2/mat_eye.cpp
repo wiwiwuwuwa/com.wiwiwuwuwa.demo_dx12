@@ -1,5 +1,5 @@
 #include <pch.h>
-#include <aiva2/mat_res.hpp>
+#include <aiva2/mat_eye.hpp>
 
 #include <aiva2/assert.hpp>
 #include <aiva2/engine.hpp>
@@ -7,39 +7,39 @@
 
 namespace aiva2
 {
-	mat_res_t::mat_res_t(engine_t& engine)
+	mat_eye_t::mat_eye_t(engine_t& engine)
 		: impl_type{ engine }
 	{
 		init_descriptor_heap();
 	}
 
-	mat_res_t::~mat_res_t()
+	mat_eye_t::~mat_eye_t()
 	{
 		shut_descriptor_heap();
 	}
 
-	auto mat_res_t::get_cpu_descriptor_handle() const->D3D12_CPU_DESCRIPTOR_HANDLE
+	auto mat_eye_t::get_cpu_descriptor_handle() const->D3D12_CPU_DESCRIPTOR_HANDLE
 	{
 		return get_descriptor_heap_ref().GetCPUDescriptorHandleForHeapStart();
 	}
 
-	auto mat_res_t::get_gpu_descriptor_handle() const->D3D12_GPU_DESCRIPTOR_HANDLE
+	auto mat_eye_t::get_gpu_descriptor_handle() const->D3D12_GPU_DESCRIPTOR_HANDLE
 	{
 		return get_descriptor_heap_ref().GetGPUDescriptorHandleForHeapStart();
 	}
 
-	auto mat_res_t::get_descriptor_heap_ptr() const->winrt::com_ptr<ID3D12DescriptorHeap> const&
+	auto mat_eye_t::get_descriptor_heap_ptr() const->winrt::com_ptr<ID3D12DescriptorHeap> const&
 	{
 		return m_descriptor_heap;
 	}
 
-	auto mat_res_t::get_descriptor_heap_ref() const->ID3D12DescriptorHeap&
+	auto mat_eye_t::get_descriptor_heap_ref() const->ID3D12DescriptorHeap&
 	{
 		assert_t::check_bool(m_descriptor_heap, "m_descriptor_heap is not valid");
 		return (*m_descriptor_heap);
 	}
 
-	void mat_res_t::init_descriptor_heap()
+	void mat_eye_t::init_descriptor_heap()
 	{
 		auto heap_desc = D3D12_DESCRIPTOR_HEAP_DESC{};
 		heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
@@ -55,7 +55,7 @@ namespace aiva2
 		assert_t::check_bool(m_descriptor_heap, "m_descriptor_heap is not valid");
 	}
 
-	void mat_res_t::shut_descriptor_heap()
+	void mat_eye_t::shut_descriptor_heap()
 	{
 		m_descriptor_heap = {};
 	}

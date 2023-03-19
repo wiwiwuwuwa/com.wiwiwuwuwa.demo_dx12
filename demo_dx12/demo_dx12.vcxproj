@@ -197,7 +197,7 @@
     <ClInclude Include="Sources\aiva2\gpu_cmd_base.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_present.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_set_render_target.hpp" />
-    <ClInclude Include="Sources\aiva2\gpu_res_base.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_res.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_res_state.hpp" />
     <ClInclude Include="Sources\aiva2\graphic_executor.hpp" />
     <ClInclude Include="Sources\aiva2\graphic_hardware.hpp" />
@@ -205,7 +205,7 @@
     <ClInclude Include="Sources\aiva2\graphic_renderer.hpp" />
     <ClInclude Include="Sources\aiva2\implements.hpp" />
     <ClInclude Include="Sources\aiva2\logger.hpp" />
-    <ClInclude Include="Sources\aiva2\mat_res.hpp" />
+    <ClInclude Include="Sources\aiva2\mat_eye.hpp" />
     <ClInclude Include="Sources\aiva2\object.hpp" />
     <ClInclude Include="Sources\aiva2\render_color_texture_2d.hpp" />
     <ClInclude Include="Sources\aiva2\render_color_texture_2d_info.hpp" />
@@ -600,14 +600,14 @@
     <ClCompile Include="Sources\aiva2\gpu_cmd_base.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_present.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_set_render_target.cpp" />
-    <ClCompile Include="Sources\aiva2\gpu_res_base.cpp" />
+    <ClCompile Include="Sources\aiva2\gpu_res.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_res_state.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_executor.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_hardware.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_pipeline.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_renderer.cpp" />
     <ClCompile Include="Sources\aiva2\logger.cpp" />
-    <ClCompile Include="Sources\aiva2\mat_res.cpp" />
+    <ClCompile Include="Sources\aiva2\mat_eye.cpp" />
     <ClCompile Include="Sources\aiva2\render_color_texture_2d.cpp" />
     <ClCompile Include="Sources\aiva2\render_color_texture_2d_info.cpp" />
     <ClCompile Include="Sources\aiva2\render_depth_texture_2d.cpp" />

@@ -16,9 +16,9 @@ namespace aiva2
 		~render_target_t() override;
 
 	public:
-		void init_for_rendering() const;
+		auto init_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>;
 
-		void shut_for_rendering() const;
+		auto shut_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>;
 
 		// ------------------------------------------------
 
@@ -41,16 +41,16 @@ namespace aiva2
 		void set_color_texture(size_t const index, t_color_texture_args&&... render_texture_args);
 
 	private:
-		void init_color_texture_for_rendering() const;
+		auto init_color_texture_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>;
 
-		void shut_color_texture_for_rendering() const;
+		auto shut_color_texture_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>;
 
 	private:
 		std::vector<std::shared_ptr<rtv_eye_t>> m_color_textures{};
 
 		// ------------------------------------------------
 
-	private:
+	public:
 		auto get_color_texture_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>;
 
 		auto num_color_texture_handle() const->size_t;
@@ -75,16 +75,16 @@ namespace aiva2
 		void set_depth_texture(t_depth_texture_args&&... render_texture_args);
 
 	private:
-		void init_depth_texture_for_rendering() const;
+		auto init_depth_texture_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>;
 
-		void shut_depth_texture_for_rendering() const;
+		auto shut_depth_texture_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>;
 
 	private:
 		std::shared_ptr<dsv_eye_t> m_depth_texture{};
 
 		// ------------------------------------------------
 
-	private:
+	public:
 		auto get_depth_texture_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>;
 
 	private:
@@ -92,13 +92,6 @@ namespace aiva2
 		
 	private:
 		winrt::com_ptr<ID3D12DescriptorHeap> m_depth_heap{};
-
-		// ------------------------------------------------
-
-	private:
-		void init_render_target_for_rendering() const;
-
-		void shut_render_target_for_rendering() const;
 
 		// ------------------------------------------------
 	};

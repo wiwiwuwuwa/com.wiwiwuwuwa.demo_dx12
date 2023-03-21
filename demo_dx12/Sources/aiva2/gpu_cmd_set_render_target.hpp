@@ -18,12 +18,19 @@ namespace aiva2
 	public:
 		void execute() override;
 
+	private:
+		void execute_resource_barrier() const;
+		
+		void execute_set_render_targets() const;
+
 		// ------------------------------------------------
 
 	public:
-		auto get_render_target() const->std::shared_ptr<render_target_t> const&;
+		auto get_render_target_ptr() const->std::shared_ptr<render_target_t> const&;
 
-		void set_render_target(std::shared_ptr<render_target_t> const& render_target);
+		auto get_render_target_ref() const->render_target_t&;
+
+		void set_render_target_ptr(std::shared_ptr<render_target_t> const& render_target);
 		
 	private:
 		std::shared_ptr<render_target_t> m_render_target{};

@@ -22,11 +22,11 @@ namespace aiva2
 		// ------------------------------------------------
 		
 	public:
-		void init_for_rendering() const override;
+		auto init_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER> override;
 
 		void bind_for_rendering(D3D12_CPU_DESCRIPTOR_HANDLE const& bind_place) const override;
 
-		void shut_for_rendering() const override;
+		auto shut_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER> override;
 
 		// ------------------------------------------------
 

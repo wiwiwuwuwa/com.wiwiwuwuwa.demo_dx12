@@ -17,11 +17,11 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
-		virtual void init_for_rendering() const = 0;
+		virtual auto init_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER> = 0;
 
 		virtual void bind_for_rendering(D3D12_CPU_DESCRIPTOR_HANDLE const& bind_place) const = 0;
 
-		virtual void shut_for_rendering() const = 0;
+		virtual auto shut_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER> = 0;
 
 		// ------------------------------------------------
 	};

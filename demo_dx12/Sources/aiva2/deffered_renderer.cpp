@@ -28,7 +28,7 @@ namespace aiva2
 	void deffered_renderer_t::tick_deffered_renderer()
 	{
 		auto const set_render_target_command = std::make_shared<gpu_cmd_set_render_target_t>(get_engine());
-		(*set_render_target_command).set_render_target(get_engine().get_graphic_renderer().get_screen_target());
+		(*set_render_target_command).set_render_target_ptr(get_engine().get_graphic_renderer().get_screen_target_ptr());
 		get_engine().get_graphic_renderer().execute_render_command(set_render_target_command);
 
 		auto const present_command = std::make_shared<gpu_cmd_present_t>(get_engine());

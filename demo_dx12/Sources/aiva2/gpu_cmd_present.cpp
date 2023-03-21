@@ -27,9 +27,9 @@ namespace aiva2
 
 	void gpu_cmd_present_t::execute_resource_barrier()
 	{
-		auto const& screen_target = get_engine().get_graphic_renderer().get_screen_target();
-		assert_t::check_bool(screen_target, "screen_target is not valid");
-		
-		(*screen_target).shut_for_rendering();
+		for (auto const& resource_barrier : get_engine().get_graphic_renderer().get_screen_target_ref().shut_for_rendering())
+		{
+			get_engine().get_graphic_hardware().get_command_list().ResourceBarrier(1, &resource_barrier);
+		}
 	}
 }

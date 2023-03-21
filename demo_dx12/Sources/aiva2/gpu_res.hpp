@@ -27,9 +27,12 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
-		void init_state_for_transition(D3D12_RESOURCE_STATES const state, std::optional<size_t> const index = {});
+		auto set_state(D3D12_RESOURCE_STATES const state, std::optional<size_t> const index = {}) -> std::vector<D3D12_RESOURCE_BARRIER>;
 
-		void init_state_for_uav();
+	private:
+		auto set_state_for_transition(D3D12_RESOURCE_STATES const state, std::optional<size_t> const index = {}) -> std::vector<D3D12_RESOURCE_BARRIER>;
+		
+		auto set_state_for_uav() -> std::optional<D3D12_RESOURCE_BARRIER>;
 
 	protected:		
 		gpu_res_state_t m_states{};

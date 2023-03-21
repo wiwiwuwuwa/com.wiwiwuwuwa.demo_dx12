@@ -23,11 +23,10 @@ namespace aiva2
 		
 	}
 
-	void rtv_tex_2d_t::init_for_rendering() const
+	auto rtv_tex_2d_t::init_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>
 	{
 		auto const subresource_index = tex_2d_utils_t::get_subresource_index(get_resource_ref(), get_info().get_mip_slice(), get_info().get_plane_slice());
-		get_resource_ref().init_state_for_transition(D3D12_RESOURCE_STATE_RENDER_TARGET, subresource_index);
-		get_resource_ref().init_state_for_uav();
+		return get_resource_ref().set_state(D3D12_RESOURCE_STATE_RENDER_TARGET, subresource_index);
 	}
 
 	void rtv_tex_2d_t::bind_for_rendering(D3D12_CPU_DESCRIPTOR_HANDLE const& bind_place) const
@@ -45,12 +44,11 @@ namespace aiva2
 			/*DestDescriptor*/ bind_place
 		);
 	}
-
-	void rtv_tex_2d_t::shut_for_rendering() const
+	
+	auto rtv_tex_2d_t::shut_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>
 	{
 		auto const subresource_index = tex_2d_utils_t::get_subresource_index(get_resource_ref(), get_info().get_mip_slice(), get_info().get_plane_slice());
-		get_resource_ref().init_state_for_transition(D3D12_RESOURCE_STATE_COMMON, subresource_index);
-		get_resource_ref().init_state_for_uav();
+		return get_resource_ref().set_state(D3D12_RESOURCE_STATE_COMMON, subresource_index);
 	}
 
 	auto rtv_tex_2d_t::get_resource_ptr() const->std::shared_ptr<tex_2d_t> const&

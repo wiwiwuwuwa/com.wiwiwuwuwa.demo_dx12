@@ -26,13 +26,21 @@ namespace aiva2
 		shut_screen_targets();
 	}
 
-	auto graphic_renderer_t::get_screen_target() const->std::shared_ptr<render_target_t> const&
+	auto graphic_renderer_t::get_screen_target_ptr() const->std::shared_ptr<render_target_t> const&
 	{
-		auto const num_screen_targets = static_cast<size_t>(std::size(m_screen_targets));
+		auto const num_screen_targets = std::size(m_screen_targets);
 		assert_t::check_bool(num_screen_targets > 0, "num_screen_targets is not valid");
-		auto const screen_target_index = (get_engine().get_time_system().get_tick() + 1) % num_screen_targets;
 		
+		auto const screen_target_index = (get_engine().get_time_system().get_tick() + 1) % num_screen_targets;
 		return m_screen_targets[screen_target_index];
+	}
+
+	auto graphic_renderer_t::get_screen_target_ref() const->render_target_t&
+	{
+		auto const& screen_target_ptr = get_screen_target_ptr();
+		assert_t::check_bool(screen_target_ptr, "screen_target_ptr is not valid");
+		
+		return (*screen_target_ptr);
 	}
 
 	void graphic_renderer_t::init_screen_targets()

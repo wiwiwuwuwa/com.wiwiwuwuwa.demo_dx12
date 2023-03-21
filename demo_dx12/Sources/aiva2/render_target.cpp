@@ -21,18 +21,38 @@ namespace aiva2
 
 	}
 
-	void render_target_t::init_for_rendering() const
+	auto render_target_t::init_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>
 	{
-		init_color_texture_for_rendering();
-		init_depth_texture_for_rendering();
-		init_render_target_for_rendering();
+		auto barriers = std::vector<D3D12_RESOURCE_BARRIER>{};
+
+		{
+			auto color_texture_barriers = init_color_texture_for_rendering();
+			std::move(std::begin(color_texture_barriers), std::end(color_texture_barriers), std::back_inserter(barriers));
+		}
+
+		{
+			auto depth_texture_barriers = init_depth_texture_for_rendering();
+			std::move(std::begin(depth_texture_barriers), std::end(depth_texture_barriers), std::back_inserter(barriers));
+		}
+
+		return barriers;
 	}
 
-	void render_target_t::shut_for_rendering() const
+	auto render_target_t::shut_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>
 	{
-		shut_render_target_for_rendering();
-		shut_depth_texture_for_rendering();
-		shut_color_texture_for_rendering();
+		auto barriers = std::vector<D3D12_RESOURCE_BARRIER>{};
+
+		{
+			auto color_texture_barriers = shut_color_texture_for_rendering();
+			std::move(std::begin(color_texture_barriers), std::end(color_texture_barriers), std::back_inserter(barriers));
+		}
+
+		{
+			auto depth_texture_barriers = shut_depth_texture_for_rendering();
+			std::move(std::begin(depth_texture_barriers), std::end(depth_texture_barriers), std::back_inserter(barriers));
+		}
+
+		return barriers;
 	}
 
 	void render_target_t::add_color_texture(std::shared_ptr<rtv_eye_t> const& color_texture)
@@ -68,22 +88,34 @@ namespace aiva2
 		upd_color_texture_handle();
 	}
 
-	void render_target_t::init_color_texture_for_rendering() const
+	auto render_target_t::init_color_texture_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>
 	{
+		auto barriers = std::vector<D3D12_RESOURCE_BARRIER>{};
+		
 		for (auto const& color_texture : m_color_textures)
 		{
 			assert_t::check_bool(color_texture, "color_texture is not valid");
-			(*color_texture).init_for_rendering();
+			
+			auto const color_barriers = (*color_texture).init_for_rendering();
+			std::move(std::begin(color_barriers), std::end(color_barriers), std::back_inserter(barriers));
 		}
+		
+		return barriers;
 	}
 
-	void render_target_t::shut_color_texture_for_rendering() const
+	auto render_target_t::shut_color_texture_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>
 	{
+		auto barriers = std::vector<D3D12_RESOURCE_BARRIER>{};
+		
 		for (auto const& color_texture : m_color_textures)
 		{
 			assert_t::check_bool(color_texture, "color_texture is not valid");
-			(*color_texture).shut_for_rendering();
+
+			auto const color_barriers = (*color_texture).shut_for_rendering();
+			std::move(std::begin(color_barriers), std::end(color_barriers), std::back_inserter(barriers));
 		}
+		
+		return barriers;
 	}
 
 	auto render_target_t::get_color_texture_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>
@@ -152,20 +184,28 @@ namespace aiva2
 		upd_depth_texture_handle();
 	}
 
-	void render_target_t::init_depth_texture_for_rendering() const
+	auto render_target_t::init_depth_texture_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>
 	{
+		auto barriers = std::vector<D3D12_RESOURCE_BARRIER>{};
+
 		if (m_depth_texture)
 		{
-			(*m_depth_texture).init_for_rendering();
+			barriers = (*m_depth_texture).init_for_rendering();
 		}
+
+		return barriers;
 	}
 
-	void render_target_t::shut_depth_texture_for_rendering() const
+	auto render_target_t::shut_depth_texture_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>
 	{
+		auto barriers = std::vector<D3D12_RESOURCE_BARRIER>{};
+
 		if (m_depth_texture)
 		{
-			(*m_depth_texture).shut_for_rendering();
+			barriers = (*m_depth_texture).shut_for_rendering();
 		}
+
+		return barriers;
 	}
 
 	auto render_target_t::get_depth_texture_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>
@@ -203,31 +243,5 @@ namespace aiva2
 
 		auto const bind_place = (*m_depth_heap).GetCPUDescriptorHandleForHeapStart();
 		(*m_depth_texture).bind_for_rendering(bind_place);
-	}
-
-	void render_target_t::init_render_target_for_rendering() const
-	{
-		auto const color_texture_handle_opt = get_color_texture_handle();
-		auto const color_texture_handle_num = num_color_texture_handle();
-		auto const depth_texture_handle_opt = get_depth_texture_handle();
-
-		get_engine().get_graphic_hardware().get_command_list().OMSetRenderTargets
-		(
-			/*NumRenderTargetDescriptors*/ static_cast<UINT>(color_texture_handle_num),
-			/*pRenderTargetDescriptors*/ color_texture_handle_opt ? &(*color_texture_handle_opt) : nullptr,
-			/*RTsSingleHandleToDescriptorRange*/ TRUE,
-			/*pDepthStencilDescriptor*/ depth_texture_handle_opt ? &(*depth_texture_handle_opt) : nullptr
-		);
-	}
-
-	void render_target_t::shut_render_target_for_rendering() const
-	{
-		get_engine().get_graphic_hardware().get_command_list().OMSetRenderTargets
-		(
-			/*NumRenderTargetDescriptors*/ {},
-			/*pRenderTargetDescriptors*/ {},
-			/*RTsSingleHandleToDescriptorRange*/ {},
-			/*pDepthStencilDescriptor*/ {}
-		);
 	}
 }

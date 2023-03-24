@@ -3,17 +3,19 @@
 
 namespace aiva2
 {
+	struct compute_shader_t;
+
 	struct deffered_renderer_t;
 
 	struct dsv_eye_t;
 
 	struct dsv_tex_2d_info_t;
-	
+
 	struct dsv_tex_2d_t;
 
-	struct engine_t;
-
 	struct engine_object_t;
+
+	struct engine_t;
 
 	struct gpu_cmd_base_t;
 
@@ -32,22 +34,24 @@ namespace aiva2
 	struct resource_system_t;
 
 	struct rtv_eye_t;
-	
+
 	struct rtv_tex_2d_info_t;
 
 	struct rtv_tex_2d_t;
 
-	struct shader_info_t;
+	struct shader_base_t;
 
 	struct shader_info_for_code_t;
 
 	struct shader_info_for_meta_t;
 
 	struct shader_info_for_resource_t;
-	
-	struct tex_2d_t;
+
+	struct shader_info_t;
 
 	struct tex_2d_info_t;
+
+	struct tex_2d_t;
 
 	struct time_system_t;
 
@@ -55,7 +59,7 @@ namespace aiva2
 
 	struct uav_tex_2d_t;
 
-	struct window_t;
-
 	struct window_system_t;
+
+	struct window_t;
 }

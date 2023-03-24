@@ -26,6 +26,9 @@ namespace aiva2
 		template <typename t_resource_type>
 		std::shared_ptr<t_resource_type> get_resource_from_file(std::filesystem::path const& resource_path);
 
+		template <typename t_resource_type>
+		std::shared_ptr<t_resource_type> new_resource_from_span(boost::span<std::byte const> const& resource_span);
+
 	private:
 		std::vector<std::byte> get_binary_from_file(std::filesystem::path const& resource_path);
 
@@ -76,14 +79,37 @@ namespace aiva2
 	std::shared_ptr<t_resource_type> resource_system_t::get_resource_from_file(std::filesystem::path const& resource_path)
 	{
 		assert_t::check_bool(!std::empty(resource_path), "resource_path is not valid");
-		
+
 		auto const resource_binary = get_binary_from_file(resource_path);
 		assert_t::check_bool(!std::empty(resource_binary), "resource_binary is not valid");
 
-		auto const resource_specific = std::make_shared<t_resource_type>(get_engine(), resource_binary);
+		auto const resource_specific = new_resource_from_span<t_resource_type>(resource_binary);
 		assert_t::check_bool(resource_specific, "resource_specific is not valid");
-		
+
 		m_resources.insert_or_assign(resource_path, resource_specific);
+		return resource_specific;
+	}
+
+	template <typename t_resource_type>
+	std::shared_ptr<t_resource_type> resource_system_t::new_resource_from_span(boost::span<std::byte const> const& resource_span)
+	{
+		assert_t::check_bool(!std::empty(resource_span), "resource_span is not valid");
+
+		auto resource_specific = std::shared_ptr<t_resource_type>{};
+
+		if constexpr (std::is_constructible_v<t_resource_type, engine_t&, nlohmann::json const&>)
+		{
+			auto const resource_json = nlohmann::json::parse(resource_span);
+			assert_t::check_bool(!std::empty(resource_json), "resource_json is not valid");
+
+			resource_specific = std::make_shared<t_resource_type>(get_engine(), resource_json);
+		}
+		else if constexpr (std::is_constructible_v<t_resource_type, engine_t&, boost::span<std::byte const> const&>)
+		{
+			resource_specific = std::make_shared<t_resource_type>(get_engine(), resource_span);
+		}
+		
+		assert_t::check_bool(resource_specific, "resource_specific is not valid");
 		return resource_specific;
 	}
 }

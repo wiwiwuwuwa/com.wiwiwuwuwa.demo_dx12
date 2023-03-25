@@ -200,6 +200,9 @@
     <ClCompile Include="Sources\aiva2\gpu_eye.cpp" />
     <ClCompile Include="Sources\aiva2\dsv_eye.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_cpu_descriptor_handle_utils.cpp" />
+    <ClCompile Include="Sources\aiva2\material_base.cpp" />
+    <ClCompile Include="Sources\aiva2\compute_material.cpp" />
+    <ClCompile Include="Sources\aiva2\string_view_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -598,6 +601,11 @@
     <ClInclude Include="Sources\aiva2\rtv_eye_init_info.hpp" />
     <ClInclude Include="Sources\aiva2\dsv_eye.hpp" />
     <ClInclude Include="Sources\aiva2\d3d12_cpu_descriptor_handle_utils.hpp" />
+    <ClInclude Include="Sources\aiva2\material_base.hpp" />
+    <ClInclude Include="Sources\aiva2\compute_material.hpp" />
+    <ClInclude Include="Sources\aiva2\string_view_utils.hpp" />
+    <ClInclude Include="Sources\aiva2\has_constructor.hpp" />
+    <ClInclude Include="Sources\aiva2\has_constructor_argument_wrapper.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

@@ -3,6 +3,7 @@
 
 #include <aiva2/assert.hpp>
 #include <aiva2/engine.hpp>
+#include <aiva2/string_view_utils.hpp>
 
 namespace aiva2
 {
@@ -16,8 +17,8 @@ namespace aiva2
 	{
 		
 	}
-
-	std::vector<std::byte> resource_system_t::get_binary_from_file(std::filesystem::path const& resource_path)
+	
+	auto resource_system_t::get_data_from_file(std::filesystem::path const& resource_path) const -> std::vector<std::byte>
 	{
 		assert_t::check_bool(!std::empty(resource_path), "resource_path is empty");
 
@@ -49,5 +50,16 @@ namespace aiva2
 		assert_t::check_bool(file_stream.gcount() == file_size_as_streamsize, "file_stream is not valid");
 
 		return file_binary;
+	}
+
+	auto resource_system_t::get_json_from_file(std::filesystem::path const& resource_path) const -> nlohmann::json
+	{
+		auto const file_data = get_data_from_file(resource_path);
+		assert_t::check_bool(!std::empty(file_data), "file_data is not valid");
+		
+		auto const file_view = string_view_utils_t::to_string_view(file_data);
+		assert_t::check_bool(!std::empty(file_view), "file_view is not valid");
+
+		return nlohmann::json::parse(file_view);
 	}
 }

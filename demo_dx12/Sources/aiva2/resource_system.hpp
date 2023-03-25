@@ -27,10 +27,12 @@ namespace aiva2
 		std::shared_ptr<t_resource_type> get_resource_from_file(std::filesystem::path const& resource_path);
 
 		template <typename t_resource_type>
-		std::shared_ptr<t_resource_type> new_resource_from_span(boost::span<std::byte const> const& resource_span);
+		std::shared_ptr<t_resource_type> new_resource_from_path(std::filesystem::path const& resource_path);
 
 	private:
-		std::vector<std::byte> get_binary_from_file(std::filesystem::path const& resource_path);
+		auto get_data_from_file(std::filesystem::path const& resource_path) const -> std::vector<std::byte>;
+
+		auto get_json_from_file(std::filesystem::path const& resource_path) const -> nlohmann::json;
 
 	private:
 		std::unordered_map<std::filesystem::path, std::weak_ptr<engine_object_t>> m_resources{};
@@ -40,6 +42,8 @@ namespace aiva2
 }
 
 // --------------------------------------------------------
+
+#include <aiva2/has_constructor.hpp>
 
 namespace aiva2
 {
@@ -80,10 +84,7 @@ namespace aiva2
 	{
 		assert_t::check_bool(!std::empty(resource_path), "resource_path is not valid");
 
-		auto const resource_binary = get_binary_from_file(resource_path);
-		assert_t::check_bool(!std::empty(resource_binary), "resource_binary is not valid");
-
-		auto const resource_specific = new_resource_from_span<t_resource_type>(resource_binary);
+		auto const resource_specific = new_resource_from_path<t_resource_type>(resource_path);
 		assert_t::check_bool(resource_specific, "resource_specific is not valid");
 
 		m_resources.insert_or_assign(resource_path, resource_specific);
@@ -91,25 +92,27 @@ namespace aiva2
 	}
 
 	template <typename t_resource_type>
-	std::shared_ptr<t_resource_type> resource_system_t::new_resource_from_span(boost::span<std::byte const> const& resource_span)
+	std::shared_ptr<t_resource_type> resource_system_t::new_resource_from_path(std::filesystem::path const& resource_path)
 	{
-		assert_t::check_bool(!std::empty(resource_span), "resource_span is not valid");
+		assert_t::check_bool(!std::empty(resource_path), "resource_path is not valid");
 
-		auto resource_specific = std::shared_ptr<t_resource_type>{};
-
-		if constexpr (std::is_constructible_v<t_resource_type, engine_t&, nlohmann::json const&>)
+		if constexpr (has_constructor<t_resource_type, engine_t&, nlohmann::json const&>())
 		{
-			auto const resource_json = nlohmann::json::parse(resource_span);
+			auto const resource_json = get_json_from_file(resource_path);
 			assert_t::check_bool(!std::empty(resource_json), "resource_json is not valid");
 
-			resource_specific = std::make_shared<t_resource_type>(get_engine(), resource_json);
+			return std::make_shared<t_resource_type>(get_engine(), resource_json);
 		}
-		else if constexpr (std::is_constructible_v<t_resource_type, engine_t&, boost::span<std::byte const> const&>)
+		else if constexpr (has_constructor<t_resource_type, engine_t&, boost::span<std::byte const> const&>())
 		{
-			resource_specific = std::make_shared<t_resource_type>(get_engine(), resource_span);
+			auto const resource_data = get_data_from_file(resource_path);
+			assert_t::check_bool(!std::empty(resource_data), "resource_data is not valid");
+
+			return std::make_shared<t_resource_type>(get_engine(), resource_data);
 		}
-		
-		assert_t::check_bool(resource_specific, "resource_specific is not valid");
-		return resource_specific;
+		else
+		{
+			return {};
+		}
 	}
 }

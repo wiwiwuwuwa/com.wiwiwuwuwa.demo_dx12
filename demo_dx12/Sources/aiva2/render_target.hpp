@@ -23,75 +23,75 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
-		void add_color_texture(std::shared_ptr<rtv_eye_t> const& color_texture);
+		void add_rtv_eye(std::shared_ptr<rtv_eye_t> const& rtv_eye);
 		
-		auto get_color_texture(size_t const index) const->std::shared_ptr<rtv_eye_t> const&;
+		auto get_rtv_eye(size_t const index) const->std::shared_ptr<rtv_eye_t> const&;
 		
-		auto num_color_texture() const->size_t;
+		auto num_rtv_eye() const->size_t;
 		
-		void rem_color_texture(size_t const index);
+		void rem_rtv_eye(size_t const index);
 		
-		void set_color_texture(size_t const index, std::shared_ptr<rtv_eye_t> const& color_texture);
+		void set_rtv_eye(size_t const index, std::shared_ptr<rtv_eye_t> const& rtv_eye);
 
 	public:
-		template <typename t_color_texture_type, typename... t_color_texture_args>
-		void add_color_texture(t_color_texture_args&&... render_texture_args);
+		template <typename t_rtv_eye_type, typename... t_rtv_eye_args>
+		void add_rtv_eye(t_rtv_eye_args&&... render_texture_args);
 
-		template <typename t_color_texture_type, typename... t_color_texture_args>
-		void set_color_texture(size_t const index, t_color_texture_args&&... render_texture_args);
-
-	private:
-		auto init_color_texture_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>;
-
-		auto shut_color_texture_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>;
+		template <typename t_rtv_eye_type, typename... t_rtv_eye_args>
+		void set_rtv_eye(size_t const index, t_rtv_eye_args&&... render_texture_args);
 
 	private:
-		std::vector<std::shared_ptr<rtv_eye_t>> m_color_textures{};
+		auto init_rtv_eye_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>;
+
+		auto shut_rtv_eye_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>;
+
+	private:
+		std::vector<std::shared_ptr<rtv_eye_t>> m_rtv_eyes{};
 
 		// ------------------------------------------------
 
 	public:
-		auto get_color_texture_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>;
+		auto get_rtv_eye_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>;
 
-		auto num_color_texture_handle() const->size_t;
+		auto num_rtv_eye_handle() const->size_t;
 
 	private:
-		void upd_color_texture_handle();
+		void upd_rtv_eye_handle();
 		
 	private:
-		winrt::com_ptr<ID3D12DescriptorHeap> m_color_heap{};
+		winrt::com_ptr<ID3D12DescriptorHeap> m_rtv_eye_heap{};
 
 		// ------------------------------------------------
 
 	public:
-		auto get_depth_texture() const->std::shared_ptr<dsv_eye_t> const&;
+		auto get_dsv_eye() const->std::shared_ptr<dsv_eye_t> const&;
 
-		auto has_depth_texture() const->bool;
+		auto has_dsv_eye() const->bool;
 
-		void set_depth_texture(std::shared_ptr<dsv_eye_t> const& depth_texture);
+		void set_dsv_eye(std::shared_ptr<dsv_eye_t> const& dsv_eye);
 		
 	public:
-		template <typename t_depth_texture_type, typename... t_depth_texture_args>
-		void set_depth_texture(t_depth_texture_args&&... render_texture_args);
+		template <typename t_dsv_eye_type, typename... t_dsv_eye_args>
+		void set_dsv_eye(t_dsv_eye_args&&... render_texture_args);
 
 	private:
-		auto init_depth_texture_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>;
+		auto init_dsv_eye_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>;
 
-		auto shut_depth_texture_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>;
+		auto shut_dsv_eye_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>;
 
 	private:
-		std::shared_ptr<dsv_eye_t> m_depth_texture{};
+		std::shared_ptr<dsv_eye_t> m_dsv_eye{};
 
 		// ------------------------------------------------
 
 	public:
-		auto get_depth_texture_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>;
+		auto get_dsv_eye_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>;
 
 	private:
-		void upd_depth_texture_handle();
+		void upd_dsv_eye_handle();
 		
 	private:
-		winrt::com_ptr<ID3D12DescriptorHeap> m_depth_heap{};
+		winrt::com_ptr<ID3D12DescriptorHeap> m_dsv_eye_heap{};
 
 		// ------------------------------------------------
 	};
@@ -101,30 +101,30 @@ namespace aiva2
 
 namespace aiva2
 {
-	template <typename t_color_texture_type, typename... t_color_texture_args>
-	void render_target_t::add_color_texture(t_color_texture_args&&... render_texture_args)
+	template <typename t_rtv_eye_type, typename... t_rtv_eye_args>
+	void render_target_t::add_rtv_eye(t_rtv_eye_args&&... render_texture_args)
 	{
-		auto const color_texture = std::make_shared<t_color_texture_type>(get_engine(), std::forward<t_color_texture_args>(render_texture_args)...);
-		assert_t::check_bool(color_texture, "color_texture is not valid");
+		auto const rtv_eye = std::make_shared<t_rtv_eye_type>(get_engine(), std::forward<t_rtv_eye_args>(render_texture_args)...);
+		assert_t::check_bool(rtv_eye, "rtv_eye is not valid");
 		
-		add_color_texture(color_texture);
+		add_rtv_eye(rtv_eye);
 	}
 
-	template <typename t_color_texture_type, typename... t_color_texture_args>
-	void render_target_t::set_color_texture(size_t const index, t_color_texture_args&&... render_texture_args)
+	template <typename t_rtv_eye_type, typename... t_rtv_eye_args>
+	void render_target_t::set_rtv_eye(size_t const index, t_rtv_eye_args&&... render_texture_args)
 	{
-		auto const color_texture = std::make_shared<t_color_texture_type>(get_engine(), std::forward<t_color_texture_args>(render_texture_args)...);
-		assert_t::check_bool(color_texture, "color_texture is not valid");
+		auto const rtv_eye = std::make_shared<t_rtv_eye_type>(get_engine(), std::forward<t_rtv_eye_args>(render_texture_args)...);
+		assert_t::check_bool(rtv_eye, "rtv_eye is not valid");
 
-		set_color_texture(index, color_texture);
+		set_rtv_eye(index, rtv_eye);
 	}
 
-	template <typename t_depth_texture_type, typename... t_depth_texture_args>
-	void render_target_t::set_depth_texture(t_depth_texture_args&&... render_texture_args)
+	template <typename t_dsv_eye_type, typename... t_dsv_eye_args>
+	void render_target_t::set_dsv_eye(t_dsv_eye_args&&... render_texture_args)
 	{
-		auto const depth_texture = std::make_shared<t_depth_texture_type>(get_engine(), std::forward<t_depth_texture_args>(render_texture_args)...);
-		assert_t::check_bool(depth_texture, "depth_texture is not valid");
+		auto const dsv_eye = std::make_shared<t_dsv_eye_type>(get_engine(), std::forward<t_dsv_eye_args>(render_texture_args)...);
+		assert_t::check_bool(dsv_eye, "dsv_eye is not valid");
 
-		set_depth_texture(depth_texture);
+		set_dsv_eye(dsv_eye);
 	}
 }

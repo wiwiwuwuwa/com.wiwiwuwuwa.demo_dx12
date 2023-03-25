@@ -40,23 +40,23 @@ namespace aiva2
 
 	void gpu_cmd_set_render_target_t::execute_set_render_targets() const
 	{
-		auto rtv_handle_opt = std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>{};
-		auto rtv_handle_num = size_t{};
-		auto dsv_eye_handle_opt = std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>{};
+		auto color_handle_opt = std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>{};
+		auto color_handle_num = size_t{};
+		auto depth_handle_opt = std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>{};
 
 		if (get_render_target_ptr())
 		{
-			rtv_handle_opt = get_render_target_ref().get_rtv_handle();
-			rtv_handle_num = get_render_target_ref().num_rtv_handle();
-			dsv_eye_handle_opt = get_render_target_ref().get_dsv_handle();
+			color_handle_opt = get_render_target_ref().get_color_handle();
+			color_handle_num = get_render_target_ref().num_color_handle();
+			depth_handle_opt = get_render_target_ref().get_depth_handle();
 		}
 
 		get_engine().get_graphic_hardware().get_command_list().OMSetRenderTargets
 		(
-			/*NumRenderTargetDescriptors*/ static_cast<UINT>(rtv_handle_num),
-			/*pRenderTargetDescriptors*/ rtv_handle_opt ? &(*rtv_handle_opt) : nullptr,
+			/*NumRenderTargetDescriptors*/ static_cast<UINT>(color_handle_num),
+			/*pRenderTargetDescriptors*/ color_handle_opt ? &(*color_handle_opt) : nullptr,
 			/*RTsSingleHandleToDescriptorRange*/ TRUE,
-			/*pDepthStencilDescriptor*/ dsv_eye_handle_opt ? &(*dsv_eye_handle_opt) : nullptr
+			/*pDepthStencilDescriptor*/ depth_handle_opt ? &(*depth_handle_opt) : nullptr
 		);
 	}
 

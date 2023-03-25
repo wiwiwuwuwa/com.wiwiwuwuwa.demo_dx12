@@ -61,8 +61,8 @@ namespace aiva2
 
 			auto const& screen_target = m_screen_targets.emplace_back(std::make_shared<render_target_t>(get_engine()));
 			assert_t::check_bool(screen_target, "screen_target is not valid");
-
-			(*screen_target).add_rtv_res(tex_obj);
+			
+			(*screen_target).add_color_resource(tex_obj);
 		}
 	}
 

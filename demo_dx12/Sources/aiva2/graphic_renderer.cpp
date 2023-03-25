@@ -52,14 +52,17 @@ namespace aiva2
 
 		for (auto i = std::size_t{}; i < static_cast<size_t>(swap_desc.BufferCount); i++)
 		{
-			auto texture_resource = winrt::com_ptr<ID3D12Resource>{};
-			assert_t::check_hresult(get_engine().get_graphic_hardware().get_swap_chain().GetBuffer(static_cast<UINT>(i), IID_PPV_ARGS(&texture_resource)), "failed to get texture_resource");
-			assert_t::check_bool(texture_resource, "texture_resource is not valid");
+			auto tex_res = winrt::com_ptr<ID3D12Resource>{};
+			assert_t::check_hresult(get_engine().get_graphic_hardware().get_swap_chain().GetBuffer(static_cast<UINT>(i), IID_PPV_ARGS(&tex_res)), "failed to get tex_res");
+			assert_t::check_bool(tex_res, "tex_res is not valid");
+
+			auto const& tex_obj = std::make_shared<tex_2d_t>(get_engine(), tex_res);
+			assert_t::check_bool(tex_obj, "tex_obj is not valid");
 
 			auto const& screen_target = m_screen_targets.emplace_back(std::make_shared<render_target_t>(get_engine()));
 			assert_t::check_bool(screen_target, "screen_target is not valid");
 
-			(*screen_target).add_rtv_eye<rtv_tex_2d_t>(texture_resource);
+			(*screen_target).add_rtv_res(tex_obj);
 		}
 	}
 

@@ -606,6 +606,13 @@
     <ClInclude Include="Sources\aiva2\string_view_utils.hpp" />
     <ClInclude Include="Sources\aiva2\has_constructor.hpp" />
     <ClInclude Include="Sources\aiva2\has_constructor_argument_wrapper.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_eye_type.hpp" />
+    <ClInclude Include="Sources\aiva2\find_gpu_eye_a.hpp" />
+    <ClInclude Include="Sources\aiva2\find_gpu_eye_info_a.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_res_type.hpp" />
+    <ClInclude Include="Sources\aiva2\find_gpu_res_type.hpp" />
+    <ClInclude Include="Sources\aiva2\find_gpu_eye_info_b.hpp" />
+    <ClInclude Include="Sources\aiva2\find_gpu_eye_b.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

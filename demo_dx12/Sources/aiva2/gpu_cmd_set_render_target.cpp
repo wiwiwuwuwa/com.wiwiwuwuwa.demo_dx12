@@ -40,21 +40,21 @@ namespace aiva2
 
 	void gpu_cmd_set_render_target_t::execute_set_render_targets() const
 	{
-		auto rtv_eye_handle_opt = std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>{};
-		auto rtv_eye_handle_num = size_t{};
+		auto rtv_handle_opt = std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>{};
+		auto rtv_handle_num = size_t{};
 		auto dsv_eye_handle_opt = std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>{};
 
 		if (get_render_target_ptr())
 		{
-			rtv_eye_handle_opt = get_render_target_ref().get_rtv_eye_handle();
-			rtv_eye_handle_num = get_render_target_ref().num_rtv_eye_handle();
-			dsv_eye_handle_opt = get_render_target_ref().get_dsv_eye_handle();
+			rtv_handle_opt = get_render_target_ref().get_rtv_handle();
+			rtv_handle_num = get_render_target_ref().num_rtv_handle();
+			dsv_eye_handle_opt = get_render_target_ref().get_dsv_handle();
 		}
 
 		get_engine().get_graphic_hardware().get_command_list().OMSetRenderTargets
 		(
-			/*NumRenderTargetDescriptors*/ static_cast<UINT>(rtv_eye_handle_num),
-			/*pRenderTargetDescriptors*/ rtv_eye_handle_opt ? &(*rtv_eye_handle_opt) : nullptr,
+			/*NumRenderTargetDescriptors*/ static_cast<UINT>(rtv_handle_num),
+			/*pRenderTargetDescriptors*/ rtv_handle_opt ? &(*rtv_handle_opt) : nullptr,
 			/*RTsSingleHandleToDescriptorRange*/ TRUE,
 			/*pDepthStencilDescriptor*/ dsv_eye_handle_opt ? &(*dsv_eye_handle_opt) : nullptr
 		);

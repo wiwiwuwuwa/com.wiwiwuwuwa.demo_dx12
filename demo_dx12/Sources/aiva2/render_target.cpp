@@ -26,12 +26,12 @@ namespace aiva2
 		auto barriers = std::vector<D3D12_RESOURCE_BARRIER>{};
 
 		{
-			auto rtv_eye_barriers = init_rtv_eye_for_rendering();
+			auto rtv_eye_barriers = init_rtv_for_rendering();
 			std::move(std::begin(rtv_eye_barriers), std::end(rtv_eye_barriers), std::back_inserter(barriers));
 		}
 
 		{
-			auto dsv_eye_barriers = init_dsv_eye_for_rendering();
+			auto dsv_eye_barriers = init_dsv_for_rendering();
 			std::move(std::begin(dsv_eye_barriers), std::end(dsv_eye_barriers), std::back_inserter(barriers));
 		}
 
@@ -43,23 +43,38 @@ namespace aiva2
 		auto barriers = std::vector<D3D12_RESOURCE_BARRIER>{};
 
 		{
-			auto rtv_eye_barriers = shut_rtv_eye_for_rendering();
+			auto rtv_eye_barriers = shut_rtv_for_rendering();
 			std::move(std::begin(rtv_eye_barriers), std::end(rtv_eye_barriers), std::back_inserter(barriers));
 		}
 
 		{
-			auto dsv_eye_barriers = shut_dsv_eye_for_rendering();
+			auto dsv_eye_barriers = shut_dsv_for_rendering();
 			std::move(std::begin(dsv_eye_barriers), std::end(dsv_eye_barriers), std::back_inserter(barriers));
 		}
 
 		return barriers;
+	}
+	
+	auto render_target_t::num_rtv_res() const->size_t
+	{
+		return num_rtv_eye();
+	}
+
+	void render_target_t::rem_rtv_res(size_t const index)
+	{
+		rem_rtv_eye(index);
+	}
+
+	auto render_target_t::has_dsv_res() const->bool
+	{
+		return has_dsv_eye();
 	}
 
 	void render_target_t::add_rtv_eye(std::shared_ptr<rtv_eye_t> const& rtv_eye)
 	{
 		assert_t::check_bool(rtv_eye, "rtv_eye is not valid");
 		m_rtv_eyes.push_back(rtv_eye);
-		upd_rtv_eye_handle();
+		upd_rtv_handle();
 	}
 
 	auto render_target_t::get_rtv_eye(size_t const index) const->std::shared_ptr<rtv_eye_t> const&
@@ -77,7 +92,7 @@ namespace aiva2
 	{
 		assert_t::check_bool(index >= 0 && index < std::size(m_rtv_eyes), "index is out of range");
 		m_rtv_eyes.erase(std::next(std::cbegin(m_rtv_eyes), index));
-		upd_rtv_eye_handle();
+		upd_rtv_handle();
 	}
 	
 	void render_target_t::set_rtv_eye(size_t const index, std::shared_ptr<rtv_eye_t> const& rtv_eye)
@@ -85,10 +100,10 @@ namespace aiva2
 		assert_t::check_bool(index >= 0 && index < std::size(m_rtv_eyes), "index is out of range");
 		assert_t::check_bool(rtv_eye, "rtv_eye is not valid");
 		m_rtv_eyes[index] =	rtv_eye;
-		upd_rtv_eye_handle();
+		upd_rtv_handle();
 	}
 
-	auto render_target_t::init_rtv_eye_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>
+	auto render_target_t::init_rtv_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>
 	{
 		auto barriers = std::vector<D3D12_RESOURCE_BARRIER>{};
 		
@@ -103,7 +118,7 @@ namespace aiva2
 		return barriers;
 	}
 
-	auto render_target_t::shut_rtv_eye_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>
+	auto render_target_t::shut_rtv_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>
 	{
 		auto barriers = std::vector<D3D12_RESOURCE_BARRIER>{};
 		
@@ -116,56 +131,6 @@ namespace aiva2
 		}
 		
 		return barriers;
-	}
-
-	auto render_target_t::get_rtv_eye_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>
-	{
-		if (m_rtv_eye_heap)
-		{
-			return (*m_rtv_eye_heap).GetCPUDescriptorHandleForHeapStart();
-		}
-		else
-		{
-			return {};
-		}
-	}
-
-	auto render_target_t::num_rtv_eye_handle() const->size_t
-	{
-		return std::size(m_rtv_eyes);
-	}
-
-	void render_target_t::upd_rtv_eye_handle()
-	{
-		if (std::empty(m_rtv_eyes))
-		{
-			m_rtv_eye_heap = {};
-			return;
-		}
-		
-		auto heap_desc = D3D12_DESCRIPTOR_HEAP_DESC{};
-		heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-		heap_desc.NumDescriptors = static_cast<UINT>(std::size(m_rtv_eyes));
-		heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-		heap_desc.NodeMask = {};
-
-		assert_t::check_hresult(get_engine().get_graphic_hardware().get_device().CreateDescriptorHeap
-		(
-			/*pDescriptorHeapDesc*/ &heap_desc,
-			/*Heap*/ IID_PPV_ARGS(&m_rtv_eye_heap)
-		));
-		assert_t::check_bool(m_rtv_eye_heap, "m_rtv_eye_heap is not valid");
-
-		auto const increment_size = get_engine().get_graphic_hardware().get_device().GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-
-		for (auto i = size_t{}; i < std::size(m_rtv_eyes); ++i)
-		{
-			auto const& rtv_eye = m_rtv_eyes[i];
-			assert_t::check_bool(rtv_eye, "rtv_eye is not valid");
-
-			auto const bind_place = (*m_rtv_eye_heap).GetCPUDescriptorHandleForHeapStart() + i * increment_size;
-			(*rtv_eye).bind_for_rendering(bind_place);
-		}
 	}
 
 	auto render_target_t::get_dsv_eye() const->std::shared_ptr<dsv_eye_t> const&
@@ -181,10 +146,10 @@ namespace aiva2
 	void render_target_t::set_dsv_eye(std::shared_ptr<dsv_eye_t> const& dsv_eye)
 	{
 		m_dsv_eye = dsv_eye;
-		upd_dsv_eye_handle();
+		upd_dsv_handle();
 	}
 
-	auto render_target_t::init_dsv_eye_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>
+	auto render_target_t::init_dsv_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>
 	{
 		auto barriers = std::vector<D3D12_RESOURCE_BARRIER>{};
 
@@ -196,7 +161,7 @@ namespace aiva2
 		return barriers;
 	}
 
-	auto render_target_t::shut_dsv_eye_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>
+	auto render_target_t::shut_dsv_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>
 	{
 		auto barriers = std::vector<D3D12_RESOURCE_BARRIER>{};
 
@@ -208,11 +173,11 @@ namespace aiva2
 		return barriers;
 	}
 
-	auto render_target_t::get_dsv_eye_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>
+	auto render_target_t::get_rtv_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>
 	{
-		if (m_dsv_eye_heap)
+		if (m_rtv_heap)
 		{
-			return (*m_dsv_eye_heap).GetCPUDescriptorHandleForHeapStart();
+			return (*m_rtv_heap).GetCPUDescriptorHandleForHeapStart();
 		}
 		else
 		{
@@ -220,11 +185,61 @@ namespace aiva2
 		}
 	}
 
-	void render_target_t::upd_dsv_eye_handle()
+	auto render_target_t::num_rtv_handle() const->size_t
+	{
+		return std::size(m_rtv_eyes);
+	}
+
+	void render_target_t::upd_rtv_handle()
+	{
+		if (std::empty(m_rtv_eyes))
+		{
+			m_rtv_heap = {};
+			return;
+		}
+		
+		auto heap_desc = D3D12_DESCRIPTOR_HEAP_DESC{};
+		heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+		heap_desc.NumDescriptors = static_cast<UINT>(std::size(m_rtv_eyes));
+		heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+		heap_desc.NodeMask = {};
+
+		assert_t::check_hresult(get_engine().get_graphic_hardware().get_device().CreateDescriptorHeap
+		(
+			/*pDescriptorHeapDesc*/ &heap_desc,
+			/*Heap*/ IID_PPV_ARGS(&m_rtv_heap)
+		));
+		assert_t::check_bool(m_rtv_heap, "m_rtv_heap is not valid");
+
+		auto const increment_size = get_engine().get_graphic_hardware().get_device().GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+
+		for (auto i = size_t{}; i < std::size(m_rtv_eyes); ++i)
+		{
+			auto const& rtv_eye = m_rtv_eyes[i];
+			assert_t::check_bool(rtv_eye, "rtv_eye is not valid");
+
+			auto const bind_place = (*m_rtv_heap).GetCPUDescriptorHandleForHeapStart() + i * increment_size;
+			(*rtv_eye).bind_for_rendering(bind_place);
+		}
+	}
+
+	auto render_target_t::get_dsv_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>
+	{
+		if (m_dsv_heap)
+		{
+			return (*m_dsv_heap).GetCPUDescriptorHandleForHeapStart();
+		}
+		else
+		{
+			return {};
+		}
+	}
+
+	void render_target_t::upd_dsv_handle()
 	{
 		if (!m_dsv_eye)
 		{
-			m_dsv_eye_heap = {};
+			m_dsv_heap = {};
 			return;
 		}
 
@@ -237,11 +252,11 @@ namespace aiva2
 		assert_t::check_hresult(get_engine().get_graphic_hardware().get_device().CreateDescriptorHeap
 		(
 			/*pDescriptorHeapDesc*/ &heap_desc,
-			/*Heap*/ IID_PPV_ARGS(&m_dsv_eye_heap)
+			/*Heap*/ IID_PPV_ARGS(&m_dsv_heap)
 		));
-		assert_t::check_bool(m_dsv_eye_heap, "m_dsv_eye_heap is not valid");
+		assert_t::check_bool(m_dsv_heap, "m_dsv_heap is not valid");
 
-		auto const bind_place = (*m_dsv_eye_heap).GetCPUDescriptorHandleForHeapStart();
+		auto const bind_place = (*m_dsv_heap).GetCPUDescriptorHandleForHeapStart();
 		(*m_dsv_eye).bind_for_rendering(bind_place);
 	}
 }

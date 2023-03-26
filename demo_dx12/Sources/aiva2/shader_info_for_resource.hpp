@@ -4,6 +4,7 @@
 #include <aiva2/engine_object.hpp>
 #include <aiva2/implements.hpp>
 #include <aiva2/shader_register_type.hpp>
+#include <aiva2/shader_resource_type.hpp>
 
 namespace aiva2
 {
@@ -25,6 +26,19 @@ namespace aiva2
 
 	private:
 		std::string m_text{};
+
+		// ------------------------------------------------
+
+	public:
+		auto get_type() const->shader_resource_type_t;
+
+	private:
+		void init_type();
+
+		void shut_type();
+
+	private:
+		shader_resource_type_t m_type{};
 
 		// ------------------------------------------------
 

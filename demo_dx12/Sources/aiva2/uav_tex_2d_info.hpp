@@ -1,11 +1,12 @@
 #pragma once
 #include <aiva2/_core.hpp>
 
-#include <aiva2/uav_res_info.hpp>
+#include <aiva2/buffer_format.hpp>
+#include <aiva2/gpu_eye_info.hpp>
 
 namespace aiva2
 {
-	struct uav_tex_2d_info_t final : public implements_t<uav_tex_2d_info_t, uav_res_info_t>
+	struct uav_tex_2d_info_t final : public implements_t<uav_tex_2d_info_t, gpu_eye_info_t>
 	{
 		// ------------------------------------------------
 
@@ -14,6 +15,16 @@ namespace aiva2
 
 		~uav_tex_2d_info_t() override = default;
 
+		// ------------------------------------------------
+
+	public:
+		auto get_format() const->buffer_format_t;
+
+		void set_format(buffer_format_t const format);
+
+	private:
+		buffer_format_t m_format{ buffer_format_t::UNKNOWN };
+		
 		// ------------------------------------------------
 		
 	public:

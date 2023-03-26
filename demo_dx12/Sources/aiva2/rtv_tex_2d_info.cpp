@@ -3,6 +3,16 @@
 
 namespace aiva2
 {
+	rtv_tex_2d_info_t::rtv_tex_2d_info_t()
+	{
+
+	}
+
+	rtv_tex_2d_info_t::~rtv_tex_2d_info_t()
+	{
+
+	}
+
 	auto rtv_tex_2d_info_t::get_format() const->buffer_format_t
 	{
 		return m_format;

@@ -2,13 +2,19 @@
 #include <aiva2/_core.hpp>
 
 #include <aiva2/buffer_format.hpp>
-#include <aiva2/implements.hpp>
-#include <aiva2/struct.hpp>
+#include <aiva2/gpu_eye_info.hpp>
 
 namespace aiva2
 {
-	struct rtv_tex_2d_info_t final : public implements_t<rtv_tex_2d_info_t, struct_t>
+	struct rtv_tex_2d_info_t final : public implements_t<rtv_tex_2d_info_t, gpu_eye_info_t>
 	{
+		// ------------------------------------------------
+
+	public:
+		rtv_tex_2d_info_t();
+
+		~rtv_tex_2d_info_t() override;
+
 		// ------------------------------------------------
 
 	public:

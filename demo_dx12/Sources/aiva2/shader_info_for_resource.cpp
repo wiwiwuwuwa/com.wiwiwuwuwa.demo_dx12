@@ -3,7 +3,9 @@
 
 #include <aiva2/assert.hpp>
 #include <aiva2/engine.hpp>
+#include <aiva2/enum_utils.hpp>
 #include <aiva2/shader_register_type_utils.hpp>
+#include <aiva2/shader_resource_type_utils.hpp>
 
 namespace aiva2
 {
@@ -11,6 +13,7 @@ namespace aiva2
 		: impl_type{ engine }
 		, m_text{ text }
 	{
+		init_type();
 		init_name();
 		init_register();
 	}
@@ -19,6 +22,7 @@ namespace aiva2
 	{
 		shut_register();
 		shut_name();
+		shut_type();
 	}
 
 	auto shader_info_for_resource_t::get_text() const->std::string const&
@@ -29,6 +33,35 @@ namespace aiva2
 	auto shader_info_for_resource_t::has_text() const->bool
 	{
 		return !std::empty(m_text);
+	}
+
+	auto shader_info_for_resource_t::get_type() const->shader_resource_type_t
+	{
+		return m_type;
+	}
+	
+	void shader_info_for_resource_t::init_type()
+	{
+		auto const regex_for_type = std::regex{ R"(^\s*?(\w+?)\b)", std::regex::icase | std::regex::optimize };
+		auto match_for_type = std::smatch{};
+
+		assert_t::check_bool(std::regex_search(m_text, match_for_type, regex_for_type), "failed to find type");
+		assert_t::check_bool(match_for_type.ready(), "failed to find type");
+		assert_t::check_bool(std::size(match_for_type) == 2, "failed to find type");
+
+		auto const type_match = match_for_type[1];
+		assert_t::check_bool(type_match.matched, "type_match is not valid");
+
+		auto const type_string = type_match.str();
+		assert_t::check_bool(!std::empty(type_string), "type_string is not valid");
+
+		m_type = from_hlsl(type_string);
+		assert_t::check_bool(is_valid(m_type), "m_type is not valid");
+	}
+
+	void shader_info_for_resource_t::shut_type()
+	{
+		m_type = {};
 	}
 	
 	auto shader_info_for_resource_t::get_name() const->std::string const&

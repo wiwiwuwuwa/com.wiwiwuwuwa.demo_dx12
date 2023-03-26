@@ -1,13 +1,13 @@
 #pragma once
 #include <aiva2/_core.hpp>
 
-#include <aiva2/dsv_eye.hpp>
+#include <aiva2/gpu_eye.hpp>
 #include <aiva2/dsv_tex_2d_info.hpp>
 #include <aiva2/tex_2d_info.hpp>
 
 namespace aiva2
 {
-	struct dsv_tex_2d_t final : public implements_t<dsv_tex_2d_t, dsv_eye_t>
+	struct dsv_tex_2d_t final : public implements_t<dsv_tex_2d_t, gpu_eye_t>
 	{
 		// ------------------------------------------------
 

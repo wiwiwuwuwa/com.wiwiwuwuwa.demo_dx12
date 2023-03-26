@@ -3,6 +3,16 @@
 
 namespace aiva2
 {
+	auto uav_tex_2d_info_t::get_format() const->buffer_format_t
+	{
+		return m_format;
+	}
+
+	void uav_tex_2d_info_t::set_format(buffer_format_t const format)
+	{
+		m_format = format;
+	}
+
 	auto uav_tex_2d_info_t::get_mip_slice() const->size_t
 	{
 		return m_mip_slice;

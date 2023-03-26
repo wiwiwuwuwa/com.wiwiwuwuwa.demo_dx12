@@ -7,8 +7,6 @@ namespace aiva2
 
 	struct deffered_renderer_t;
 
-	struct dsv_eye_t;
-
 	struct dsv_tex_2d_info_t;
 
 	struct dsv_tex_2d_t;
@@ -19,6 +17,12 @@ namespace aiva2
 
 	struct gpu_cmd_base_t;
 
+	struct gpu_eye_t;
+
+	struct gpu_eye_info_t;
+
+	struct gpu_res_t;
+
 	struct graphic_executor_t;
 
 	struct graphic_hardware_t;
@@ -27,13 +31,9 @@ namespace aiva2
 
 	struct graphic_renderer_t;
 
-	struct mat_eye_t;
-
 	struct render_target_t;
 
 	struct resource_system_t;
-
-	struct rtv_eye_t;
 
 	struct rtv_tex_2d_info_t;
 

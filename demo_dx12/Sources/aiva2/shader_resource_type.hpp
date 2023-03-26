@@ -3,10 +3,10 @@
 
 namespace aiva2
 {
-    enum class gpu_res_type_t
+    enum class shader_resource_type_t
     {
         UNKNOWN,
-        TEXTURE2D,
+        CONSTANT_BUFFER,
         MAXIMUM,
     };
 }

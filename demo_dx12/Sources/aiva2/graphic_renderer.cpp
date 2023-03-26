@@ -8,6 +8,7 @@
 #include <aiva2/graphic_hardware.hpp>
 #include <aiva2/render_target.hpp>
 #include <aiva2/rtv_tex_2d.hpp>
+#include <aiva2/rtv_tex_2d_info.hpp>
 #include <aiva2/tex_2d.hpp>
 #include <aiva2/time_system.hpp>
 
@@ -52,17 +53,20 @@ namespace aiva2
 
 		for (auto i = std::size_t{}; i < static_cast<size_t>(swap_desc.BufferCount); i++)
 		{
-			auto tex_res = winrt::com_ptr<ID3D12Resource>{};
-			assert_t::check_hresult(get_engine().get_graphic_hardware().get_swap_chain().GetBuffer(static_cast<UINT>(i), IID_PPV_ARGS(&tex_res)), "failed to get tex_res");
-			assert_t::check_bool(tex_res, "tex_res is not valid");
-
-			auto const& tex_obj = std::make_shared<tex_2d_t>(get_engine(), tex_res);
-			assert_t::check_bool(tex_obj, "tex_obj is not valid");
+			auto native_resource = winrt::com_ptr<ID3D12Resource>{};
+			assert_t::check_hresult(get_engine().get_graphic_hardware().get_swap_chain().GetBuffer(static_cast<UINT>(i), IID_PPV_ARGS(&native_resource)), "failed to get native_resource");
+			assert_t::check_bool(native_resource, "native_resource is not valid");
+			
+			auto const texture_resource = std::make_shared<tex_2d_t>(get_engine(), native_resource);
+			assert_t::check_bool(texture_resource, "texture_resource is not valid");
+			
+			auto const texture_info = std::make_shared<rtv_tex_2d_info_t>();
+			assert_t::check_bool(texture_info, "texture_info is not valid");
 
 			auto const& screen_target = m_screen_targets.emplace_back(std::make_shared<render_target_t>(get_engine()));
 			assert_t::check_bool(screen_target, "screen_target is not valid");
-			
-			(*screen_target).add_color_resource(tex_obj);
+
+			(*screen_target).add_color_resource(texture_resource, texture_info);
 		}
 	}
 

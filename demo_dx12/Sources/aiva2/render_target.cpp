@@ -62,7 +62,7 @@ namespace aiva2
 		assert_t::check_bool(resource, "resource is not valid");
 		assert_t::check_bool(info, "info is not valid");
 
-		auto const color_view = gpu_eye_lib_t::new_eye(resource, info);
+		auto const color_view = gpu_eye_lib_t::new_eye(get_engine(), resource, info);
 		assert_t::check_bool(color_view, "color_view is not valid");
 
 		m_color_views.push_back(color_view);
@@ -90,7 +90,7 @@ namespace aiva2
 		assert_t::check_bool(resource, "resource is not valid");
 		assert_t::check_bool(info, "info is not valid");
 
-		auto const color_view = gpu_eye_lib_t::new_eye(resource, info);
+		auto const color_view = gpu_eye_lib_t::new_eye(get_engine(), resource, info);
 		assert_t::check_bool(color_view, "color_view is not valid");
 
 		m_color_views[index] = color_view;
@@ -190,7 +190,7 @@ namespace aiva2
 		assert_t::check_bool(resource, "resource is not valid");
 		assert_t::check_bool(info, "info is not valid");
 
-		m_depth_view = gpu_eye_lib_t::new_eye(resource, info);
+		m_depth_view = gpu_eye_lib_t::new_eye(get_engine(), resource, info);
 		assert_t::check_bool(m_depth_view, "m_depth_view is not valid");
 
 		upd_depth_resource();

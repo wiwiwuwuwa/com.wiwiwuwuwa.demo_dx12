@@ -4,12 +4,15 @@
 #include <aiva2/assert.hpp>
 #include <aiva2/buffer_format_to_dxgi_format.hpp>
 #include <aiva2/engine.hpp>
+#include <aiva2/gpu_eye_reg.hpp>
 #include <aiva2/graphic_hardware.hpp>
 #include <aiva2/tex_2d.hpp>
 #include <aiva2/tex_2d_utils.hpp>
 
 namespace aiva2
 {
+	GPU_EYE_REG(rtv_tex_2d_t);
+
 	rtv_tex_2d_t::rtv_tex_2d_t(engine_t& engine, std::shared_ptr<tex_2d_t> const& resource, rtv_tex_2d_info_t const& info /*= {}*/)
 		: impl_type{ engine }
 		, m_resource{ resource }

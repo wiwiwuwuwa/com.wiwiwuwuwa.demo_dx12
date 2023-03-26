@@ -12,6 +12,11 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
+		using resource_type = tex_2d_t;
+
+		using info_type = rtv_tex_2d_info_t;
+
+	public:
 		rtv_tex_2d_t(engine_t& engine, std::shared_ptr<tex_2d_t> const& resource, rtv_tex_2d_info_t const& info = {});
 
 		~rtv_tex_2d_t() override;

@@ -202,7 +202,10 @@
     <ClInclude Include="Sources\aiva2\gpu_eye.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_eye_info.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_eye_init_info.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_eye_key.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_eye_key_utils.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_eye_lib.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_eye_reg.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_res.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_res_state.hpp" />
     <ClInclude Include="Sources\aiva2\graphic_executor.hpp" />
@@ -613,6 +616,7 @@
     <ClCompile Include="Sources\aiva2\gpu_cmd_set_render_target.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_eye.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_eye_info.cpp" />
+    <ClCompile Include="Sources\aiva2\gpu_eye_key_utils.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_eye_lib.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_res.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_res_state.cpp" />

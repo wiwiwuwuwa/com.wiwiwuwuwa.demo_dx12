@@ -21,6 +21,8 @@ namespace aiva2
 
 	struct gpu_eye_info_t;
 
+	struct gpu_eye_key_t;
+
 	struct gpu_res_t;
 
 	struct graphic_executor_t;

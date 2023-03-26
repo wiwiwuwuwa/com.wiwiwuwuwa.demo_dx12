@@ -201,6 +201,7 @@
     <ClCompile Include="Sources\aiva2\string_view_utils.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_eye_info.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_eye_lib.cpp" />
+    <ClCompile Include="Sources\aiva2\gpu_eye_key_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -603,6 +604,9 @@
     <ClInclude Include="Sources\aiva2\gpu_eye_info.hpp" />
     <ClInclude Include="Sources\aiva2\shader_resource_type.hpp" />
     <ClInclude Include="Sources\aiva2\shader_resource_type_utils.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_eye_key.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_eye_key_utils.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_eye_reg.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

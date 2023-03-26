@@ -12,6 +12,11 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
+		using resource_type = tex_2d_t;
+
+		using info_type = dsv_tex_2d_info_t;
+
+	public:
 		dsv_tex_2d_t(engine_t& engine, std::shared_ptr<tex_2d_t> const& resource, dsv_tex_2d_info_t const& info = {});
 
 		~dsv_tex_2d_t() override;

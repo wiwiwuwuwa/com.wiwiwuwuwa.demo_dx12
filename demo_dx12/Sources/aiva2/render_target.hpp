@@ -27,6 +27,8 @@ namespace aiva2
 	public:
 		void add_color_resource(std::shared_ptr<gpu_res_t> const& resource, std::shared_ptr<gpu_eye_info_t> const& info);
 
+		auto get_color_resource(size_t const index) const->std::shared_ptr<gpu_res_t>;
+
 		auto num_color_resource() const->size_t;
 
 		void rem_color_resource(size_t const index);
@@ -56,6 +58,8 @@ namespace aiva2
 		// ------------------------------------------------
 		
 	public:
+		auto get_depth_resource() const->std::shared_ptr<gpu_res_t>;
+
 		auto has_depth_resource() const->bool;
 
 		void set_depth_resource(std::shared_ptr<gpu_res_t> const& resource, std::shared_ptr<gpu_eye_info_t> const& info);

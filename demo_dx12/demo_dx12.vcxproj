@@ -197,6 +197,7 @@
     <ClInclude Include="Sources\aiva2\event_action_read_only.hpp" />
     <ClInclude Include="Sources\aiva2\event_action_read_write.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_base.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_cmd_dispatch.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_present.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_set_render_target.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_eye.hpp" />
@@ -612,6 +613,7 @@
     <ClCompile Include="Sources\aiva2\engine.cpp" />
     <ClCompile Include="Sources\aiva2\engine_object.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_base.cpp" />
+    <ClCompile Include="Sources\aiva2\gpu_cmd_dispatch.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_present.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_set_render_target.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_eye.cpp" />
@@ -988,6 +990,7 @@
     <None Include="Sources\resources\scenes\avenger.blend" />
     <None Include="Sources\resources\scenes\de_dust2.blend" />
     <None Include="Sources\resources\scenes\quad_blit.blend" />
+    <Text Include="Assets\resources2\materials\random.json" />
     <Text Include="readme.txt">
       <DeploymentContent>false</DeploymentContent>
     </Text>

@@ -9,8 +9,6 @@
 #include <aiva2/gpu_eye_lib.hpp>
 #include <aiva2/gpu_res.hpp>
 #include <aiva2/graphic_hardware.hpp>
-#include <aiva2/shader_base.hpp>
-#include <aiva2/shader_info.hpp>
 #include <aiva2/shader_info_for_code.hpp>
 #include <aiva2/shader_info_for_resource.hpp>
 
@@ -19,12 +17,12 @@ namespace aiva2
     material_base_t::material_base_t(engine_t& engine)
         : impl_type{ engine }
     {
-        init_resources();
+        
     }
 
     material_base_t::~material_base_t()
     {
-        shut_resources();
+        
     }
 
     auto material_base_t::init_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>
@@ -35,19 +33,6 @@ namespace aiva2
     auto material_base_t::shut_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>
     {
         return shut_resources_for_rendering();
-    }
-    
-    auto material_base_t::get_shader_ref() const->shader_base_t const&
-    {
-        auto const shader = get_shader_imp();
-        assert_t::check_bool(shader, "shader is not valid");
-
-        return (*shader);
-    }
-
-    auto material_base_t::get_shader_ptr() const->std::shared_ptr<shader_base_t const>
-    {
-        return get_shader_imp();
     }
 
     void material_base_t::set_resource(std::string const& name, std::shared_ptr<gpu_res_t> const& resource, std::shared_ptr<gpu_eye_info_t> const& info)
@@ -80,16 +65,14 @@ namespace aiva2
         return m_resources_heap;
     }
 
-    void material_base_t::init_resources()
+    void material_base_t::init_resources(shader_info_for_code_t const& code_info)
     {
-        auto const& code_block = get_shader_ref().get_info().get_code_block();
-
         m_resources_keys = {};
         m_resources_data = {};
 
-        for (auto i = size_t{}; i < code_block.num_resource(); i++)
+        for (auto i = size_t{}; i < code_info.num_resource(); i++)
         {
-            auto const& resource_data = code_block.get_resource_ptr(i);
+            auto const& resource_data = code_info.get_resource_ptr(i);
             assert_t::check_bool(resource_data, "resource_data is not valid");
 
             auto const& resource_name = resource_data->get_name();
@@ -115,6 +98,13 @@ namespace aiva2
         assert_t::check_bool(m_resources_heap, "m_resources_heap is not valid");
     }
 
+    void material_base_t::shut_resources()
+    {
+        m_resources_heap = {};
+        m_resources_data = {};
+        m_resources_keys = {};
+    }
+
     void material_base_t::tick_resources()
     {
         auto const increment_size = get_engine().get_graphic_hardware().get_device().GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
@@ -128,13 +118,6 @@ namespace aiva2
             auto const bind_place = (*m_resources_heap).GetCPUDescriptorHandleForHeapStart() + i * increment_size;
             (*resource_data).bind_for_rendering(bind_place);
         }
-    }
-
-    void material_base_t::shut_resources()
-    {
-        m_resources_heap = {};
-        m_resources_data = {};
-        m_resources_keys = {};
     }
 
     auto material_base_t::init_resources_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>

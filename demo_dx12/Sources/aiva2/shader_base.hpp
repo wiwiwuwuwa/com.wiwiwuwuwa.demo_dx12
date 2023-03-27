@@ -30,8 +30,10 @@ namespace aiva2
 
 		// ------------------------------------------------
 
-	protected:
-		auto get_root_signature() const->ID3D12RootSignature&;
+	public:
+		auto get_root_signature_ref() const->ID3D12RootSignature&;
+
+		auto get_root_signature_ptr() const->winrt::com_ptr<ID3D12RootSignature> const&;
 
 	private:
 		void init_root_signature();

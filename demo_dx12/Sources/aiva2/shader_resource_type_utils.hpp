@@ -14,6 +14,9 @@ namespace aiva2
         if (hlsl == "ConstantBuffer")
             return shader_resource_type_t::CONSTANT_BUFFER;
 
+        if (hlsl == "RWTexture2D")
+            return shader_resource_type_t::RW_TEXTURE_2D;
+
         assert_t::check_bool(false, "failed to parse shader resource type from hlsl");
         return shader_resource_type_t::UNKNOWN;
     }
@@ -24,6 +27,9 @@ namespace aiva2
     {
         if (type == shader_resource_type_t::CONSTANT_BUFFER)
             return "ConstantBuffer";
+
+        if (type == shader_resource_type_t::RW_TEXTURE_2D)
+            return "RWTexture2D";
 
         assert_t::check_bool(false, "failed to parse shader resource type to hlsl");
         return "";

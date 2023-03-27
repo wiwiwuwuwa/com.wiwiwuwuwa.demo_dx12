@@ -23,16 +23,6 @@ namespace aiva2
         // ------------------------------------------------
 
     public:
-        auto get_shader_ref() const->shader_base_t const&;
-
-        auto get_shader_ptr() const->std::shared_ptr<shader_base_t const>;
-
-    protected:
-        virtual auto get_shader_imp() const->std::shared_ptr<shader_base_t const> = 0;
-
-        // ------------------------------------------------
-
-    public:
         void set_resource(std::string const& name, std::shared_ptr<gpu_res_t> const& resource, std::shared_ptr<gpu_eye_info_t> const& info);
 
     public:
@@ -40,12 +30,13 @@ namespace aiva2
 
         auto get_resource_heap_ptr() const->winrt::com_ptr<ID3D12DescriptorHeap> const&;
 
-    private:
-        void init_resources();
-
-        void tick_resources();
+    protected:
+        void init_resources(shader_info_for_code_t const& code_info);
 
         void shut_resources();
+
+    private:
+        void tick_resources();
 
     private:
         auto init_resources_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>;

@@ -68,16 +68,22 @@ namespace aiva2
 		m_bytecode_for_comp = {};
 	}
 
-	auto compute_shader_t::get_pipeline_state() const->ID3D12PipelineState&
+	auto compute_shader_t::get_pipeline_state_ref() const->ID3D12PipelineState&
 	{
 		assert_t::check_bool(m_pipeline_state, "m_pipeline_state is not valid");
 		return (*m_pipeline_state);
 	}
 
+	auto compute_shader_t::get_pipeline_state_ptr() const->winrt::com_ptr<ID3D12PipelineState> const&
+	{
+		assert_t::check_bool(m_pipeline_state, "m_pipeline_state is not valid");
+		return m_pipeline_state;
+	}
+
 	void compute_shader_t::init_pipeline_state()
 	{
 		auto pipeline_state_desc = D3D12_COMPUTE_PIPELINE_STATE_DESC{};
-		pipeline_state_desc.pRootSignature = &get_root_signature();
+		pipeline_state_desc.pRootSignature = &get_root_signature_ref();
 		pipeline_state_desc.CS.pShaderBytecode = get_bytecode_for_comp().GetBufferPointer();
 		pipeline_state_desc.CS.BytecodeLength = get_bytecode_for_comp().GetBufferSize();
 		pipeline_state_desc.NodeMask = {};

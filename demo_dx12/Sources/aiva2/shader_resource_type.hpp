@@ -7,6 +7,7 @@ namespace aiva2
     {
         UNKNOWN,
         CONSTANT_BUFFER,
+        RW_TEXTURE_2D,
         MAXIMUM,
     };
 }

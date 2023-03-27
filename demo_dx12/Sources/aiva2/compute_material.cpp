@@ -5,6 +5,8 @@
 #include <aiva2/compute_shader.hpp>
 #include <aiva2/engine.hpp>
 #include <aiva2/resource_system.hpp>
+#include <aiva2/shader_info.hpp>
+#include <aiva2/shader_info_for_code.hpp>
 
 namespace aiva2
 {
@@ -12,10 +14,12 @@ namespace aiva2
         : impl_type{ engine }
     {
         init_shader(json);
+        init_resources(get_shader_ref().get_info().get_code_block());
     }
 
     compute_material_t::~compute_material_t()
     {
+        shut_resources();
         shut_shader();
     }
     
@@ -26,11 +30,6 @@ namespace aiva2
     }
 
     auto compute_material_t::get_shader_ptr() const->std::shared_ptr<compute_shader_t const>
-    {
-        return m_shader;
-    }
-
-    auto compute_material_t::get_shader_imp() const->std::shared_ptr<shader_base_t const>
     {
         return m_shader;
     }

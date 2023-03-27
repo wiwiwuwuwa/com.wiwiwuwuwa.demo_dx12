@@ -69,6 +69,17 @@ namespace aiva2
 		upd_color_resource();
 	}
 
+	auto render_target_t::get_color_resource(size_t const index) const->std::shared_ptr<gpu_res_t>
+	{
+		assert_t::check_bool(index >= size_t{}, "index is out of range");
+		assert_t::check_bool(index < std::size(m_color_views), "index is out of range");
+
+		auto const& eye = m_color_views[index];
+		assert_t::check_bool(eye, "eye is not valid");
+
+		return gpu_eye_lib_t::get_res(eye);
+	}
+
 	auto render_target_t::num_color_resource() const->size_t
 	{
 		return std::size(m_color_views);
@@ -178,6 +189,16 @@ namespace aiva2
 			auto const bind_place = (*m_color_heap).GetCPUDescriptorHandleForHeapStart() + i * increment_size;
 			(*color_view).bind_for_rendering(bind_place);
 		}
+	}
+	
+	auto render_target_t::get_depth_resource() const->std::shared_ptr<gpu_res_t>
+	{
+		if (!m_depth_view)
+		{
+			return {};
+		}
+
+		return gpu_eye_lib_t::get_res(m_depth_view);
 	}
 
 	auto render_target_t::has_depth_resource() const->bool

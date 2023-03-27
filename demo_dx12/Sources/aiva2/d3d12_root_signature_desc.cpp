@@ -42,7 +42,7 @@ namespace aiva2
 			descriptor_range.NumDescriptors = 1;
 			descriptor_range.BaseShaderRegister = static_cast<UINT>(resource.get_register_index());
 			descriptor_range.RegisterSpace = static_cast<UINT>(resource.get_register_space());
-			descriptor_range.Flags = D3D12_DESCRIPTOR_RANGE_FLAG_NONE;
+			descriptor_range.Flags = D3D12_DESCRIPTOR_RANGE_FLAG_DESCRIPTORS_VOLATILE | D3D12_DESCRIPTOR_RANGE_FLAG_DATA_VOLATILE;
 			descriptor_range.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 		}
 	}

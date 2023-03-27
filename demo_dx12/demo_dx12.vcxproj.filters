@@ -202,6 +202,7 @@
     <ClCompile Include="Sources\aiva2\gpu_eye_info.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_eye_lib.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_eye_key_utils.cpp" />
+    <ClCompile Include="Sources\aiva2\gpu_cmd_dispatch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -607,6 +608,7 @@
     <ClInclude Include="Sources\aiva2\gpu_eye_key.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_eye_key_utils.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_eye_reg.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_cmd_dispatch.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">
@@ -675,5 +677,6 @@
   <ItemGroup>
     <Text Include="readme.txt" />
     <Text Include="Assets\resources2\shaders\random.hlsl" />
+    <Text Include="Assets\resources2\materials\random.json" />
   </ItemGroup>
 </Project>

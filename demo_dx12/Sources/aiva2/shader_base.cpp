@@ -45,10 +45,16 @@ namespace aiva2
 		m_info = {};
 	}
 
-	auto shader_base_t::get_root_signature() const->ID3D12RootSignature&
+	auto shader_base_t::get_root_signature_ref() const->ID3D12RootSignature&
 	{
 		assert_t::check_bool(m_root_signature, "m_root_signature is not valid");
-		return *m_root_signature;
+		return (*m_root_signature);
+	}
+
+	auto shader_base_t::get_root_signature_ptr() const->winrt::com_ptr<ID3D12RootSignature> const&
+	{
+		assert_t::check_bool(m_root_signature, "m_root_signature is not valid");
+		return m_root_signature;
 	}
 
 	void shader_base_t::init_root_signature()

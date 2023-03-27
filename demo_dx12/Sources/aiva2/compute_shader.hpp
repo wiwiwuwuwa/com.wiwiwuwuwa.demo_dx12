@@ -31,7 +31,9 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
-		auto get_pipeline_state() const->ID3D12PipelineState&;
+		auto get_pipeline_state_ref() const->ID3D12PipelineState&;
+
+		auto get_pipeline_state_ptr() const->winrt::com_ptr<ID3D12PipelineState> const&;
 
 	private:
 		void init_pipeline_state();

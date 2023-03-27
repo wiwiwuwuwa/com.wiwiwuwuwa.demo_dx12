@@ -3,6 +3,8 @@
 
 namespace aiva2
 {
+	struct compute_material_t;
+
 	struct compute_shader_t;
 
 	struct deffered_renderer_t;

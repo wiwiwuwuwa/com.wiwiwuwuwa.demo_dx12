@@ -21,9 +21,6 @@ namespace aiva2
 
         auto get_shader_ptr() const->std::shared_ptr<compute_shader_t const>;
 
-    protected:
-        auto get_shader_imp() const->std::shared_ptr<shader_base_t const> override;
-
     private:
         void init_shader(nlohmann::json const& json);
 

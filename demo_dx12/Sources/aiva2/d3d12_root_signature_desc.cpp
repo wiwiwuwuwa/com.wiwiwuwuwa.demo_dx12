@@ -29,7 +29,7 @@ namespace aiva2
 
 		for (auto i = size_t{}; i < shader_info.get_code_block().num_resource(); i++)
 		{
-			auto const& resource = shader_info.get_code_block().get_resource(i);
+			auto const& resource = shader_info.get_code_block().get_resource_ref(i);
 
 			auto const register_type = resource.get_register_type();
 			assert_t::check_bool(is_valid(register_type), "register_type is not valid");

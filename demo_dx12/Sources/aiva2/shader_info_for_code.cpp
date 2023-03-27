@@ -29,8 +29,8 @@ namespace aiva2
 	{
 		return !std::empty(m_text);
 	}
-
-	auto shader_info_for_code_t::get_resource(size_t const index) const->shader_info_for_resource_t const&
+	
+	auto shader_info_for_code_t::get_resource_ref(size_t const index) const->shader_info_for_resource_t const&
 	{
 		assert_t::check_bool(index >= size_t{} && index < std::size(m_resources), "index is not valid");
 
@@ -38,6 +38,16 @@ namespace aiva2
 		assert_t::check_bool(resource, "resource not valid");
 
 		return (*resource);
+	}
+
+	auto shader_info_for_code_t::get_resource_ptr(size_t const index) const->std::shared_ptr<shader_info_for_resource_t const> const&
+	{
+		assert_t::check_bool(index >= size_t{} && index < std::size(m_resources), "index is not valid");
+
+		auto const& resource = m_resources[index];
+		assert_t::check_bool(resource, "resource not valid");
+
+		return resource;
 	}
 
 	auto shader_info_for_code_t::num_resource() const->size_t

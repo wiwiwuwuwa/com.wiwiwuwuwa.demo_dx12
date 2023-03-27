@@ -17,7 +17,7 @@ namespace aiva2
 
 		// ------------------------------------------------
 
-	protected:
+	public:
 		auto get_info() const->shader_info_t const&;
 
 	private:

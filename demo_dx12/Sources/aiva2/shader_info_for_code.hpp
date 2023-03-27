@@ -28,7 +28,9 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
-		auto get_resource(size_t const index) const->shader_info_for_resource_t const&;
+		auto get_resource_ref(size_t const index) const->shader_info_for_resource_t const&;
+
+		auto get_resource_ptr(size_t const index) const->std::shared_ptr<shader_info_for_resource_t const> const&;
 		
 		auto num_resource() const->size_t;
 

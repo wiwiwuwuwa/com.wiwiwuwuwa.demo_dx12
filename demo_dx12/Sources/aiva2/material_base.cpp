@@ -26,7 +26,7 @@ namespace aiva2
     {
         shut_resources();
     }
-    
+
     auto material_base_t::init_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>
     {
         return init_resources_for_rendering();
@@ -58,12 +58,13 @@ namespace aiva2
 
         auto const res_key = m_resources_keys.find(name);
         assert_t::check_bool(res_key != std::cend(m_resources_keys), "res_key is not valid");
-        assert_t::check_bool((*res_key).second, "(*res_key).second is not valid");
+        assert_t::check_bool((*res_key).second >= size_t{}, "(*res_key).second is not valid");
+        assert_t::check_bool((*res_key).second < std::size(m_resources_data), "(*res_key).second is not valid");
 
         auto const res_val = gpu_eye_lib_t::new_eye(get_engine(), resource, info);
         assert_t::check_bool(res_val, "res_val is not valid");
 
-        m_resources_data.insert_or_assign((*res_key).second, res_val);
+        m_resources_data[(*res_key).second] = res_val;
         tick_resources();
     }
     
@@ -94,8 +95,8 @@ namespace aiva2
             auto const& resource_name = resource_data->get_name();
             assert_t::check_bool(!std::empty(resource_name), "resource_name is not valid");
 
-            m_resources_keys.insert_or_assign(resource_name, resource_data);
-            m_resources_data.insert_or_assign(resource_data, nullptr);
+            m_resources_keys.insert_or_assign(resource_name, i);
+            m_resources_data.push_back(nullptr);
         }
 
         m_resources_heap = {};
@@ -121,7 +122,7 @@ namespace aiva2
 
         for (auto i = size_t{}; i < std::size(m_resources_data); ++i)
         {
-            auto const& resource_data = (*std::next(std::begin(m_resources_data), i)).second;
+            auto const& resource_data = m_resources_data[i];
             if (!resource_data) continue;
 
             auto const bind_place = (*m_resources_heap).GetCPUDescriptorHandleForHeapStart() + i * increment_size;
@@ -140,9 +141,8 @@ namespace aiva2
     {
         auto barriers = std::vector<D3D12_RESOURCE_BARRIER>{};
 
-        for (auto const& pair : m_resources_data)
+        for (auto const& resource_data : m_resources_data)
         {
-            auto const& resource_data = pair.second;
             if (!resource_data) continue;
 
             auto const resource_barriers = (*resource_data).init_for_rendering();
@@ -156,9 +156,8 @@ namespace aiva2
     {
         auto barriers = std::vector<D3D12_RESOURCE_BARRIER>{};
 
-        for (auto const& pair : m_resources_data)
+        for (auto const& resource_data : m_resources_data)
         {
-            auto const& resource_data = pair.second;
             if (!resource_data) continue;
 
             auto const resource_barriers = (*resource_data).shut_for_rendering();

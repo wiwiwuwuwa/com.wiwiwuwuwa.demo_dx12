@@ -609,6 +609,8 @@
     <ClInclude Include="Sources\aiva2\gpu_eye_key_utils.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_eye_reg.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_dispatch.hpp" />
+    <ClInclude Include="Sources\aiva2\buffer_memory.hpp" />
+    <ClInclude Include="Sources\aiva2\buffer_memory_utils.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

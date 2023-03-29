@@ -181,6 +181,8 @@
     <ClInclude Include="Sources\aiva2\assert.hpp" />
     <ClInclude Include="Sources\aiva2\buffer_format.hpp" />
     <ClInclude Include="Sources\aiva2\buffer_format_to_dxgi_format.hpp" />
+    <ClInclude Include="Sources\aiva2\buffer_memory.hpp" />
+    <ClInclude Include="Sources\aiva2\buffer_memory_utils.hpp" />
     <ClInclude Include="Sources\aiva2\compute_material.hpp" />
     <ClInclude Include="Sources\aiva2\compute_shader.hpp" />
     <ClInclude Include="Sources\aiva2\d3d12_cpu_descriptor_handle_utils.hpp" />

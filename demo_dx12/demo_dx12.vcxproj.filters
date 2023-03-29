@@ -203,6 +203,8 @@
     <ClCompile Include="Sources\aiva2\gpu_eye_lib.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_eye_key_utils.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_dispatch.cpp" />
+    <ClCompile Include="Sources\aiva2\buf.cpp" />
+    <ClCompile Include="Sources\aiva2\buf_info.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -611,6 +613,8 @@
     <ClInclude Include="Sources\aiva2\gpu_cmd_dispatch.hpp" />
     <ClInclude Include="Sources\aiva2\buffer_memory.hpp" />
     <ClInclude Include="Sources\aiva2\buffer_memory_utils.hpp" />
+    <ClInclude Include="Sources\aiva2\buf.hpp" />
+    <ClInclude Include="Sources\aiva2\buf_info.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

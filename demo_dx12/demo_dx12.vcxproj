@@ -219,6 +219,7 @@
     <ClInclude Include="Sources\aiva2\graphic_renderer.hpp" />
     <ClInclude Include="Sources\aiva2\has_constructor.hpp" />
     <ClInclude Include="Sources\aiva2\has_constructor_argument_wrapper.hpp" />
+    <ClInclude Include="Sources\aiva2\img_png.hpp" />
     <ClInclude Include="Sources\aiva2\implements.hpp" />
     <ClInclude Include="Sources\aiva2\logger.hpp" />
     <ClInclude Include="Sources\aiva2\material_base.hpp" />
@@ -632,6 +633,7 @@
     <ClCompile Include="Sources\aiva2\graphic_hardware.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_pipeline.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_renderer.cpp" />
+    <ClCompile Include="Sources\aiva2\img_png.cpp" />
     <ClCompile Include="Sources\aiva2\logger.cpp" />
     <ClCompile Include="Sources\aiva2\material_base.cpp" />
     <ClCompile Include="Sources\aiva2\rtv_tex_2d.cpp" />

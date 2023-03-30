@@ -205,6 +205,7 @@
     <ClCompile Include="Sources\aiva2\gpu_cmd_dispatch.cpp" />
     <ClCompile Include="Sources\aiva2\buf.cpp" />
     <ClCompile Include="Sources\aiva2\buf_info.cpp" />
+    <ClCompile Include="Sources\aiva2\img_png.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -615,6 +616,7 @@
     <ClInclude Include="Sources\aiva2\buffer_memory_utils.hpp" />
     <ClInclude Include="Sources\aiva2\buf.hpp" />
     <ClInclude Include="Sources\aiva2\buf_info.hpp" />
+    <ClInclude Include="Sources\aiva2\img_png.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

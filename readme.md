@@ -7,7 +7,7 @@
 |  /  \\  |
 | /\\\_/\\ |
 (^o w o^)
-(it is a cat)
+(this is a cat)
 ```
 
 こんにちわ！🌸 Welcome to AIVA, a super kawaii DirectX12 renderer project! 🌈✨ We are learning DX12 graphic programming and using modern C++ with WinRT and Visual Studio 2022. 🎀🎮 Let's make this project the cutest and most powerful game engine ever! 💕🌟

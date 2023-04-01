@@ -191,6 +191,8 @@
     <ClInclude Include="Sources\aiva2\d3d12_resource_desc_utils.hpp" />
     <ClInclude Include="Sources\aiva2\d3d12_resource_utils.hpp" />
     <ClInclude Include="Sources\aiva2\d3d12_root_signature_desc.hpp" />
+    <ClInclude Include="Sources\aiva2\data_range.hpp" />
+    <ClInclude Include="Sources\aiva2\data_range_utils.hpp" />
     <ClInclude Include="Sources\aiva2\deffered_renderer.hpp" />
     <ClInclude Include="Sources\aiva2\dxgi_format_to_buffer_format.hpp" />
     <ClInclude Include="Sources\aiva2\engine.hpp" />
@@ -201,6 +203,7 @@
     <ClInclude Include="Sources\aiva2\event_action_read_only.hpp" />
     <ClInclude Include="Sources\aiva2\event_action_read_write.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_base.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_cmd_copy_resource.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_dispatch.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_present.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_set_render_target.hpp" />
@@ -616,10 +619,12 @@
     <ClCompile Include="Sources\aiva2\d3d12_resource_desc_utils.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_resource_utils.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_root_signature_desc.cpp" />
+    <ClCompile Include="Sources\aiva2\data_range.cpp" />
     <ClCompile Include="Sources\aiva2\deffered_renderer.cpp" />
     <ClCompile Include="Sources\aiva2\engine.cpp" />
     <ClCompile Include="Sources\aiva2\engine_object.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_base.cpp" />
+    <ClCompile Include="Sources\aiva2\gpu_cmd_copy_resource.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_dispatch.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_present.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_set_render_target.cpp" />

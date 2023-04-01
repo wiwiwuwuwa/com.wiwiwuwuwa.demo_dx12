@@ -31,5 +31,12 @@ namespace aiva2
         buf_info_t m_info{};
 
         // ------------------------------------------------
+
+    public:
+        void set_data(boost::span<std::byte const> const& src_bin, std::optional<size_t> const& dst_pos = {}) const;
+
+        void get_data(boost::span<std::byte> const& dst_bin, std::optional<size_t> const& src_pos = {}) const;
+
+        // ------------------------------------------------
     };
 }

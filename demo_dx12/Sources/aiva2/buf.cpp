@@ -107,4 +107,74 @@ namespace aiva2
         auto const state_locked = m_info.get_memory() != buffer_memory_t::GPU_ONLY;
         m_states = gpu_res_state_t{ D3D12_RESOURCE_STATE_COMMON, d3d12_resource_utils_t::get_subresources_count(*m_resource), state_locked };
     }
+
+    void buf_t::set_data(boost::span<std::byte const> const& src_bin, std::optional<size_t> const& dst_pos /*= {}*/) const
+    {
+        assert_t::check_bool(!std::empty(src_bin), "(src_bin) is not valid");
+        assert_t::check_bool(!dst_pos || (*dst_pos) < m_info.get_size(), "(dst_pos) is out of range");
+        assert_t::check_bool(!dst_pos || (*dst_pos) + std::size(src_bin) <= m_info.get_size(), "(dst_pos) is out of range");
+        assert_t::check_bool(dst_pos || std::size(src_bin) <= m_info.get_size(), "(src_bin) is too big");
+        assert_t::check_bool(m_resource, "(m_resource) is not valid");
+        assert_t::check_bool(m_info.get_memory() != buffer_memory_t::GPU_ONLY, "(m_resource) is not CPU accessible");
+
+        auto const dst_raw_pos = dst_pos ? D3D12_RANGE{ (*dst_pos), (*dst_pos) + std::size(src_bin) } : std::optional<D3D12_RANGE>{};
+        auto dst_raw_mem = std::add_pointer_t<void>{};
+
+        assert_t::check_hresult((*m_resource).Map
+        (
+            /* Subresource */ {},
+            /* pReadRange */ dst_raw_pos ? &(*dst_raw_pos) : nullptr,
+            /* ppData */ &dst_raw_mem
+        ), "failed to map resource");
+        assert_t::check_bool(dst_raw_mem, "(dst_raw_mem) is not valid");
+
+        assert_t::check_bool(memcpy_s
+        (
+            /* dst */ dst_raw_mem,
+            /* dst_size */ dst_raw_pos ? (*dst_raw_pos).End - (*dst_raw_pos).Begin : m_info.get_size(),
+            /* src */ std::data(src_bin),
+            /* src_size */ std::size(src_bin)
+        ) == 0, "failed to copy data");
+
+        (*m_resource).Unmap
+        (
+            /* Subresource */ {},
+            /* pWrittenRange */ dst_raw_pos ? &(*dst_raw_pos) : nullptr
+        );
+    }
+
+    void buf_t::get_data(boost::span<std::byte> const& dst_bin, std::optional<size_t> const& src_pos /*= {}*/) const
+    {
+        assert_t::check_bool(!std::empty(dst_bin), "(dst_bin) is not valid");
+        assert_t::check_bool(!src_pos || (*src_pos) < m_info.get_size(), "(src_pos) is out of range");
+        assert_t::check_bool(!src_pos || (*src_pos) + std::size(dst_bin) <= m_info.get_size(), "(src_pos) is out of range");
+        assert_t::check_bool(src_pos || std::size(dst_bin) <= m_info.get_size(), "(dst_bin) is too big");
+        assert_t::check_bool(m_resource, "(m_resource) is not valid");
+        assert_t::check_bool(m_info.get_memory() != buffer_memory_t::GPU_ONLY, "(m_resource) is not CPU accessible");
+
+        auto const src_raw_pos = src_pos ? D3D12_RANGE{ (*src_pos), (*src_pos) + std::size(dst_bin) } : std::optional<D3D12_RANGE>{};
+        auto src_raw_mem = std::add_pointer_t<void>{};
+
+        assert_t::check_hresult((*m_resource).Map
+        (
+            /* Subresource */ {},
+            /* pReadRange */ src_raw_pos ? &(*src_raw_pos) : nullptr,
+            /* ppData */ &src_raw_mem
+        ), "failed to map resource");
+        assert_t::check_bool(src_raw_mem, "(src_raw_mem) is not valid");
+
+        assert_t::check_bool(memcpy_s
+        (
+            /* dst */ std::data(dst_bin),
+            /* dst_size */ std::size(dst_bin),
+            /* src */ src_raw_mem,
+            /* src_size */ src_raw_pos ? (*src_raw_pos).End - (*src_raw_pos).Begin : m_info.get_size()
+        ) == 0, "failed to copy data");
+
+        (*m_resource).Unmap
+        (
+            /* Subresource */ {},
+            /* pWrittenRange */ src_raw_pos ? &(*src_raw_pos) : nullptr
+        );
+    }
 }

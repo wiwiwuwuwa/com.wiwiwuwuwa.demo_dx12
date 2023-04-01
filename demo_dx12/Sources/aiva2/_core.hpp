@@ -7,6 +7,8 @@ namespace aiva2
 
 	struct compute_shader_t;
 
+	struct data_range_t;
+
 	struct deffered_renderer_t;
 
 	struct dsv_tex_2d_info_t;
@@ -34,6 +36,8 @@ namespace aiva2
 	struct graphic_pipeline_t;
 
 	struct graphic_renderer_t;
+
+	struct img_png_t;
 
 	struct render_target_t;
 

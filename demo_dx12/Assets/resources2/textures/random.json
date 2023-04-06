@@ -1,0 +1,9 @@
+{
+    "data_path": "resources2/textures/random.png",
+    "support_mip_mapping": false,
+    "support_shader_resource": true,
+    "support_shader_atomics": false,
+    "support_render_target": false,
+    "support_depth_stencil": false,
+    "support_unordered_access": true
+}

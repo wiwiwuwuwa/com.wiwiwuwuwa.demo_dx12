@@ -38,7 +38,7 @@ namespace aiva2
         m_width = static_cast<decltype(m_width)>(out_x);
         m_height = static_cast<decltype(m_height)>(out_y);
         m_channels = static_cast<decltype(m_channels)>(STBI_rgb_alpha);
-        m_data = decltype(m_data)(reinterpret_cast<std::byte*>(out_buffer), reinterpret_cast<std::byte*>(out_buffer) + out_x * out_y * out_c);
+        m_data = decltype(m_data)(reinterpret_cast<std::byte*>(out_buffer), reinterpret_cast<std::byte*>(out_buffer) + out_x * out_y * STBI_rgb_alpha);
 
         assert_t::check_bool(m_width > decltype(m_width) {}, "(m_width) is not valid");
         assert_t::check_bool(m_height > decltype(m_height) {}, "(m_height) is not valid");

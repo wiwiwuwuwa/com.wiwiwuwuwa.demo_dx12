@@ -16,8 +16,6 @@ namespace aiva2
 
 		tex_2d_t(engine_t& engine, winrt::com_ptr<ID3D12Resource> const& resource);
 
-		tex_2d_t(engine_t& engine, nlohmann::json const& json);
-
 		~tex_2d_t() override;
 
 		// ------------------------------------------------
@@ -32,11 +30,6 @@ namespace aiva2
 
 	private:
 		tex_2d_info_t m_info{};
-
-		// ------------------------------------------------
-
-	private:
-		void init_from_json(nlohmann::json const& json);
 
 		// ------------------------------------------------
 	};

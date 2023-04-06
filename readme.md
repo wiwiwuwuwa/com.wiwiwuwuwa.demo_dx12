@@ -1,15 +1,8 @@
 # AIVA DirectX12 Renderer 🌟💖🐱
 
-```
- /   ~~~~  \
-|  /  \\  |
-( /\\\_/\\ )
-|  /  \\  |
-| /\\\_/\\ |
-(^o w o^)
-
-(this is a cat)
-```
+<p align="center">
+  <img src="demo_dx12/Assets/resources2/textures/random.png" alt="random image" width="384" height="384" />
+</p>
 
 こんにちわ！🌸 Welcome to AIVA, a super kawaii DirectX12 renderer project! 🌈✨ We are learning DX12 graphic programming and using modern C++ with WinRT and Visual Studio 2022. 🎀🎮 Let's make this project the cutest and most powerful game engine ever! 💕🌟
 

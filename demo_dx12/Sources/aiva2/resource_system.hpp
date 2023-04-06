@@ -29,10 +29,14 @@ namespace aiva2
 		template <typename t_resource_type>
 		std::shared_ptr<t_resource_type> new_resource_from_path(std::filesystem::path const& resource_path);
 
-	private:
-		auto get_data_from_file(std::filesystem::path const& resource_path) const -> std::vector<std::byte>;
+		template <typename t_resource_type>
+		std::shared_ptr<t_resource_type> new_resource_from_libr(std::filesystem::path const& resource_path);
 
-		auto get_json_from_file(std::filesystem::path const& resource_path) const -> nlohmann::json;
+		template <typename t_resource_type>
+		std::shared_ptr<t_resource_type> new_resource_from_json(std::filesystem::path const& resource_path);
+
+		template <typename t_resource_type>
+		std::shared_ptr<t_resource_type> new_resource_from_data(std::filesystem::path const& resource_path);
 
 	private:
 		std::unordered_map<std::filesystem::path, std::weak_ptr<engine_object_t>> m_resources{};
@@ -43,7 +47,10 @@ namespace aiva2
 
 // --------------------------------------------------------
 
+#include <aiva2/assert.hpp>
+#include <aiva2/file_utils.hpp>
 #include <aiva2/has_constructor.hpp>
+#include <aiva2/resource_loader_library.hpp>
 
 namespace aiva2
 {
@@ -96,16 +103,59 @@ namespace aiva2
 	{
 		assert_t::check_bool(!std::empty(resource_path), "resource_path is not valid");
 
+		if (auto const resource_from_libr = new_resource_from_libr<t_resource_type>(resource_path); resource_from_libr)
+			return resource_from_libr;
+
+		if (auto const resource_from_json = new_resource_from_json<t_resource_type>(resource_path); resource_from_json)
+			return resource_from_json;
+
+		if (auto const resource_from_data = new_resource_from_data<t_resource_type>(resource_path); resource_from_data)
+			return resource_from_data;
+		
+		assert_t::check_bool(false, "resource was not found");
+		return {};
+	}
+
+	template <typename t_resource_type>
+	std::shared_ptr<t_resource_type> resource_system_t::new_resource_from_libr(std::filesystem::path const& resource_path)
+	{
+		assert_t::check_bool(!std::empty(resource_path), "resource_path is not valid");
+
+		auto const basic_resource = resource_loader_library_t::load_resource(get_engine(), std::type_index{ typeid(t_resource_type) }, resource_path);
+		if (!basic_resource) return {};
+
+		auto const specific_resource = std::dynamic_pointer_cast<t_resource_type>(basic_resource);
+		assert_t::check_bool(specific_resource, "(specific_resource) is not valid");
+
+		return specific_resource;
+	}
+
+	template <typename t_resource_type>
+	std::shared_ptr<t_resource_type> resource_system_t::new_resource_from_json(std::filesystem::path const& resource_path)
+	{
+		assert_t::check_bool(!std::empty(resource_path), "resource_path is not valid");
+
 		if constexpr (has_constructor<t_resource_type, engine_t&, nlohmann::json const&>())
 		{
-			auto const resource_json = get_json_from_file(resource_path);
+			auto const resource_json = file_utils_t::load_json_from_file(resource_path);
 			assert_t::check_bool(!std::empty(resource_json), "resource_json is not valid");
 
 			return std::make_shared<t_resource_type>(get_engine(), resource_json);
 		}
-		else if constexpr (has_constructor<t_resource_type, engine_t&, boost::span<std::byte const> const&>())
+		else
 		{
-			auto const resource_data = get_data_from_file(resource_path);
+			return {};
+		}
+	}
+
+	template <typename t_resource_type>
+	std::shared_ptr<t_resource_type> resource_system_t::new_resource_from_data(std::filesystem::path const& resource_path)
+	{
+		assert_t::check_bool(!std::empty(resource_path), "resource_path is not valid");
+
+		if constexpr (has_constructor<t_resource_type, engine_t&, boost::span<std::byte const> const&>())
+		{
+			auto const resource_data = file_utils_t::load_data_from_file(resource_path);
 			assert_t::check_bool(!std::empty(resource_data), "resource_data is not valid");
 
 			return std::make_shared<t_resource_type>(get_engine(), resource_data);

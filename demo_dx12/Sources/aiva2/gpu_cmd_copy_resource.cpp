@@ -21,6 +21,28 @@ namespace aiva2
     
     void gpu_cmd_copy_resource_t::execute()
     {
+        execute_resource_barrier();
+        execute_copy_resource();
+    }
+
+    void gpu_cmd_copy_resource_t::execute_resource_barrier()
+    {
+        assert_t::check_bool(m_src, "(m_src) is not valid");
+        assert_t::check_bool(m_dst, "(m_dst) is not valid");
+
+        for (auto const& resource_barrier : (*m_src).set_state(D3D12_RESOURCE_STATE_COPY_SOURCE))
+        {
+            get_engine().get_graphic_hardware().get_command_list().ResourceBarrier(1, &resource_barrier);
+        }
+
+        for (auto const& resource_barrier : (*m_dst).set_state(D3D12_RESOURCE_STATE_COPY_DEST))
+        {
+            get_engine().get_graphic_hardware().get_command_list().ResourceBarrier(1, &resource_barrier);
+        }
+    }
+
+    void gpu_cmd_copy_resource_t::execute_copy_resource()
+    {
         assert_t::check_bool(m_src, "(m_src) is not valid");
         assert_t::check_bool(m_dst, "(m_dst) is not valid");
 

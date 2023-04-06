@@ -50,7 +50,6 @@ namespace aiva2
         auto heap_flags = D3D12_HEAP_FLAG_NONE;
         if (m_info.get_support_shader_atomics()) { heap_flags |= D3D12_HEAP_FLAG_ALLOW_SHADER_ATOMICS; }
         heap_flags |= D3D12_HEAP_FLAG_CREATE_NOT_ZEROED;
-        heap_flags |= D3D12_HEAP_FLAG_ALLOW_ONLY_BUFFERS;
 
         auto resource_desc = D3D12_RESOURCE_DESC{};
         resource_desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;

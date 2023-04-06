@@ -202,8 +202,10 @@
     <ClInclude Include="Sources\aiva2\event_action_base.hpp" />
     <ClInclude Include="Sources\aiva2\event_action_read_only.hpp" />
     <ClInclude Include="Sources\aiva2\event_action_read_write.hpp" />
+    <ClInclude Include="Sources\aiva2\file_utils.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_base.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_copy_resource.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_cmd_copy_buf_to_tex_2d.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_dispatch.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_present.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_set_render_target.hpp" />
@@ -226,7 +228,10 @@
     <ClInclude Include="Sources\aiva2\implements.hpp" />
     <ClInclude Include="Sources\aiva2\logger.hpp" />
     <ClInclude Include="Sources\aiva2\material_base.hpp" />
+    <ClInclude Include="Sources\aiva2\math.hpp" />
     <ClInclude Include="Sources\aiva2\object.hpp" />
+    <ClInclude Include="Sources\aiva2\resource_loader_library.hpp" />
+    <ClInclude Include="Sources\aiva2\resource_loader_registr.hpp" />
     <ClInclude Include="Sources\aiva2\rtv_tex_2d.hpp" />
     <ClInclude Include="Sources\aiva2\rtv_tex_2d_info.hpp" />
     <ClInclude Include="Sources\aiva2\dsv_tex_2d.hpp" />
@@ -249,6 +254,7 @@
     <ClInclude Include="Sources\aiva2\struct.hpp" />
     <ClInclude Include="Sources\aiva2\tex_2d.hpp" />
     <ClInclude Include="Sources\aiva2\tex_2d_info.hpp" />
+    <ClInclude Include="Sources\aiva2\tex_2d_loader.hpp" />
     <ClInclude Include="Sources\aiva2\tex_2d_utils.hpp" />
     <ClInclude Include="Sources\aiva2\time_system.hpp" />
     <ClInclude Include="Sources\aiva2\uav_tex_2d.hpp" />
@@ -593,6 +599,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\LockScreenLogo.scale-200.png" />
+    <Image Include="Assets\resources2\textures\random.png" />
     <Image Include="Assets\resources\textures\avenger.png" />
     <Image Include="Assets\resources\textures\de_dust2_albedo.png" />
     <Image Include="Assets\resources\textures\de_dust2_occlusion.png" />
@@ -623,8 +630,10 @@
     <ClCompile Include="Sources\aiva2\deffered_renderer.cpp" />
     <ClCompile Include="Sources\aiva2\engine.cpp" />
     <ClCompile Include="Sources\aiva2\engine_object.cpp" />
+    <ClCompile Include="Sources\aiva2\file_utils.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_base.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_copy_resource.cpp" />
+    <ClCompile Include="Sources\aiva2\gpu_cmd_copy_buf_to_tex_2d.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_dispatch.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_present.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_set_render_target.cpp" />
@@ -641,6 +650,7 @@
     <ClCompile Include="Sources\aiva2\img_png.cpp" />
     <ClCompile Include="Sources\aiva2\logger.cpp" />
     <ClCompile Include="Sources\aiva2\material_base.cpp" />
+    <ClCompile Include="Sources\aiva2\resource_loader_library.cpp" />
     <ClCompile Include="Sources\aiva2\rtv_tex_2d.cpp" />
     <ClCompile Include="Sources\aiva2\rtv_tex_2d_info.cpp" />
     <ClCompile Include="Sources\aiva2\dsv_tex_2d.cpp" />
@@ -657,6 +667,7 @@
     <ClCompile Include="Sources\aiva2\string_view_utils.cpp" />
     <ClCompile Include="Sources\aiva2\tex_2d.cpp" />
     <ClCompile Include="Sources\aiva2\tex_2d_info.cpp" />
+    <ClCompile Include="Sources\aiva2\tex_2d_loader.cpp" />
     <ClCompile Include="Sources\aiva2\tex_2d_utils.cpp" />
     <ClCompile Include="Sources\aiva2\time_system.cpp" />
     <ClCompile Include="Sources\aiva2\uav_tex_2d.cpp" />
@@ -816,6 +827,10 @@
     <ClCompile Include="Sources\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Assets\resources2\textures\random.json">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+    </Text>
     <None Include="Assets\resources\configs\scene_system.json">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>

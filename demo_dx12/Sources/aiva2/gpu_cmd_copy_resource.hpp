@@ -17,6 +17,11 @@ namespace aiva2
     public:
         void execute() override;
 
+    private:
+        void execute_resource_barrier();
+
+        void execute_copy_resource();
+
         // ------------------------------------------------
         
     public:

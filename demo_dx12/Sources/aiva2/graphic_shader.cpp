@@ -49,9 +49,16 @@ namespace aiva2
         pipeline_state_desc.GS = {};
         pipeline_state_desc.StreamOutput = {};
         pipeline_state_desc.BlendState = blend_desc.get_data();
-        // ...
-        // many other fields
-        // ...
+        pipeline_state_desc.SampleMask = UINT_MAX;
+        // pipeline_state_desc.RasterizerState = {};
+        // pipeline_state_desc.DepthStencilState = {};
+        // pipeline_state_desc.InputLayout = {};
+        pipeline_state_desc.IBStripCutValue = D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
+        pipeline_state_desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+        // pipeline_state_desc.NumRenderTargets = {};
+        // pipeline_state_desc.RTVFormats = {};
+        // pipeline_state_desc.DSVFormat = {};
+        pipeline_state_desc.SampleDesc = { 1, 0 };
         pipeline_state_desc.NodeMask = {};
         pipeline_state_desc.CachedPSO = {};
         pipeline_state_desc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;

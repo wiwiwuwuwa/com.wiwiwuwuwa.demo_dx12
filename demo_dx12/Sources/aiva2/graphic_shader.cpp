@@ -42,6 +42,10 @@ namespace aiva2
         pipeline_state_desc.pRootSignature = &get_root_signature_ref();
         pipeline_state_desc.VS = shader_bytecode_vs.get_data();
         pipeline_state_desc.PS = shader_bytecode_ps.get_data();
+        pipeline_state_desc.DS = {};
+        pipeline_state_desc.HS = {};
+        pipeline_state_desc.GS = {};
+        pipeline_state_desc.StreamOutput = {};
         // ...
         // many other fields
         // ...

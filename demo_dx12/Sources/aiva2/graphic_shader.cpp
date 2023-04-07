@@ -2,6 +2,7 @@
 #include <aiva2/graphic_shader.hpp>
 
 #include <aiva2/assert.hpp>
+#include <aiva2/d3d12_blend_desc.hpp>
 #include <aiva2/d3d12_shader_bytecode_ps.hpp>
 #include <aiva2/d3d12_shader_bytecode_vs.hpp>
 #include <aiva2/engine.hpp>
@@ -37,6 +38,7 @@ namespace aiva2
     {
         auto const shader_bytecode_ps = d3d12_shader_bytecode_ps_t{ get_info() };
         auto const shader_bytecode_vs = d3d12_shader_bytecode_vs_t{ get_info() };
+        auto const blend_desc = d3d12_blend_desc_t{ get_info() };
 
         auto pipeline_state_desc = D3D12_GRAPHICS_PIPELINE_STATE_DESC{};
         pipeline_state_desc.pRootSignature = &get_root_signature_ref();
@@ -46,6 +48,7 @@ namespace aiva2
         pipeline_state_desc.HS = {};
         pipeline_state_desc.GS = {};
         pipeline_state_desc.StreamOutput = {};
+        pipeline_state_desc.BlendState = blend_desc.get_data();
         // ...
         // many other fields
         // ...

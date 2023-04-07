@@ -212,6 +212,10 @@
     <ClCompile Include="Sources\aiva2\resource_loader_library.cpp" />
     <ClCompile Include="Sources\aiva2\file_utils.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_copy_buf_to_tex_2d.cpp" />
+    <ClCompile Include="Sources\aiva2\graphic_shader.cpp" />
+    <ClCompile Include="Sources\aiva2\d3d12_shader_bytecode_cs.cpp" />
+    <ClCompile Include="Sources\aiva2\d3d12_shader_bytecode_vs.cpp" />
+    <ClCompile Include="Sources\aiva2\d3d12_shader_bytecode_ps.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -632,6 +636,10 @@
     <ClInclude Include="Sources\aiva2\resource_loader_registr.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_copy_buf_to_tex_2d.hpp" />
     <ClInclude Include="Sources\aiva2\math.hpp" />
+    <ClInclude Include="Sources\aiva2\graphic_shader.hpp" />
+    <ClInclude Include="Sources\aiva2\d3d12_shader_bytecode_cs.hpp" />
+    <ClInclude Include="Sources\aiva2\d3d12_shader_bytecode_vs.hpp" />
+    <ClInclude Include="Sources\aiva2\d3d12_shader_bytecode_ps.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

@@ -191,6 +191,9 @@
     <ClInclude Include="Sources\aiva2\d3d12_resource_desc_utils.hpp" />
     <ClInclude Include="Sources\aiva2\d3d12_resource_utils.hpp" />
     <ClInclude Include="Sources\aiva2\d3d12_root_signature_desc.hpp" />
+    <ClInclude Include="Sources\aiva2\d3d12_shader_bytecode_cs.hpp" />
+    <ClInclude Include="Sources\aiva2\d3d12_shader_bytecode_ps.hpp" />
+    <ClInclude Include="Sources\aiva2\d3d12_shader_bytecode_vs.hpp" />
     <ClInclude Include="Sources\aiva2\data_range.hpp" />
     <ClInclude Include="Sources\aiva2\data_range_utils.hpp" />
     <ClInclude Include="Sources\aiva2\deffered_renderer.hpp" />
@@ -222,6 +225,7 @@
     <ClInclude Include="Sources\aiva2\graphic_hardware.hpp" />
     <ClInclude Include="Sources\aiva2\graphic_pipeline.hpp" />
     <ClInclude Include="Sources\aiva2\graphic_renderer.hpp" />
+    <ClInclude Include="Sources\aiva2\graphic_shader.hpp" />
     <ClInclude Include="Sources\aiva2\has_constructor.hpp" />
     <ClInclude Include="Sources\aiva2\has_constructor_argument_wrapper.hpp" />
     <ClInclude Include="Sources\aiva2\img_png.hpp" />
@@ -626,6 +630,9 @@
     <ClCompile Include="Sources\aiva2\d3d12_resource_desc_utils.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_resource_utils.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_root_signature_desc.cpp" />
+    <ClCompile Include="Sources\aiva2\d3d12_shader_bytecode_cs.cpp" />
+    <ClCompile Include="Sources\aiva2\d3d12_shader_bytecode_ps.cpp" />
+    <ClCompile Include="Sources\aiva2\d3d12_shader_bytecode_vs.cpp" />
     <ClCompile Include="Sources\aiva2\data_range.cpp" />
     <ClCompile Include="Sources\aiva2\deffered_renderer.cpp" />
     <ClCompile Include="Sources\aiva2\engine.cpp" />
@@ -647,6 +654,7 @@
     <ClCompile Include="Sources\aiva2\graphic_hardware.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_pipeline.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_renderer.cpp" />
+    <ClCompile Include="Sources\aiva2\graphic_shader.cpp" />
     <ClCompile Include="Sources\aiva2\img_png.cpp" />
     <ClCompile Include="Sources\aiva2\logger.cpp" />
     <ClCompile Include="Sources\aiva2\material_base.cpp" />

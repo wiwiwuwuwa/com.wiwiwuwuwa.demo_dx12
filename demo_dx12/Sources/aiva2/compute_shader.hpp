@@ -17,19 +17,6 @@ namespace aiva2
 
 		// ------------------------------------------------
 
-	private:
-		auto get_bytecode_for_comp() const->ID3DBlob&;
-
-	private:
-		void init_bytecode_for_comp();
-
-		void shut_bytecode_for_comp();
-
-	private:
-		winrt::com_ptr<ID3DBlob> m_bytecode_for_comp{};
-
-		// ------------------------------------------------
-
 	public:
 		auto get_pipeline_state_ref() const->ID3D12PipelineState&;
 

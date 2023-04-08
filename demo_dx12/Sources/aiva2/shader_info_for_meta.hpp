@@ -1,6 +1,7 @@
 #pragma once
 #include <aiva2/_core.hpp>
 
+#include <aiva2/buffer_format.hpp>
 #include <aiva2/engine_object.hpp>
 #include <aiva2/implements.hpp>
 
@@ -69,6 +70,21 @@ namespace aiva2
 
 	private:
 		std::string m_entry_for_frag{};
+
+		// ------------------------------------------------
+
+	public:
+		auto get_depth_stencil_format() const->buffer_format_t;
+
+		auto has_depth_stencil_format() const->bool;
+
+	private:
+		void init_depth_stencil_format();
+
+		void shut_depth_stencil_format();
+
+	private:
+		std::optional<buffer_format_t> m_depth_stencil_format{};
 
 		// ------------------------------------------------
 	};

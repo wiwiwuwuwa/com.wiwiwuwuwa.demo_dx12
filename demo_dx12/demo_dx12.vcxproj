@@ -179,9 +179,11 @@
     <ClInclude Include="External Sources\tinyutf8\tinyutf8.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Sources\aiva2\assert.hpp" />
+    <ClInclude Include="Sources\aiva2\bool_utils.hpp" />
     <ClInclude Include="Sources\aiva2\buf.hpp" />
     <ClInclude Include="Sources\aiva2\buffer_format.hpp" />
     <ClInclude Include="Sources\aiva2\buffer_format_to_dxgi_format.hpp" />
+    <ClInclude Include="Sources\aiva2\buffer_format_utils.hpp" />
     <ClInclude Include="Sources\aiva2\buffer_memory.hpp" />
     <ClInclude Include="Sources\aiva2\buffer_memory_utils.hpp" />
     <ClInclude Include="Sources\aiva2\buf_info.hpp" />

@@ -217,6 +217,8 @@
     <ClCompile Include="Sources\aiva2\d3d12_shader_bytecode_vs.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_shader_bytecode_ps.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_blend_desc.cpp" />
+    <ClCompile Include="Sources\aiva2\d3d12_rasterizer_desc.cpp" />
+    <ClCompile Include="Sources\aiva2\d3d12_depth_stencil_desc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -642,6 +644,8 @@
     <ClInclude Include="Sources\aiva2\d3d12_shader_bytecode_vs.hpp" />
     <ClInclude Include="Sources\aiva2\d3d12_shader_bytecode_ps.hpp" />
     <ClInclude Include="Sources\aiva2\d3d12_blend_desc.hpp" />
+    <ClInclude Include="Sources\aiva2\d3d12_rasterizer_desc.hpp" />
+    <ClInclude Include="Sources\aiva2\d3d12_depth_stencil_desc.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

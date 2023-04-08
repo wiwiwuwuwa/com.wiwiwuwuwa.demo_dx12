@@ -219,6 +219,7 @@
     <ClCompile Include="Sources\aiva2\d3d12_blend_desc.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_rasterizer_desc.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_depth_stencil_desc.cpp" />
+    <ClCompile Include="Sources\aiva2\d3d12_render_output_desc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -648,6 +649,7 @@
     <ClInclude Include="Sources\aiva2\d3d12_depth_stencil_desc.hpp" />
     <ClInclude Include="Sources\aiva2\buffer_format_utils.hpp" />
     <ClInclude Include="Sources\aiva2\bool_utils.hpp" />
+    <ClInclude Include="Sources\aiva2\d3d12_render_output_desc.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

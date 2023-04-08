@@ -5,6 +5,7 @@
 #include <aiva2/d3d12_blend_desc.hpp>
 #include <aiva2/d3d12_depth_stencil_desc.hpp>
 #include <aiva2/d3d12_rasterizer_desc.hpp>
+#include <aiva2/d3d12_render_output_desc.hpp>
 #include <aiva2/d3d12_shader_bytecode_ps.hpp>
 #include <aiva2/d3d12_shader_bytecode_vs.hpp>
 #include <aiva2/engine.hpp>
@@ -43,6 +44,7 @@ namespace aiva2
         auto const blend_desc = d3d12_blend_desc_t{ get_info() };
         auto const rasterizer_desc = d3d12_rasterizer_desc_t{ get_info() };
         auto const depth_stencil_desc = d3d12_depth_stencil_desc_t{ get_info() };
+        auto const render_output_desc = d3d12_render_output_desc_t{ get_info() };
 
         auto pipeline_state_desc = D3D12_GRAPHICS_PIPELINE_STATE_DESC{};
         pipeline_state_desc.pRootSignature = &get_root_signature_ref();
@@ -59,9 +61,9 @@ namespace aiva2
         // pipeline_state_desc.InputLayout = {};
         pipeline_state_desc.IBStripCutValue = D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
         pipeline_state_desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-        // pipeline_state_desc.NumRenderTargets = {};
-        // pipeline_state_desc.RTVFormats = {};
-        // pipeline_state_desc.DSVFormat = {};
+        pipeline_state_desc.NumRenderTargets = static_cast<UINT>(render_output_desc.num_render_targets());
+        std::copy(std::cbegin(render_output_desc.get_render_targets()), std::cend(render_output_desc.get_render_targets()), std::begin(pipeline_state_desc.RTVFormats));
+        pipeline_state_desc.DSVFormat = render_output_desc.get_depth_stencil();
         pipeline_state_desc.SampleDesc = { 1, 0 };
         pipeline_state_desc.NodeMask = {};
         pipeline_state_desc.CachedPSO = {};

@@ -74,6 +74,19 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
+		auto get_render_target_formats() const->boost::span<buffer_format_t const>;
+
+	private:
+		void init_render_target_formats();
+
+		void shut_render_target_formats();
+
+	private:
+		std::vector<buffer_format_t> m_render_target_formats{};
+
+		// ------------------------------------------------
+
+	public:
 		auto get_depth_stencil_format() const->buffer_format_t;
 
 		auto has_depth_stencil_format() const->bool;

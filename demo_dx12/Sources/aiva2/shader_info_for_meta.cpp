@@ -14,12 +14,14 @@ namespace aiva2
 		init_entry_for_comp();
 		init_entry_for_vert();
 		init_entry_for_frag();
+		init_render_target_formats();
 		init_depth_stencil_format();
 	}
 
 	shader_info_for_meta_t::~shader_info_for_meta_t()
 	{
 		shut_depth_stencil_format();
+		shut_render_target_formats();
 		shut_entry_for_frag();
 		shut_entry_for_vert();
 		shut_entry_for_comp();
@@ -134,6 +136,46 @@ namespace aiva2
 		m_entry_for_frag = {};
 	}
 
+	auto shader_info_for_meta_t::get_render_target_formats() const->boost::span<buffer_format_t const>
+	{
+		return m_render_target_formats;
+	}
+
+	void shader_info_for_meta_t::init_render_target_formats()
+	{
+		m_render_target_formats = {};
+
+		auto const regex_for_array = std::regex{R"(\brender_target_formats\s*?=\s*?\[[\s\S]*?\])", std::regex::icase | std::regex::optimize};
+		auto match_for_array = std::smatch{};
+
+		if (!std::regex_search(m_text, match_for_array, regex_for_array))
+		{
+			return;
+		}
+
+		assert_t::check_bool(match_for_array.ready(), "(match_for_array) is not valid");
+		assert_t::check_bool(std::size(match_for_array) == 1, "(match_for_array) is not valid");
+
+		auto const regex_for_element = std::regex{R"(\b(\w+)\b)", std::regex::icase | std::regex::optimize};
+		for (auto i = std::sregex_iterator{match_for_array[0].first, match_for_array[0].second, regex_for_element}; i != decltype(i){}; i++)
+		{
+			auto const& match_for_element = (*i);
+			assert_t::check_bool(match_for_element.ready(), "(match_for_element) is not valid");
+			assert_t::check_bool(std::size(match_for_element) == 2, "(match_for_element) is not valid");
+
+			auto const value_string = match_for_element[1].str();
+			assert_t::check_bool(!std::empty(value_string), "(value_string) is not valid");
+
+			auto const value_enum = from_string(value_string);
+			m_render_target_formats.push_back(value_enum);
+		}
+	}
+	
+	void shader_info_for_meta_t::shut_render_target_formats()
+	{
+		m_render_target_formats = {};
+	}
+
 	auto shader_info_for_meta_t::get_depth_stencil_format() const->buffer_format_t
 	{
 		assert_t::check_bool(m_depth_stencil_format, "(m_depth_stencil_format) is not valid");
@@ -154,7 +196,7 @@ namespace aiva2
 		{
 			assert_t::check_bool(match.ready(), "(match) is not valid");
 			assert_t::check_bool(std::size(match) == 2, "(match) is not valid");
-			
+
 			auto const value_string = match[1].str();
 			assert_t::check_bool(!std::empty(value_string), "(value_string) is not valid");
 

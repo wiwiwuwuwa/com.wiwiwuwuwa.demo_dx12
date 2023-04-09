@@ -2,49 +2,51 @@
 #include <aiva2/_core.hpp>
 
 #include <aiva2/assert.hpp>
+#include <aiva2/enum_from_string.hpp>
 #include <aiva2/hlsl_primitive_type.hpp>
 
 namespace aiva2
 {
     // ----------------------------------------------------
 
-    constexpr void from_string(std::string_view const& str, hlsl_primitive_type_t& val)
+    template <>
+	constexpr auto enum_from_string_impl<enum_from_string_wrapper_t<hlsl_primitive_type_t>>(std::string_view const& str) -> hlsl_primitive_type_t
     {
         if (str == "UNKNOWN")
-            { val = hlsl_primitive_type_t::UNKNOWN; return; }
+            return hlsl_primitive_type_t::UNKNOWN;
 
         if (str == "int")
-            { val = hlsl_primitive_type_t::INT; return; }
+            return hlsl_primitive_type_t::INT;
 
         if (str == "float")
-            { val = hlsl_primitive_type_t::FLOAT; return; }
+            return hlsl_primitive_type_t::FLOAT;
 
         if (str == "float2")
-            { val = hlsl_primitive_type_t::FLOAT2; return; }
+            return hlsl_primitive_type_t::FLOAT2;
 
         if (str == "float3")
-            { val = hlsl_primitive_type_t::FLOAT3; return; }
+            return hlsl_primitive_type_t::FLOAT3;
 
         if (str == "float4")
-            { val = hlsl_primitive_type_t::FLOAT4; return; }
+            return hlsl_primitive_type_t::FLOAT4;
 
         if (str == "float2x2")
-            { val = hlsl_primitive_type_t::FLOAT2X2; return; }
+            return hlsl_primitive_type_t::FLOAT2X2;
 
         if (str == "float3x3")
-            { val = hlsl_primitive_type_t::FLOAT3X3; return; }
+            return hlsl_primitive_type_t::FLOAT3X3;
 
         if (str == "float4x4")
-            { val = hlsl_primitive_type_t::FLOAT4X4; return; }
+            return hlsl_primitive_type_t::FLOAT4X4;
 
         if (str == "uint")
-            { val = hlsl_primitive_type_t::UINT; return; }
+            return hlsl_primitive_type_t::UINT;
 
         if (str == "MAXIMUM")
-            { val = hlsl_primitive_type_t::MAXIMUM; return; }
+            return hlsl_primitive_type_t::MAXIMUM;
 
         assert_t::check_bool(false, "failed to convert string to hlsl primitive type");
-        val = hlsl_primitive_type_t::UNKNOWN;
+        return hlsl_primitive_type_t::UNKNOWN;
     }
 
     constexpr auto to_string(hlsl_primitive_type_t const type)
@@ -95,7 +97,7 @@ namespace aiva2
 
     void from_json(nlohmann::json const& json, hlsl_primitive_type_t& type)
     {
-		from_string(json.get<std::string>(), type);
+		type = enum_from_string<hlsl_primitive_type_t>(json.get<std::string>());
     }
 
     // ----------------------------------------------------

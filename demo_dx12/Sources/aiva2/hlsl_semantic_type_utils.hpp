@@ -2,40 +2,42 @@
 #include <aiva2/_core.hpp>
 
 #include <aiva2/assert.hpp>
+#include <aiva2/enum_from_string.hpp>
 #include <aiva2/hlsl_semantic_type.hpp>
 
 namespace aiva2
 {
     // ----------------------------------------------------
 
-    constexpr void from_string(std::string_view const& str, hlsl_semantic_type_t& val)
+    template <>
+    constexpr auto enum_from_string_impl<enum_from_string_wrapper_t<hlsl_semantic_type_t>>(std::string_view const& str) -> hlsl_semantic_type_t
     {
         if (str == "UNKNOWN")
-            { val = hlsl_semantic_type_t::UNKNOWN; return; }
+            return hlsl_semantic_type_t::UNKNOWN;
 
         if (str == "POSITION")
-            { val = hlsl_semantic_type_t::POSITION; return; }
+            return hlsl_semantic_type_t::POSITION;
 
         if (str == "NORMAL")
-            { val = hlsl_semantic_type_t::NORMAL; return; }
+            return hlsl_semantic_type_t::NORMAL;
 
         if (str == "TEXCOORD")
-            { val = hlsl_semantic_type_t::TEXCOORD; return; }
+            return hlsl_semantic_type_t::TEXCOORD;
 
         if (str == "COLOR")
-            { val = hlsl_semantic_type_t::COLOR; return; }
+            return hlsl_semantic_type_t::COLOR;
 
         if (str == "SV_POSITION")
-            { val = hlsl_semantic_type_t::SV_POSITION; return; }
+            return hlsl_semantic_type_t::SV_POSITION;
 
         if (str == "SV_TARGET")
-            { val = hlsl_semantic_type_t::SV_TARGET; return; }
+            return hlsl_semantic_type_t::SV_TARGET;
 
         if (str == "MAXIMUM")
-            { val = hlsl_semantic_type_t::MAXIMUM; return; }
+            return hlsl_semantic_type_t::MAXIMUM;
 
         assert_t::check_bool(false, "failed to convert string to hlsl semantic type");
-        val = hlsl_semantic_type_t::UNKNOWN;
+        return hlsl_semantic_type_t::UNKNOWN;
     }
 
     constexpr auto to_string(hlsl_semantic_type_t const type)
@@ -77,7 +79,7 @@ namespace aiva2
 
     void from_json(nlohmann::json const& json, hlsl_semantic_type_t& type)
     {
-		from_string(json.get<std::string>(), type);
+		type = enum_from_string<hlsl_semantic_type_t>(json.get<std::string>());
     }
 
     // ----------------------------------------------------

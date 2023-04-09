@@ -192,6 +192,7 @@
     <ClInclude Include="Sources\aiva2\d3d12_blend_desc.hpp" />
     <ClInclude Include="Sources\aiva2\d3d12_cpu_descriptor_handle_utils.hpp" />
     <ClInclude Include="Sources\aiva2\d3d12_depth_stencil_desc.hpp" />
+    <ClInclude Include="Sources\aiva2\d3d12_input_layout_desc.hpp" />
     <ClInclude Include="Sources\aiva2\d3d12_rasterizer_desc.hpp" />
     <ClInclude Include="Sources\aiva2\d3d12_render_output_desc.hpp" />
     <ClInclude Include="Sources\aiva2\d3d12_resource_desc_utils.hpp" />
@@ -234,6 +235,8 @@
     <ClInclude Include="Sources\aiva2\graphic_shader.hpp" />
     <ClInclude Include="Sources\aiva2\has_constructor.hpp" />
     <ClInclude Include="Sources\aiva2\has_constructor_argument_wrapper.hpp" />
+    <ClInclude Include="Sources\aiva2\hlsl_semantic_type.hpp" />
+    <ClInclude Include="Sources\aiva2\hlsl_semantic_type_utils.hpp" />
     <ClInclude Include="Sources\aiva2\img_png.hpp" />
     <ClInclude Include="Sources\aiva2\implements.hpp" />
     <ClInclude Include="Sources\aiva2\logger.hpp" />
@@ -635,6 +638,7 @@
     <ClCompile Include="Sources\aiva2\d3d12_blend_desc.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_cpu_descriptor_handle_utils.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_depth_stencil_desc.cpp" />
+    <ClCompile Include="Sources\aiva2\d3d12_input_layout_desc.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_rasterizer_desc.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_render_output_desc.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_resource_desc_utils.cpp" />

@@ -4,6 +4,7 @@
 #include <aiva2/assert.hpp>
 #include <aiva2/d3d12_blend_desc.hpp>
 #include <aiva2/d3d12_depth_stencil_desc.hpp>
+#include <aiva2/d3d12_input_layout_desc.hpp>
 #include <aiva2/d3d12_rasterizer_desc.hpp>
 #include <aiva2/d3d12_render_output_desc.hpp>
 #include <aiva2/d3d12_shader_bytecode_ps.hpp>
@@ -44,6 +45,7 @@ namespace aiva2
         auto const blend_desc = d3d12_blend_desc_t{ get_info() };
         auto const rasterizer_desc = d3d12_rasterizer_desc_t{ get_info() };
         auto const depth_stencil_desc = d3d12_depth_stencil_desc_t{ get_info() };
+        auto const input_layout_desc = d3d12_input_layout_desc_t{ get_info() };
         auto const render_output_desc = d3d12_render_output_desc_t{ get_info() };
 
         auto pipeline_state_desc = D3D12_GRAPHICS_PIPELINE_STATE_DESC{};
@@ -58,7 +60,7 @@ namespace aiva2
         pipeline_state_desc.SampleMask = UINT_MAX;
         pipeline_state_desc.RasterizerState = rasterizer_desc.get_data();
         pipeline_state_desc.DepthStencilState = depth_stencil_desc.get_data();
-        // pipeline_state_desc.InputLayout = {};
+        pipeline_state_desc.InputLayout = input_layout_desc.get_data();
         pipeline_state_desc.IBStripCutValue = D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
         pipeline_state_desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
         pipeline_state_desc.NumRenderTargets = static_cast<UINT>(render_output_desc.num_render_targets());

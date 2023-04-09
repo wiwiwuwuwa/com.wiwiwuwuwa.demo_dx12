@@ -7,7 +7,7 @@
 
 namespace aiva2
 {
-    struct shader_info_for_struct_field_t final : public engine_object_t
+    struct shader_info_for_struct_field_t final : public implements_t<shader_info_for_struct_field_t, engine_object_t>
     {
         // ------------------------------------------------
 

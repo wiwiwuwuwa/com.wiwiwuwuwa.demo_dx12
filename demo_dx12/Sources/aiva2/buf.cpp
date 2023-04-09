@@ -93,7 +93,8 @@ namespace aiva2
         auto heap_flags = D3D12_HEAP_FLAG_NONE;
         assert_t::check_hresult(m_resource->GetHeapProperties(&heap_properties, &heap_flags));
 
-        m_info.set_memory(from_d3d12_heap_type(heap_properties.Type));
+		auto buffer_memory = buffer_memory_t{}; from_d3d12_heap_type(heap_properties.Type, buffer_memory);
+		m_info.set_memory(buffer_memory);
         m_info.set_support_shader_atomics(heap_flags & D3D12_HEAP_FLAG_ALLOW_SHADER_ATOMICS);
 
         auto const resource_desc = m_resource->GetDesc();

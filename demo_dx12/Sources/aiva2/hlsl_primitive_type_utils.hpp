@@ -8,43 +8,43 @@ namespace aiva2
 {
     // ----------------------------------------------------
 
-    constexpr auto from_string(std::string_view const& str)
+    constexpr void from_string(std::string_view const& str, hlsl_primitive_type_t& val)
     {
         if (str == "UNKNOWN")
-            return hlsl_primitive_type_t::UNKNOWN;
+            { val = hlsl_primitive_type_t::UNKNOWN; return; }
 
         if (str == "int")
-            return hlsl_primitive_type_t::INT;
+            { val = hlsl_primitive_type_t::INT; return; }
 
         if (str == "float")
-            return hlsl_primitive_type_t::FLOAT;
+            { val = hlsl_primitive_type_t::FLOAT; return; }
 
         if (str == "float2")
-            return hlsl_primitive_type_t::FLOAT2;
+            { val = hlsl_primitive_type_t::FLOAT2; return; }
 
         if (str == "float3")
-            return hlsl_primitive_type_t::FLOAT3;
+            { val = hlsl_primitive_type_t::FLOAT3; return; }
 
         if (str == "float4")
-            return hlsl_primitive_type_t::FLOAT4;
+            { val = hlsl_primitive_type_t::FLOAT4; return; }
 
         if (str == "float2x2")
-            return hlsl_primitive_type_t::FLOAT2X2;
+            { val = hlsl_primitive_type_t::FLOAT2X2; return; }
 
         if (str == "float3x3")
-            return hlsl_primitive_type_t::FLOAT3X3;
+            { val = hlsl_primitive_type_t::FLOAT3X3; return; }
 
         if (str == "float4x4")
-            return hlsl_primitive_type_t::FLOAT4X4;
+            { val = hlsl_primitive_type_t::FLOAT4X4; return; }
 
         if (str == "uint")
-            return hlsl_primitive_type_t::UINT;
+            { val = hlsl_primitive_type_t::UINT; return; }
 
         if (str == "MAXIMUM")
-            return hlsl_primitive_type_t::MAXIMUM;
+            { val = hlsl_primitive_type_t::MAXIMUM; return; }
 
         assert_t::check_bool(false, "failed to convert string to hlsl primitive type");
-        return hlsl_primitive_type_t::UNKNOWN;
+        val = hlsl_primitive_type_t::UNKNOWN;
     }
 
     constexpr auto to_string(hlsl_primitive_type_t const type)
@@ -95,7 +95,7 @@ namespace aiva2
 
     void from_json(nlohmann::json const& json, hlsl_primitive_type_t& type)
     {
-        type = from_string(json.get<std::string>());
+		from_string(json.get<std::string>(), type);
     }
 
     // ----------------------------------------------------

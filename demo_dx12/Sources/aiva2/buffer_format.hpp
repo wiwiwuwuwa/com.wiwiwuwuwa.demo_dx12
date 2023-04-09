@@ -14,5 +14,6 @@ namespace aiva2
 		R32_UINT,
 		R8G8B8A8_UNORM,
 		D32_FLOAT,
+		MAXIMUM,
 	};
 }

@@ -55,8 +55,10 @@ namespace aiva2
 		auto const type_string = type_match.str();
 		assert_t::check_bool(!std::empty(type_string), "type_string is not valid");
 
-		m_type = from_hlsl(type_string);
-		assert_t::check_bool(is_valid(m_type), "m_type is not valid");
+		auto type_enum = shader_resource_type_t{}; from_hlsl(type_string, type_enum);
+		assert_t::check_bool(is_valid(type_enum), "type_enum is not valid");
+
+		m_type = type_enum;
 	}
 
 	void shader_info_for_resource_t::shut_type()
@@ -126,8 +128,10 @@ namespace aiva2
 			auto const register_type_string = register_type_match.str();
 			assert_t::check_bool(std::size(register_type_string) == 1, "register_type_string is not valid");
 
-			m_register_type = from_letter(register_type_string[0]);
-			assert_t::check_bool(is_valid(m_register_type), "register_type is not valid");
+			auto register_type_enum = shader_register_type_t{}; from_letter(register_type_string[0], register_type_enum);
+			assert_t::check_bool(is_valid(register_type_enum), "register_type_enum is not valid");
+			
+			m_register_type = register_type_enum;
 		}
 
 		{

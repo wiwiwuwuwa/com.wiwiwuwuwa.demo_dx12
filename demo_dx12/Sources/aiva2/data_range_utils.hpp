@@ -18,12 +18,11 @@ namespace aiva2
     
     // ----------------------------------------------------
 
-    auto from_d3d12_range(D3D12_RANGE const& in_range)
+    void from_d3d12_range(D3D12_RANGE const& in_val, data_range_t& out_val)
     {
-        auto out_range = data_range_t{};
-        out_range.set_offset(static_cast<size_t>(in_range.Begin));
-        out_range.set_size(static_cast<size_t>(in_range.End - in_range.Begin));
-        return out_range;
+        out_val = {};
+        out_val.set_offset(static_cast<size_t>(in_val.Begin));
+        out_val.set_size(static_cast<size_t>(in_val.End - in_val.Begin));
     }
 
     // ----------------------------------------------------    

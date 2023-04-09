@@ -8,34 +8,34 @@ namespace aiva2
 {
     // ----------------------------------------------------
 
-    constexpr auto from_string(std::string_view const& str)
+    constexpr void from_string(std::string_view const& str, hlsl_semantic_type_t& val)
     {
         if (str == "UNKNOWN")
-            return hlsl_semantic_type_t::UNKNOWN;
+            { val = hlsl_semantic_type_t::UNKNOWN; return; }
 
         if (str == "POSITION")
-            return hlsl_semantic_type_t::POSITION;
+            { val = hlsl_semantic_type_t::POSITION; return; }
 
         if (str == "NORMAL")
-            return hlsl_semantic_type_t::NORMAL;
+            { val = hlsl_semantic_type_t::NORMAL; return; }
 
         if (str == "TEXCOORD")
-            return hlsl_semantic_type_t::TEXCOORD;
+            { val = hlsl_semantic_type_t::TEXCOORD; return; }
 
         if (str == "COLOR")
-            return hlsl_semantic_type_t::COLOR;
+            { val = hlsl_semantic_type_t::COLOR; return; }
 
         if (str == "SV_POSITION")
-            return hlsl_semantic_type_t::SV_POSITION;
+            { val = hlsl_semantic_type_t::SV_POSITION; return; }
 
         if (str == "SV_TARGET")
-            return hlsl_semantic_type_t::SV_TARGET;
+            { val = hlsl_semantic_type_t::SV_TARGET; return; }
 
         if (str == "MAXIMUM")
-            return hlsl_semantic_type_t::MAXIMUM;
+            { val = hlsl_semantic_type_t::MAXIMUM; return; }
 
         assert_t::check_bool(false, "failed to convert string to hlsl semantic type");
-        return hlsl_semantic_type_t::UNKNOWN;
+        val = hlsl_semantic_type_t::UNKNOWN;
     }
 
     constexpr auto to_string(hlsl_semantic_type_t const type)
@@ -77,7 +77,7 @@ namespace aiva2
 
     void from_json(nlohmann::json const& json, hlsl_semantic_type_t& type)
     {
-        type = from_string(json.get<std::string>());
+		from_string(json.get<std::string>(), type);
     }
 
     // ----------------------------------------------------

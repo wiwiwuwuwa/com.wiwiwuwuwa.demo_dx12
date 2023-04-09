@@ -9,16 +9,16 @@ namespace aiva2
 {
     // ----------------------------------------------------
 
-    constexpr auto from_hlsl(std::string_view const& hlsl)
+    constexpr void from_hlsl(std::string_view const& in_val, shader_resource_type_t& out_val)
     {
-        if (hlsl == "ConstantBuffer")
-            return shader_resource_type_t::CONSTANT_BUFFER;
+        if (in_val == "ConstantBuffer")
+            { out_val = shader_resource_type_t::CONSTANT_BUFFER; return; }
 
-        if (hlsl == "RWTexture2D")
-            return shader_resource_type_t::RW_TEXTURE_2D;
+        if (in_val == "RWTexture2D")
+            { out_val = shader_resource_type_t::RW_TEXTURE_2D; return; }
 
         assert_t::check_bool(false, "failed to parse shader resource type from hlsl");
-        return shader_resource_type_t::UNKNOWN;
+        out_val = shader_resource_type_t::UNKNOWN;
     }
     
     // ----------------------------------------------------

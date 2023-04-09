@@ -7,16 +7,16 @@ namespace aiva2
 {
     // ----------------------------------------------------
 
-    constexpr auto from_string(std::string_view const& str)
+    constexpr void from_string(std::string_view const& str, bool& val)
     {
         if (str == "true")
-            return true;
+            { val = true; return; }
 
         if (str == "false")
-            return false;
+            { val = false; return; }
 
         assert_t::check_bool(false, "failed to convert string to bool");
-        return false;
+        val = false;
     }
 
     constexpr auto to_string(bool const value)

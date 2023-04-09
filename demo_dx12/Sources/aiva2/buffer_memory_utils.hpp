@@ -8,32 +8,20 @@ namespace aiva2
 {
     // ----------------------------------------------------
 
-    constexpr auto from_d3d12_heap_type(D3D12_HEAP_TYPE const type)
+    constexpr void from_d3d12_heap_type(D3D12_HEAP_TYPE const in_val, buffer_memory_t& out_val)
     {
-        if (type == D3D12_HEAP_TYPE_DEFAULT)
-            return buffer_memory_t::GPU_ONLY;
+        if (in_val == D3D12_HEAP_TYPE_DEFAULT)
+            { out_val = buffer_memory_t::GPU_ONLY; return; }
 
-        if (type == D3D12_HEAP_TYPE_UPLOAD)
-            return buffer_memory_t::CPU_TO_GPU;
+        if (in_val == D3D12_HEAP_TYPE_UPLOAD)
+            { out_val = buffer_memory_t::CPU_TO_GPU; return; }
 
-        if (type == D3D12_HEAP_TYPE_READBACK)
-            return buffer_memory_t::GPU_TO_CPU;
+        if (in_val == D3D12_HEAP_TYPE_READBACK)
+            { out_val = buffer_memory_t::GPU_TO_CPU; return; }
 
         assert_t::check_bool(false, "unsupported d3d12 heap type");
-        return buffer_memory_t::UNKNOWN;
+        out_val = buffer_memory_t::UNKNOWN;
     }
-
-    template <D3D12_HEAP_TYPE t_type>
-    constexpr auto from_d3d12_heap_type()
-    {
-        return from_d3d12_heap_type(t_type);
-    }
-
-    template <D3D12_HEAP_TYPE t_type>
-    struct from_d3d12_heap_type_t : public std::integral_constant<buffer_memory_t, from_d3d12_heap_type(t_type)> {};
-
-    template <D3D12_HEAP_TYPE t_type>
-    constexpr auto from_d3d12_heap_type_v = from_d3d12_heap_type_t<t_type>::value;
 
     // ----------------------------------------------------
 
@@ -51,18 +39,6 @@ namespace aiva2
         assert_t::check_bool(false, "unsupported buffer memory");
         return D3D12_HEAP_TYPE_DEFAULT;
     }
-
-    template <buffer_memory_t t_type>
-    constexpr auto to_d3d12_heap_type()
-    {
-        return to_d3d12_heap_type(t_type);
-    }
-
-    template <buffer_memory_t t_type>
-    struct to_d3d12_heap_type_t : public std::integral_constant<D3D12_HEAP_TYPE, to_d3d12_heap_type(t_type)> {};
-
-    template <buffer_memory_t t_type>
-    constexpr auto to_d3d12_heap_type_v = to_d3d12_heap_type_t<t_type>::value;
     
     // ----------------------------------------------------
 }

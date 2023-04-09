@@ -165,8 +165,10 @@ namespace aiva2
 
 			auto const value_string = match_for_element[1].str();
 			assert_t::check_bool(!std::empty(value_string), "(value_string) is not valid");
-
-			auto const value_enum = from_string(value_string);
+			
+			auto value_enum = buffer_format_t{}; from_string(value_string, value_enum);
+			assert_t::check_bool(is_valid(value_enum), "(value_enum) is not valid");
+			
 			m_render_target_formats.push_back(value_enum);
 		}
 	}
@@ -200,7 +202,10 @@ namespace aiva2
 			auto const value_string = match[1].str();
 			assert_t::check_bool(!std::empty(value_string), "(value_string) is not valid");
 
-			m_depth_stencil_format = from_string(value_string);
+			auto value_enum = buffer_format_t{}; from_string(value_string, value_enum);
+			assert_t::check_bool(is_valid(value_enum), "(value_enum) is not valid");
+			
+			m_depth_stencil_format = value_enum;
 		}
 		else
 		{

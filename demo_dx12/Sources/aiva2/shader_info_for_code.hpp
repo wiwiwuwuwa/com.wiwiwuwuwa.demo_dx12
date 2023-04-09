@@ -28,6 +28,27 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
+		auto get_struct_ref(size_t const index) const->shader_info_for_struct_t const&;
+
+		auto get_struct_ref(std::string_view const& name) const->shader_info_for_struct_t const&;
+
+		auto get_struct_ptr(size_t const index) const->std::shared_ptr<shader_info_for_struct_t const>;
+
+		auto get_struct_ptr(std::string_view const& name) const->std::shared_ptr<shader_info_for_struct_t const>;
+
+		auto num_struct() const->size_t;
+
+	private:
+		void init_structs();
+
+		void shut_structs();
+
+	private:
+		std::vector<std::shared_ptr<shader_info_for_struct_t>> m_structs{};
+
+		// ------------------------------------------------
+
+	public:
 		auto get_resource_ref(size_t const index) const->shader_info_for_resource_t const&;
 
 		auto get_resource_ptr(size_t const index) const->std::shared_ptr<shader_info_for_resource_t const> const&;

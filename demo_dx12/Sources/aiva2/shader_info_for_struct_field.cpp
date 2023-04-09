@@ -53,13 +53,11 @@ namespace aiva2
 
         assert_t::check_bool(std::regex_search(m_text, match, regex), "failed to find struct field info");
         assert_t::check_bool(match.ready(), "failed to find struct field info");
-        assert_t::check_bool(std::size(match) >= 3 && std::size(match) <= 5, "failed to find struct field info");
+        assert_t::check_bool(std::size(match) == 5, "failed to find struct field info");
         
-        if (std::size(match) >= 2)
+        auto const& primitive_type_match = match[1];
+        if (primitive_type_match.matched)
         {
-            auto const& primitive_type_match = match[1];
-            assert_t::check_bool(primitive_type_match.matched, "(primitive_type_match) is not valid");
-
             auto const& primitive_type_str = primitive_type_match.str();
             assert_t::check_bool(!std::empty(primitive_type_str), "(primitive_type_str) is not valid");
             
@@ -69,22 +67,18 @@ namespace aiva2
             m_primitive_type = primitive_type_enum;
         }
 
-        if (std::size(match) >= 3)
+        auto const& name_match = match[2];
+        if (name_match.matched)
         {
-            auto const& name_match = match[2];
-            assert_t::check_bool(name_match.matched, "(name_match) is not valid");
-
             auto const& name_str = name_match.str();
             assert_t::check_bool(!std::empty(name_str), "(name_str) is not valid");
 
             m_name = name_str;
         }
 
-        if (std::size(match) >= 4)
+        auto const& semantic_type_match = match[3];
+        if (semantic_type_match.matched)
         {
-            auto const& semantic_type_match = match[3];
-            assert_t::check_bool(semantic_type_match.matched, "(semantic_type_match) is not valid");
-
             auto const& semantic_type_str = semantic_type_match.str();
             assert_t::check_bool(!std::empty(semantic_type_str), "(semantic_type_str) is not valid");
             
@@ -93,12 +87,10 @@ namespace aiva2
 
             m_semantic_type = semantic_type_enum;
         }
-
-        if (std::size(match) >= 5)
+        
+        auto const& semantic_index_match = match[4];
+        if (semantic_index_match.matched)
         {
-            auto const& semantic_index_match = match[4];
-            assert_t::check_bool(semantic_index_match.matched, "(semantic_index_match) is not valid");
-
             auto const& semantic_index_str = semantic_index_match.str();
             assert_t::check_bool(!std::empty(semantic_index_str), "(semantic_index_str) is not valid");
 

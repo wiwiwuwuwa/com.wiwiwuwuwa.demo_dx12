@@ -63,7 +63,7 @@ namespace aiva2
             auto const& primitive_type_str = primitive_type_match.str();
             assert_t::check_bool(!std::empty(primitive_type_str), "(primitive_type_str) is not valid");
             
-            auto const primitive_type_enum = enum_from_string<hlsl_primitive_type_t>(primitive_type_str);
+            auto const primitive_type_enum = parse_enum<hlsl_primitive_type_t>(primitive_type_str);
             assert_t::check_bool(is_valid(primitive_type_enum), "(primitive_type_enum) is not valid");
 
             m_primitive_type = primitive_type_enum;
@@ -88,7 +88,7 @@ namespace aiva2
             auto const& semantic_type_str = semantic_type_match.str();
             assert_t::check_bool(!std::empty(semantic_type_str), "(semantic_type_str) is not valid");
             
-			auto const semantic_type_enum = enum_from_string<hlsl_semantic_type_t>(semantic_type_str);
+			auto const semantic_type_enum = parse_enum<hlsl_semantic_type_t>(semantic_type_str);
             assert_t::check_bool(is_valid(semantic_type_enum), "(semantic_type_enum) is not valid");
 
             m_semantic_type = semantic_type_enum;

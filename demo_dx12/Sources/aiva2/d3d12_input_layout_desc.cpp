@@ -1,7 +1,7 @@
 #include <pch.h>
 #include <aiva2/d3d12_input_layout_desc.hpp>
 
-#include <aiva2/assert.hpp>\
+#include <aiva2/assert.hpp>
 #include <aiva2/shader_info.hpp>
 
 namespace aiva2

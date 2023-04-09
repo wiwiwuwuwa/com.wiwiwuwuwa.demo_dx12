@@ -235,6 +235,8 @@
     <ClInclude Include="Sources\aiva2\graphic_shader.hpp" />
     <ClInclude Include="Sources\aiva2\has_constructor.hpp" />
     <ClInclude Include="Sources\aiva2\has_constructor_argument_wrapper.hpp" />
+    <ClInclude Include="Sources\aiva2\hlsl_primitive_type.hpp" />
+    <ClInclude Include="Sources\aiva2\hlsl_primitive_type_utils.hpp" />
     <ClInclude Include="Sources\aiva2\hlsl_semantic_type.hpp" />
     <ClInclude Include="Sources\aiva2\hlsl_semantic_type_utils.hpp" />
     <ClInclude Include="Sources\aiva2\img_png.hpp" />

@@ -13,11 +13,26 @@ namespace aiva2
 		case buffer_format_t::UNKNOWN:
 			return DXGI_FORMAT_UNKNOWN;
 
-		case buffer_format_t::R8G8B8A8_UNORM:
-			return DXGI_FORMAT_R8G8B8A8_UNORM;
+		case buffer_format_t::R32_SINT:
+			return DXGI_FORMAT_R32_SINT;
+
+		case buffer_format_t::R32_FLOAT:
+			return DXGI_FORMAT_R32_FLOAT;
+
+		case buffer_format_t::R32G32_FLOAT:
+			return DXGI_FORMAT_R32G32_FLOAT;
+
+		case buffer_format_t::R32G32B32_FLOAT:
+			return DXGI_FORMAT_R32G32B32_FLOAT;
 
 		case buffer_format_t::R32G32B32A32_FLOAT:
 			return DXGI_FORMAT_R32G32B32A32_FLOAT;
+
+		case buffer_format_t::R32_UINT:
+			return DXGI_FORMAT_R32_UINT;
+
+		case buffer_format_t::R8G8B8A8_UNORM:
+			return DXGI_FORMAT_R8G8B8A8_UNORM;
 
 		case buffer_format_t::D32_FLOAT:
 			return DXGI_FORMAT_D32_FLOAT;

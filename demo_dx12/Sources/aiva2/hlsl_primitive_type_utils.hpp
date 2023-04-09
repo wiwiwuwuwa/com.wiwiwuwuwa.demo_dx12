@@ -18,6 +18,24 @@ namespace aiva2
         if (str == "int")
             return hlsl_primitive_type_t::INT;
 
+        if (str == "int2")
+            return hlsl_primitive_type_t::INT2;
+
+        if (str == "int3")
+            return hlsl_primitive_type_t::INT3;
+
+        if (str == "int4")
+            return hlsl_primitive_type_t::INT4;
+
+        if (str == "int2x2")
+            return hlsl_primitive_type_t::INT2X2;
+
+        if (str == "int3x3")
+            return hlsl_primitive_type_t::INT3X3;
+
+        if (str == "int4x4")
+            return hlsl_primitive_type_t::INT4X4;
+
         if (str == "float")
             return hlsl_primitive_type_t::FLOAT;
 
@@ -41,6 +59,24 @@ namespace aiva2
 
         if (str == "uint")
             return hlsl_primitive_type_t::UINT;
+
+        if (str == "uint2")
+            return hlsl_primitive_type_t::UINT2;
+
+        if (str == "uint3")
+            return hlsl_primitive_type_t::UINT3;
+
+        if (str == "uint4")
+            return hlsl_primitive_type_t::UINT4;
+
+        if (str == "uint2x2")
+            return hlsl_primitive_type_t::UINT2X2;
+
+        if (str == "uint3x3")
+            return hlsl_primitive_type_t::UINT3X3;
+
+        if (str == "uint4x4")
+            return hlsl_primitive_type_t::UINT4X4;
 
         if (str == "MAXIMUM")
             return hlsl_primitive_type_t::MAXIMUM;

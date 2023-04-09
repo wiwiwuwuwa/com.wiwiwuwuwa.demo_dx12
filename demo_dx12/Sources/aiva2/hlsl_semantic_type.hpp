@@ -10,6 +10,7 @@ namespace aiva2
         NORMAL,
         TEXCOORD,
         COLOR,
+        SV_DISPATCHTHREADID,
         SV_POSITION,
         SV_TARGET,
         MAXIMUM,

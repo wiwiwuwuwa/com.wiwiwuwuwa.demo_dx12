@@ -27,6 +27,9 @@ namespace aiva2
         if (str == "COLOR")
             return hlsl_semantic_type_t::COLOR;
 
+        if (str == "SV_DISPATCHTHREADID")
+            return hlsl_semantic_type_t::SV_DISPATCHTHREADID;
+
         if (str == "SV_POSITION")
             return hlsl_semantic_type_t::SV_POSITION;
 
@@ -56,6 +59,9 @@ namespace aiva2
 
         if (type == hlsl_semantic_type_t::COLOR)
             return "COLOR";
+
+        if (type == hlsl_semantic_type_t::SV_DISPATCHTHREADID)
+            return "SV_DISPATCHTHREADID";
 
         if (type == hlsl_semantic_type_t::SV_POSITION)
             return "SV_POSITION";
@@ -103,6 +109,9 @@ namespace aiva2
 
     constexpr auto is_system_value(hlsl_semantic_type_t const type)
     {
+        if (type == hlsl_semantic_type_t::SV_DISPATCHTHREADID)
+            return true;
+
         if (type == hlsl_semantic_type_t::SV_POSITION)
             return true;
 

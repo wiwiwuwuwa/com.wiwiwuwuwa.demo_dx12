@@ -638,6 +638,7 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Sources\aiva2\buf.cpp" />
+    <ClCompile Include="Sources\aiva2\buffer_format_utils.cpp" />
     <ClCompile Include="Sources\aiva2\buf_info.cpp" />
     <ClCompile Include="Sources\aiva2\compute_material.cpp" />
     <ClCompile Include="Sources\aiva2\compute_shader.cpp" />
@@ -675,6 +676,8 @@
     <ClCompile Include="Sources\aiva2\graphic_pipeline.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_renderer.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_shader.cpp" />
+    <ClCompile Include="Sources\aiva2\hlsl_primitive_type_utils.cpp" />
+    <ClCompile Include="Sources\aiva2\hlsl_semantic_type_utils.cpp" />
     <ClCompile Include="Sources\aiva2\img_png.cpp" />
     <ClCompile Include="Sources\aiva2\logger.cpp" />
     <ClCompile Include="Sources\aiva2\material_base.cpp" />

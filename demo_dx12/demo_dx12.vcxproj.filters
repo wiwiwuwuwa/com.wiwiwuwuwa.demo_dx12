@@ -224,6 +224,9 @@
     <ClCompile Include="Sources\aiva2\shader_info_for_struct.cpp" />
     <ClCompile Include="Sources\aiva2\shader_info_for_struct_field.cpp" />
     <ClCompile Include="Sources\aiva2\shader_info_for_func.cpp" />
+    <ClCompile Include="Sources\aiva2\buffer_format_utils.cpp" />
+    <ClCompile Include="Sources\aiva2\hlsl_primitive_type_utils.cpp" />
+    <ClCompile Include="Sources\aiva2\hlsl_semantic_type_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

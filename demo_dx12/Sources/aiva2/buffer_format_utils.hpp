@@ -3,6 +3,8 @@
 
 #include <aiva2/assert.hpp>
 #include <aiva2/buffer_format.hpp>
+#include <aiva2/buffer_format_to_dxgi_format.hpp>
+#include <aiva2/dxgi_format_to_buffer_format.hpp>
 #include <aiva2/enum_utils.hpp>
 #include <aiva2/hlsl_primitive_type.hpp>
 

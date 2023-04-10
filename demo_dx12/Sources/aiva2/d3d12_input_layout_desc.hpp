@@ -15,18 +15,28 @@ namespace aiva2
 
         ~d3d12_input_layout_desc_t() override;
 
+    public:
+        auto get_data() const -> D3D12_INPUT_LAYOUT_DESC const&;
+
         // ------------------------------------------------
 
-    public:
-        auto get_data() const->D3D12_INPUT_LAYOUT_DESC const&;
+    private:
+        void init_element_descs(shader_info_t const& shader_info);
+
+        void shut_element_descs();
 
     private:
-        void init_data(shader_info_t const& shader_info);
+        std::vector<D3D12_INPUT_ELEMENT_DESC> m_element_descs{};
 
-        void shut_data();
+        // ------------------------------------------------
 
     private:
-        D3D12_INPUT_LAYOUT_DESC m_data{};
+        void init_layout_desc(shader_info_t const& shader_info);
+
+        void shut_layout_desc();
+
+    private:
+        D3D12_INPUT_LAYOUT_DESC m_layout_desc{};
 
         // ------------------------------------------------
     };

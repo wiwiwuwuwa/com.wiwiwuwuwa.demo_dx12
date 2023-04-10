@@ -2,6 +2,7 @@
 #include <aiva2/_core.hpp>
 
 #include <aiva2/assert.hpp>
+#include <aiva2/enum_utils.hpp>
 #include <aiva2/parse_enum.hpp>
 #include <aiva2/hlsl_semantic_type.hpp>
 

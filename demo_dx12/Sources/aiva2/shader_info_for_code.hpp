@@ -64,5 +64,26 @@ namespace aiva2
 		std::vector<std::shared_ptr<shader_info_for_resource_t>> m_resources{};
 
 		// ------------------------------------------------
+
+	public:
+		auto get_func_ref(size_t const index) const->shader_info_for_func_t const&;
+
+		auto get_func_ref(std::string_view const& name) const->shader_info_for_func_t const&;
+
+		auto get_func_ptr(size_t const index) const->std::shared_ptr<shader_info_for_func_t const>;
+
+		auto get_func_ptr(std::string_view const& name) const->std::shared_ptr<shader_info_for_func_t const>;
+
+		auto num_func() const->size_t;
+
+	private:
+		void init_funcs();
+
+		void shut_funcs();
+
+	private:
+		std::vector<std::shared_ptr<shader_info_for_func_t>> m_funcs{};
+
+		// ------------------------------------------------
 	};
 }

@@ -58,9 +58,12 @@ namespace aiva2
 
             for (auto i = std::sregex_iterator{ std::cbegin(input_types_string), std::cend(input_types_string), input_type_regex }; i != decltype(i){}; i++)
             {
-                auto const& input_type_match = (*i);
-                assert_t::check_bool(input_type_match.ready(), "(input_type_match) is not valid");
-                assert_t::check_bool(std::size(input_type_match) == 2, "(input_type_match) is not valid");
+                auto const& input_field_match = (*i);
+                assert_t::check_bool(input_field_match.ready(), "(input_field_match) is not valid");
+                assert_t::check_bool(std::size(input_field_match) == 2, "(input_field_match) is not valid");
+
+                auto const& input_type_match = input_field_match[1];
+                assert_t::check_bool(input_type_match.matched, "(input_type_match) is not valid");
 
                 auto const input_type_string = input_type_match.str();
                 assert_t::check_bool(!std::empty(input_type_string), "(input_type_string) is not valid");

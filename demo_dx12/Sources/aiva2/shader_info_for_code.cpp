@@ -3,6 +3,7 @@
 
 #include <aiva2/assert.hpp>
 #include <aiva2/engine.hpp>
+#include <aiva2/shader_info_for_func.hpp>
 #include <aiva2/shader_info_for_resource.hpp>
 #include <aiva2/shader_info_for_resource_utils.hpp>
 #include <aiva2/shader_info_for_struct.hpp>
@@ -15,10 +16,12 @@ namespace aiva2
 	{
 		init_structs();
 		init_resources();
+		init_funcs();
 	}
 
 	shader_info_for_code_t::~shader_info_for_code_t()
 	{
+		shut_funcs();
 		shut_resources();
 		shut_structs();
 	}
@@ -155,5 +158,72 @@ namespace aiva2
 	void shader_info_for_code_t::shut_resources()
 	{
 		m_resources = {};
+	}
+
+	auto shader_info_for_code_t::get_func_ref(size_t const index) const->shader_info_for_func_t const&
+	{
+		auto const& func = get_func_ptr(index);
+		assert_t::check_bool(func, "(func) not valid");
+
+		return (*func);
+	}
+
+	auto shader_info_for_code_t::get_func_ref(std::string_view const& name) const->shader_info_for_func_t const&
+	{
+		auto const& func = get_func_ptr(name);
+		assert_t::check_bool(func, "(func) not valid");
+
+		return (*func);
+	}
+
+	auto shader_info_for_code_t::get_func_ptr(size_t const index) const->std::shared_ptr<shader_info_for_func_t const>
+	{
+		assert_t::check_bool(index >= decltype(index){}, "(index) is not valid");
+		assert_t::check_bool(index < std::size(m_funcs), "(index) is not valid");
+
+		return m_funcs[index];
+	}
+
+	auto shader_info_for_code_t::get_func_ptr(std::string_view const& name) const->std::shared_ptr<shader_info_for_func_t const>
+	{
+		assert_t::check_bool(!std::empty(name), "(name) is not valid");
+
+		auto const func_itr = std::find_if(std::cbegin(m_funcs), std::cend(m_funcs), [&name](auto const& func)
+		{
+			assert_t::check_bool(func, "(func) not valid");
+			return (*func).get_name() == name;
+		});
+		
+		return func_itr != std::cend(m_funcs) ? (*func_itr) : nullptr;
+	}
+
+	auto shader_info_for_code_t::num_func() const->size_t
+	{
+		return std::size(m_funcs);
+	}
+
+	void shader_info_for_code_t::init_funcs()
+	{
+		m_funcs = {};
+
+		auto const regex_for_func = std::regex(R"((?:^|\n)\s*(\b\w+\b\s+\b\w+\b\([\s\S]*?\)))", std::regex::icase | std::regex::optimize);
+
+		for (auto i = std::sregex_iterator{ std::cbegin(m_text), std::cend(m_text), regex_for_func }; i != decltype(i){}; i++)
+		{
+			auto const& func_match = (*i);
+			assert_t::check_bool(func_match.ready(), "(func_match) is not valid");
+			assert_t::check_bool(std::size(func_match) == 2, "(func_match) is not valid");
+
+			auto const func_string = func_match.str(1);
+			assert_t::check_bool(!std::empty(func_string), "(func_string) is not valid");
+
+			auto const& func_info = m_funcs.emplace_back(std::make_shared<shader_info_for_func_t>(get_engine(), func_string));
+			assert_t::check_bool(func_info, "(func_info) is not valid");
+		}
+	}
+
+	void shader_info_for_code_t::shut_funcs()
+	{
+		m_funcs = {};
 	}
 }

@@ -220,6 +220,10 @@
     <ClCompile Include="Sources\aiva2\d3d12_rasterizer_desc.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_depth_stencil_desc.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_render_output_desc.cpp" />
+    <ClCompile Include="Sources\aiva2\d3d12_input_layout_desc.cpp" />
+    <ClCompile Include="Sources\aiva2\shader_info_for_struct.cpp" />
+    <ClCompile Include="Sources\aiva2\shader_info_for_struct_field.cpp" />
+    <ClCompile Include="Sources\aiva2\shader_info_for_func.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -650,6 +654,15 @@
     <ClInclude Include="Sources\aiva2\buffer_format_utils.hpp" />
     <ClInclude Include="Sources\aiva2\bool_utils.hpp" />
     <ClInclude Include="Sources\aiva2\d3d12_render_output_desc.hpp" />
+    <ClInclude Include="Sources\aiva2\d3d12_input_layout_desc.hpp" />
+    <ClInclude Include="Sources\aiva2\parse_enum.hpp" />
+    <ClInclude Include="Sources\aiva2\hlsl_primitive_type.hpp" />
+    <ClInclude Include="Sources\aiva2\hlsl_primitive_type_utils.hpp" />
+    <ClInclude Include="Sources\aiva2\hlsl_semantic_type.hpp" />
+    <ClInclude Include="Sources\aiva2\hlsl_semantic_type_utils.hpp" />
+    <ClInclude Include="Sources\aiva2\shader_info_for_struct.hpp" />
+    <ClInclude Include="Sources\aiva2\shader_info_for_struct_field.hpp" />
+    <ClInclude Include="Sources\aiva2\shader_info_for_func.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

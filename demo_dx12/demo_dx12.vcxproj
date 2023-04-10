@@ -257,6 +257,7 @@
     <ClInclude Include="Sources\aiva2\shader_base.hpp" />
     <ClInclude Include="Sources\aiva2\shader_info.hpp" />
     <ClInclude Include="Sources\aiva2\shader_info_for_code.hpp" />
+    <ClInclude Include="Sources\aiva2\shader_info_for_func.hpp" />
     <ClInclude Include="Sources\aiva2\shader_info_for_meta.hpp" />
     <ClInclude Include="Sources\aiva2\shader_info_for_resource.hpp" />
     <ClInclude Include="Sources\aiva2\shader_info_for_resource_utils.hpp" />
@@ -687,6 +688,7 @@
     <ClCompile Include="Sources\aiva2\shader_base.cpp" />
     <ClCompile Include="Sources\aiva2\shader_info.cpp" />
     <ClCompile Include="Sources\aiva2\shader_info_for_code.cpp" />
+    <ClCompile Include="Sources\aiva2\shader_info_for_func.cpp" />
     <ClCompile Include="Sources\aiva2\shader_info_for_meta.cpp" />
     <ClCompile Include="Sources\aiva2\shader_info_for_resource.cpp" />
     <ClCompile Include="Sources\aiva2\shader_info_for_resource_utils.cpp" />

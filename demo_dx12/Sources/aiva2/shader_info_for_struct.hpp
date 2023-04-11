@@ -2,6 +2,7 @@
 #include <aiva2/_core.hpp>
 
 #include <aiva2/engine_object.hpp>
+#include <aiva2/hlsl_semantic_type.hpp>
 
 namespace aiva2
 {
@@ -38,13 +39,23 @@ namespace aiva2
         // ------------------------------------------------
 
     public:
+        auto get_field_idx(std::string_view const& name) const -> std::optional<size_t>;
+
+        auto get_field_idx(hlsl_semantic_type_t const& semantic_type, size_t const semantic_index) const -> std::optional<size_t>;
+
+        auto get_field_idx(shader_info_for_struct_field_t const& field) const -> std::optional<size_t>;
+
         auto get_field_ref(size_t const index) const -> shader_info_for_struct_field_t const&;
 
         auto get_field_ref(std::string_view const& name) const -> shader_info_for_struct_field_t const&;
 
+        auto get_field_ref(hlsl_semantic_type_t const& semantic_type, size_t const semantic_index) const -> shader_info_for_struct_field_t const&;
+
         auto get_field_ptr(size_t const index) const -> std::shared_ptr<shader_info_for_struct_field_t const>;
 
         auto get_field_ptr(std::string_view const& name) const -> std::shared_ptr<shader_info_for_struct_field_t const>;
+
+        auto get_field_ptr(hlsl_semantic_type_t const& semantic_type, size_t const semantic_index) const -> std::shared_ptr<shader_info_for_struct_field_t const>;
 
         auto num_field() const -> size_t;
 
@@ -55,6 +66,31 @@ namespace aiva2
 
     private:
         std::vector<std::shared_ptr<shader_info_for_struct_field_t>> m_fields{};
+
+        // ------------------------------------------------
+
+    public:
+        auto get_input_layout_slot(size_t const field_index) const -> std::optional<size_t>;
+
+        auto get_input_layout_slot(std::string_view const& field_name) const -> std::optional<size_t>;
+
+        auto get_input_layout_slot(hlsl_semantic_type_t const& semantic_type, size_t const semantic_index) const -> std::optional<size_t>;
+
+        auto get_input_layout_slot(shader_info_for_struct_field_t const& field) const -> std::optional<size_t>;
+
+        auto get_input_layout_field_ref(size_t const slot_index) const -> shader_info_for_struct_field_t const&;
+
+        auto get_input_layout_field_ptr(size_t const slot_index) const -> std::shared_ptr<shader_info_for_struct_field_t const>;
+
+        auto num_input_layout_slot() const -> size_t;
+
+    private:
+        void init_input_layout_slot_indices();
+
+        void shut_input_layout_slot_indices();
+
+    private:
+        std::vector<size_t> m_slot_index_to_field_index{};
 
         // ------------------------------------------------
     };

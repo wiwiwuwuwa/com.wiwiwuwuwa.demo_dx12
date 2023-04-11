@@ -3,6 +3,7 @@
 
 #include <aiva2/assert.hpp>
 #include <aiva2/engine.hpp>
+#include <aiva2/hlsl_semantic_type_utils.hpp>
 #include <aiva2/shader_info_for_struct_field.hpp>
 
 namespace aiva2
@@ -13,10 +14,12 @@ namespace aiva2
     {
         init_name();
         init_fields();
+        init_input_layout_slot_indices();
     }
 
     shader_info_for_struct_t::~shader_info_for_struct_t()
     {
+        shut_input_layout_slot_indices();
         shut_fields();
         shut_name();
     }
@@ -54,6 +57,56 @@ namespace aiva2
         m_name = {};
     }
 
+    auto shader_info_for_struct_t::get_field_idx(std::string_view const& name) const -> std::optional<size_t>
+    {
+        if (std::empty(name)) return {};
+
+        auto const field_itr = std::find_if(std::cbegin(m_fields), std::cend(m_fields), [&](auto const& field_ptr)
+        {
+            return field_ptr && (*field_ptr).get_name() == name;
+        });
+        if (field_itr == std::cend(m_fields)) return {};
+
+        auto const field_idx = static_cast<size_t>(std::distance(std::cbegin(m_fields), field_itr));
+        if (field_idx < decltype(field_idx){}) return {};
+        if (field_idx >= std::size(m_fields)) return {};
+
+        return field_idx;
+    }
+
+    auto shader_info_for_struct_t::get_field_idx(hlsl_semantic_type_t const& semantic_type, size_t const semantic_index) const -> std::optional<size_t>
+    {
+        if (!is_valid(semantic_type)) return {};
+        if (semantic_index < decltype(semantic_index){}) return {};
+
+        auto const field_itr = std::find_if(std::cbegin(m_fields), std::cend(m_fields), [&](auto const& field_ptr)
+        {
+            return field_ptr && (*field_ptr).get_semantic_type() == semantic_type && (*field_ptr).get_semantic_index() == semantic_index;
+        });
+        if (field_itr == std::cend(m_fields)) return {};
+
+        auto const field_idx = static_cast<size_t>(std::distance(std::cbegin(m_fields), field_itr));
+        if (field_idx < decltype(field_idx){}) return {};
+        if (field_idx >= std::size(m_fields)) return {};
+
+        return field_idx;
+    }
+
+    auto shader_info_for_struct_t::get_field_idx(shader_info_for_struct_field_t const& field) const -> std::optional<size_t>
+    {
+        auto const field_itr = std::find_if(std::cbegin(m_fields), std::cend(m_fields), [&](auto const& field_ptr)
+        {
+            return field_ptr && field_ptr.get() == &field;
+        });
+        if (field_itr == std::cend(m_fields)) return {};
+
+        auto const field_idx = static_cast<size_t>(std::distance(std::cbegin(m_fields), field_itr));
+        if (field_idx < decltype(field_idx){}) return {};
+        if (field_idx >= std::size(m_fields)) return {};
+
+        return field_idx;
+    }
+
     auto shader_info_for_struct_t::get_field_ref(size_t const index) const -> shader_info_for_struct_field_t const&
     {
         assert_t::check_bool(index >= decltype(index){}, "(index) is not valid");
@@ -70,6 +123,14 @@ namespace aiva2
         assert_t::check_bool(!name.empty(), "(name) is not valid");
 
         auto const& field_ptr = get_field_ptr(name);
+        assert_t::check_bool(field_ptr, "(field_ptr) is not valid");
+
+        return (*field_ptr);
+    }
+
+    auto shader_info_for_struct_t::get_field_ref(hlsl_semantic_type_t const& semantic_type, size_t const semantic_index) const -> shader_info_for_struct_field_t const&
+    {
+        auto const& field_ptr = get_field_ptr(semantic_type, semantic_index);
         assert_t::check_bool(field_ptr, "(field_ptr) is not valid");
 
         return (*field_ptr);
@@ -93,6 +154,20 @@ namespace aiva2
             return (*field_ptr).get_name() == name;
         });
         
+        return (field_itr != std::cend(m_fields)) ? (*field_itr) : nullptr;
+    }
+    
+    auto shader_info_for_struct_t::get_field_ptr(hlsl_semantic_type_t const& semantic_type, size_t const semantic_index) const -> std::shared_ptr<shader_info_for_struct_field_t const>
+    {
+        if (!is_valid(semantic_type)) return {};
+        if (semantic_index < decltype(semantic_index){}) return {};
+
+        auto const field_itr = std::find_if(std::cbegin(m_fields), std::cend(m_fields), [&](auto const& field_ptr)
+        {
+            assert_t::check_bool(field_ptr, "(field_ptr) is not valid");
+            return (*field_ptr).get_semantic_type() == semantic_type && (*field_ptr).get_semantic_index() == semantic_index;
+        });
+
         return (field_itr != std::cend(m_fields)) ? (*field_itr) : nullptr;
     }
 
@@ -124,5 +199,86 @@ namespace aiva2
     void shader_info_for_struct_t::shut_fields()
     {
         m_fields = {};
+    }
+
+    auto shader_info_for_struct_t::get_input_layout_slot(size_t const field_index) const -> std::optional<size_t>
+    {
+        auto const iter = std::find(std::cbegin(m_slot_index_to_field_index), std::cend(m_slot_index_to_field_index), field_index);
+        if (iter == std::cend(m_slot_index_to_field_index)) return {};
+
+        auto const slot = static_cast<size_t>(std::distance(std::cbegin(m_slot_index_to_field_index), iter));
+        if (slot < decltype(slot){}) return {};
+        if (slot >= std::size(m_slot_index_to_field_index)) return {};
+
+        return slot;
+    }
+
+    auto shader_info_for_struct_t::get_input_layout_slot(std::string_view const& field_name) const -> std::optional<size_t>
+    {
+        auto const field_index = get_field_idx(field_name);
+        if (!field_index) return {};
+
+        return get_input_layout_slot(*field_index);
+    }
+
+    auto shader_info_for_struct_t::get_input_layout_slot(hlsl_semantic_type_t const& semantic_type, size_t const semantic_index) const -> std::optional<size_t>
+    {
+        auto const field_index = get_field_idx(semantic_type, semantic_index);
+        if (!field_index) return {};
+
+        return get_input_layout_slot(*field_index);
+    }
+
+    auto shader_info_for_struct_t::get_input_layout_slot(shader_info_for_struct_field_t const& field) const -> std::optional<size_t>
+    {
+        auto const field_index = get_field_idx(field);
+        if (!field_index) return {};
+
+        return get_input_layout_slot(*field_index);
+    }
+
+    auto shader_info_for_struct_t::get_input_layout_field_ref(size_t const slot_index) const -> shader_info_for_struct_field_t const&
+    {
+        auto const field_ptr = get_input_layout_field_ptr(slot_index);
+        assert_t::check_bool(field_ptr, "(field_ptr) is not valid");
+
+        return (*field_ptr);
+    }
+
+    auto shader_info_for_struct_t::get_input_layout_field_ptr(size_t const slot_index) const -> std::shared_ptr<shader_info_for_struct_field_t const>
+    {
+        if (slot_index < decltype(slot_index){}) return {};
+        if (slot_index >= std::size(m_slot_index_to_field_index)) return {};
+
+        auto const field_index = m_slot_index_to_field_index[slot_index];
+        if (field_index < decltype(field_index){}) return {};
+        if (field_index >= num_field()) return {};
+
+        return get_field_ptr(field_index);
+    }
+
+    auto shader_info_for_struct_t::num_input_layout_slot() const -> size_t
+    {
+        return std::size(m_slot_index_to_field_index);
+    }
+
+    void shader_info_for_struct_t::init_input_layout_slot_indices()
+    {
+        m_slot_index_to_field_index = {};
+        
+        for (auto i = size_t{}; i < num_field(); i++)
+        {
+            auto const& field = get_field_ref(i);
+
+            auto const semantic_type = field.get_semantic_type();
+            if (!is_input_assembly(semantic_type)) continue;
+
+            m_slot_index_to_field_index.emplace_back(i);
+        }
+    }
+
+    void shader_info_for_struct_t::shut_input_layout_slot_indices()
+    {
+        m_slot_index_to_field_index = {};
     }
 }

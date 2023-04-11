@@ -43,6 +43,8 @@ namespace aiva2
 
         void set_resource(std::string const& name, std::shared_ptr<gpu_res_t> const& resource, std::shared_ptr<gpu_eye_info_t> const& info);
 
+        void set_resource(size_t const index, std::shared_ptr<gpu_res_t> const& resource, std::shared_ptr<gpu_eye_info_t> const& info);
+
     public:
         auto get_resource_heap_ref() const->ID3D12DescriptorHeap&;
 

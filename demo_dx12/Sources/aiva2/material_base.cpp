@@ -158,6 +158,20 @@ namespace aiva2
         m_resources_data[(*res_key).second] = res_val;
         tick_resources();
     }
+
+    void material_base_t::set_resource(size_t const index, std::shared_ptr<gpu_res_t> const& resource, std::shared_ptr<gpu_eye_info_t> const& info)
+    {
+        assert_t::check_bool(index >= size_t{}, "index is not valid");
+        assert_t::check_bool(index < std::size(m_resources_data), "index is not valid");
+        assert_t::check_bool(resource, "resource not valid");
+        assert_t::check_bool(info, "info not valid");
+
+        auto const res_val = gpu_eye_lib_t::new_eye(get_engine(), resource, info);
+        assert_t::check_bool(res_val, "res_val is not valid");
+
+        m_resources_data[index] = res_val;
+        tick_resources();
+    }
     
     auto material_base_t::get_resource_heap_ref() const->ID3D12DescriptorHeap&
     {

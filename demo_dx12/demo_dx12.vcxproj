@@ -207,7 +207,8 @@
     <ClInclude Include="Sources\aiva2\dxgi_format_to_buffer_format.hpp" />
     <ClInclude Include="Sources\aiva2\engine.hpp" />
     <ClInclude Include="Sources\aiva2\engine_object.hpp" />
-    <ClInclude Include="Sources\aiva2\gpu_res_utils.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_res_lib.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_res_reg.hpp" />
     <ClInclude Include="Sources\aiva2\parse_enum.hpp" />
     <ClInclude Include="Sources\aiva2\enum_utils.hpp" />
     <ClInclude Include="Sources\aiva2\event_action.hpp" />
@@ -671,6 +672,7 @@
     <ClCompile Include="Sources\aiva2\gpu_eye_key_utils.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_eye_lib.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_res.cpp" />
+    <ClCompile Include="Sources\aiva2\gpu_res_lib.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_res_state.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_executor.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_hardware.cpp" />

@@ -7,10 +7,13 @@
 #include <aiva2/d3d12_resource_utils.hpp>
 #include <aiva2/engine.hpp>
 #include <aiva2/enum_utils.hpp>
+#include <aiva2/gpu_res_reg.hpp>
 #include <aiva2/graphic_hardware.hpp>
 
 namespace aiva2
 {
+    GPU_RES_REG(buf_t);
+
     buf_t::buf_t(engine_t& engine, buf_info_t const& info)
         : impl_type{ engine }
     {

@@ -227,6 +227,7 @@
     <ClCompile Include="Sources\aiva2\buffer_format_utils.cpp" />
     <ClCompile Include="Sources\aiva2\hlsl_primitive_type_utils.cpp" />
     <ClCompile Include="Sources\aiva2\hlsl_semantic_type_utils.cpp" />
+    <ClCompile Include="Sources\aiva2\gpu_res_lib.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -666,7 +667,8 @@
     <ClInclude Include="Sources\aiva2\shader_info_for_struct.hpp" />
     <ClInclude Include="Sources\aiva2\shader_info_for_struct_field.hpp" />
     <ClInclude Include="Sources\aiva2\shader_info_for_func.hpp" />
-    <ClInclude Include="Sources\aiva2\gpu_res_utils.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_res_lib.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_res_reg.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

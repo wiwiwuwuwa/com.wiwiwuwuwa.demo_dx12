@@ -9,6 +9,7 @@
 #include <aiva2/dxgi_format_to_buffer_format.hpp>
 #include <aiva2/engine.hpp>
 #include <aiva2/gpu_cmd_copy_resource.hpp>
+#include <aiva2/gpu_res_reg.hpp>
 #include <aiva2/graphic_executor.hpp>
 #include <aiva2/graphic_hardware.hpp>
 #include <aiva2/img_png.hpp>
@@ -17,6 +18,8 @@
 
 namespace aiva2
 {
+	GPU_RES_REG(tex_2d_t);
+
 	tex_2d_t::tex_2d_t(engine_t& engine, tex_2d_info_t const& info)
 		: impl_type{ engine }
 	{

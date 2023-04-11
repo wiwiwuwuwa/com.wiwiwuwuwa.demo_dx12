@@ -106,7 +106,7 @@ namespace aiva2
 
 // --------------------------------------------------------
 
-#include <aiva2/gpu_res_utils.hpp>
+#include <aiva2/gpu_res_lib.hpp>
 
 namespace aiva2
 {
@@ -162,7 +162,7 @@ namespace aiva2
             assert_t::check_bool(typed_eye, "(typed_eye) is not valid");
 
             auto const& src_res = (*typed_eye).get_resource_ptr();
-            auto const& dst_res = aiva2::copy_deep<t_eye::resource_type>(src_res);
+            auto const& dst_res = std::dynamic_pointer_cast<t_eye::resource_type>(gpu_res_lib_t::copy_deep(src_res));
             assert_t::check_bool(dst_res, "(dst_res) is not valid");
             
             return std::make_shared<t_eye>((*typed_eye).get_engine(), dst_res, (*typed_eye).get_info());

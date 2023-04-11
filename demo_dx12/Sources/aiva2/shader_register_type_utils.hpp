@@ -102,7 +102,7 @@ namespace aiva2
 
 	// ----------------------------------------------------
 
-	constexpr auto to_d3d12_root_descriptor_parameter_type(shader_register_type_t const type)
+	constexpr auto to_d3d12_root_parameter_type(shader_register_type_t const type)
 	{
 		switch (type)
 		{

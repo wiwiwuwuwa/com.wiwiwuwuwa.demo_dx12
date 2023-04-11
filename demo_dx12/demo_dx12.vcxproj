@@ -271,6 +271,7 @@
     <ClInclude Include="Sources\aiva2\shader_register_group_type.hpp" />
     <ClInclude Include="Sources\aiva2\shader_register_type.hpp" />
     <ClInclude Include="Sources\aiva2\shader_register_type_utils.hpp" />
+    <ClInclude Include="Sources\aiva2\shader_resource_frequency.hpp" />
     <ClInclude Include="Sources\aiva2\shader_resource_type.hpp" />
     <ClInclude Include="Sources\aiva2\shader_resource_type_utils.hpp" />
     <ClInclude Include="Sources\aiva2\string_utils.hpp" />

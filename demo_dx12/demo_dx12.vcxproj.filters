@@ -674,6 +674,7 @@
     <ClInclude Include="Sources\aiva2\mat_lib.hpp" />
     <ClInclude Include="Sources\aiva2\mat_reg.hpp" />
     <ClInclude Include="Sources\aiva2\graphic_material.hpp" />
+    <ClInclude Include="Sources\aiva2\shader_resource_frequency.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

@@ -16,10 +16,12 @@ namespace aiva2
 		init_type();
 		init_name();
 		init_register();
+		init_frequency();
 	}
 
 	shader_info_for_resource_t::~shader_info_for_resource_t()
 	{
+		shut_frequency();
 		shut_register();
 		shut_name();
 		shut_type();
@@ -173,5 +175,33 @@ namespace aiva2
 		m_register_space = {};
 		m_register_index = {};
 		m_register_type = {};
+	}
+
+	auto shader_info_for_resource_t::get_frequency() const->shader_resource_frequency_t
+	{
+		return m_frequency;
+	}
+
+	void shader_info_for_resource_t::init_frequency()
+	{
+		if (std::regex_search(m_name, std::regex{ R"(^m_)", std::regex::icase | std::regex::optimize }))
+		{
+			m_frequency = shader_resource_frequency_t::PER_MATERIAL;
+			return;
+		}
+
+		if (std::regex_search(m_name, std::regex{ R"(^o_)", std::regex::icase | std::regex::optimize }))
+		{
+			m_frequency = shader_resource_frequency_t::PER_OBJECT;
+			return;
+		}
+
+		m_frequency = shader_resource_frequency_t::UNKNOWN;
+		assert_t::check_bool(false, "(m_frequency) is not valid");
+	}
+
+	void shader_info_for_resource_t::shut_frequency()
+	{
+		m_frequency = {};
 	}
 }

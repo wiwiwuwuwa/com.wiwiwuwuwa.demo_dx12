@@ -15,16 +15,6 @@ namespace aiva2
 		d3d12_root_signature_desc_t(shader_info_t const& shader_info);
 		
 		~d3d12_root_signature_desc_t() override;
-
-		// ------------------------------------------------
-
-	private:
-		void init_descriptor_ranges(shader_info_t const& shader_info);
-
-		void shut_descriptor_ranges();
-
-	private:
-		std::map<shader_register_group_type_t, std::vector<D3D12_DESCRIPTOR_RANGE1>> m_descriptor_ranges{};
 		
 		// ------------------------------------------------
 
@@ -32,9 +22,16 @@ namespace aiva2
 		void init_root_parameters(shader_info_t const& shader_info);
 
 		void shut_root_parameters();
+
+	private:
+		void init_root_parameters_for_descriptors(shader_info_t const& shader_info);
+
+		void init_root_parameters_for_descriptor_tables(shader_info_t const& shader_info);
 		
 	private:
 		std::vector<D3D12_ROOT_PARAMETER1> m_root_parameters{};
+
+		std::map<shader_register_group_type_t, std::vector<D3D12_DESCRIPTOR_RANGE1>> m_descriptor_ranges{};
 
 		// ------------------------------------------------
 
@@ -47,7 +44,7 @@ namespace aiva2
 		void shut_root_signature_desc();
 
 	private:
-		std::optional<D3D12_VERSIONED_ROOT_SIGNATURE_DESC> m_root_signature_desc{};
+		D3D12_VERSIONED_ROOT_SIGNATURE_DESC m_root_signature_desc{};
 
 		// ------------------------------------------------
 	};

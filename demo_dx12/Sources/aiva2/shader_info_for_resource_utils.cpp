@@ -8,6 +8,11 @@ namespace aiva2
 {
 	auto operator<(shader_info_for_resource_t const& lhs, shader_info_for_resource_t const& rhs)->bool
 	{
+		if (lhs.get_frequency() != rhs.get_frequency())
+		{
+			return lhs.get_frequency() < rhs.get_frequency();
+		}
+
 		if (lhs.get_register_type() != rhs.get_register_type())
 		{
 			return lhs.get_register_type() < rhs.get_register_type();

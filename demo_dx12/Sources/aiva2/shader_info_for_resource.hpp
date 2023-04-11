@@ -4,6 +4,7 @@
 #include <aiva2/engine_object.hpp>
 #include <aiva2/implements.hpp>
 #include <aiva2/shader_register_type.hpp>
+#include <aiva2/shader_resource_frequency.hpp>
 #include <aiva2/shader_resource_type.hpp>
 
 namespace aiva2
@@ -75,6 +76,19 @@ namespace aiva2
 		size_t m_register_index{};
 		
 		size_t m_register_space{};
+
+		// ------------------------------------------------
+
+	public:
+		auto get_frequency() const->shader_resource_frequency_t;
+
+	private:
+		void init_frequency();
+
+		void shut_frequency();
+
+	private:
+		shader_resource_frequency_t m_frequency{};
 
 		// ------------------------------------------------
 	};

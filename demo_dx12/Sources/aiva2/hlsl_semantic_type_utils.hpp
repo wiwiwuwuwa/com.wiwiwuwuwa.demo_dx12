@@ -37,6 +37,9 @@ namespace aiva2
         if (str == "SV_TARGET")
             return hlsl_semantic_type_t::SV_TARGET;
 
+        if (str == "SV_VERTEXID")
+            return hlsl_semantic_type_t::SV_VERTEXID;
+
         if (str == "MAXIMUM")
             return hlsl_semantic_type_t::MAXIMUM;
 
@@ -69,6 +72,9 @@ namespace aiva2
 
         if (type == hlsl_semantic_type_t::SV_TARGET)
             return "SV_TARGET";
+
+        if (type == hlsl_semantic_type_t::SV_VERTEXID)
+            return "SV_VERTEXID";
 
         if (type == hlsl_semantic_type_t::MAXIMUM)
             return "MAXIMUM";
@@ -111,6 +117,9 @@ namespace aiva2
             return true;
 
         if (type == hlsl_semantic_type_t::SV_TARGET)
+            return true;
+
+        if (type == hlsl_semantic_type_t::SV_VERTEXID)
             return true;
 
         return false;

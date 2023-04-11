@@ -13,6 +13,7 @@ namespace aiva2
         SV_DISPATCHTHREADID,
         SV_POSITION,
         SV_TARGET,
+        SV_VERTEXID,
         MAXIMUM,
     };
 }

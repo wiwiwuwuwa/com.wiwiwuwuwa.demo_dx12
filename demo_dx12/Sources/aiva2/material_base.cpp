@@ -35,6 +35,112 @@ namespace aiva2
         return shut_resources_for_rendering();
     }
 
+    auto material_base_t::get_resource(std::string const& name) const->std::shared_ptr<gpu_res_t>
+    {
+        if (std::empty(name)) return {};
+
+        auto const res_key = m_resources_keys.find(name);
+        if (res_key == std::cend(m_resources_keys)) return {};
+        if ((*res_key).second < size_t{}) return {};
+        if ((*res_key).second >= std::size(m_resources_data)) return {};
+
+        auto const& res_val = m_resources_data[(*res_key).second];
+        if (!res_val) return {};
+
+        return gpu_eye_lib_t::get_res(res_val);
+    }
+
+    auto material_base_t::get_resource(size_t const index) const->std::shared_ptr<gpu_res_t>
+    {
+        if (index < size_t{}) return {};
+        if (index >= std::size(m_resources_data)) return {};
+
+        auto const& res_val = m_resources_data[index];
+        if (!res_val) return {};
+
+        return gpu_eye_lib_t::get_res(res_val);
+    }
+
+    auto material_base_t::get_info(std::string const& name) const->std::shared_ptr<gpu_eye_info_t>
+    {
+        if (std::empty(name)) return {};
+
+        auto const res_key = m_resources_keys.find(name);
+        if (res_key == std::cend(m_resources_keys)) return {};
+        if ((*res_key).second < size_t{}) return {};
+        if ((*res_key).second >= std::size(m_resources_data)) return {};
+
+        auto const& res_val = m_resources_data[(*res_key).second];
+        if (!res_val) return {};
+
+        return gpu_eye_lib_t::get_inf(res_val);
+    }
+
+    auto material_base_t::get_info(size_t const index) const->std::shared_ptr<gpu_eye_info_t>
+    {
+        if (index < size_t{}) return {};
+        if (index >= std::size(m_resources_data)) return {};
+
+        auto const& res_val = m_resources_data[index];
+        if (!res_val) return {};
+
+        return gpu_eye_lib_t::get_inf(res_val);
+    }
+
+    auto material_base_t::get_name(size_t const index) const->std::string
+    {
+        auto const iter = std::find_if(std::cbegin(m_resources_keys), std::cend(m_resources_keys), [index](auto const& pair)
+        {
+            return pair.second == index;
+        });
+        if (iter == std::cend(m_resources_keys)) return {};
+
+        return (*iter).first;
+    }
+
+    auto material_base_t::get_name(std::shared_ptr<gpu_res_t> const& resource) const->std::string
+    {
+        if (!resource) return {};
+
+        auto const iter = std::find_if(std::cbegin(m_resources_data), std::cend(m_resources_data), [resource](auto const& res)
+        {
+            return gpu_eye_lib_t::get_res(res) == resource;
+        });
+        if (iter == std::cend(m_resources_data)) return {};
+
+        return get_name(std::distance(std::cbegin(m_resources_data), iter));
+    }
+
+    auto material_base_t::get_index(std::string const& name) const->std::optional<size_t>
+    {
+        if (std::empty(name)) return {};
+
+        auto const res_key = m_resources_keys.find(name);
+        if (res_key == std::cend(m_resources_keys)) return {};
+        if ((*res_key).second < size_t{}) return {};
+        if ((*res_key).second >= std::size(m_resources_data)) return {};
+
+        return (*res_key).second;
+    }
+
+    auto material_base_t::get_index(std::shared_ptr<gpu_res_t> const& resource) const->std::optional<size_t>
+    {
+        if (!resource) return {};
+
+        auto const iter = std::find_if(std::cbegin(m_resources_data), std::cend(m_resources_data), [resource](auto const& res)
+        {
+            return gpu_eye_lib_t::get_res(res) == resource;
+        });
+        if (iter == std::cend(m_resources_data)) return {};
+
+        return std::distance(std::cbegin(m_resources_data), iter);
+    }
+
+    auto material_base_t::num_resources() const->size_t
+    {
+        return std::size(m_resources_data);
+    }
+
     void material_base_t::set_resource(std::string const& name, std::shared_ptr<gpu_res_t> const& resource, std::shared_ptr<gpu_eye_info_t> const& info)
     {
         assert_t::check_bool(!std::empty(name), "name not valid");

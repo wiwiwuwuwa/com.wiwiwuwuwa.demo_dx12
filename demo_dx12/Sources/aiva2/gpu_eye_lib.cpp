@@ -25,6 +25,17 @@ namespace aiva2
         return (*val).second(eye);
     }
 
+    auto gpu_eye_lib_t::get_inf(std::shared_ptr<gpu_eye_t> const& eye) -> std::shared_ptr<gpu_eye_info_t>
+    {
+        assert_t::check_bool(eye, "(eye) is not valid");
+
+        auto const key = get_inf_key_type{ typeid(*eye) };
+        auto const val = get_instance().m_get_inf_funcs.find(key);
+        assert_t::check_bool(val != std::cend(get_instance().m_get_inf_funcs), "(val) is not found");
+
+        return (*val).second(eye);
+    }
+
     auto gpu_eye_lib_t::new_eye(engine_t& engine, std::shared_ptr<gpu_res_t> const& resource, std::shared_ptr<gpu_eye_info_t> const& info) -> std::shared_ptr<gpu_eye_t>
     {
         assert_t::check_bool(resource, "resource is not valid");

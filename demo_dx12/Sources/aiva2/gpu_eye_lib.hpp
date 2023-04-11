@@ -46,6 +46,25 @@ namespace aiva2
         // ------------------------------------------------
 
     private:
+        using get_inf_key_type = std::type_index;
+
+        using get_inf_val_type = std::function<std::shared_ptr<gpu_eye_info_t>(std::shared_ptr<gpu_eye_t> const&)>;
+
+        using get_inf_hsh_type = boost::hash<get_inf_key_type>;
+
+    public:
+        static auto get_inf(std::shared_ptr<gpu_eye_t> const& eye) -> std::shared_ptr<gpu_eye_info_t>;
+
+    private:
+        template <typename t_eye>
+        static void reg_get_inf_func();
+
+    private:
+        std::unordered_map<get_inf_key_type, get_inf_val_type, get_inf_hsh_type> m_get_inf_funcs{};
+
+        // ------------------------------------------------
+
+    private:
         using new_eye_key_type = std::pair<std::type_index, std::type_index>;
 
         using new_eye_val_type = std::function<std::shared_ptr<gpu_eye_t>(engine_t&, std::shared_ptr<gpu_res_t> const&, std::shared_ptr<gpu_eye_info_t> const&)>;
@@ -114,6 +133,7 @@ namespace aiva2
     void gpu_eye_lib_t::reg_eye()
     {
         reg_get_res_func<t_eye>();
+        reg_get_inf_func<t_eye>();
         reg_new_eye_func<t_eye>();
         reg_copy_deep_func<t_eye>();
         reg_copy_shlw_func<t_eye>();
@@ -132,6 +152,21 @@ namespace aiva2
         };
         
         get_instance().m_get_res_funcs[key] = val;
+    }
+
+    template <typename t_eye>
+    void gpu_eye_lib_t::reg_get_inf_func()
+    {
+        auto const key = get_inf_key_type{ typeid(t_eye) };
+        auto const val = [](std::shared_ptr<gpu_eye_t> const& eye) -> std::shared_ptr<gpu_eye_info_t>
+        {
+            auto const typed_eye = std::dynamic_pointer_cast<t_eye>(eye);
+            assert_t::check_bool(typed_eye, "typed_eye is not valid");
+
+            return std::make_shared<typename t_eye::info_type>((*typed_eye).get_info());
+        };
+
+        get_instance().m_get_inf_funcs[key] = val;
     }
 
     template <typename t_eye>

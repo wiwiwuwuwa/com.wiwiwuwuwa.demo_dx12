@@ -23,6 +23,24 @@ namespace aiva2
         // ------------------------------------------------
 
     public:
+        auto get_resource(std::string const& name) const->std::shared_ptr<gpu_res_t>;
+
+        auto get_resource(size_t const index) const->std::shared_ptr<gpu_res_t>;
+
+        auto get_info(std::string const& name) const->std::shared_ptr<gpu_eye_info_t>;
+
+        auto get_info(size_t const index) const->std::shared_ptr<gpu_eye_info_t>;
+
+        auto get_name(size_t const index) const->std::string;
+
+        auto get_name(std::shared_ptr<gpu_res_t> const& resource) const->std::string;
+
+        auto get_index(std::string const& name) const->std::optional<size_t>;
+
+        auto get_index(std::shared_ptr<gpu_res_t> const& resource) const->std::optional<size_t>;
+
+        auto num_resources() const->size_t;
+
         void set_resource(std::string const& name, std::shared_ptr<gpu_res_t> const& resource, std::shared_ptr<gpu_eye_info_t> const& info);
 
     public:

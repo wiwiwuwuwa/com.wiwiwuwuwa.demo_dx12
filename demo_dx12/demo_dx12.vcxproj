@@ -209,6 +209,7 @@
     <ClInclude Include="Sources\aiva2\engine_object.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_res_lib.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_res_reg.hpp" />
+    <ClInclude Include="Sources\aiva2\graphic_material.hpp" />
     <ClInclude Include="Sources\aiva2\mat_lib.hpp" />
     <ClInclude Include="Sources\aiva2\mat_reg.hpp" />
     <ClInclude Include="Sources\aiva2\parse_enum.hpp" />
@@ -678,6 +679,7 @@
     <ClCompile Include="Sources\aiva2\gpu_res_state.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_executor.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_hardware.cpp" />
+    <ClCompile Include="Sources\aiva2\graphic_material.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_pipeline.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_renderer.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_shader.cpp" />

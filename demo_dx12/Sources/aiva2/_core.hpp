@@ -35,9 +35,13 @@ namespace aiva2
 
 	struct graphic_hardware_t;
 
+	struct graphic_material_t;
+
 	struct graphic_pipeline_t;
 
 	struct graphic_renderer_t;
+
+	struct graphic_shader_t;
 
 	struct img_png_t;
 

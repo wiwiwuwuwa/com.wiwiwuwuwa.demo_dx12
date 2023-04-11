@@ -10,6 +10,8 @@ namespace aiva2
         // ------------------------------------------------
 
     public:
+        compute_material_t(engine_t& engine, std::shared_ptr<compute_shader_t const> const& shader);
+
         compute_material_t(engine_t& engine, nlohmann::json const& json);
 
         ~compute_material_t() override;
@@ -22,6 +24,8 @@ namespace aiva2
         auto get_shader_ptr() const->std::shared_ptr<compute_shader_t const>;
 
     private:
+        void init_shader(std::shared_ptr<compute_shader_t const> const& shader);
+
         void init_shader(nlohmann::json const& json);
 
         void shut_shader();

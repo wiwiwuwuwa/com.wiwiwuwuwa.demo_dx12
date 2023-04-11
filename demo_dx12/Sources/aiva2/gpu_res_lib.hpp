@@ -70,7 +70,6 @@ namespace aiva2
 #include <aiva2/gpu_cmd_copy_resource.hpp>
 #include <aiva2/graphic_executor.hpp>
 
-
 namespace aiva2
 {
     template <typename t_res>

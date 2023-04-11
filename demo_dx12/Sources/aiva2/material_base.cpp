@@ -182,7 +182,7 @@ namespace aiva2
         return std::distance(std::cbegin(m_resources_data), iter);
     }
 
-    auto material_base_t::num_resources() const->size_t
+    auto material_base_t::num_resource() const->size_t
     {
         return std::size(m_resources_data);
     }
@@ -216,6 +216,30 @@ namespace aiva2
         assert_t::check_bool(res_val, "res_val is not valid");
 
         m_resources_data[index] = res_val;
+        tick_resources();
+    }
+        
+    void material_base_t::set_resource(std::string const& name, std::shared_ptr<gpu_eye_t> const& view)
+    {
+        assert_t::check_bool(!std::empty(name), "name not valid");
+        assert_t::check_bool(view, "view not valid");
+
+        auto const res_key = m_resources_keys.find(name);
+        assert_t::check_bool(res_key != std::cend(m_resources_keys), "res_key is not valid");
+        assert_t::check_bool((*res_key).second >= size_t{}, "(*res_key).second is not valid");
+        assert_t::check_bool((*res_key).second < std::size(m_resources_data), "(*res_key).second is not valid");
+
+        m_resources_data[(*res_key).second] = view;
+        tick_resources();
+    }
+
+    void material_base_t::set_resource(size_t const index, std::shared_ptr<gpu_eye_t> const& view)
+    {
+        assert_t::check_bool(index >= size_t{}, "index is not valid");
+        assert_t::check_bool(index < std::size(m_resources_data), "index is not valid");
+        assert_t::check_bool(view, "view not valid");
+
+        m_resources_data[index] = view;
         tick_resources();
     }
     

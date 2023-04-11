@@ -41,6 +41,8 @@ namespace aiva2
 
 	struct img_png_t;
 
+	struct material_base_t;
+
 	struct render_target_t;
 
 	struct resource_system_t;

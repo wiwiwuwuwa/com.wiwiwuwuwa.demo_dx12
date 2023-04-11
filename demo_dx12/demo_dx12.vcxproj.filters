@@ -230,6 +230,7 @@
     <ClCompile Include="Sources\aiva2\gpu_res_lib.cpp" />
     <ClCompile Include="Sources\aiva2\mat_lib.cpp" />
     <ClCompile Include="Sources\aiva2\graphic_material.cpp" />
+    <ClCompile Include="Sources\aiva2\gpu_cmd_draw_proc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -675,6 +676,7 @@
     <ClInclude Include="Sources\aiva2\mat_reg.hpp" />
     <ClInclude Include="Sources\aiva2\graphic_material.hpp" />
     <ClInclude Include="Sources\aiva2\shader_resource_frequency.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_cmd_draw_proc.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

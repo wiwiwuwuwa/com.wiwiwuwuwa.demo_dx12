@@ -37,66 +37,42 @@ namespace aiva2
 
     auto material_base_t::get_resource(std::string const& name) const->std::shared_ptr<gpu_res_t>
     {
-        if (std::empty(name)) return {};
+        auto const idx = get_index(name);
+        if (!idx) return {};
 
-        auto const res_key = m_resources_keys.find(name);
-        if (res_key == std::cend(m_resources_keys)) return {};
-        if ((*res_key).second < size_t{}) return {};
-        if ((*res_key).second >= std::size(m_resources_data)) return {};
-
-        auto const& res_val = m_resources_data[(*res_key).second];
-        if (!res_val) return {};
-
-        return gpu_eye_lib_t::get_res(res_val);
+        return get_resource(*idx);
     }
 
     auto material_base_t::get_resource(size_t const index) const->std::shared_ptr<gpu_res_t>
     {
-        if (index < size_t{}) return {};
-        if (index >= std::size(m_resources_data)) return {};
+        auto const res = get_view(index);
+        if (!res) return {};
 
-        auto const& res_val = m_resources_data[index];
-        if (!res_val) return {};
-
-        return gpu_eye_lib_t::get_res(res_val);
+        return gpu_eye_lib_t::get_res(res);
     }
 
     auto material_base_t::get_info(std::string const& name) const->std::shared_ptr<gpu_eye_info_t>
     {
-        if (std::empty(name)) return {};
+        auto const idx = get_index(name);
+        if (!idx) return {};
 
-        auto const res_key = m_resources_keys.find(name);
-        if (res_key == std::cend(m_resources_keys)) return {};
-        if ((*res_key).second < size_t{}) return {};
-        if ((*res_key).second >= std::size(m_resources_data)) return {};
-
-        auto const& res_val = m_resources_data[(*res_key).second];
-        if (!res_val) return {};
-
-        return gpu_eye_lib_t::get_inf(res_val);
+        return get_info(*idx);
     }
 
     auto material_base_t::get_info(size_t const index) const->std::shared_ptr<gpu_eye_info_t>
     {
-        if (index < size_t{}) return {};
-        if (index >= std::size(m_resources_data)) return {};
+        auto const res = get_view(index);
+        if (!res) return {};
 
-        auto const& res_val = m_resources_data[index];
-        if (!res_val) return {};
-
-        return gpu_eye_lib_t::get_inf(res_val);
+        return gpu_eye_lib_t::get_inf(res);
     }
 
     auto material_base_t::get_view(std::string const& name) const->std::shared_ptr<gpu_eye_t>
     {
-        if (std::empty(name)) return {};
+        auto const idx = get_index(name);
+        if (!idx) return {};
 
-        auto const res_key = m_resources_keys.find(name);
-        if (res_key == std::cend(m_resources_keys)) return {};
-        if ((*res_key).second < size_t{}) return {};
-        if ((*res_key).second >= std::size(m_resources_data)) return {};
-
-        return m_resources_data[(*res_key).second];
+        return get_view(*idx);
     }
 
     auto material_base_t::get_view(size_t const index) const->std::shared_ptr<gpu_eye_t>
@@ -109,39 +85,24 @@ namespace aiva2
 
     auto material_base_t::get_name(size_t const index) const->std::string
     {
-        auto const iter = std::find_if(std::cbegin(m_resources_keys), std::cend(m_resources_keys), [index](auto const& pair)
-        {
-            return pair.second == index;
-        });
-        if (iter == std::cend(m_resources_keys)) return {};
-
-        return (*iter).first;
+        auto const itr = std::find_if(std::cbegin(m_resources_keys), std::cend(m_resources_keys), [index](auto const& pair) { return pair.second == index; });
+        return itr != std::cend(m_resources_keys) ? (*itr).first : std::string{};
     }
 
     auto material_base_t::get_name(std::shared_ptr<gpu_res_t> const& resource) const->std::string
     {
-        if (!resource) return {};
+        auto const idx = get_index(resource);
+        if (!idx) return {};
 
-        auto const iter = std::find_if(std::cbegin(m_resources_data), std::cend(m_resources_data), [resource](auto const& res)
-        {
-            return gpu_eye_lib_t::get_res(res) == resource;
-        });
-        if (iter == std::cend(m_resources_data)) return {};
-
-        return get_name(std::distance(std::cbegin(m_resources_data), iter));
+        return get_name(*idx);
     }
 
     auto material_base_t::get_name(std::shared_ptr<gpu_eye_t> const& view) const->std::string
     {
-        if (!view) return {};
+        auto const idx = get_index(view);
+        if (!idx) return {};
 
-        auto const iter = std::find_if(std::cbegin(m_resources_data), std::cend(m_resources_data), [view](auto const& res)
-        {
-            return res == view;
-        });
-        if (iter == std::cend(m_resources_data)) return {};
-
-        return get_name(std::distance(std::cbegin(m_resources_data), iter));
+        return get_name(*idx);
     }
 
     auto material_base_t::get_index(std::string const& name) const->std::optional<size_t>
@@ -150,36 +111,40 @@ namespace aiva2
 
         auto const res_key = m_resources_keys.find(name);
         if (res_key == std::cend(m_resources_keys)) return {};
-        if ((*res_key).second < size_t{}) return {};
-        if ((*res_key).second >= std::size(m_resources_data)) return {};
 
-        return (*res_key).second;
+        auto const res_idx = (*res_key).second;
+        if (res_idx < size_t{}) return {};
+        if (res_idx >= std::size(m_resources_data)) return {};
+
+        return res_idx;
     }
 
     auto material_base_t::get_index(std::shared_ptr<gpu_res_t> const& resource) const->std::optional<size_t>
     {
         if (!resource) return {};
 
-        auto const iter = std::find_if(std::cbegin(m_resources_data), std::cend(m_resources_data), [resource](auto const& res)
-        {
-            return gpu_eye_lib_t::get_res(res) == resource;
-        });
-        if (iter == std::cend(m_resources_data)) return {};
+        auto const res_itr = std::find_if(std::cbegin(m_resources_data), std::cend(m_resources_data), [resource](auto const& res) { return gpu_eye_lib_t::get_res(res) == resource; });
+        if (res_itr == std::cend(m_resources_data)) return {};
 
-        return std::distance(std::cbegin(m_resources_data), iter);
+        auto const res_idx = static_cast<size_t>(std::distance(std::cbegin(m_resources_data), res_itr));
+        if (res_idx < size_t{}) return {};
+        if (res_idx >= std::size(m_resources_data)) return {};
+
+        return res_idx;
     }
 
     auto material_base_t::get_index(std::shared_ptr<gpu_eye_t> const& view) const->std::optional<size_t>
     {
         if (!view) return {};
 
-        auto const iter = std::find_if(std::cbegin(m_resources_data), std::cend(m_resources_data), [view](auto const& res)
-        {
-            return res == view;
-        });
-        if (iter == std::cend(m_resources_data)) return {};
+        auto const res_itr = std::find(std::cbegin(m_resources_data), std::cend(m_resources_data), view);
+        if (res_itr == std::cend(m_resources_data)) return {};
 
-        return std::distance(std::cbegin(m_resources_data), iter);
+        auto const res_idx = static_cast<size_t>(std::distance(std::cbegin(m_resources_data), res_itr));
+        if (res_idx < size_t{}) return {};
+        if (res_idx >= std::size(m_resources_data)) return {};
+
+        return res_idx;
     }
 
     auto material_base_t::num_resource() const->size_t
@@ -189,48 +154,38 @@ namespace aiva2
 
     void material_base_t::set_resource(std::string const& name, std::shared_ptr<gpu_res_t> const& resource, std::shared_ptr<gpu_eye_info_t> const& info)
     {
-        assert_t::check_bool(!std::empty(name), "name not valid");
-        assert_t::check_bool(resource, "resource not valid");
-        assert_t::check_bool(info, "info not valid");
-
-        auto const res_key = m_resources_keys.find(name);
-        assert_t::check_bool(res_key != std::cend(m_resources_keys), "res_key is not valid");
-        assert_t::check_bool((*res_key).second >= size_t{}, "(*res_key).second is not valid");
-        assert_t::check_bool((*res_key).second < std::size(m_resources_data), "(*res_key).second is not valid");
+        assert_t::check_bool(!std::empty(name), "(name) not valid");
+        assert_t::check_bool(resource, "(resource) not valid");
+        assert_t::check_bool(info, "(info) not valid");
 
         auto const res_val = gpu_eye_lib_t::new_eye(get_engine(), resource, info);
         assert_t::check_bool(res_val, "res_val is not valid");
 
-        m_resources_data[(*res_key).second] = res_val;
-        tick_resources();
+        set_resource(name, res_val);
     }
 
     void material_base_t::set_resource(size_t const index, std::shared_ptr<gpu_res_t> const& resource, std::shared_ptr<gpu_eye_info_t> const& info)
     {
-        assert_t::check_bool(index >= size_t{}, "index is not valid");
-        assert_t::check_bool(index < std::size(m_resources_data), "index is not valid");
-        assert_t::check_bool(resource, "resource not valid");
-        assert_t::check_bool(info, "info not valid");
+        assert_t::check_bool(index >= size_t{}, "(index) is not valid");
+        assert_t::check_bool(index < std::size(m_resources_data), "(index) is not valid");
+        assert_t::check_bool(resource, "(resource) not valid");
+        assert_t::check_bool(info, "(info) not valid");
 
         auto const res_val = gpu_eye_lib_t::new_eye(get_engine(), resource, info);
-        assert_t::check_bool(res_val, "res_val is not valid");
+        assert_t::check_bool(res_val, "(res_val) is not valid");
 
-        m_resources_data[index] = res_val;
-        tick_resources();
+        set_resource(index, res_val);
     }
         
     void material_base_t::set_resource(std::string const& name, std::shared_ptr<gpu_eye_t> const& view)
     {
-        assert_t::check_bool(!std::empty(name), "name not valid");
-        assert_t::check_bool(view, "view not valid");
+        assert_t::check_bool(!std::empty(name), "(name) not valid");
+        assert_t::check_bool(view, "(view) not valid");
 
-        auto const res_key = m_resources_keys.find(name);
-        assert_t::check_bool(res_key != std::cend(m_resources_keys), "res_key is not valid");
-        assert_t::check_bool((*res_key).second >= size_t{}, "(*res_key).second is not valid");
-        assert_t::check_bool((*res_key).second < std::size(m_resources_data), "(*res_key).second is not valid");
-
-        m_resources_data[(*res_key).second] = view;
-        tick_resources();
+        auto const res_idx = get_index(name);
+        assert_t::check_bool(res_idx, "(res_idx) not valid");
+        
+        set_resource(*res_idx, view);
     }
 
     void material_base_t::set_resource(size_t const index, std::shared_ptr<gpu_eye_t> const& view)

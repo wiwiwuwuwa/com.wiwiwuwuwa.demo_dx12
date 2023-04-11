@@ -31,13 +31,21 @@ namespace aiva2
 
         auto get_info(size_t const index) const->std::shared_ptr<gpu_eye_info_t>;
 
+        auto get_view(std::string const& name) const->std::shared_ptr<gpu_eye_t>;
+
+        auto get_view(size_t const index) const->std::shared_ptr<gpu_eye_t>;
+
         auto get_name(size_t const index) const->std::string;
 
         auto get_name(std::shared_ptr<gpu_res_t> const& resource) const->std::string;
 
+        auto get_name(std::shared_ptr<gpu_eye_t> const& view) const->std::string;
+
         auto get_index(std::string const& name) const->std::optional<size_t>;
 
         auto get_index(std::shared_ptr<gpu_res_t> const& resource) const->std::optional<size_t>;
+
+        auto get_index(std::shared_ptr<gpu_eye_t> const& view) const->std::optional<size_t>;
 
         auto num_resources() const->size_t;
 

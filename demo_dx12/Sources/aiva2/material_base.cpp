@@ -87,6 +87,26 @@ namespace aiva2
         return gpu_eye_lib_t::get_inf(res_val);
     }
 
+    auto material_base_t::get_view(std::string const& name) const->std::shared_ptr<gpu_eye_t>
+    {
+        if (std::empty(name)) return {};
+
+        auto const res_key = m_resources_keys.find(name);
+        if (res_key == std::cend(m_resources_keys)) return {};
+        if ((*res_key).second < size_t{}) return {};
+        if ((*res_key).second >= std::size(m_resources_data)) return {};
+
+        return m_resources_data[(*res_key).second];
+    }
+
+    auto material_base_t::get_view(size_t const index) const->std::shared_ptr<gpu_eye_t>
+    {
+        if (index < size_t{}) return {};
+        if (index >= std::size(m_resources_data)) return {};
+
+        return m_resources_data[index];
+    }
+
     auto material_base_t::get_name(size_t const index) const->std::string
     {
         auto const iter = std::find_if(std::cbegin(m_resources_keys), std::cend(m_resources_keys), [index](auto const& pair)
@@ -105,6 +125,19 @@ namespace aiva2
         auto const iter = std::find_if(std::cbegin(m_resources_data), std::cend(m_resources_data), [resource](auto const& res)
         {
             return gpu_eye_lib_t::get_res(res) == resource;
+        });
+        if (iter == std::cend(m_resources_data)) return {};
+
+        return get_name(std::distance(std::cbegin(m_resources_data), iter));
+    }
+
+    auto material_base_t::get_name(std::shared_ptr<gpu_eye_t> const& view) const->std::string
+    {
+        if (!view) return {};
+
+        auto const iter = std::find_if(std::cbegin(m_resources_data), std::cend(m_resources_data), [view](auto const& res)
+        {
+            return res == view;
         });
         if (iter == std::cend(m_resources_data)) return {};
 
@@ -130,6 +163,19 @@ namespace aiva2
         auto const iter = std::find_if(std::cbegin(m_resources_data), std::cend(m_resources_data), [resource](auto const& res)
         {
             return gpu_eye_lib_t::get_res(res) == resource;
+        });
+        if (iter == std::cend(m_resources_data)) return {};
+
+        return std::distance(std::cbegin(m_resources_data), iter);
+    }
+
+    auto material_base_t::get_index(std::shared_ptr<gpu_eye_t> const& view) const->std::optional<size_t>
+    {
+        if (!view) return {};
+
+        auto const iter = std::find_if(std::cbegin(m_resources_data), std::cend(m_resources_data), [view](auto const& res)
+        {
+            return res == view;
         });
         if (iter == std::cend(m_resources_data)) return {};
 

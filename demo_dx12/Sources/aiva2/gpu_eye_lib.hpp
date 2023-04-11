@@ -63,10 +63,50 @@ namespace aiva2
         std::unordered_map<new_eye_key_type, new_eye_val_type, new_eye_hsh_type> m_new_eye_funcs{};
 
         // ------------------------------------------------
+
+    private:
+        using copy_deep_key_type = std::type_index;
+
+        using copy_deep_val_type = std::function<std::shared_ptr<gpu_eye_t>(std::shared_ptr<gpu_eye_t> const&)>;
+
+        using copy_deep_hsh_type = boost::hash<copy_deep_key_type>;
+
+    public:
+        static auto copy_deep(std::shared_ptr<gpu_eye_t> const& eye) -> std::shared_ptr<gpu_eye_t>;
+
+    private:
+        template <typename t_eye>
+        static void reg_copy_deep_func();
+
+    private:
+        std::unordered_map<copy_deep_key_type, copy_deep_val_type, copy_deep_hsh_type> m_copy_deep_funcs{};
+
+        // ------------------------------------------------
+
+    private:
+        using copy_shlw_key_type = std::type_index;
+
+        using copy_shlw_val_type = std::function<std::shared_ptr<gpu_eye_t>(std::shared_ptr<gpu_eye_t> const&)>;
+
+        using copy_shlw_hsh_type = boost::hash<copy_shlw_key_type>;
+
+    public:
+        static auto copy_shlw(std::shared_ptr<gpu_eye_t> const& eye) -> std::shared_ptr<gpu_eye_t>;
+
+    private:
+        template <typename t_eye>
+        static void reg_copy_shlw_func();
+
+    private:
+        std::unordered_map<copy_shlw_key_type, copy_shlw_val_type, copy_shlw_hsh_type> m_copy_shlw_funcs{};
+
+        // ------------------------------------------------
     };
 };
 
 // --------------------------------------------------------
+
+#include <aiva2/gpu_res_utils.hpp>
 
 namespace aiva2
 {
@@ -75,6 +115,8 @@ namespace aiva2
     {
         reg_get_res_func<t_eye>();
         reg_new_eye_func<t_eye>();
+        reg_copy_deep_func<t_eye>();
+        reg_copy_shlw_func<t_eye>();
     }
     
     template <typename t_eye>
@@ -108,5 +150,39 @@ namespace aiva2
         };
         
         get_instance().m_new_eye_funcs[key] = val;
+    }
+
+    template <typename t_eye>
+    void gpu_eye_lib_t::reg_copy_deep_func()
+    {
+        auto const key = copy_deep_key_type{ typeid(t_eye) };
+        auto const val = [](std::shared_ptr<gpu_eye_t> const& eye) -> std::shared_ptr<gpu_eye_t>
+        {
+            auto const typed_eye = std::dynamic_pointer_cast<t_eye>(eye);
+            assert_t::check_bool(typed_eye, "(typed_eye) is not valid");
+
+            auto const& src_res = (*typed_eye).get_resource_ptr();
+            auto const& dst_res = aiva2::copy_deep<t_eye::resource_type>(src_res);
+            assert_t::check_bool(dst_res, "(dst_res) is not valid");
+            
+            return std::make_shared<t_eye>((*typed_eye).get_engine(), dst_res, (*typed_eye).get_info());
+        };
+        
+        get_instance().m_copy_deep_funcs[key] = val;
+    }
+
+    template <typename t_eye>
+    void gpu_eye_lib_t::reg_copy_shlw_func()
+    {
+        auto const key = copy_shlw_key_type{ typeid(t_eye) };
+        auto const val = [](std::shared_ptr<gpu_eye_t> const& eye) -> std::shared_ptr<gpu_eye_t>
+        {
+            auto const typed_eye = std::dynamic_pointer_cast<t_eye>(eye);
+            assert_t::check_bool(typed_eye, "(typed_eye) is not valid");
+
+            return std::make_shared<t_eye>((*typed_eye).get_engine(), (*typed_eye).get_resource_ptr(), (*typed_eye).get_info());
+        };
+        
+        get_instance().m_copy_shlw_funcs[key] = val;
     }
 }

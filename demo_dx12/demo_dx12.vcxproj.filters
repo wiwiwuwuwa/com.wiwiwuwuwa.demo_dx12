@@ -666,6 +666,7 @@
     <ClInclude Include="Sources\aiva2\shader_info_for_struct.hpp" />
     <ClInclude Include="Sources\aiva2\shader_info_for_struct_field.hpp" />
     <ClInclude Include="Sources\aiva2\shader_info_for_func.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_res_utils.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

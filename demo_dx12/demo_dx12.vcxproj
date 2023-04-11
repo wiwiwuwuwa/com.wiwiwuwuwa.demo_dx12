@@ -207,6 +207,7 @@
     <ClInclude Include="Sources\aiva2\dxgi_format_to_buffer_format.hpp" />
     <ClInclude Include="Sources\aiva2\engine.hpp" />
     <ClInclude Include="Sources\aiva2\engine_object.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_res_utils.hpp" />
     <ClInclude Include="Sources\aiva2\parse_enum.hpp" />
     <ClInclude Include="Sources\aiva2\enum_utils.hpp" />
     <ClInclude Include="Sources\aiva2\event_action.hpp" />

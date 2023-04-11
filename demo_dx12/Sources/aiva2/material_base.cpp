@@ -219,14 +219,16 @@ namespace aiva2
         {
             auto const& resource_data = code_info.get_resource_ptr(i);
             assert_t::check_bool(resource_data, "resource_data is not valid");
+            
+            if ((*resource_data).get_frequency() != shader_resource_frequency_t::PER_MATERIAL) continue;
 
-            auto const& resource_name = resource_data->get_name();
+            auto const& resource_name = (*resource_data).get_name();
             assert_t::check_bool(!std::empty(resource_name), "resource_name is not valid");
 
-            m_resources_keys.insert_or_assign(resource_name, i);
+            m_resources_keys.insert_or_assign(resource_name, std::size(m_resources_data));
             m_resources_data.push_back(nullptr);
         }
-
+        
         m_resources_heap = {};
 
         auto heap_desc = D3D12_DESCRIPTOR_HEAP_DESC{};

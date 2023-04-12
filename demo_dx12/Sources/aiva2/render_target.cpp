@@ -108,14 +108,16 @@ namespace aiva2
 		upd_color_resource();
 	}
 
-	auto render_target_t::get_color_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>
+	auto render_target_t::get_color_handle(size_t const index /*= {}*/) const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>
 	{
-		if (!m_color_heap)
-		{
-			return {};
-		}
+		if (index < decltype(index){} || index >= std::size(m_color_views) || !m_color_heap) return {};
 
-		return (*m_color_heap).GetCPUDescriptorHandleForHeapStart();
+		auto descriptor_handle = (*m_color_heap).GetCPUDescriptorHandleForHeapStart();
+		
+		auto const increment_size = static_cast<size_t>(get_engine().get_graphic_hardware().get_device().GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
+		descriptor_handle.ptr += index * increment_size;
+
+		return descriptor_handle;
 	}
 
 	auto render_target_t::num_color_handle() const->size_t

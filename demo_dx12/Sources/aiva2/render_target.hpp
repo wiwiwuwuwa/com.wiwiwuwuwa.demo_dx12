@@ -36,7 +36,7 @@ namespace aiva2
 		void set_color_resource(size_t const index, std::shared_ptr<gpu_res_t> const& resource, std::shared_ptr<gpu_eye_info_t> const& info);
 
 	public:
-		auto get_color_handle() const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>;
+		auto get_color_handle(size_t const index = {}) const->std::optional<D3D12_CPU_DESCRIPTOR_HANDLE>;
 
 		auto num_color_handle() const->size_t;
 

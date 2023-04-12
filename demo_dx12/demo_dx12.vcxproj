@@ -207,6 +207,7 @@
     <ClInclude Include="Sources\aiva2\dxgi_format_to_buffer_format.hpp" />
     <ClInclude Include="Sources\aiva2\engine.hpp" />
     <ClInclude Include="Sources\aiva2\engine_object.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_cmd_clear_render_target.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_draw_proc.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_res_lib.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_res_reg.hpp" />
@@ -667,6 +668,7 @@
     <ClCompile Include="Sources\aiva2\engine_object.cpp" />
     <ClCompile Include="Sources\aiva2\file_utils.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_base.cpp" />
+    <ClCompile Include="Sources\aiva2\gpu_cmd_clear_render_target.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_copy_resource.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_copy_buf_to_tex_2d.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_dispatch.cpp" />

@@ -23,6 +23,10 @@ namespace aiva2
 		
 		void execute_set_render_targets() const;
 
+		void execute_rs_set_scissor_rects() const;
+
+		void execute_rs_set_viewports() const;
+
 		// ------------------------------------------------
 
 	public:

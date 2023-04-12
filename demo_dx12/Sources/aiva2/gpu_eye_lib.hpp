@@ -120,6 +120,25 @@ namespace aiva2
         std::unordered_map<copy_shlw_key_type, copy_shlw_val_type, copy_shlw_hsh_type> m_copy_shlw_funcs{};
 
         // ------------------------------------------------
+
+    private:
+        using get_viewport_size_key_type = std::type_index;
+
+        using get_viewport_size_val_type = std::function<glm::size2(std::shared_ptr<gpu_eye_t> const&)>;
+
+        using get_viewport_size_hsh_type = boost::hash<get_viewport_size_key_type>;
+
+    public:
+        static auto get_viewport_size(std::shared_ptr<gpu_eye_t> const& eye) -> glm::size2;
+
+    private:
+        template <typename t_eye>
+        static void reg_get_viewport_size_func();
+
+    private:
+        std::unordered_map<get_viewport_size_key_type, get_viewport_size_val_type, get_viewport_size_hsh_type> m_get_viewport_size_funcs{};
+
+        // ------------------------------------------------
     };
 };
 
@@ -137,6 +156,7 @@ namespace aiva2
         reg_new_eye_func<t_eye>();
         reg_copy_deep_func<t_eye>();
         reg_copy_shlw_func<t_eye>();
+        reg_get_viewport_size_func<t_eye>();
     }
     
     template <typename t_eye>
@@ -219,5 +239,28 @@ namespace aiva2
         };
         
         get_instance().m_copy_shlw_funcs[key] = val;
+    }
+
+    template <typename t_eye>
+    void gpu_eye_lib_t::reg_get_viewport_size_func()
+    {
+        auto const key = get_viewport_size_key_type{ typeid(t_eye) };
+        auto const val = [](std::shared_ptr<gpu_eye_t> const& eye) -> glm::size2
+        {
+            auto const typed_eye = std::dynamic_pointer_cast<t_eye>(eye);
+            assert_t::check_bool(typed_eye, "(typed_eye) is not valid");
+
+            auto const typed_res = (*typed_eye).get_resource_ptr();
+            assert_t::check_bool(typed_res, "(typed_res) is not valid");
+
+            return glm::size2
+            (
+                (*typed_res).get_info().get_width(),
+                (*typed_res).get_info().get_height()
+            )
+            >> (*typed_eye).get_info().get_mip_slice();
+        };
+        
+        get_instance().m_get_viewport_size_funcs[key] = val;
     }
 }

@@ -275,4 +275,20 @@ namespace aiva2
 		auto const bind_place = (*m_depth_heap).GetCPUDescriptorHandleForHeapStart();
 		(*m_depth_view).bind_for_rendering(bind_place);
 	}
+
+	auto render_target_t::get_viewport_size(size_t const index) const->glm::size2
+	{
+		assert_t::check_bool(index >= decltype(index){}, "(index) is not valid");
+		assert_t::check_bool(index < std::size(m_color_views), "(index) is not valid");
+
+		auto const& color_view = m_color_views[index];
+		assert_t::check_bool(color_view, "color_view is not valid");
+
+		return gpu_eye_lib_t::get_viewport_size(color_view);
+	}
+
+	auto render_target_t::num_viewport_size() const->size_t
+	{
+		return std::size(m_color_views);
+	}
 }

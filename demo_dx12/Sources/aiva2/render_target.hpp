@@ -79,6 +79,15 @@ namespace aiva2
 		std::shared_ptr<gpu_eye_t> m_depth_view{};
 
 		winrt::com_ptr<ID3D12DescriptorHeap> m_depth_heap{};
+
+		// ------------------------------------------------
+		// UTILS
+		// ------------------------------------------------
+
+	public:
+		auto get_viewport_size(size_t const index) const->glm::size2;
+
+		auto num_viewport_size() const->size_t;
 		
 		// ------------------------------------------------
 	};

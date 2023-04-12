@@ -23,6 +23,8 @@ namespace aiva2
 	{
 		execute_resource_barrier();
 		execute_set_render_targets();
+		execute_rs_set_scissor_rects();
+		execute_rs_set_viewports();
 	}
 
 	void gpu_cmd_set_render_target_t::execute_resource_barrier() const
@@ -57,6 +59,62 @@ namespace aiva2
 			/*pRenderTargetDescriptors*/ color_handle_opt ? &(*color_handle_opt) : nullptr,
 			/*RTsSingleHandleToDescriptorRange*/ TRUE,
 			/*pDepthStencilDescriptor*/ depth_handle_opt ? &(*depth_handle_opt) : nullptr
+		);
+	}
+
+	void gpu_cmd_set_render_target_t::execute_rs_set_scissor_rects() const
+	{
+		auto scissor_rects = std::vector<D3D12_RECT>{};
+
+		if (auto const render_target = get_render_target_ptr())
+		{
+			for (auto i = size_t{}; i < (*render_target).num_viewport_size(); i++)
+			{
+				auto const size = (*render_target).get_viewport_size(i);
+				assert_t::check_bool(size.x > decltype(size.x){}, "(size.x) is not valid");
+				assert_t::check_bool(size.y > decltype(size.y){}, "(size.y) is not valid");
+
+				auto& scissor_rect = scissor_rects.emplace_back();
+				scissor_rect.left = 0;
+				scissor_rect.top = 0;
+				scissor_rect.right = static_cast<LONG>(size.x);
+				scissor_rect.bottom = static_cast<LONG>(size.y);
+			}
+		}
+
+		get_engine().get_graphic_hardware().get_command_list().RSSetScissorRects
+		(
+			/*NumRects*/ static_cast<UINT>(std::size(scissor_rects)),
+			/*pRects*/ std::data(scissor_rects)
+		);
+	}
+
+	void gpu_cmd_set_render_target_t::execute_rs_set_viewports() const
+	{
+		auto viewports = std::vector<D3D12_VIEWPORT>{};
+
+		if (auto const render_target = get_render_target_ptr())
+		{
+			for (auto i = size_t{}; i < (*render_target).num_viewport_size(); i++)
+			{
+				auto const size = (*render_target).get_viewport_size(i);
+				assert_t::check_bool(size.x > decltype(size.x){}, "(size.x) is not valid");
+				assert_t::check_bool(size.y > decltype(size.y){}, "(size.y) is not valid");
+
+				auto& viewport = viewports.emplace_back();
+				viewport.TopLeftX = 0.0f;
+				viewport.TopLeftY = 0.0f;
+				viewport.Width = static_cast<FLOAT>(size.x);
+				viewport.Height = static_cast<FLOAT>(size.y);
+				viewport.MinDepth = 0.0f;
+				viewport.MaxDepth = 1.0f;
+			}
+		}
+
+		get_engine().get_graphic_hardware().get_command_list().RSSetViewports
+		(
+			/*NumViewports*/ static_cast<UINT>(std::size(viewports)),
+			/*pViewports*/ std::data(viewports)
 		);
 	}
 

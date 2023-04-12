@@ -69,4 +69,15 @@ namespace aiva2
 
         return (*val).second(eye);
     }
+
+    auto gpu_eye_lib_t::get_viewport_size(std::shared_ptr<gpu_eye_t> const& eye) -> glm::size2
+    {
+        assert_t::check_bool(eye, "(eye) is not valid");
+
+        auto const key = get_viewport_size_key_type{ typeid(*eye) };
+        auto const val = get_instance().m_get_viewport_size_funcs.find(key);
+        assert_t::check_bool(val != std::cend(get_instance().m_get_viewport_size_funcs), "(val) is not found");
+
+        return (*val).second(eye);
+    }
 }

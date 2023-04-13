@@ -93,5 +93,18 @@ namespace aiva2
         std::vector<size_t> m_slot_index_to_field_index{};
 
         // ------------------------------------------------
+
+    public:
+        auto get_byte_size() const -> size_t;
+
+    private:
+        void init_byte_layout();
+
+        void shut_byte_layout();
+
+    private:
+        size_t m_byte_size{};
+
+        // ------------------------------------------------
     };
 }

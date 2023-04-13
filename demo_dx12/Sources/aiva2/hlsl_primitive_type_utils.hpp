@@ -125,6 +125,39 @@ namespace aiva2
         return "UNKNOWN";
     }
 
+    constexpr auto to_byte_size(hlsl_primitive_type_t const type)
+    {
+        if (type == hlsl_primitive_type_t::INT)
+            return sizeof(glm::i32vec1);
+
+        if (type == hlsl_primitive_type_t::FLOAT)
+            return sizeof(glm::f32vec1);
+
+        if (type == hlsl_primitive_type_t::FLOAT2)
+            return sizeof(glm::f32vec2);
+
+        if (type == hlsl_primitive_type_t::FLOAT3)
+            return sizeof(glm::f32vec3);
+
+        if (type == hlsl_primitive_type_t::FLOAT4)
+            return sizeof(glm::f32vec4);
+
+        if (type == hlsl_primitive_type_t::FLOAT2X2)
+            return sizeof(glm::f32mat2);
+
+        if (type == hlsl_primitive_type_t::FLOAT3X3)
+            return sizeof(glm::f32mat3);
+
+        if (type == hlsl_primitive_type_t::FLOAT4X4)
+            return sizeof(glm::f32mat4);
+
+        if (type == hlsl_primitive_type_t::UINT)
+            return sizeof(glm::u32vec1);
+
+        assert_t::check_bool(false, "failed to convert hlsl primitive type to byte size");
+        return size_t{};
+    }
+
     // ----------------------------------------------------
 
     void to_json(nlohmann::json& json, hlsl_primitive_type_t const& type);

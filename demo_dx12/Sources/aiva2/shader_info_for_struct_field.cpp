@@ -9,15 +9,22 @@
 
 namespace aiva2
 {
-    shader_info_for_struct_field_t::shader_info_for_struct_field_t(engine_t& engine, std::string const& text)
+    shader_info_for_struct_field_t::shader_info_for_struct_field_t
+    (
+        engine_t& engine,
+        std::string const& text,
+        size_t const byte_offset
+    )
         : impl_type{ engine }
         , m_text{ text }
     {
         init_self();
+        init_byte_layout(byte_offset);
     }
 
     shader_info_for_struct_field_t::~shader_info_for_struct_field_t()
     {
+        shut_byte_layout();
         shut_self();
     }
 
@@ -107,5 +114,55 @@ namespace aiva2
         m_semantic_type = {};
         m_name = {};
         m_primitive_type = {};
+    }
+
+    auto shader_info_for_struct_field_t::is_input_assembly() const->bool
+    {
+        return aiva2::is_input_assembly(get_semantic_type());
+    }
+
+    auto shader_info_for_struct_field_t::is_system_value() const->bool
+    {
+        return aiva2::is_system_value(get_semantic_type());
+    }
+
+    auto shader_info_for_struct_field_t::get_byte_offset() const->size_t
+    {
+        assert_t::check_bool(has_byte_layout(), "field has no byte layout");
+        return m_byte_offset;
+    }
+
+    auto shader_info_for_struct_field_t::get_byte_size() const->size_t
+    {
+        assert_t::check_bool(has_byte_layout(), "field has no byte layout");
+        return m_byte_size;
+    }
+
+    auto shader_info_for_struct_field_t::has_byte_layout() const->bool
+    {
+        return m_has_byte_layout;
+    }
+
+    void shader_info_for_struct_field_t::init_byte_layout(size_t const byte_offset)
+    {
+        if (is_system_value())
+        {
+            m_has_byte_layout = false;
+            m_byte_offset = {};
+            m_byte_size = {};
+        }
+        else
+        {
+            m_has_byte_layout = true;
+            m_byte_offset = byte_offset;
+            m_byte_size = aiva2::to_byte_size(get_primitive_type());
+        }
+    }
+
+    void shader_info_for_struct_field_t::shut_byte_layout()
+    {
+        m_has_byte_layout = {};
+        m_byte_offset = {};
+        m_byte_size = {};
     }
 }

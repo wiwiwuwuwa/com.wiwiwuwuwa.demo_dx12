@@ -32,6 +32,8 @@ namespace aiva2
 
         void bind_for_rendering(D3D12_CPU_DESCRIPTOR_HANDLE const& bind_place) const override;
 
+        auto get_gpu_virtual_address() const->D3D12_GPU_VIRTUAL_ADDRESS;
+
         auto shut_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER> override;
 
         // ------------------------------------------------

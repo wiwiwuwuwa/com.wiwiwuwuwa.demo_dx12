@@ -12,7 +12,7 @@ namespace aiva2
         // ------------------------------------------------
 
     public:
-        shader_info_for_struct_field_t(engine_t& engine, std::string const& text);
+        shader_info_for_struct_field_t(engine_t& engine, std::string const& text, size_t const byte_offset);
 
         ~shader_info_for_struct_field_t() override;
 
@@ -48,6 +48,34 @@ namespace aiva2
         hlsl_semantic_type_t m_semantic_type{};
 
         size_t m_semantic_index{};
+
+        // ------------------------------------------------
+
+    public:
+        auto is_input_assembly() const->bool;
+
+        auto is_system_value() const->bool;
+
+        // ------------------------------------------------
+
+    public:
+        auto get_byte_offset() const->size_t;
+
+        auto get_byte_size() const->size_t;
+
+        auto has_byte_layout() const->bool;
+
+    private:
+        void init_byte_layout(size_t const byte_offset);
+
+        void shut_byte_layout();
+
+    private:
+        bool m_has_byte_layout{};
+
+        size_t m_byte_offset{};
+
+        size_t m_byte_size{};
 
         // ------------------------------------------------
     };

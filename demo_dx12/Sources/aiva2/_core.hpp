@@ -5,6 +5,8 @@ namespace aiva2
 {
 	struct buf_t;
 
+	struct cbv_buf_t;
+
 	struct compute_material_t;
 
 	struct compute_shader_t;

@@ -20,6 +20,8 @@ namespace aiva2
 
 	public:
 		auto get_resource() const->winrt::com_ptr<ID3D12Resource> const&;
+
+		auto get_gpu_virtual_address() const->D3D12_GPU_VIRTUAL_ADDRESS;
 		
 	protected:
 		winrt::com_ptr<ID3D12Resource> m_resource{};

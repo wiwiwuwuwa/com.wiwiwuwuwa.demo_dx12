@@ -24,6 +24,14 @@ namespace aiva2
 		return m_resource;
 	}
 
+	auto gpu_res_t::get_gpu_virtual_address() const->D3D12_GPU_VIRTUAL_ADDRESS
+	{
+		auto const resource = get_resource();
+		assert_t::check_bool(resource, "(resource) is not valid");
+
+		return (*resource).GetGPUVirtualAddress();
+	}
+
 	auto gpu_res_t::set_state(D3D12_RESOURCE_STATES const state, std::optional<size_t> const index /*= {}*/) ->std::vector<D3D12_RESOURCE_BARRIER>
 	{
 		assert_t::check_bool(m_resource, "m_resource is not valid");

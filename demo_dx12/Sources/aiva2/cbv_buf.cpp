@@ -43,6 +43,11 @@ namespace aiva2
         );
     }
 
+    auto cbv_buf_t::get_gpu_virtual_address() const->D3D12_GPU_VIRTUAL_ADDRESS
+    {
+        return get_resource_ref().get_gpu_virtual_address();
+    }
+
     auto cbv_buf_t::shut_for_rendering() const->std::vector<D3D12_RESOURCE_BARRIER>
     {
         return get_resource_ref().set_state(D3D12_RESOURCE_STATE_COMMON);

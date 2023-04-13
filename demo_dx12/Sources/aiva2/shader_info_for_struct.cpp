@@ -15,10 +15,12 @@ namespace aiva2
         init_name();
         init_fields();
         init_input_layout_slot_indices();
+        init_byte_layout();
     }
 
     shader_info_for_struct_t::~shader_info_for_struct_t()
     {
+        shut_byte_layout();
         shut_input_layout_slot_indices();
         shut_fields();
         shut_name();
@@ -181,6 +183,7 @@ namespace aiva2
         m_fields = {};
 
         auto const regex = std::regex{ R"([{\n]\s*\b([\s\S]*?;))", std::regex::icase | std::regex::optimize };
+        auto byte_offset = size_t{};
 
         for (auto i = std::sregex_iterator{ std::cbegin(m_text), std::cend(m_text), regex }; i != decltype(i){}; i++)
         {
@@ -191,8 +194,12 @@ namespace aiva2
             auto const field_string = field_match.str();
             assert_t::check_bool(!std::empty(field_string), "(field_string) is not valid");
 
-            auto const& field_info = m_fields.emplace_back(std::make_shared<shader_info_for_struct_field_t>(get_engine(), field_string));
+            auto const& field_info = m_fields.emplace_back(std::make_shared<shader_info_for_struct_field_t>(get_engine(), field_string, byte_offset));
             assert_t::check_bool(field_info, "field_info is not valid");
+
+            if (!(*field_info).has_byte_layout()) continue;
+
+            byte_offset = (*field_info).get_byte_offset() + (*field_info).get_byte_size();
         }
     }
 
@@ -280,5 +287,28 @@ namespace aiva2
     void shader_info_for_struct_t::shut_input_layout_slot_indices()
     {
         m_slot_index_to_field_index = {};
+    }
+
+    auto shader_info_for_struct_t::get_byte_size() const -> size_t
+    {
+        return m_byte_size;
+    }
+
+    void shader_info_for_struct_t::init_byte_layout()
+    {
+        m_byte_size = {};
+        
+        for (auto i = size_t{}; i < num_field(); i++)
+        {
+            auto const& field = get_field_ref(i);
+            if (!field.has_byte_layout()) continue;
+
+            m_byte_size = std::max(m_byte_size, field.get_byte_offset() + field.get_byte_size());
+        }
+    }
+
+    void shader_info_for_struct_t::shut_byte_layout()
+    {
+        m_byte_size = {};
     }
 }

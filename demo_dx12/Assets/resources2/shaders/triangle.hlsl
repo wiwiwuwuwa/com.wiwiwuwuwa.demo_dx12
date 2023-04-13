@@ -27,7 +27,6 @@ struct f2a_t
 // init functions ----------------------------------------
 v2f_t vert(a2v_t a2v)
 {
-    //clockwise array with 0.5
     float2 pos[3] = { float2(-0.5, -0.5), float2(0.0, 0.5), float2(0.5, -0.5) };
     float3 col[3] = { float3(1.0, 0.0, 0.0), float3(0.0, 1.0, 0.0), float3(0.0, 0.0, 1.0) };
 

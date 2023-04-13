@@ -19,8 +19,8 @@ namespace aiva2
     {
         auto rasterizer_desc = D3D12_RASTERIZER_DESC{};
         rasterizer_desc.FillMode = D3D12_FILL_MODE_SOLID;
-        rasterizer_desc.CullMode = D3D12_CULL_MODE_NONE;
-        rasterizer_desc.FrontCounterClockwise = TRUE;
+        rasterizer_desc.CullMode = D3D12_CULL_MODE_BACK;
+        rasterizer_desc.FrontCounterClockwise = FALSE;
         rasterizer_desc.DepthBias = D3D12_DEFAULT_DEPTH_BIAS;
         rasterizer_desc.DepthBiasClamp = D3D12_DEFAULT_DEPTH_BIAS_CLAMP;
         rasterizer_desc.SlopeScaledDepthBias = D3D12_DEFAULT_SLOPE_SCALED_DEPTH_BIAS;

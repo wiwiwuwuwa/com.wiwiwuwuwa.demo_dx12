@@ -253,12 +253,20 @@ namespace aiva2
             auto const typed_res = (*typed_eye).get_resource_ptr();
             assert_t::check_bool(typed_res, "(typed_res) is not valid");
 
-            return glm::size2
-            (
-                (*typed_res).get_info().get_width(),
-                (*typed_res).get_info().get_height()
-            )
-            >> (*typed_eye).get_info().get_mip_slice();
+            if constexpr (std::is_same_v<typename t_eye::resource_type, tex_2d_t>)
+            {
+                return glm::size2
+                (
+                    (*typed_res).get_info().get_width(),
+                    (*typed_res).get_info().get_height()
+                )
+                >> (*typed_eye).get_info().get_mip_slice();
+            }
+            else
+            {
+                assert_t::check_bool(false, "(get_viewport_size) is only supported for tex_2d_t");
+                return {};
+            }
         };
         
         get_instance().m_get_viewport_size_funcs[key] = val;

@@ -232,6 +232,8 @@
     <ClCompile Include="Sources\aiva2\graphic_material.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_draw_proc.cpp" />
     <ClCompile Include="Sources\aiva2\gpu_cmd_clear_render_target.cpp" />
+    <ClCompile Include="Sources\aiva2\cbv_buf.cpp" />
+    <ClCompile Include="Sources\aiva2\cbv_buf_info.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -679,6 +681,8 @@
     <ClInclude Include="Sources\aiva2\shader_resource_frequency.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_draw_proc.hpp" />
     <ClInclude Include="Sources\aiva2\gpu_cmd_clear_render_target.hpp" />
+    <ClInclude Include="Sources\aiva2\cbv_buf.hpp" />
+    <ClInclude Include="Sources\aiva2\cbv_buf_info.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

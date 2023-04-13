@@ -187,6 +187,8 @@
     <ClInclude Include="Sources\aiva2\buffer_memory.hpp" />
     <ClInclude Include="Sources\aiva2\buffer_memory_utils.hpp" />
     <ClInclude Include="Sources\aiva2\buf_info.hpp" />
+    <ClInclude Include="Sources\aiva2\cbv_buf.hpp" />
+    <ClInclude Include="Sources\aiva2\cbv_buf_info.hpp" />
     <ClInclude Include="Sources\aiva2\compute_material.hpp" />
     <ClInclude Include="Sources\aiva2\compute_shader.hpp" />
     <ClInclude Include="Sources\aiva2\d3d12_blend_desc.hpp" />
@@ -648,6 +650,8 @@
     <ClCompile Include="Sources\aiva2\buf.cpp" />
     <ClCompile Include="Sources\aiva2\buffer_format_utils.cpp" />
     <ClCompile Include="Sources\aiva2\buf_info.cpp" />
+    <ClCompile Include="Sources\aiva2\cbv_buf.cpp" />
+    <ClCompile Include="Sources\aiva2\cbv_buf_info.cpp" />
     <ClCompile Include="Sources\aiva2\compute_material.cpp" />
     <ClCompile Include="Sources\aiva2\compute_shader.cpp" />
     <ClCompile Include="Sources\aiva2\d3d12_blend_desc.cpp" />

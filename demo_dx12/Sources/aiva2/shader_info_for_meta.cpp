@@ -145,7 +145,7 @@ namespace aiva2
 	{
 		m_render_target_formats = {};
 
-		auto const regex_for_array = std::regex{R"(\brender_target_formats\s*?=\s*?\[[\s\S]*?\])", std::regex::icase | std::regex::optimize};
+		auto const regex_for_array = std::regex{R"(\brender_target_format\s*?=\s*?\[([\s\S]*?)\])", std::regex::icase | std::regex::optimize};
 		auto match_for_array = std::smatch{};
 
 		if (!std::regex_search(m_text, match_for_array, regex_for_array))
@@ -154,10 +154,10 @@ namespace aiva2
 		}
 
 		assert_t::check_bool(match_for_array.ready(), "(match_for_array) is not valid");
-		assert_t::check_bool(std::size(match_for_array) == 1, "(match_for_array) is not valid");
+		assert_t::check_bool(std::size(match_for_array) == 2, "(match_for_array) is not valid");
 
 		auto const regex_for_element = std::regex{R"(\b(\w+)\b)", std::regex::icase | std::regex::optimize};
-		for (auto i = std::sregex_iterator{match_for_array[0].first, match_for_array[0].second, regex_for_element}; i != decltype(i){}; i++)
+		for (auto i = std::sregex_iterator{match_for_array[1].first, match_for_array[1].second, regex_for_element}; i != decltype(i){}; i++)
 		{
 			auto const& match_for_element = (*i);
 			assert_t::check_bool(match_for_element.ready(), "(match_for_element) is not valid");
@@ -203,7 +203,7 @@ namespace aiva2
 			assert_t::check_bool(!std::empty(value_string), "(value_string) is not valid");
 
 			auto value_enum = buffer_format_t{}; from_string(value_string, value_enum);
-			assert_t::check_bool(is_valid(value_enum), "(value_enum) is not valid");
+			assert_t::check_bool(value_enum != buffer_format_t::MAXIMUM, "(value_enum) is not valid");
 			
 			m_depth_stencil_format = value_enum;
 		}

@@ -137,7 +137,7 @@ namespace aiva2
 	{
 		m_resources = {};
 
-		auto const regex_for_resources = std::regex(R"(\b\w+?\s*?(<[\s\S]*?>)?\s*?\w+?(\s*?\[[\s\S]*?\]\s*?)*?\s*?:\s*?register\s*?\([\s\S]*?\)\s*?;)", std::regex::icase | std::regex::optimize);
+		auto const regex_for_resources = std::regex(R"(\b\w+?\b *?(?:<[ \w]*?>) *?\b\w+?\b(?: *?\[[ \d]*?\] *?)*?: *?\bregister\b *?\([ \w]*?\) *?;)", std::regex::icase | std::regex::optimize);
 
 		for (auto i = std::sregex_iterator{ std::cbegin(m_text), std::cend(m_text), regex_for_resources }; i != decltype(i){}; i++)
 		{

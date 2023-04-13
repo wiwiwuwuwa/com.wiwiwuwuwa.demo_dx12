@@ -25,16 +25,14 @@ namespace aiva2
 		// ------------------------------------------------
 
 	private:
-		void init_random_effect();
+		void init_triangle();
 
-		void tick_random_effect();
+		void tick_triangle();
 
-		void shut_random_effect();
+		void shut_triangle();
 
 	private:
-		std::shared_ptr<compute_material_t> m_random_effect_material{};
-
-		std::shared_ptr<tex_2d_t> m_random_effect_output{};
+		std::shared_ptr<graphic_material_t> m_triangle_material{};
 
 		// ------------------------------------------------
 

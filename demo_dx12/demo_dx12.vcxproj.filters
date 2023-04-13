@@ -750,5 +750,7 @@
     <Text Include="Assets\resources2\shaders\random.hlsl" />
     <Text Include="Assets\resources2\materials\random.json" />
     <Text Include="Assets\resources2\textures\random.json" />
+    <Text Include="Assets\resources2\materials\triangle.json" />
+    <Text Include="Assets\resources2\shaders\triangle.hlsl" />
   </ItemGroup>
 </Project>

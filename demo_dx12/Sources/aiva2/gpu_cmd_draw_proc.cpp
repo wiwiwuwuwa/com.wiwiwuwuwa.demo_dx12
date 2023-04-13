@@ -50,10 +50,21 @@ namespace aiva2
         auto& root_signature = get_material_ref().get_shader_ref().get_root_signature_ref();
         get_engine().get_graphic_hardware().get_command_list().SetGraphicsRootSignature(&root_signature);
     }
-
+    
     void gpu_cmd_draw_proc_t::execute_set_descriptor_heaps() const
     {
-        auto const descriptor_heaps = std::array<ID3D12DescriptorHeap*, 1>{ &get_material_ref().get_resource_heap_ref() };
+        auto descriptor_heaps = std::vector<ID3D12DescriptorHeap*>{};
+
+        if (auto const& resource_heap = get_material_ref().get_resource_heap_ptr())
+        {
+            descriptor_heaps.push_back(resource_heap.get());
+        }
+
+        if (std::empty(descriptor_heaps))
+        {
+            return;
+        }
+
         get_engine().get_graphic_hardware().get_command_list().SetDescriptorHeaps
         (
             /*NumDescriptorHeaps*/ static_cast<UINT>(std::size(descriptor_heaps)),
@@ -63,8 +74,14 @@ namespace aiva2
 
     void gpu_cmd_draw_proc_t::execute_set_graphics_root_descriptor_table() const
     {
-        auto& resource_heap = get_material_ref().get_resource_heap_ref();
-        get_engine().get_graphic_hardware().get_command_list().SetGraphicsRootDescriptorTable(0, resource_heap.GetGPUDescriptorHandleForHeapStart());
+        auto const& resource_heap = get_material_ref().get_resource_heap_ptr();
+
+        if (!resource_heap)
+        {
+            return;
+        }
+
+        get_engine().get_graphic_hardware().get_command_list().SetGraphicsRootDescriptorTable(0, (*resource_heap).GetGPUDescriptorHandleForHeapStart());
     }
 
     void gpu_cmd_draw_proc_t::execute_ia_set_primitive_topology() const

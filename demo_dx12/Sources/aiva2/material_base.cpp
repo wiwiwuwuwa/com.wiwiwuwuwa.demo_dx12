@@ -206,7 +206,6 @@ namespace aiva2
 
     auto material_base_t::get_resource_heap_ptr() const->winrt::com_ptr<ID3D12DescriptorHeap> const&
     {
-        assert_t::check_bool(m_resources_heap, "m_resources_heap is not valid");
         return m_resources_heap;
     }
 
@@ -230,6 +229,11 @@ namespace aiva2
         }
         
         m_resources_heap = {};
+
+        if (std::empty(m_resources_data))
+        {
+            return;
+        }
 
         auto heap_desc = D3D12_DESCRIPTOR_HEAP_DESC{};
         heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;

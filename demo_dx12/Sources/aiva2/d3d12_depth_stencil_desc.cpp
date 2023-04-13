@@ -18,9 +18,9 @@ namespace aiva2
     auto d3d12_depth_stencil_desc_t::get_data() const->D3D12_DEPTH_STENCIL_DESC
     {
         auto depth_stencil_desc = D3D12_DEPTH_STENCIL_DESC{};
-        depth_stencil_desc.DepthEnable = TRUE;
+        depth_stencil_desc.DepthEnable = FALSE;
         depth_stencil_desc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-        depth_stencil_desc.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+        depth_stencil_desc.DepthFunc = D3D12_COMPARISON_FUNC_ALWAYS;
         depth_stencil_desc.StencilEnable = FALSE;
         depth_stencil_desc.StencilReadMask = D3D12_DEFAULT_STENCIL_READ_MASK;
         depth_stencil_desc.StencilWriteMask = D3D12_DEFAULT_STENCIL_WRITE_MASK;

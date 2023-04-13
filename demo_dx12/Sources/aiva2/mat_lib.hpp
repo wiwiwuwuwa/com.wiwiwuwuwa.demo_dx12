@@ -76,18 +76,10 @@ namespace aiva2
                 auto const res_src = (*mat_src).get_view(i);
                 if (!res_src) continue;
 
-                auto const nme_src = (*mat_src).get_name(i);
-                assert_t::check_bool(!nme_src.empty(), "(nme_src) is not valid");
-
-                auto res_dst = std::shared_ptr<gpu_eye_t>{};
-
-                if (std::regex_search(nme_src, std::regex{ R"(per_object)" }))
-                    res_dst = gpu_eye_lib_t::copy_deep(res_src);
-                else
-                    res_dst = gpu_eye_lib_t::copy_shlw(res_src);
-
+                auto const res_dst = gpu_eye_lib_t::copy_shlw(res_src);
                 assert_t::check_bool(res_dst, "(res_dst) is not valid");
-                (*mat_dst).set_resource(i, res_dst);                    
+
+                (*mat_dst).set_resource(i, res_dst);
             }
 
             return mat_dst;

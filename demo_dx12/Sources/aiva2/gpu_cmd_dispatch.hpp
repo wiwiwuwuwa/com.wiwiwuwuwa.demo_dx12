@@ -45,6 +45,18 @@ namespace aiva2
         // ------------------------------------------------
 
     public:
+        auto get_property_block_ptr() const->std::shared_ptr<material_property_block_t const> const&;
+
+        auto get_property_block_ref() const->material_property_block_t const&;
+
+        void set_property_block_ptr(std::shared_ptr<material_property_block_t const> const& property_block);
+
+    private:
+        std::shared_ptr<material_property_block_t const> m_property_block{};
+
+        // ------------------------------------------------
+
+    public:
         auto get_thread_group_count() const->glm::u16vec3 const&;
 
         void set_thread_group_count(glm::u16vec3 const& thread_group_count);

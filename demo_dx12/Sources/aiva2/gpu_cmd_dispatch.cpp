@@ -6,6 +6,7 @@
 #include <aiva2/compute_shader.hpp>
 #include <aiva2/engine.hpp>
 #include <aiva2/graphic_hardware.hpp>
+#include <aiva2/material_property_block.hpp>
 
 namespace aiva2
 {
@@ -32,9 +33,20 @@ namespace aiva2
 
     void gpu_cmd_dispatch_t::execute_resource_barrier() const
     {
-        for (auto const& resource_barrier : get_material_ref().init_for_rendering())
+        if (auto const& material = get_material_ptr())
         {
-            get_engine().get_graphic_hardware().get_command_list().ResourceBarrier(1, &resource_barrier);
+            for (auto const& resource_barrier : (*material).init_for_rendering())
+            {
+                get_engine().get_graphic_hardware().get_command_list().ResourceBarrier(1, &resource_barrier);
+            }
+        }
+
+        if (auto const& property_block = get_property_block_ptr())
+        {
+            for (auto const& resource_barrier : (*property_block).init_for_rendering())
+            {
+                get_engine().get_graphic_hardware().get_command_list().ResourceBarrier(1, &resource_barrier);
+            }
         }
     }
     
@@ -73,14 +85,25 @@ namespace aiva2
 
     void gpu_cmd_dispatch_t::execute_set_compute_root_descriptor_table() const
     {
-        auto const& resource_heap = get_material_ref().get_resource_heap_ptr();
+        auto root_parameter_index = size_t{};
 
-        if (!resource_heap)
+        if (auto const& property_block = get_property_block_ptr())
         {
-            return;
+            get_engine().get_graphic_hardware().get_command_list().SetComputeRootConstantBufferView
+            (
+                /*RootParameterIndex*/ static_cast<UINT>(root_parameter_index++),
+                /*BufferLocation*/ (*property_block).get_gpu_virtual_address()
+            );
         }
 
-        get_engine().get_graphic_hardware().get_command_list().SetComputeRootDescriptorTable(0, (*resource_heap).GetGPUDescriptorHandleForHeapStart());
+        if (auto const& resource_heap = get_material_ref().get_resource_heap_ptr())
+        {
+            get_engine().get_graphic_hardware().get_command_list().SetComputeRootDescriptorTable
+            (
+                /*RootParameterIndex*/ static_cast<UINT>(root_parameter_index++),
+                /*BaseDescriptor*/ (*resource_heap).GetGPUDescriptorHandleForHeapStart()
+            );
+        }
     }
 
     void gpu_cmd_dispatch_t::execute_dispatch() const
@@ -106,6 +129,24 @@ namespace aiva2
     void gpu_cmd_dispatch_t::set_material_ptr(std::shared_ptr<compute_material_t> const& material)
     {
         m_material = material;
+    }
+
+    auto gpu_cmd_dispatch_t::get_property_block_ptr() const->std::shared_ptr<material_property_block_t const> const&
+    {
+        return m_property_block;
+    }
+
+    auto gpu_cmd_dispatch_t::get_property_block_ref() const->material_property_block_t const&
+    {
+        auto const& property_block = get_property_block_ptr();
+        assert_t::check_bool(property_block, "(property_block) is not valid");
+
+        return (*property_block);
+    }
+
+    void gpu_cmd_dispatch_t::set_property_block_ptr(std::shared_ptr<material_property_block_t const> const& property_block)
+    {
+        m_property_block = property_block;
     }
 
     auto gpu_cmd_dispatch_t::get_thread_group_count() const->glm::u16vec3 const&

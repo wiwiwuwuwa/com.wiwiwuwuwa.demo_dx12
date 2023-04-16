@@ -47,6 +47,18 @@ namespace aiva2
         // ------------------------------------------------
 
     public:
+        auto get_property_block_ptr() const->std::shared_ptr<material_property_block_t const> const&;
+
+        auto get_property_block_ref() const->material_property_block_t const&;
+
+        void set_property_block_ptr(std::shared_ptr<material_property_block_t const> const& property_block);
+
+    private:
+        std::shared_ptr<material_property_block_t const> m_property_block{};
+
+        // ------------------------------------------------
+
+    public:
         auto get_vertices_count() const->size_t;
 
         void set_vertices_count(size_t const vertices_count);

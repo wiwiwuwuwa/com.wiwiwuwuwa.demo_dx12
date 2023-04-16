@@ -65,6 +65,11 @@ namespace aiva2
 
         auto has_byte_layout() const->bool;
 
+    public:
+        void get_byte_value(buf_t const& ref_buffer, boost::span<std::byte> const& out_value) const;
+
+        void set_byte_value(boost::span<std::byte const> const& in_value, buf_t const& ref_buffer) const;
+
     private:
         void init_byte_layout(size_t const byte_offset);
 

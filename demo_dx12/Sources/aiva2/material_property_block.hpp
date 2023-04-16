@@ -27,28 +27,9 @@ namespace aiva2
         // ------------------------------------------------
 
     public:
-        template <typename t_val>
-        auto get_value_t(std::string_view const& name) const -> t_val;
+        void get_byte_value(std::string_view const& field_name, boost::span<std::byte> const& out_value) const;
 
-        template <typename t_val>
-        auto get_value_t(size_t const index) const -> t_val;
-
-        template <typename t_val>
-        auto set_value_t(std::string_view const& name, t_val const& value) -> void;
-
-        template <typename t_val>
-        auto set_value_t(size_t const index, t_val const& value) -> void;
-
-    public:
-        auto get_value(std::string_view const& name) const -> std::any;
-
-        auto get_value(size_t const index) const -> std::any;
-
-        auto num_value() const -> size_t;
-
-        auto set_value(std::string_view const& name, std::any const& value) -> void;
-
-        auto set_value(size_t const index, std::any const& value) -> void;
+        void set_byte_value(std::string_view const& field_name, boost::span<std::byte const> const& in_value) const;
 
         // ------------------------------------------------
 
@@ -84,35 +65,5 @@ namespace aiva2
 
 namespace aiva2
 {
-    template <typename t_val>
-    auto material_property_block_t::get_value_t(std::string_view const& name) const -> t_val
-    {
-        auto const value = get_value(name);
-        if (!value.has_value()) return {};
-        if (value.type() != typeid(t_val)) return {};
 
-        return std::any_cast<t_val>(value);
-    }
-
-    template <typename t_val>
-    auto material_property_block_t::get_value_t(size_t const index) const -> t_val
-    {
-        auto const value = get_value(index);
-        if (!value.has_value()) return {};
-        if (value.type() != typeid(t_val)) return {};
-
-        return std::any_cast<t_val>(value);
-    }
-
-    template <typename t_val>
-    auto material_property_block_t::set_value_t(std::string_view const& name, t_val const& value) -> void
-    {
-        set_value(name, value);
-    }
-
-    template <typename t_val>
-    auto material_property_block_t::set_value_t(size_t const index, t_val const& value) -> void
-    {
-        set_value(index, value);
-    }
 }

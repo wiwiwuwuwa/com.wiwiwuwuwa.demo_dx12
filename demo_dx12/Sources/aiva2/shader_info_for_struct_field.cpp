@@ -2,6 +2,7 @@
 #include <aiva2/shader_info_for_struct_field.hpp>
 
 #include <aiva2/assert.hpp>
+#include <aiva2/buf.hpp>
 #include <aiva2/engine.hpp>
 #include <aiva2/enum_utils.hpp>
 #include <aiva2/hlsl_primitive_type_utils.hpp>
@@ -141,6 +142,26 @@ namespace aiva2
     auto shader_info_for_struct_field_t::has_byte_layout() const->bool
     {
         return m_has_byte_layout;
+    }
+
+    void shader_info_for_struct_field_t::get_byte_value(buf_t const& ref_buffer, boost::span<std::byte> const& out_value) const
+    {
+        assert_t::check_bool(has_byte_layout(), "field has no byte layout");
+        assert_t::check_bool(std::size(out_value) == get_byte_size(), "(out_value) has invalid size");
+        assert_t::check_bool(ref_buffer.get_info().get_memory() != buffer_memory_t::GPU_ONLY, "(ref_buffer) is GPU_ONLY");
+        assert_t::check_bool(ref_buffer.get_info().get_size() >= get_byte_offset() + get_byte_size(), "(ref_buffer) has invalid size");
+
+        ref_buffer.get_data(out_value, get_byte_offset());
+    }
+
+    void shader_info_for_struct_field_t::set_byte_value(boost::span<std::byte const> const& in_value, buf_t const& ref_buffer) const
+    {
+        assert_t::check_bool(has_byte_layout(), "field has no byte layout");
+        assert_t::check_bool(std::size(in_value) == get_byte_size(), "(in_value) has invalid size");
+        assert_t::check_bool(ref_buffer.get_info().get_memory() != buffer_memory_t::GPU_ONLY, "(ref_buffer) is GPU_ONLY");
+        assert_t::check_bool(ref_buffer.get_info().get_size() >= get_byte_offset() + get_byte_size(), "(ref_buffer) has invalid size");
+
+        ref_buffer.set_data(in_value, get_byte_offset());
     }
 
     void shader_info_for_struct_field_t::init_byte_layout(size_t const byte_offset)

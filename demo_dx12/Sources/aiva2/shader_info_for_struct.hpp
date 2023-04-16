@@ -97,6 +97,11 @@ namespace aiva2
     public:
         auto get_byte_size() const -> size_t;
 
+    public:
+        void get_byte_value(std::string_view const& field_name, buf_t const& ref_buffer, boost::span<std::byte> const& out_value) const;
+
+        void set_byte_value(std::string_view const& field_name, boost::span<std::byte const> const& in_value, buf_t const& ref_buffer) const;
+
     private:
         void init_byte_layout();
 

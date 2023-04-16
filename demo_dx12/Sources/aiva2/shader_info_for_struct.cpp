@@ -294,6 +294,16 @@ namespace aiva2
         return m_byte_size;
     }
 
+    void shader_info_for_struct_t::get_byte_value(std::string_view const& field_name, buf_t const& ref_buffer, boost::span<std::byte> const& out_value) const
+    {
+        get_field_ref(field_name).get_byte_value(ref_buffer, out_value);
+    }
+    
+    void shader_info_for_struct_t::set_byte_value(std::string_view const& field_name, boost::span<std::byte const> const& in_value, buf_t const& ref_buffer) const
+    {
+        get_field_ref(field_name).set_byte_value(in_value, ref_buffer);
+    }
+    
     void shader_info_for_struct_t::init_byte_layout()
     {
         m_byte_size = {};

@@ -59,6 +59,11 @@ namespace aiva2
             descriptor_heaps.push_back(resource_heap.get());
         }
 
+        if (std::empty(descriptor_heaps))
+        {
+            return;
+        }
+
         get_engine().get_graphic_hardware().get_command_list().SetDescriptorHeaps
         (
             /*NumDescriptorHeaps*/ static_cast<UINT>(std::size(descriptor_heaps)),

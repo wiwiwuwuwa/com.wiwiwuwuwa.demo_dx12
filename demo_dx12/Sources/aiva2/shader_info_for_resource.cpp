@@ -15,6 +15,7 @@ namespace aiva2
 	{
 		init_type();
 		init_name();
+		init_struct_name();
 		init_register();
 		init_frequency();
 	}
@@ -23,6 +24,7 @@ namespace aiva2
 	{
 		shut_frequency();
 		shut_register();
+		shut_struct_name();
 		shut_name();
 		shut_type();
 	}
@@ -97,6 +99,38 @@ namespace aiva2
 	void shader_info_for_resource_t::shut_name()
 	{
 		m_name.clear();
+	}
+	
+	auto shader_info_for_resource_t::get_struct_name() const->std::string const&
+	{
+		return m_struct_name;
+	}
+
+	auto shader_info_for_resource_t::init_struct_name()->void
+	{
+		auto const regex_for_struct_name = std::regex{ R"(< *?\b([\w ]*?)\b *?>)", std::regex::icase | std::regex::optimize };
+		auto match_for_struct_name = std::smatch{};
+
+		if (std::regex_search(m_text, match_for_struct_name, regex_for_struct_name))
+		{
+			assert_t::check_bool(match_for_struct_name.ready(), "failed to find struct name");
+			assert_t::check_bool(std::size(match_for_struct_name) == 2, "failed to find struct name");
+
+			auto const& struct_name_match = match_for_struct_name[1];
+			assert_t::check_bool(struct_name_match.matched, "struct_name_match is not valid");
+
+			m_struct_name = struct_name_match.str();
+			assert_t::check_bool(!std::empty(m_struct_name), "struct_name is not valid");
+		}
+		else
+		{
+			m_struct_name = {};
+		}
+	}
+
+	auto shader_info_for_resource_t::shut_struct_name()->void
+	{
+		m_struct_name = {};
 	}
 
 	auto shader_info_for_resource_t::get_register_type() const->shader_register_type_t

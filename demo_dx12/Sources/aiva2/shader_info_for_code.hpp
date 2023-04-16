@@ -85,5 +85,20 @@ namespace aiva2
 		std::vector<std::shared_ptr<shader_info_for_func_t>> m_funcs{};
 
 		// ------------------------------------------------
+
+	public:
+		auto get_cbuffer_struct_ptr() const->std::shared_ptr<shader_info_for_struct_t const>;
+
+		auto get_cbuffer_struct_ref() const->shader_info_for_struct_t const&;
+
+	public:
+		auto get_cbuffer_resource_ptr() const->std::shared_ptr<shader_info_for_resource_t const>;
+
+		auto get_cbuffer_resource_ref() const->shader_info_for_resource_t const&;
+
+	public:
+		static constexpr const auto C_BUFFER_RESOURCE_NAME = "o_cbuffer";
+
+		// ------------------------------------------------
 	};
 }

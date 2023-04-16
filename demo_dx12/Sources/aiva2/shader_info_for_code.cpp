@@ -226,4 +226,53 @@ namespace aiva2
 	{
 		m_funcs = {};
 	}
+
+	auto shader_info_for_code_t::get_cbuffer_struct_ptr() const->std::shared_ptr<shader_info_for_struct_t const>
+	{
+		auto const resource_ptr = get_cbuffer_resource_ptr();
+		if (!resource_ptr)
+		{
+			return {};
+		}
+
+		auto const& struct_name = (*resource_ptr).get_struct_name();
+		if (std::empty(struct_name))
+		{
+			return {};
+		}
+
+		return get_struct_ptr(struct_name);
+	}
+
+	auto shader_info_for_code_t::get_cbuffer_struct_ref() const->shader_info_for_struct_t const&
+	{
+		auto const& struct_ptr = get_cbuffer_struct_ptr();
+		assert_t::check_bool(struct_ptr, "(struct_ptr) not valid");
+
+		return (*struct_ptr);
+	}
+
+	auto shader_info_for_code_t::get_cbuffer_resource_ptr() const->std::shared_ptr<shader_info_for_resource_t const>
+	{
+		for (auto i = size_t{}; i < num_resource(); i++)
+		{
+			auto const& resource_ptr = get_resource_ptr(i);
+			assert_t::check_bool(resource_ptr, "(resource_ptr) not valid");
+
+			if ((*resource_ptr).get_name() == C_BUFFER_RESOURCE_NAME)
+			{
+				return resource_ptr;
+			}
+		}
+
+		return {};
+	}
+
+	auto shader_info_for_code_t::get_cbuffer_resource_ref() const->shader_info_for_resource_t const&
+	{
+		auto const& resource_ptr = get_cbuffer_resource_ptr();
+		assert_t::check_bool(resource_ptr, "(resource) not valid");
+
+		return (*resource_ptr);
+	}
 }

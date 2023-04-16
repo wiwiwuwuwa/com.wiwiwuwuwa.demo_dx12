@@ -59,6 +59,19 @@ namespace aiva2
 		// ------------------------------------------------
 
 	public:
+		auto get_struct_name() const->std::string const&;
+
+	private:
+		void init_struct_name();
+
+		void shut_struct_name();
+
+	private:
+		std::string m_struct_name{};
+
+		// ------------------------------------------------
+
+	public:
 		auto get_register_type() const->shader_register_type_t;
 
 		auto get_register_index() const->size_t;

@@ -6,7 +6,7 @@
 
 namespace aiva2
 {
-    struct scene_actor_t final : public implements_t<scene_actor_t, object_t>
+    struct scene_actor_t final : public implements_t<scene_actor_t, object_t>, public std::enable_shared_from_this<scene_actor_t>
     {
         // ------------------------------------------------
 
@@ -28,6 +28,31 @@ namespace aiva2
 
     private:
         scene_graph_t& m_graph;
+
+        // ------------------------------------------------
+
+    public:
+        auto get_parent_ptr() const -> std::shared_ptr<scene_actor_t>;
+
+        auto get_parent_ref() const -> scene_actor_t&;
+
+        auto has_parent() const -> bool;
+
+        auto set_parent(std::shared_ptr<scene_actor_t> const& parent) -> void;
+
+        auto set_parent(scene_actor_t& parent) -> void;
+
+    public:
+        auto get_child_ptr(size_t const index) const -> std::shared_ptr<scene_actor_t>;
+
+        auto get_child_ref(size_t const index) const -> scene_actor_t&;
+
+        auto num_child() const -> size_t;
+
+    private:
+        std::weak_ptr<scene_actor_t> m_parent{};
+
+        std::vector<std::shared_ptr<scene_actor_t>> m_children{};
 
         // ------------------------------------------------
 

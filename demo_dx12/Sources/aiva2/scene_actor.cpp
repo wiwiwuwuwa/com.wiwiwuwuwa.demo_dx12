@@ -91,6 +91,170 @@ namespace aiva2
         return std::size(m_children);
     }
 
+    auto scene_actor_t::get_local_position() const -> glm::vec3
+    {
+        return m_local_position;
+    }
+
+    auto scene_actor_t::get_local_rotation() const -> glm::quat
+    {
+        return m_local_rotation;
+    }
+
+    auto scene_actor_t::get_local_scale() const -> glm::vec3
+    {
+        return m_local_scale;
+    }
+
+    auto scene_actor_t::get_local_transform() const -> glm::mat4
+    {
+        auto transform = glm::identity<glm::mat4>();
+
+        transform = glm::scale(transform, m_local_scale);
+        transform = transform * glm::mat4_cast(m_local_rotation);
+        transform = glm::translate(transform, m_local_position);
+
+        return transform;
+    }
+
+    auto scene_actor_t::set_local_position(glm::vec3 const& position) -> void
+    {
+        m_local_position = position;
+    }
+
+    auto scene_actor_t::set_local_rotation(glm::quat const& rotation) -> void
+    {
+        m_local_rotation = rotation;
+    }
+
+    auto scene_actor_t::set_local_scale(glm::vec3 const& scale) -> void
+    {
+        m_local_scale = scale;
+    }
+
+    auto scene_actor_t::set_local_transform(glm::mat4 const& transform) -> void
+    {
+        m_local_position = transform[3];
+        m_local_rotation = glm::quat_cast(transform);
+        m_local_scale = glm::vec3(glm::length(transform[0]), glm::length(transform[1]), glm::length(transform[2]));
+    }
+
+    auto scene_actor_t::get_world_position() const -> glm::vec3
+    {
+        if (auto const parent = get_parent_ptr())
+        {
+            auto const local_to_world = (*parent).get_world_transform();
+            return glm::vec3(local_to_world * glm::vec4(m_local_position, 1.0f));
+        }
+        else
+        {
+            return m_local_position;
+        }
+    }
+
+    auto scene_actor_t::get_world_rotation() const -> glm::quat
+    {
+        if (auto const parent = get_parent_ptr())
+        {
+            auto const local_to_world = (*parent).get_world_rotation();
+            return local_to_world * m_local_rotation;
+        }
+        else
+        {
+            return m_local_rotation;
+        }
+    }
+
+    auto scene_actor_t::get_world_scale() const -> glm::vec3
+    {
+        if (auto const parent = get_parent_ptr())
+        {
+            auto const local_to_world = (*parent).get_world_scale();
+            return local_to_world * m_local_scale;
+        }
+        else
+        {
+            return m_local_scale;
+        }
+    }
+
+    auto scene_actor_t::get_world_transform() const -> glm::mat4
+    {
+        if (auto const parent = get_parent_ptr())
+        {
+            auto const local_to_world = (*parent).get_world_transform();
+            return local_to_world * get_local_transform();
+        }
+        else
+        {
+            return get_local_transform();
+        }
+    }
+
+    auto scene_actor_t::set_world_position(glm::vec3 const& position) -> void
+    {
+        if (auto const parent = get_parent_ptr())
+        {
+            auto const local_to_world = (*parent).get_world_transform();
+            auto const world_to_local = glm::inverse(local_to_world);
+            m_local_position = world_to_local * glm::vec4(position, 1.0f);
+        }
+        else
+        {
+            m_local_position = position;
+        }
+    }
+
+    auto scene_actor_t::set_world_rotation(glm::quat const& rotation) -> void
+    {
+        if (auto const parent = get_parent_ptr())
+        {
+            auto const local_to_world = (*parent).get_world_rotation();
+            auto const world_to_local = glm::inverse(local_to_world);
+            m_local_rotation = world_to_local * rotation;
+        }
+        else
+        {
+            m_local_rotation = rotation;
+        }
+    }
+
+    auto scene_actor_t::set_world_scale(glm::vec3 const& scale) -> void
+    {
+        if (auto const parent = get_parent_ptr())
+        {
+            auto const local_to_world = (*parent).get_world_scale();
+
+            if (glm::all(glm::epsilonNotEqual(local_to_world, glm::zero<glm::vec3>(), glm::epsilon<float>())))
+            {
+                auto const world_to_local = glm::one<glm::vec3>() / local_to_world;
+                m_local_scale = world_to_local * scale;
+            }
+            else
+            {
+                m_local_scale = glm::one<glm::vec3>();
+            }
+        }
+        else
+        {
+            m_local_scale = scale;
+        }
+    }
+
+    auto scene_actor_t::set_world_transform(glm::mat4 const& transform) -> void
+    {
+        if (auto const parent = get_parent_ptr())
+        {
+            auto const local_to_world = (*parent).get_world_transform();
+            auto const world_to_local = glm::inverse(local_to_world);
+            set_local_transform(world_to_local * transform);
+        }
+        else
+        {
+            set_local_transform(transform);
+        }
+    }
+
     auto scene_actor_t::get_component_ptr(size_t const index) -> std::shared_ptr<scene_component_t>
     {
         assert_t::check_bool(index >= decltype(index){}, "(index) is out of range");

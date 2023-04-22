@@ -57,6 +57,49 @@ namespace aiva2
         // ------------------------------------------------
 
     public:
+        auto get_local_position() const -> glm::vec3;
+
+        auto get_local_rotation() const -> glm::quat;
+
+        auto get_local_scale() const -> glm::vec3;
+
+        auto get_local_transform() const -> glm::mat4;
+
+        auto set_local_position(glm::vec3 const& position) -> void;
+
+        auto set_local_rotation(glm::quat const& rotation) -> void;
+
+        auto set_local_scale(glm::vec3 const& scale) -> void;
+
+        auto set_local_transform(glm::mat4 const& transform) -> void;
+
+    public:
+        auto get_world_position() const -> glm::vec3;
+
+        auto get_world_rotation() const -> glm::quat;
+
+        auto get_world_scale() const -> glm::vec3;
+
+        auto get_world_transform() const -> glm::mat4;
+
+        auto set_world_position(glm::vec3 const& position) -> void;
+
+        auto set_world_rotation(glm::quat const& rotation) -> void;
+
+        auto set_world_scale(glm::vec3 const& scale) -> void;
+
+        auto set_world_transform(glm::mat4 const& transform) -> void;
+
+    private:
+        glm::vec3 m_local_position{};
+
+        glm::quat m_local_rotation{ glm::identity<glm::quat>() };
+
+        glm::vec3 m_local_scale{ glm::one<glm::vec3>() };
+
+        // ------------------------------------------------
+
+    public:
         template <typename t_cmp>
         auto add_component_ptr() -> std::shared_ptr<t_cmp>;
 

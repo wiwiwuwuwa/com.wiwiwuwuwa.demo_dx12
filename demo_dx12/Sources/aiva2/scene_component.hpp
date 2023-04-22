@@ -6,12 +6,9 @@
 
 namespace aiva2
 {
-    struct scene_component_t final : public implements_t<scene_component_t, object_t>
+    struct scene_component_t : public implements_t<scene_component_t, object_t>
     {
         // ------------------------------------------------
-
-    public:
-        friend scene_actor_t;
 
     protected:
         scene_component_t(scene_actor_t& scene_actor);

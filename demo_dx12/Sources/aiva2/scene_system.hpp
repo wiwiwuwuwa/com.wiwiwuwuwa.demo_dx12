@@ -15,5 +15,15 @@ namespace aiva2
         ~scene_system_t() override;
 
         // ------------------------------------------------
+
+    private:
+        void init_scene();
+
+        void shut_scene();
+
+    private:
+        std::shared_ptr<scene_graph_t> m_scene{};
+
+        // ------------------------------------------------
     };
 }

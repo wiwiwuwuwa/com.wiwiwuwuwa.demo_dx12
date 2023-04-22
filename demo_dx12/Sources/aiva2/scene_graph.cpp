@@ -13,6 +13,12 @@ namespace aiva2
 
     }
 
+    scene_graph_t::scene_graph_t(engine_t& engine, nlohmann::json const& json)
+        : scene_graph_t{ engine }
+    {
+        assert_t::check_bool(false, "TODO: IMPLEMENT ME");
+    }
+
     scene_graph_t::~scene_graph_t()
     {
 

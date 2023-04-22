@@ -12,6 +12,8 @@ namespace aiva2
     public:
         scene_graph_t(engine_t& engine);
 
+        scene_graph_t(engine_t& engine, nlohmann::json const& json);
+
         ~scene_graph_t() override;
 
         // ------------------------------------------------

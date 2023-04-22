@@ -16,6 +16,7 @@ namespace aiva2
     protected:
         scene_actor_t(scene_graph_t& scene_graph);
 
+    public:
         ~scene_actor_t() override;
 
         // ------------------------------------------------

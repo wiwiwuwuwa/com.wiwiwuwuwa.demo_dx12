@@ -15,5 +15,23 @@ namespace aiva2
         ~scene_graph_t() override;
 
         // ------------------------------------------------
+
+    public:
+        auto add_actor_ptr() -> std::shared_ptr<scene_actor_t>;
+
+        auto add_actor_ref() -> scene_actor_t&;
+
+        auto get_actor_ptr(size_t const index) -> std::shared_ptr<scene_actor_t>;
+
+        auto get_actor_ref(size_t const index) -> scene_actor_t&;
+
+        auto num_actor() const -> size_t;
+
+        auto rem_actor(size_t const index) -> void;
+
+    private:
+        std::vector<std::shared_ptr<scene_actor_t>> m_actors{};
+
+        // ------------------------------------------------
     };
 }

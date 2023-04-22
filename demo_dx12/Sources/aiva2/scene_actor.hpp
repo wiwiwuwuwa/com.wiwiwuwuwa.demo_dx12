@@ -73,7 +73,7 @@ namespace aiva2
     template <typename t_cmp>
     auto scene_actor_t::add_component_ptr() -> std::shared_ptr<t_cmp>
     {
-        auto const component = std::make_shared<t_cmp>(*this);
+        auto const component = new t_cmp(*this);
         assert_t::check_bool(component, "(component) is not valid");
 
         return m_components.emplace_back(component);

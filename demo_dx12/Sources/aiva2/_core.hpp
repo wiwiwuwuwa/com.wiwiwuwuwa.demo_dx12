@@ -59,6 +59,14 @@ namespace aiva2
 
 	struct rtv_tex_2d_t;
 
+	struct scene_actor_t;
+
+	struct scene_component_t;
+
+	struct scene_graph_t;
+
+	struct scene_system_t;
+
 	struct shader_base_t;
 
 	struct shader_info_for_code_t;

@@ -264,6 +264,10 @@
     <ClInclude Include="Sources\aiva2\dsv_tex_2d_info.hpp" />
     <ClInclude Include="Sources\aiva2\render_target.hpp" />
     <ClInclude Include="Sources\aiva2\resource_system.hpp" />
+    <ClInclude Include="Sources\aiva2\scene_actor.hpp" />
+    <ClInclude Include="Sources\aiva2\scene_component.hpp" />
+    <ClInclude Include="Sources\aiva2\scene_graph.hpp" />
+    <ClInclude Include="Sources\aiva2\scene_system.hpp" />
     <ClInclude Include="Sources\aiva2\shader_base.hpp" />
     <ClInclude Include="Sources\aiva2\shader_info.hpp" />
     <ClInclude Include="Sources\aiva2\shader_info_for_code.hpp" />
@@ -707,6 +711,10 @@
     <ClCompile Include="Sources\aiva2\dsv_tex_2d_info.cpp" />
     <ClCompile Include="Sources\aiva2\render_target.cpp" />
     <ClCompile Include="Sources\aiva2\resource_system.cpp" />
+    <ClCompile Include="Sources\aiva2\scene_actor.cpp" />
+    <ClCompile Include="Sources\aiva2\scene_component.cpp" />
+    <ClCompile Include="Sources\aiva2\scene_graph.cpp" />
+    <ClCompile Include="Sources\aiva2\scene_system.cpp" />
     <ClCompile Include="Sources\aiva2\shader_base.cpp" />
     <ClCompile Include="Sources\aiva2\shader_info.cpp" />
     <ClCompile Include="Sources\aiva2\shader_info_for_code.cpp" />

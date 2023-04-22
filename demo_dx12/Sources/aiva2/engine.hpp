@@ -62,7 +62,7 @@ namespace aiva2
 		void tick_time_system();
 
 		void shut_time_system();
-		
+
 	private:
 		std::unique_ptr<time_system_t> m_time_system{};
 
@@ -70,7 +70,7 @@ namespace aiva2
 
 	public:
 		auto get_graphic_hardware() const->graphic_hardware_t&;
-		
+
 	private:
 		void init_graphic_hardware();
 
@@ -83,10 +83,10 @@ namespace aiva2
 
 	public:
 		auto get_graphic_pipeline() const->graphic_pipeline_t&;
-		
+
 	private:
 		void init_graphic_pipeline();
-		
+
 		void shut_graphic_pipeline();
 
 	private:
@@ -96,12 +96,12 @@ namespace aiva2
 
 	public:
 		auto get_graphic_executor() const->graphic_executor_t&;
-		
+
 	private:
 		void init_graphic_executor();
-		
+
 		void shut_graphic_executor();
-		
+
 	private:
 		std::unique_ptr<graphic_executor_t> m_graphic_executor{};
 
@@ -114,9 +114,22 @@ namespace aiva2
 		void init_graphic_renderer();
 
 		void shut_graphic_renderer();
-		
+
 	private:
 		std::unique_ptr<graphic_renderer_t> m_graphic_renderer{};
+
+		// ------------------------------------------------
+
+	public:
+		auto get_scene_system() const->scene_system_t&;
+
+	private:
+		void init_scene_system();
+
+		void shut_scene_system();
+
+	private:
+		std::unique_ptr<scene_system_t> m_scene_system{};
 
 		// ------------------------------------------------
 

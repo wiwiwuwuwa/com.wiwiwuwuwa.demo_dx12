@@ -24,7 +24,7 @@ namespace aiva2
 
         if (auto const resource_from_data = load_resource_from_data(engine, resource_type, resource_path); resource_from_data)
             return resource_from_data;
-        
+
         return {};
     }
 
@@ -72,12 +72,9 @@ namespace aiva2
         auto const& load_func = (*load_iter).second;
         assert_t::check_bool(load_func, "(load_func) is not valid");
 
-        auto const file_data = file_utils_t::load_data_from_file(resource_path);
-        assert_t::check_bool(!std::empty(file_data), "failed to load data from file: " + resource_path.string());
+        auto const file_json = file_utils_t::load_json_from_file(resource_path);
+        assert_t::check_bool(!file_json.empty(), "failed to load json from file: " + resource_path.string());
 
-        auto const json = nlohmann::json::parse(file_data);
-        assert_t::check_bool(!json.empty(), "failed to parse json from file: " + resource_path.string());
-
-        return load_func(engine, json);
+        return load_func(engine, file_json);
     }
 }

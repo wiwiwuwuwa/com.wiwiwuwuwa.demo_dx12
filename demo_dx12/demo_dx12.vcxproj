@@ -266,6 +266,8 @@
     <ClInclude Include="Sources\aiva2\resource_system.hpp" />
     <ClInclude Include="Sources\aiva2\scene_actor.hpp" />
     <ClInclude Include="Sources\aiva2\scene_component.hpp" />
+    <ClInclude Include="Sources\aiva2\scene_gltf.hpp" />
+    <ClInclude Include="Sources\aiva2\scene_graph_loader.hpp" />
     <ClInclude Include="Sources\aiva2\scene_graph.hpp" />
     <ClInclude Include="Sources\aiva2\scene_system.hpp" />
     <ClInclude Include="Sources\aiva2\shader_base.hpp" />
@@ -713,6 +715,8 @@
     <ClCompile Include="Sources\aiva2\resource_system.cpp" />
     <ClCompile Include="Sources\aiva2\scene_actor.cpp" />
     <ClCompile Include="Sources\aiva2\scene_component.cpp" />
+    <ClCompile Include="Sources\aiva2\scene_gltf.cpp" />
+    <ClCompile Include="Sources\aiva2\scene_graph_loader.cpp" />
     <ClCompile Include="Sources\aiva2\scene_graph.cpp" />
     <ClCompile Include="Sources\aiva2\scene_system.cpp" />
     <ClCompile Include="Sources\aiva2\shader_base.cpp" />
@@ -899,6 +903,17 @@
     <Text Include="Assets\resources2\scenes\main.json">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
       <FileType>Document</FileType>
+    </Text>
+    <Text Include="Assets\resources2\scenes\main.gltf">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Text>
     <None Include="Assets\resources\configs\scene_system.json">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>

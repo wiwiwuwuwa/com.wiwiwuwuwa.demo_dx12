@@ -63,6 +63,8 @@ namespace aiva2
 
 	struct scene_component_t;
 
+	struct scene_gltf_t;
+
 	struct scene_graph_t;
 
 	struct scene_system_t;

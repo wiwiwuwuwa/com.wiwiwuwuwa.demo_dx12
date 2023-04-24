@@ -13,7 +13,12 @@ namespace aiva2
 {
     REGISTER_RESOURCE_LOADER(scene_graph_loader_t);
 
-    auto scene_graph_loader_t::load(engine_t& in_engine, nlohmann::json const& in_json) -> std::shared_ptr<scene_graph_t>
+    auto scene_graph_loader_t::load
+    (
+        engine_t& in_engine,
+        nlohmann::json const& in_json
+    )
+    -> std::shared_ptr<scene_graph_t>
     {
         auto const graph = std::make_shared<scene_graph_t>(in_engine);
         assert_t::check_bool(graph, "(graph) is not valid");
@@ -37,7 +42,12 @@ namespace aiva2
         return graph;
     }
 
-    auto scene_graph_loader_t::load_gltf(engine_t& in_engine, nlohmann::json const& in_json) -> std::shared_ptr<scene_gltf_t>
+    auto scene_graph_loader_t::load_gltf
+    (
+        engine_t& in_engine,
+        nlohmann::json const& in_json
+    )
+    -> std::shared_ptr<scene_gltf_t>
     {
         auto const gltf_pth = in_json.at("data_path").get<std::filesystem::path>();
         assert_t::check_bool(!std::empty(gltf_pth), "(gltf_pth) is not valid");
@@ -48,7 +58,13 @@ namespace aiva2
         return gltf_res;
     }
 
-    auto scene_graph_loader_t::load_actors(engine_t& in_engine, scene_gltf_t const& in_gltf, scene_graph_t& ref_graph) -> std::vector<std::shared_ptr<scene_actor_t>>
+    auto scene_graph_loader_t::load_actors
+    (
+        engine_t& in_engine,
+        scene_gltf_t const& in_gltf,
+        scene_graph_t& ref_graph
+    )
+    -> std::vector<std::shared_ptr<scene_actor_t>>
     {
         auto actors = std::vector<std::shared_ptr<scene_actor_t>>{};
         actors.reserve(std::size(in_gltf.get_model().nodes));
@@ -61,7 +77,13 @@ namespace aiva2
         return actors;
     }
 
-    auto scene_graph_loader_t::load_actors_hierarchy(engine_t& in_engine, scene_gltf_t const& in_gltf, std::vector<std::shared_ptr<scene_actor_t>> const& ref_actors) -> void
+    auto scene_graph_loader_t::load_actors_hierarchy
+    (
+        engine_t& in_engine,
+        scene_gltf_t const& in_gltf,
+        std::vector<std::shared_ptr<scene_actor_t>> const& ref_actors
+    )
+    -> void
     {
         for (auto parent_index = size_t{}; parent_index < std::size(in_gltf.get_model().nodes); parent_index++)
         {
@@ -78,7 +100,13 @@ namespace aiva2
         }
     }
 
-    auto scene_graph_loader_t::load_actors_transform(engine_t& in_engine, scene_gltf_t const& in_gltf, std::vector<std::shared_ptr<scene_actor_t>> const& ref_actors) -> void
+    auto scene_graph_loader_t::load_actors_transform
+    (
+        engine_t& in_engine,
+        scene_gltf_t const& in_gltf,
+        std::vector<std::shared_ptr<scene_actor_t>> const& ref_actors
+    )
+    -> void
     {
         for (auto i = size_t{}; i < std::size(in_gltf.get_model().nodes); i++)
         {
@@ -120,7 +148,13 @@ namespace aiva2
         }
     }
 
-    auto scene_graph_loader_t::load_scenes(engine_t& in_engine, scene_gltf_t const& in_gltf, scene_graph_t& ref_graph) -> std::vector<std::shared_ptr<scene_actor_t>>
+    auto scene_graph_loader_t::load_scenes
+    (
+        engine_t& in_engine,
+        scene_gltf_t const& in_gltf,
+        scene_graph_t& ref_graph
+    )
+    -> std::vector<std::shared_ptr<scene_actor_t>>
     {
         auto scenes = std::vector<std::shared_ptr<scene_actor_t>>{};
         scenes.reserve(std::size(in_gltf.get_model().scenes));
@@ -133,7 +167,14 @@ namespace aiva2
         return scenes;
     }
 
-    auto scene_graph_loader_t::load_scenes_hierarchy(engine_t& in_engine, scene_gltf_t const& in_gltf, std::vector<std::shared_ptr<scene_actor_t>> const& ref_actors, std::vector<std::shared_ptr<scene_actor_t>> const& ref_scenes) -> void
+    auto scene_graph_loader_t::load_scenes_hierarchy
+    (
+        engine_t& in_engine,
+        scene_gltf_t const& in_gltf,
+        std::vector<std::shared_ptr<scene_actor_t>> const& ref_actors,
+        std::vector<std::shared_ptr<scene_actor_t>> const& ref_scenes
+    )
+    -> void
     {
         for (auto scene_index = size_t{}; scene_index < std::size(in_gltf.get_model().scenes); scene_index++)
         {

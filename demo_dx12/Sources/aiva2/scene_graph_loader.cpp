@@ -18,14 +18,21 @@ namespace aiva2
         auto const graph = std::make_shared<scene_graph_t>(in_engine);
         assert_t::check_bool(graph, "(graph) is not valid");
 
-        auto const gltf = load_gltf(in_engine, in_json);
-        assert_t::check_bool(gltf, "(gltf) is not valid");
+        {
+            auto const gltf = load_gltf(in_engine, in_json);
+            assert_t::check_bool(gltf, "(gltf) is not valid");
 
-        auto const actors = load_actors(in_engine, (*gltf), (*graph));
-        assert_t::check_bool(!std::empty(actors), "(actors) is not valid");
+            auto const actors = load_actors(in_engine, (*gltf), (*graph));
+            assert_t::check_bool(!std::empty(actors), "(actors) is not valid");
 
-        load_actors_hierarchy(in_engine, (*gltf), actors);
-        load_actors_transform(in_engine, (*gltf), actors);
+            load_actors_hierarchy(in_engine, (*gltf), actors);
+            load_actors_transform(in_engine, (*gltf), actors);
+
+            auto const scenes = load_scenes(in_engine, (*gltf), (*graph));
+            assert_t::check_bool(!std::empty(scenes), "(scenes) is not valid");
+
+            load_scenes_hierarchy(in_engine, (*gltf), actors, scenes);
+        }
 
         return graph;
     }
@@ -109,6 +116,37 @@ namespace aiva2
 
                 auto const matrix = glm::make_mat4(std::data(gl_actor.matrix));
                 (*my_actor).set_local_transform(matrix);
+            }
+        }
+    }
+
+    auto scene_graph_loader_t::load_scenes(engine_t& in_engine, scene_gltf_t const& in_gltf, scene_graph_t& ref_graph) -> std::vector<std::shared_ptr<scene_actor_t>>
+    {
+        auto scenes = std::vector<std::shared_ptr<scene_actor_t>>{};
+        scenes.reserve(std::size(in_gltf.get_model().scenes));
+
+        for (auto const& gl_scene : in_gltf.get_model().scenes)
+        {
+            scenes.emplace_back(ref_graph.add_actor_ptr());
+        }
+
+        return scenes;
+    }
+
+    auto scene_graph_loader_t::load_scenes_hierarchy(engine_t& in_engine, scene_gltf_t const& in_gltf, std::vector<std::shared_ptr<scene_actor_t>> const& ref_actors, std::vector<std::shared_ptr<scene_actor_t>> const& ref_scenes) -> void
+    {
+        for (auto scene_index = size_t{}; scene_index < std::size(in_gltf.get_model().scenes); scene_index++)
+        {
+            auto const& gl_scene = in_gltf.get_model().scenes.at(scene_index);
+            auto const& my_scene = ref_scenes.at(scene_index);
+            assert_t::check_bool(my_scene, "(my_scene) is not valid");
+
+            for (auto const actor_index : gl_scene.nodes)
+            {
+                auto const& my_actor = ref_actors.at(actor_index);
+                assert_t::check_bool(my_actor, "(my_actor) is not valid");
+
+                (*my_actor).set_parent(my_scene);
             }
         }
     }

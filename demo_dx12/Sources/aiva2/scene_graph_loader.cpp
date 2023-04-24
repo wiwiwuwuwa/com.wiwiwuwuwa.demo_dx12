@@ -25,6 +25,7 @@ namespace aiva2
         assert_t::check_bool(!std::empty(actors), "(actors) is not valid");
 
         load_actors_hierarchy(in_engine, (*gltf), actors);
+        load_actors_transform(in_engine, (*gltf), actors);
 
         return graph;
     }
@@ -66,6 +67,48 @@ namespace aiva2
                 assert_t::check_bool(child_actor, "(child_actor) is not valid");
 
                 (*child_actor).set_parent(parent_actor);
+            }
+        }
+    }
+
+    auto scene_graph_loader_t::load_actors_transform(engine_t& in_engine, scene_gltf_t const& in_gltf, std::vector<std::shared_ptr<scene_actor_t>> const& ref_actors) -> void
+    {
+        for (auto i = size_t{}; i < std::size(in_gltf.get_model().nodes); i++)
+        {
+            auto const& gl_actor = in_gltf.get_model().nodes.at(i);
+            auto const& my_actor = ref_actors.at(i);
+            assert_t::check_bool(my_actor, "(my_actor) is not valid");
+
+            if (!std::empty(gl_actor.translation))
+            {
+                assert_t::check_bool(std::size(gl_actor.translation) == 3, "(gl_actor.translation) is not valid");
+
+                auto const position = glm::make_vec3(std::data(gl_actor.translation));
+                (*my_actor).set_local_position(position);
+            }
+
+            if (!std::empty(gl_actor.rotation))
+            {
+                assert_t::check_bool(std::size(gl_actor.rotation) == 4, "(gl_actor.rotation) is not valid");
+
+                auto const rotation = glm::make_quat(std::data(gl_actor.rotation));
+                (*my_actor).set_local_rotation(rotation);
+            }
+
+            if (!std::empty(gl_actor.scale))
+            {
+                assert_t::check_bool(std::size(gl_actor.scale) == 3, "(gl_actor.scale) is not valid");
+
+                auto const scale = glm::make_vec3(std::data(gl_actor.scale));
+                (*my_actor).set_local_scale(scale);
+            }
+
+            if (!std::empty(gl_actor.matrix))
+            {
+                assert_t::check_bool(std::size(gl_actor.matrix) == 16, "(gl_actor.matrix) is not valid");
+
+                auto const matrix = glm::make_mat4(std::data(gl_actor.matrix));
+                (*my_actor).set_local_transform(matrix);
             }
         }
     }

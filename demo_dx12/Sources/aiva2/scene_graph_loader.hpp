@@ -22,6 +22,8 @@ namespace aiva2
 
         static auto load_actors_hierarchy(engine_t& in_engine, scene_gltf_t const& in_gltf, std::vector<std::shared_ptr<scene_actor_t>> const& ref_actors)->void;
 
+        static auto load_actors_transform(engine_t& in_engine, scene_gltf_t const& in_gltf, std::vector<std::shared_ptr<scene_actor_t>> const& ref_actors)->void;
+
         // ------------------------------------------------
     };
 }

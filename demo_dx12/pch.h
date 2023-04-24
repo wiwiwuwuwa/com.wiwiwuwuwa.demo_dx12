@@ -93,6 +93,7 @@
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_SIZE_T_LENGTH
 #define GLM_FORCE_XYZW_ONLY
+#define GLM_FORCE_QUAT_DATA_XYZW
 #include <glm/glm.hpp>
 
 #include <glm/ext.hpp>

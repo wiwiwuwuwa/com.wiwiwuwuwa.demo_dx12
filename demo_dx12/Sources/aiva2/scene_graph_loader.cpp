@@ -5,6 +5,7 @@
 #include <aiva2/engine.hpp>
 #include <aiva2/resource_loader_registr.hpp>
 #include <aiva2/resource_system.hpp>
+#include <aiva2/scene_actor.hpp>
 #include <aiva2/scene_gltf.hpp>
 #include <aiva2/scene_graph.hpp>
 
@@ -12,15 +13,60 @@ namespace aiva2
 {
     REGISTER_RESOURCE_LOADER(scene_graph_loader_t);
 
-    auto scene_graph_loader_t::load(engine_t& engine, nlohmann::json const& json) -> std::shared_ptr<scene_graph_t>
+    auto scene_graph_loader_t::load(engine_t& in_engine, nlohmann::json const& in_json) -> std::shared_ptr<scene_graph_t>
     {
-        auto const gltf_pth = json.at("data_path").get<std::filesystem::path>();
+        auto const graph = std::make_shared<scene_graph_t>(in_engine);
+        assert_t::check_bool(graph, "(graph) is not valid");
+
+        auto const gltf = load_gltf(in_engine, in_json);
+        assert_t::check_bool(gltf, "(gltf) is not valid");
+
+        auto const actors = load_actors(in_engine, (*gltf), (*graph));
+        assert_t::check_bool(!std::empty(actors), "(actors) is not valid");
+
+        load_actors_hierarchy(in_engine, (*gltf), actors);
+
+        return graph;
+    }
+
+    auto scene_graph_loader_t::load_gltf(engine_t& in_engine, nlohmann::json const& in_json) -> std::shared_ptr<scene_gltf_t>
+    {
+        auto const gltf_pth = in_json.at("data_path").get<std::filesystem::path>();
         assert_t::check_bool(!std::empty(gltf_pth), "(gltf_pth) is not valid");
 
-        auto const gltf_res = engine.get_resource_system().get_resource<scene_gltf_t>(gltf_pth);
+        auto const gltf_res = in_engine.get_resource_system().get_resource<scene_gltf_t>(gltf_pth);
         assert_t::check_bool(gltf_res, "(gltf_res) is not valid");
 
-        assert_t::check_bool(false, "TODO: IMPLEMENT ME");
-        return {};
+        return gltf_res;
+    }
+
+    auto scene_graph_loader_t::load_actors(engine_t& in_engine, scene_gltf_t const& in_gltf, scene_graph_t& ref_graph) -> std::vector<std::shared_ptr<scene_actor_t>>
+    {
+        auto actors = std::vector<std::shared_ptr<scene_actor_t>>{};
+        actors.reserve(std::size(in_gltf.get_model().nodes));
+
+        for (auto i = size_t{}; i < std::size(in_gltf.get_model().nodes); i++)
+        {
+            actors.emplace_back(ref_graph.add_actor_ptr());
+        }
+
+        return actors;
+    }
+
+    auto scene_graph_loader_t::load_actors_hierarchy(engine_t& in_engine, scene_gltf_t const& in_gltf, std::vector<std::shared_ptr<scene_actor_t>> const& ref_actors) -> void
+    {
+        for (auto parent_index = size_t{}; parent_index < std::size(in_gltf.get_model().nodes); parent_index++)
+        {
+            for (auto const child_index : in_gltf.get_model().nodes[parent_index].children)
+            {
+                auto const& parent_actor = ref_actors.at(parent_index);
+                assert_t::check_bool(parent_actor, "(parent_actor) is not valid");
+
+                auto const& child_actor = ref_actors.at(child_index);
+                assert_t::check_bool(child_actor, "(child_actor) is not valid");
+
+                (*child_actor).set_parent(parent_actor);
+            }
+        }
     }
 }

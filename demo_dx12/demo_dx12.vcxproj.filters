@@ -234,6 +234,19 @@
     <ClCompile Include="Sources\aiva2\gpu_cmd_clear_render_target.cpp" />
     <ClCompile Include="Sources\aiva2\cbv_buf.cpp" />
     <ClCompile Include="Sources\aiva2\cbv_buf_info.cpp" />
+    <ClCompile Include="Sources\aiva2\material_property_block.cpp" />
+    <ClCompile Include="Sources\aiva2\scene_actor.cpp" />
+    <ClCompile Include="Sources\aiva2\scene_component.cpp" />
+    <ClCompile Include="Sources\aiva2\scene_gltf.cpp" />
+    <ClCompile Include="Sources\aiva2\scene_graph_loader.cpp" />
+    <ClCompile Include="Sources\aiva2\scene_graph.cpp" />
+    <ClCompile Include="Sources\aiva2\scene_system.cpp" />
+    <ClCompile Include="Sources\aiva2\vert_attr_pair.cpp" />
+    <ClCompile Include="Sources\aiva2\vert_attr_pair_utils.cpp" />
+    <ClCompile Include="Sources\aiva2\vbv_buf_info.cpp" />
+    <ClCompile Include="Sources\aiva2\vbv_buf.cpp" />
+    <ClCompile Include="Sources\aiva2\ibv_buf_info.cpp" />
+    <ClCompile Include="Sources\aiva2\ibv_buf.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -683,6 +696,19 @@
     <ClInclude Include="Sources\aiva2\gpu_cmd_clear_render_target.hpp" />
     <ClInclude Include="Sources\aiva2\cbv_buf.hpp" />
     <ClInclude Include="Sources\aiva2\cbv_buf_info.hpp" />
+    <ClInclude Include="Sources\aiva2\material_property_block.hpp" />
+    <ClInclude Include="Sources\aiva2\scene_actor.hpp" />
+    <ClInclude Include="Sources\aiva2\scene_component.hpp" />
+    <ClInclude Include="Sources\aiva2\scene_gltf.hpp" />
+    <ClInclude Include="Sources\aiva2\scene_graph_loader.hpp" />
+    <ClInclude Include="Sources\aiva2\scene_graph.hpp" />
+    <ClInclude Include="Sources\aiva2\scene_system.hpp" />
+    <ClInclude Include="Sources\aiva2\vert_attr_pair.hpp" />
+    <ClInclude Include="Sources\aiva2\vert_attr_pair_utils.hpp" />
+    <ClInclude Include="Sources\aiva2\vbv_buf_info.hpp" />
+    <ClInclude Include="Sources\aiva2\vbv_buf.hpp" />
+    <ClInclude Include="Sources\aiva2\ibv_buf_info.hpp" />
+    <ClInclude Include="Sources\aiva2\ibv_buf.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">
@@ -756,5 +782,7 @@
     <Text Include="Assets\resources2\textures\random.json" />
     <Text Include="Assets\resources2\materials\triangle.json" />
     <Text Include="Assets\resources2\shaders\triangle.hlsl" />
+    <Text Include="Assets\resources2\scenes\main.json" />
+    <Text Include="Assets\resources2\scenes\main.gltf" />
   </ItemGroup>
 </Project>

@@ -153,4 +153,34 @@ namespace aiva2
     }
 
     // ----------------------------------------------------
+
+    template <typename t_element>
+    constexpr auto convert_primitive_type_to_buffer_format()
+    {
+        if constexpr (std::is_same_v<t_element, std::int32_t>)
+            return buffer_format_t::R32_SINT;
+
+        if constexpr (std::is_same_v<t_element, std::uint32_t>)
+            return buffer_format_t::R32_UINT;
+
+        if constexpr (std::is_same_v<t_element, float>)
+            return buffer_format_t::R32_FLOAT;
+
+        if constexpr (std::is_same_v<t_element, glm::vec1>)
+            return buffer_format_t::R32_FLOAT;
+
+        if constexpr (std::is_same_v<t_element, glm::vec2>)
+            return buffer_format_t::R32G32_FLOAT;
+
+        if constexpr (std::is_same_v<t_element, glm::vec3>)
+            return buffer_format_t::R32G32B32_FLOAT;
+
+        if constexpr (std::is_same_v<t_element, glm::vec4>)
+            return buffer_format_t::R32G32B32A32_FLOAT;
+
+        assert_t::check_bool(false, "failed to convert element type to buffer format");
+        return buffer_format_t::UNKNOWN;
+    }
+
+    // ----------------------------------------------------
 }

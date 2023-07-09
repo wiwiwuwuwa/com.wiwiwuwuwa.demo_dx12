@@ -45,6 +45,10 @@ namespace aiva2
 
 	struct graphic_shader_t;
 
+	struct ibv_buf_t;
+
+	struct ibv_buf_info_t;
+
 	struct img_png_t;
 
 	struct material_base_t;
@@ -94,6 +98,12 @@ namespace aiva2
 	struct uav_tex_2d_info_t;
 
 	struct uav_tex_2d_t;
+
+	struct vbv_buf_t;
+
+	struct vbv_buf_info_t;
+
+	struct vert_attr_pair_t;
 
 	struct window_system_t;
 

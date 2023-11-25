@@ -44,6 +44,8 @@ namespace aiva2
         template <typename t_element>
         void set_indx_data(boost::span<t_element const> const &data);
 
+        auto num_indx_data() const->std::size_t;
+
     private:
         void set_indx_data(boost::span<std::byte const> const &data, buffer_format_t const format);
 

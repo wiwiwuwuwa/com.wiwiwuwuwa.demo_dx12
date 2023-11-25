@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="demo_dx12/Assets/resources2/textures/random.png" alt="random image" width="384" height="384" />
+  <img src="promo/aiva.jpg" alt="random image" width="384" height="384" />
 </p>
 
 # AIVA DirectX12 Renderer 🌟💖🐱

@@ -8,6 +8,8 @@
 #include <aiva2/gpu_cmd_copy_resource.hpp>
 #include <aiva2/graphic_executor.hpp>
 #include <aiva2/vbv_buf.hpp>
+#include <aiva2/vert_attr_pair.hpp>
+#include <aiva2/vert_attr_pair_utils.hpp>
 
 namespace aiva2
 {
@@ -158,5 +160,11 @@ namespace aiva2
         assert_t::check_bool(ibv_buf, "(ibv_buf) is not valid");
 
         m_indx_data = ibv_buf;
+    }
+
+    auto mesh_t::num_indx_data() const -> std::size_t
+    {
+        assert_t::check_bool(false, "not implemented");
+        return {};
     }
 }

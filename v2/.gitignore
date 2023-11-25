@@ -1,0 +1,62 @@
+#######################################
+# clang++
+#######################################
+
+# prerequisites
+*.d
+
+# compiled object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# precompiled headers
+*.gch
+*.pch
+
+# compiled dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# fortran module files
+*.mod
+*.smod
+
+# compiled static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# executables
+*.exe
+*.out
+*.app
+
+#######################################
+# premake5 gmake2
+#######################################
+
+makefile
+*.make
+bin/
+obj/
+
+#######################################
+# vscode
+#######################################
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# local history for visual studio code
+.history/
+
+# built visual studio code extensions
+*.vsix

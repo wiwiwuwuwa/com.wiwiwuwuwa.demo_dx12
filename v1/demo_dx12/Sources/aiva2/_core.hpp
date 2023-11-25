@@ -55,6 +55,8 @@ namespace aiva2
 
 	struct material_property_block_t;
 
+	struct mesh_t;
+
 	struct render_target_t;
 
 	struct resource_system_t;

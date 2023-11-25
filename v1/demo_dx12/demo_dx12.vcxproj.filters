@@ -247,6 +247,8 @@
     <ClCompile Include="Sources\aiva2\vbv_buf.cpp" />
     <ClCompile Include="Sources\aiva2\ibv_buf_info.cpp" />
     <ClCompile Include="Sources\aiva2\ibv_buf.cpp" />
+    <ClCompile Include="Sources\aiva2\gpu_cmd_draw_mesh.cpp" />
+    <ClCompile Include="Sources\aiva2\mesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -709,6 +711,9 @@
     <ClInclude Include="Sources\aiva2\vbv_buf.hpp" />
     <ClInclude Include="Sources\aiva2\ibv_buf_info.hpp" />
     <ClInclude Include="Sources\aiva2\ibv_buf.hpp" />
+    <ClInclude Include="Sources\aiva2\gpu_cmd_draw_mesh.hpp" />
+    <ClInclude Include="Sources\aiva2\mesh.hpp" />
+    <ClInclude Include="Sources\aiva2\vert_attr_type.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

@@ -97,6 +97,11 @@
         "xtree": "cpp",
         "xutility": "cpp",
         "csetjmp": "cpp",
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "codecvt": "cpp",
+        "execution": "cpp",
+        "queue": "cpp",
+        "scoped_allocator": "cpp",
+        "shared_mutex": "cpp"
     }
 }

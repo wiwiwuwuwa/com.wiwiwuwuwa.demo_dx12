@@ -23,7 +23,7 @@ namespace aiva
             auto event = SDL_Event{};
             while (SDL_PollEvent(&event))
             {
-                if (event.type == SDL_EVENT_QUIT)
+                if (event.type == SDL_QUIT)
                 {
                     quit = true;
                 }
@@ -31,10 +31,19 @@ namespace aiva
         }
     }
 
+    auto hardware_system_t::get_hwnd() const -> HWND
+    {
+        auto info = SDL_SysWMinfo{};
+        SDL_VERSION(&info.version);
+
+        assert_t::check_bool(SDL_GetWindowWMInfo(m_window, &info), "(SDL_GetWindowWMInfo) is not valid");
+        return info.info.win.window;
+    }
+
     void hardware_system_t::init_video()
     {
         SDL_InitSubSystem(SDL_INIT_VIDEO);
-        m_window = SDL_CreateWindow("aiva", 800, 600, NULL);
+        m_window = SDL_CreateWindow("aiva", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
         assert_t::check_bool(m_window, "(window) is not valid");
     }
 

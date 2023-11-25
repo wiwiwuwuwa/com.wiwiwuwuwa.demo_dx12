@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34024.191
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aiva", "aiva.vcxproj", "{860E947C-7245-950D-1B32-7B100748110F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		debug|Win32 = debug|Win32
+		debug|x64 = debug|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{860E947C-7245-950D-1B32-7B100748110F}.debug|Win32.ActiveCfg = debug|Win32
+		{860E947C-7245-950D-1B32-7B100748110F}.debug|Win32.Build.0 = debug|Win32
+		{860E947C-7245-950D-1B32-7B100748110F}.debug|x64.ActiveCfg = debug|x64
+		{860E947C-7245-950D-1B32-7B100748110F}.debug|x64.Build.0 = debug|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9961F1D8-FCA8-42C2-B592-7DA3E4AB80D4}
+	EndGlobalSection
+EndGlobal

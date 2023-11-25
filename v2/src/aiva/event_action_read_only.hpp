@@ -28,7 +28,7 @@ namespace aiva
 
 // --------------------------------------------------------
 
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 
 namespace aiva
 {

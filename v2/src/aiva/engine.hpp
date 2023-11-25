@@ -30,5 +30,18 @@ namespace aiva
         std::unique_ptr<struct hardware_system_t> m_hardware_system{};
 
         // ------------------------------------------------
+
+    public:
+        auto get_graphic_hardware() const -> struct graphic_hardware_t&;
+
+    protected:
+        void init_graphic_hardware();
+
+        void shut_graphic_hardware();
+
+    private:
+        std::unique_ptr<struct graphic_hardware_t> m_graphic_hardware{};
+
+        // ------------------------------------------------
     };
 }

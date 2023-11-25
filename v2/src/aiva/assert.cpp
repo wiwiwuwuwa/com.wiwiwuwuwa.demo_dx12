@@ -1,7 +1,7 @@
 #include <aiva/assert.hpp>
 
 #include <cstdlib>
-#include <SDL3/SDL.h>
+#include <SDL.h>
 
 namespace aiva
 {

@@ -1,5 +1,7 @@
 #pragma once
-#include <SDL3/SDL.h>
+#include <windows.h>
+#include <SDL.h>
+#include <SDL_syswm.h>
 #include <aiva/engine_object.hpp>
 
 namespace aiva
@@ -17,6 +19,9 @@ namespace aiva
         void run() const;
 
         // ------------------------------------------------
+
+    public:
+        auto get_hwnd() const -> HWND;
 
     private:
         void init_video();

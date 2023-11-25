@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="aiva">
+      <UniqueIdentifier>{860E947C-7245-950D-1B32-7B100748110F}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\aiva\assert.hpp">
+      <Filter>aiva</Filter>
+    </ClInclude>
+    <ClInclude Include="src\aiva\engine.hpp">
+      <Filter>aiva</Filter>
+    </ClInclude>
+    <ClInclude Include="src\aiva\engine_object.hpp">
+      <Filter>aiva</Filter>
+    </ClInclude>
+    <ClInclude Include="src\aiva\event_action_base.hpp">
+      <Filter>aiva</Filter>
+    </ClInclude>
+    <ClInclude Include="src\aiva\event_action_read_only.hpp">
+      <Filter>aiva</Filter>
+    </ClInclude>
+    <ClInclude Include="src\aiva\event_action_read_write.hpp">
+      <Filter>aiva</Filter>
+    </ClInclude>
+    <ClInclude Include="src\aiva\graphic_hardware.hpp">
+      <Filter>aiva</Filter>
+    </ClInclude>
+    <ClInclude Include="src\aiva\hardware_system.hpp">
+      <Filter>aiva</Filter>
+    </ClInclude>
+    <ClInclude Include="src\aiva\implements.hpp">
+      <Filter>aiva</Filter>
+    </ClInclude>
+    <ClInclude Include="src\aiva\init.hpp">
+      <Filter>aiva</Filter>
+    </ClInclude>
+    <ClInclude Include="src\aiva\object.hpp">
+      <Filter>aiva</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\aiva\assert.cpp">
+      <Filter>aiva</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aiva\engine.cpp">
+      <Filter>aiva</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aiva\engine_object.cpp">
+      <Filter>aiva</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aiva\graphic_hardware.cpp">
+      <Filter>aiva</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aiva\hardware_system.cpp">
+      <Filter>aiva</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aiva\init.cpp">
+      <Filter>aiva</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>

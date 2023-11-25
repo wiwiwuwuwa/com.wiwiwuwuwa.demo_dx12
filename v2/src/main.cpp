@@ -1,7 +1,8 @@
-#include <aiva/engine.hpp>
+#include <cstdlib>
+#include <aiva/init.hpp>
 
 int main()
 {
-    aiva::engine_t{};
+    aiva::init();
     return EXIT_SUCCESS;
 }

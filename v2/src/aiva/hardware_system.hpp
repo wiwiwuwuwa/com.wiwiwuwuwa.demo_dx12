@@ -1,4 +1,5 @@
 #pragma once
+#include <SDL3/SDL.h>
 #include <aiva/engine_object.hpp>
 
 namespace aiva
@@ -11,6 +12,19 @@ namespace aiva
         hardware_system_t(struct engine_t& engine);
 
         ~hardware_system_t() override;
+
+    public:
+        void run() const;
+
+        // ------------------------------------------------
+
+    private:
+        void init_video();
+
+        void shut_video();
+
+    private:
+        SDL_Window* m_window{};
 
         // ------------------------------------------------
     };

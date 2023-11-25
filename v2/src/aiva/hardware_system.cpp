@@ -1,6 +1,5 @@
 #include <aiva/hardware_system.hpp>
 
-#include <SDL3/SDL.h>
 #include <aiva/assert.hpp>
 
 namespace aiva
@@ -8,11 +7,16 @@ namespace aiva
     hardware_system_t::hardware_system_t(struct engine_t& engine)
         : impl_type{ engine }
     {
-        SDL_Init(SDL_INIT_VIDEO);
+        init_video();
+    }
 
-        auto *const window = SDL_CreateWindow("aiva", 800, 600, NULL);
-        assert_t::check_bool(window, "(window) is not valid");
+    hardware_system_t::~hardware_system_t()
+    {
+        shut_video();
+    }
 
+    void hardware_system_t::run() const
+    {
         auto quit = bool{};
         while (!quit)
         {
@@ -25,13 +29,19 @@ namespace aiva
                 }
             }
         }
-
-        SDL_DestroyWindow(window);
-        SDL_Quit();
     }
 
-    hardware_system_t::~hardware_system_t()
+    void hardware_system_t::init_video()
     {
+        SDL_InitSubSystem(SDL_INIT_VIDEO);
+        m_window = SDL_CreateWindow("aiva", 800, 600, NULL);
+        assert_t::check_bool(m_window, "(window) is not valid");
+    }
 
+    void hardware_system_t::shut_video()
+    {
+        assert_t::check_bool(m_window, "(window) is not valid");
+        SDL_DestroyWindow(m_window);
+        SDL_QuitSubSystem(SDL_INIT_VIDEO);
     }
 }

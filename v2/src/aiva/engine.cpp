@@ -15,6 +15,12 @@ namespace aiva
         shut_hardware_system();
     }
 
+    void engine_t::run() const
+    {
+        assert_t::check_bool(m_hardware_system, "(m_hardware_system) is not valid");
+        (*m_hardware_system).run();
+    }
+
     auto engine_t::get_hardware_system() const -> struct hardware_system_t&
     {
         assert_t::check_bool(m_hardware_system, "(m_hardware_system) is not valid");

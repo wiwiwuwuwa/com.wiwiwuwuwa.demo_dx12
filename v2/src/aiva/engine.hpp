@@ -13,6 +13,9 @@ namespace aiva
 
         ~engine_t() override;
 
+    public:
+        void run() const;
+
         // ------------------------------------------------
 
     public:

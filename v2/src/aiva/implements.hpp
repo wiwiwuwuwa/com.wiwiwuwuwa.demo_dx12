@@ -41,6 +41,10 @@ namespace aiva
 
         using this_type = t_this;
 
+	public:
+		template <typename... t_args>
+		using event_action_type = event_action_read_write_t<t_this, t_args...>;
+
 	protected:
 		template <typename... t_args>
 		implements_t(t_args&&... args) : t_base{ std::forward<t_args>(args)... } {};
@@ -59,6 +63,10 @@ namespace aiva
 		using impl_type = implements_t<t_this, t_base, t_interfaces...>;
 
         using this_type = t_this;
+
+	public:
+		template <typename... t_args>
+		using event_action_type = event_action_read_write_t<t_this, t_args...>;
 
 		// ------------------------------------------------
 	};

@@ -65,6 +65,7 @@
     <ClInclude Include="src\aiva\implements.hpp" />
     <ClInclude Include="src\aiva\init.hpp" />
     <ClInclude Include="src\aiva\object.hpp" />
+    <ClInclude Include="src\aiva\time_system.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\aiva\assert.cpp" />
@@ -73,6 +74,7 @@
     <ClCompile Include="src\aiva\graphic_hardware.cpp" />
     <ClCompile Include="src\aiva\hardware_system.cpp" />
     <ClCompile Include="src\aiva\init.cpp" />
+    <ClCompile Include="src\aiva\time_system.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>

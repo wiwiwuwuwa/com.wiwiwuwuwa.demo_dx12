@@ -1,39 +1,34 @@
 #pragma once
-#include <windows.h>
-#include <SDL.h>
-#include <SDL_syswm.h>
 #include <aiva/engine_object.hpp>
 
 namespace aiva
 {
-    struct hardware_system_t final : public implements_t<hardware_system_t, engine_object_t>
+    struct time_system_t final : public implements_t<time_system_t, engine_object_t>
     {
         // ------------------------------------------------
 
     public:
-        hardware_system_t(struct engine_t& engine);
+        time_system_t(struct engine_t& engine);
 
-        ~hardware_system_t() override;
-
-    public:
-        void run();
+        ~time_system_t() override;
 
         // ------------------------------------------------
 
     public:
-        auto get_hwnd() const -> HWND;
-
         auto get_on_tick() -> event_action_type<>&;
 
     private:
-        void init_video();
-
-        void shut_video();
+        void on_hardware_system_tick();
 
     private:
-        SDL_Window* m_window{};
+        void init_timer();
 
+        void shut_timer();
+
+    private:
         event_action_type<> m_on_tick{};
+
+        size_t m_tick_id{};
 
         // ------------------------------------------------
     };

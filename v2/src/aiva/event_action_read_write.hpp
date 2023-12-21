@@ -23,7 +23,7 @@ namespace aiva
 		// ------------------------------------------------
 
 	protected:
-		void invoke(t_args&&... args);
+		void invoke(t_args&&... args) const;
 
 		// ------------------------------------------------
 	};
@@ -46,7 +46,7 @@ namespace aiva
 	}
 
 	template <typename t_owner, typename... t_args>
-	void event_action_read_write_t<t_owner, t_args...>::invoke(t_args&&... args)
+	void event_action_read_write_t<t_owner, t_args...>::invoke(t_args&&... args) const
 	{
 		(*this).get_event()(std::forward<t_args>(args)...);
 	}

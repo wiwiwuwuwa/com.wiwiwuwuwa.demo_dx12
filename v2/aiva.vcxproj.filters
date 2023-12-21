@@ -39,6 +39,7 @@
     <ClInclude Include="src\aiva\object.hpp">
       <Filter>aiva</Filter>
     </ClInclude>
+    <ClInclude Include="src\aiva\time_system.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\aiva\assert.cpp">
@@ -60,6 +61,7 @@
       <Filter>aiva</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\aiva\time_system.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

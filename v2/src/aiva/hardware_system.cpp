@@ -15,7 +15,7 @@ namespace aiva
         shut_video();
     }
 
-    void hardware_system_t::run() const
+    void hardware_system_t::run()
     {
         auto quit = bool{};
         while (!quit)
@@ -28,6 +28,8 @@ namespace aiva
                     quit = true;
                 }
             }
+
+            get_on_tick().invoke();
         }
     }
 
@@ -38,6 +40,11 @@ namespace aiva
 
         assert_t::check_bool(SDL_GetWindowWMInfo(m_window, &info), "(SDL_GetWindowWMInfo) is not valid");
         return info.info.win.window;
+    }
+
+    auto hardware_system_t::get_on_tick() -> event_action_type<>&
+    {
+        return m_on_tick;
     }
 
     void hardware_system_t::init_video()

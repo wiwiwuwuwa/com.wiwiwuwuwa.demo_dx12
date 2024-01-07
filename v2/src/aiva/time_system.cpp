@@ -20,9 +20,20 @@ namespace aiva
         return m_on_tick;
     }
 
+    auto time_system_t::get_on_draw() -> event_action_type<>&
+    {
+        return m_on_draw;
+    }
+
+    auto time_system_t::get_tick_id() const -> size_t
+    {
+        return m_tick_id;
+    }
+
     void time_system_t::on_hardware_system_tick()
     {
         m_on_tick.invoke();
+        m_on_draw.invoke();
         m_tick_id++;
     }
 

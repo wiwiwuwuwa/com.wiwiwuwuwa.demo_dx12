@@ -60,6 +60,7 @@
     <ClInclude Include="src\aiva\event_action_base.hpp" />
     <ClInclude Include="src\aiva\event_action_read_only.hpp" />
     <ClInclude Include="src\aiva\event_action_read_write.hpp" />
+    <ClInclude Include="src\aiva\graphic_conveyor.hpp" />
     <ClInclude Include="src\aiva\graphic_hardware.hpp" />
     <ClInclude Include="src\aiva\hardware_system.hpp" />
     <ClInclude Include="src\aiva\implements.hpp" />
@@ -71,6 +72,7 @@
     <ClCompile Include="src\aiva\assert.cpp" />
     <ClCompile Include="src\aiva\engine.cpp" />
     <ClCompile Include="src\aiva\engine_object.cpp" />
+    <ClCompile Include="src\aiva\graphic_conveyor.cpp" />
     <ClCompile Include="src\aiva\graphic_hardware.cpp" />
     <ClCompile Include="src\aiva\hardware_system.cpp" />
     <ClCompile Include="src\aiva\init.cpp" />

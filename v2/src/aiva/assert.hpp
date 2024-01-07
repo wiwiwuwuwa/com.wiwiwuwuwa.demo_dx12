@@ -28,6 +28,8 @@ namespace aiva
 
 // --------------------------------------------------------
 
+#include <winerror.h>
+
 namespace aiva
 {
 	template <typename t_val>

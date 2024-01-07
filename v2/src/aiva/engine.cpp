@@ -1,6 +1,7 @@
 #include <aiva/engine.hpp>
 
 #include <aiva/assert.hpp>
+#include <aiva/graphic_conveyor.hpp>
 #include <aiva/graphic_hardware.hpp>
 #include <aiva/hardware_system.hpp>
 #include <aiva/time_system.hpp>
@@ -12,10 +13,12 @@ namespace aiva
         init_hardware_system();
         init_graphic_hardware();
         init_time_system();
+        init_graphic_conveyor();
     }
 
     engine_t::~engine_t()
     {
+        shut_graphic_conveyor();
         shut_time_system();
         shut_graphic_hardware();
         shut_hardware_system();
@@ -79,5 +82,23 @@ namespace aiva
     {
         assert_t::check_bool(m_time_system, "(m_time_system) is not valid");
         m_time_system = {};
+    }
+
+    auto engine_t::get_graphic_conveyor() const -> struct graphic_conveyor_t&
+    {
+        assert_t::check_bool(m_graphic_conveyor, "(m_graphic_conveyor) is not valid");
+        return (*m_graphic_conveyor);
+    }
+
+    void engine_t::init_graphic_conveyor()
+    {
+        assert_t::check_bool(!m_graphic_conveyor, "(m_graphic_conveyor) is already valid");
+        m_graphic_conveyor = std::make_unique<graphic_conveyor_t>(*this);
+    }
+
+    void engine_t::shut_graphic_conveyor()
+    {
+        assert_t::check_bool(m_graphic_conveyor, "(m_graphic_conveyor) is not valid");
+        m_graphic_conveyor = {};
     }
 }

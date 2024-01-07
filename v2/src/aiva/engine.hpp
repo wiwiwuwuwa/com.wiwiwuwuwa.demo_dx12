@@ -56,5 +56,18 @@ namespace aiva
         std::unique_ptr<struct time_system_t> m_time_system{};
 
         // ------------------------------------------------
+
+    public:
+        auto get_graphic_conveyor() const -> struct graphic_conveyor_t&;
+
+    protected:
+        void init_graphic_conveyor();
+
+        void shut_graphic_conveyor();
+
+    private:
+        std::unique_ptr<struct graphic_conveyor_t> m_graphic_conveyor{};
+
+        // ------------------------------------------------
     };
 }

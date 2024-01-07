@@ -17,6 +17,10 @@ namespace aiva
     public:
         auto get_on_tick() -> event_action_type<>&;
 
+        auto get_on_draw() -> event_action_type<>&;
+
+        auto get_tick_id() const -> size_t;
+
     private:
         void on_hardware_system_tick();
 
@@ -27,6 +31,8 @@ namespace aiva
 
     private:
         event_action_type<> m_on_tick{};
+
+        event_action_type<> m_on_draw{};
 
         size_t m_tick_id{};
 

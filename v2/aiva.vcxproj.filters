@@ -41,6 +41,15 @@
     </ClInclude>
     <ClInclude Include="src\aiva\time_system.hpp" />
     <ClInclude Include="src\aiva\graphic_conveyor.hpp" />
+    <ClInclude Include="src\aiva\graphic_format.hpp" />
+    <ClInclude Include="src\aiva\texture_2d_info.hpp" />
+    <ClInclude Include="src\aiva\graphic_resource_state.hpp" />
+    <ClInclude Include="src\aiva\graphic_resource.hpp" />
+    <ClInclude Include="src\aiva\texture_2d.hpp" />
+    <ClInclude Include="src\aiva\i_support_unordered_access.hpp" />
+    <ClInclude Include="src\aiva\to_dxgi_format.hpp" />
+    <ClInclude Include="src\aiva\to_graphic_format.hpp" />
+    <ClInclude Include="src\aiva\d3d12_resource_desc_utils.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\aiva\assert.cpp">
@@ -64,6 +73,10 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\aiva\time_system.cpp" />
     <ClCompile Include="src\aiva\graphic_conveyor.cpp" />
+    <ClCompile Include="src\aiva\texture_2d_info.cpp" />
+    <ClCompile Include="src\aiva\graphic_resource_state.cpp" />
+    <ClCompile Include="src\aiva\texture_2d.cpp" />
+    <ClCompile Include="src\aiva\d3d12_resource_desc_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

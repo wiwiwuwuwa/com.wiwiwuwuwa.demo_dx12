@@ -3,7 +3,7 @@
 **Unlock the potential of DirectX12 with Aiva.** Aiva is a modern renderer built using C++ and WinRT, designed for high-performance graphics programming using Visual Studio 2022.
 
 <p align="center">
-  <img src="promo/aiva.jpg" width="720"/>
+  <img src="promo/aiva.jpg" style="max-width:100%; height:auto;"/>
 </p>
 
 ## Features

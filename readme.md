@@ -1,38 +1,22 @@
+# Aiva DirectX12 Renderer
+
+**Unlock the potential of DirectX12 with Aiva.** Aiva is a modern renderer built using C++ and WinRT, designed for high-performance graphics programming using Visual Studio 2022.
+
 <p align="center">
-  <img src="promo/aiva.jpg" alt="random image" width="384" height="384" />
+  <img src="promo/aiva.jpg" width="720"/>
 </p>
 
-# AIVA DirectX12 Renderer 🌟💖🐱
+## Features
 
-こんにちわ！🌸 Welcome to AIVA, a super kawaii DirectX12 renderer project! 🌈✨ We are learning DX12 graphic programming and using modern C++ with WinRT and Visual Studio 2022. 🎀🎮 Let's make this project the cutest and most powerful game engine ever! 💕🌟
+- **DirectX12 Renderer:** Advanced graphics performance.
+- **Modern C++ and WinRT:** Leverage the latest programming techniques.
+- **Visual Studio 2022 Integration:** Optimized for modern development workflows.
 
-## 🌈✨ Features
+## Usage
 
-- DirectX12 Renderer 🎮💖
-- Modern C++ and WinRT 🌟💻
-- Visual Studio 2022 💕🖥️
-- Cute and powerful game engine 🌈🐱
+1. Open the project in Visual Studio 2022.
+2. Build the solution and run the Aiva renderer.
 
-## 🌸💖 Setup
+## Feedback and Support
 
-1. Clone this super kawaii repository! 💖✨
-2. Open the project in Visual Studio 2022 🌟🖥️
-3. Build the solution and run the cute AIVA game engine! 🎮🌈
-
-## 🐱💕 Usage
-
-Use this adorable game engine to create the cutest games with DirectX12! 🌸✨ Make sure to share your kawaii creations with everyone! 💖🌟
-
-## 🌟💖 Contributing
-
-We'd love to see your cute ideas and improvements for AIVA! 🌈🌸 Feel free to submit a pull request or open an issue, and let's make this project even more adorable together! 💕🐱
-
-## 🎀🌈 Credits
-
-A big thank you to all the kawaii contributors and the DX12, modern C++, and WinRT communities for their support and inspiration! 🌸💖 Let's keep making the world of game development cuter and more powerful! 💕✨
-
-## 🐾💕 License
-
-This super cute project is licensed under the MIT License. 🌟🎀
-
-おわり！Thank you for using the AIVA DirectX12 Renderer! Let's create adorable games together! 💖🌈✨🐱
+Your feedback drives improvements. Submit issues on GitHub.
